@@ -1,3 +1,10 @@
+# [1.0.0-beta.2](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2023-10-24)
+
+
+### Features
+
+* added issues write permissions ([7adb7ec](https://github.com/powerhouse-inc/design-system/commit/7adb7ec6fa234c3989a009b57f730fc9487c3cd3))
+
 # 1.0.0-beta.1 (2023-10-24)
 
 
