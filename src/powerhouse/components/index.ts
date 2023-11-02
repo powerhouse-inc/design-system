@@ -4,4 +4,5 @@ export * from './dropdown-menu';
 export * from './legacy';
 export * from './modal';
 export * from './sidebar';
+export * from './tree-view-input';
 export * from './tree-view-item';
