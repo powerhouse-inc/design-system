@@ -1,16 +1,14 @@
+import { ActionType, TreeItem } from '@/connect/types';
 import React from 'react';
-
-import {
-    ActionType,
-    ConnectTreeViewItem,
-    ConnectTreeViewItemProps,
-    TreeItem,
-} from '../tree-view-item';
 
 import {
     ConnectTreeViewInput,
     ConnectTreeViewInputProps,
 } from '../tree-view-input';
+import {
+    ConnectTreeViewItem,
+    ConnectTreeViewItemProps,
+} from '../tree-view-item';
 
 export interface ConnectTreeViewProps<T extends string = string>
     extends Omit<React.HTMLAttributes<HTMLElement>, 'onClick'> {

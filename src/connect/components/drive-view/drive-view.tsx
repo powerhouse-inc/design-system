@@ -1,14 +1,9 @@
 import IconGear from '@/assets/icons/gear.svg?react';
+import { ItemType, TreeItem } from '@/connect/types';
 import type { DropEvent } from 'react-aria';
 import { Button } from 'react-aria-components';
 import { twMerge } from 'tailwind-merge';
-import {
-    ConnectTreeView,
-    ConnectTreeViewItemProps,
-    DefaultOptionId,
-    ItemType,
-    TreeItem,
-} from '..';
+import { ConnectTreeView, ConnectTreeViewItemProps, DefaultOptionId } from '..';
 
 export type DriveType = 'public' | 'local' | 'cloud';
 

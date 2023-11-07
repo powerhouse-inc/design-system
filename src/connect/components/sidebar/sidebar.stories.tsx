@@ -1,7 +1,8 @@
+import { ItemStatus, ItemType } from '@/connect/types';
 import { action } from '@storybook/addon-actions';
 import { useArgs } from '@storybook/preview-api';
 import type { Meta, StoryObj } from '@storybook/react';
-import { ConnectSidebar, DriveView, ItemStatus, ItemType } from '..';
+import { ConnectSidebar, DriveView } from '..';
 
 const meta: Meta<typeof ConnectSidebar> = {
     title: 'Connect/Components',

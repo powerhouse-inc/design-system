@@ -1,5 +1,5 @@
+import { ItemStatus, ItemType } from '@/connect/types';
 import type { Meta, StoryObj } from '@storybook/react';
-import { ItemStatus, ItemType } from '../tree-view-item';
 import { DriveView } from './drive-view';
 
 const meta: Meta<typeof DriveView> = {

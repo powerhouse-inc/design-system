@@ -1,5 +1,6 @@
+import { ItemStatus, ItemType } from '@/connect/types';
 import type { Meta, StoryObj } from '@storybook/react';
-import { ConnectTreeViewItem, ItemStatus, ItemType } from './tree-view-item';
+import { ConnectTreeViewItem } from './tree-view-item';
 
 const meta: Meta<typeof ConnectTreeViewItem> = {
     title: 'Connect/Components/TreeView',

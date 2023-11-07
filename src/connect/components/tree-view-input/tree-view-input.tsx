@@ -1,13 +1,13 @@
 import CheckIcon from '@/assets/icons/check-fill.svg';
 import FolderIcon from '@/assets/icons/folder-close-fill.svg';
 import CancelIcon from '@/assets/icons/xmark.svg';
+import { TreeItem } from '@/connect/types';
 import {
     TreeViewInput,
     TreeViewInputProps,
 } from '@/powerhouse/components/tree-view-input';
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
-import { TreeItem } from '../tree-view-item';
 
 export interface ConnectTreeViewInputProps
     extends Omit<

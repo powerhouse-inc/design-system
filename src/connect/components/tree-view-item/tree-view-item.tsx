@@ -2,6 +2,7 @@ import {
     ConnectDropdownMenu,
     ConnectDropdownMenuItem,
 } from '@/connect/components/dropdown-menu';
+import { ItemStatus, ItemType, TreeItem } from '@/connect/types';
 import {
     TreeViewItem,
     TreeViewItemProps,
@@ -25,38 +26,6 @@ import ServerIcon from '@/assets/icons/server-fill.svg';
 import SyncingIcon from '@/assets/icons/syncing.svg';
 import TrashIcon from '@/assets/icons/trash-fill.svg';
 import DotsIcon from '@/assets/icons/vertical-dots.svg';
-
-export enum ItemType {
-    Folder = 'folder',
-    File = 'file',
-    LocalDrive = 'local-drive',
-    NetworkDrive = 'network-drive',
-    PublicDrive = 'public-drive',
-}
-
-export enum ActionType {
-    Update = 'update',
-    New = 'new',
-}
-
-export enum ItemStatus {
-    Available = 'available',
-    AvailableOffline = 'available-offline',
-    Syncing = 'syncing',
-    Offline = 'offline',
-}
-
-export interface TreeItem<T extends string = string> {
-    id: string;
-    label: string;
-    type: ItemType;
-    action?: ActionType;
-    status?: ItemStatus;
-    expanded?: boolean;
-    children?: TreeItem<T>[];
-    isSelected?: boolean;
-    options?: ConnectDropdownMenuItem<T>[];
-}
 
 export const DefaultOptions = [
     {

@@ -1,5 +1,5 @@
+import { ActionType, ItemType } from '@/connect/types';
 import type { Meta, StoryObj } from '@storybook/react';
-import { ActionType, ItemType } from '../tree-view-item';
 import { ConnectTreeViewInput } from './tree-view-input';
 
 const meta: Meta<typeof ConnectTreeViewInput> = {
