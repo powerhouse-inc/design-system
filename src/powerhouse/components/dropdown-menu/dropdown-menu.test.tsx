@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { DropdownMenu, DropdownMenuProps } from './dropdown-menu';
+import { DropdownMenu, SharedDropdownMenuProps } from './dropdown-menu';
 
 const children = '☰';
-const items: DropdownMenuProps['items'] = [
+const items: SharedDropdownMenuProps['items'] = [
     {
         id: 'item-1',
         content: 'Item 1',
@@ -20,7 +20,11 @@ const items: DropdownMenuProps['items'] = [
 describe('DropDownMenu Component', () => {
     it('should match snapshot', () => {
         const { asFragment } = render(
-            <DropdownMenu onItemClick={() => {}} items={items}>
+            <DropdownMenu
+                type="uncontrolled"
+                onItemClick={() => {}}
+                items={items}
+            >
                 <div>{children}</div>
             </DropdownMenu>,
         );
@@ -30,7 +34,11 @@ describe('DropDownMenu Component', () => {
 
     it('should match snapshot (open menu)', () => {
         const { asFragment } = render(
-            <DropdownMenu onItemClick={() => {}} items={items}>
+            <DropdownMenu
+                type="uncontrolled"
+                onItemClick={() => {}}
+                items={items}
+            >
                 <div>{children}</div>
             </DropdownMenu>,
         );
@@ -48,7 +56,11 @@ describe('DropDownMenu Component', () => {
 
     it('should render correctly', () => {
         render(
-            <DropdownMenu onItemClick={() => {}} items={items}>
+            <DropdownMenu
+                type="uncontrolled"
+                onItemClick={() => {}}
+                items={items}
+            >
                 <div>{children}</div>
             </DropdownMenu>,
         );
@@ -58,7 +70,11 @@ describe('DropDownMenu Component', () => {
 
     it('should open menu when click in menu button', () => {
         render(
-            <DropdownMenu onItemClick={() => {}} items={items}>
+            <DropdownMenu
+                type="uncontrolled"
+                onItemClick={() => {}}
+                items={items}
+            >
                 <div>{children}</div>
             </DropdownMenu>,
         );
@@ -80,7 +96,11 @@ describe('DropDownMenu Component', () => {
         const onItemClick = jest.fn();
 
         render(
-            <DropdownMenu onItemClick={onItemClick} items={items}>
+            <DropdownMenu
+                type="uncontrolled"
+                onItemClick={onItemClick}
+                items={items}
+            >
                 <div>{children}</div>
             </DropdownMenu>,
         );
