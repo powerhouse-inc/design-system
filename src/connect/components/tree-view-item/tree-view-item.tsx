@@ -3,8 +3,8 @@ import {
     ConnectDropdownMenuItem,
 } from '@/connect/components/dropdown-menu';
 import {
+    ReadTreeViewItemProps,
     TreeViewItem,
-    TreeViewItemProps,
     UseDraggableTargetProps,
     useDraggableTarget,
 } from '@/powerhouse';
@@ -86,7 +86,7 @@ export type DefaultOptionId = (typeof DefaultOptions)[number]['id'];
 
 export interface ConnectTreeViewItemProps<T extends string = DefaultOptionId>
     extends Pick<
-        TreeViewItemProps,
+        ReadTreeViewItemProps,
         'children' | 'onClick' | 'buttonProps' | 'level'
     > {
     item: TreeItem<T>;
@@ -189,7 +189,7 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
                 ref: containerRef,
                 ...restButtonProps,
             }}
-            optionsContent={optionsContent}
+            DropdownMenu={optionsContent}
             {...(item.status && {
                 secondaryIcon: getStatusIcon(item.status),
             })}

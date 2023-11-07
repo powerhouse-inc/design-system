@@ -6,10 +6,8 @@ import { twMerge } from 'tailwind-merge';
 
 export interface TreeViewInputProps
     extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'> {
-    icon?: React.ReactNode;
     cancelIcon?: React.ReactNode;
     submitIcon: React.ReactNode;
-    level?: number;
     initialValue?: string;
     placeholder?: string;
     onCancel?: () => void;
@@ -19,8 +17,6 @@ export interface TreeViewInputProps
 
 export const TreeViewInput: React.FC<TreeViewInputProps> = props => {
     const {
-        icon,
-        level = 0,
         submitIcon,
         cancelIcon,
         onSubmit,
@@ -53,25 +49,21 @@ export const TreeViewInput: React.FC<TreeViewInputProps> = props => {
         },
     });
 
-    const paddingLeft = 10 * level + 24;
-
     return (
         <ClickAwayListener onClickAway={() => onSubmit(text)}>
             <div
                 className={twMerge(
-                    'flex flex-row items-center pr-5',
+                    'flex items-center justify-between pr-5 w-full',
                     className,
                 )}
                 style={{
-                    paddingLeft,
                     ...style,
                 }}
                 {...keyboardProps}
                 {...containerProps}
             >
-                {icon}
                 <TextField
-                    className="flex flex-1 ml-2 min-w-0"
+                    className="flex ml-2 min-w-0"
                     value={text}
                     onChange={setText}
                     aria-label={ariaLabel}

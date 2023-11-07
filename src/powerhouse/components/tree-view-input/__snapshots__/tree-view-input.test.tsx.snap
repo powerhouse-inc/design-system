@@ -3,14 +3,10 @@
 exports[`TreeViewInput Component should match snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="flex flex-row items-center pr-5"
-    style="padding-left: 24px;"
+    class="flex items-center justify-between pr-5 w-full"
   >
-    <div>
-      Icon
-    </div>
     <div
-      class="flex flex-1 ml-2 min-w-0"
+      class="flex ml-2 min-w-0"
       data-rac=""
     >
       <input

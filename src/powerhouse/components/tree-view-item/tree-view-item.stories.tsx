@@ -1,21 +1,17 @@
+import CheckIcon from '@/assets/icons/check-fill.svg';
+import FolderClose from '@/assets/icons/folder-close-fill.svg';
+import FolderOpen from '@/assets/icons/folder-open-fill.svg';
+import CancelIcon from '@/assets/icons/xmark.svg';
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 import { TreeViewItem, TreeViewItemProps } from './tree-view-item';
-
-import CheckFilledIcon from '@/assets/icons/check-filled.svg';
-import CheckIcon from '@/assets/icons/check.svg';
-import CloudSlashIcon from '@/assets/icons/cloud-slash.svg';
-import FolderClose from '@/assets/icons/folder-close-fill.svg';
-import FolderOpen from '@/assets/icons/folder-open-fill.svg';
-import SyncingIcon from '@/assets/icons/syncing.svg';
-import DotsIcon from '@/assets/icons/vertical-dots.svg';
 
 const meta: Meta<typeof TreeViewItem> = {
     title: 'Powerhouse/Components/TreeView/TreeViewItem',
     component: TreeViewItem,
     decorators: [
         Story => (
-            <div className="w-[312px] p-8 bg-white to-white">
+            <div className="p-8 bg-white to-white">
                 <Story />
             </div>
         ),
@@ -27,65 +23,55 @@ const meta: Meta<typeof TreeViewItem> = {
         expandedIcon: { control: { type: 'text' } },
         icon: { control: { type: 'text' } },
         onClick: { control: { type: 'action' } },
-        onOptionsClick: { control: { type: 'action' } },
         level: { control: { type: 'number' } },
-        secondaryIcon: {
-            control: {
-                type: 'select',
-            },
-            options: [
-                undefined,
-                CheckIcon,
-                CheckFilledIcon,
-                SyncingIcon,
-                CloudSlashIcon,
-            ],
-        },
     },
 };
 
 export default meta;
-type Story = StoryObj<typeof meta>;
-
-const optionsContent = (
-    <div
-        role="button"
-        onClick={e => {
-            e.stopPropagation();
-            action('options-click')(e);
-        }}
-        className="w-6 h-6 focus:outline-none"
-    >
-        <img src={DotsIcon} className="w-6 h-6 pointer-events-none" />
-    </div>
-);
+type Story = StoryObj<TreeViewItemProps>;
 
 export const Primary: Story = {
     args: {
+        type: 'read',
         label: 'Local Device',
         initialOpen: true,
         icon: FolderClose,
         expandedIcon: FolderOpen,
-        secondaryIcon: SyncingIcon,
-        optionsContent,
         children: (
             <>
                 <TreeViewItem
+                    type="read"
                     label="Folder 1"
                     icon={FolderClose}
                     expandedIcon={FolderOpen}
                 >
                     <TreeViewItem
-                        label="Folder 1.1"
+                        type="write"
+                        inputProps={{
+                            initialValue: 'New Folder',
+                            placeholder: 'New Folder',
+                            onSubmit: action('submit'),
+                            onCancel: action('cancel'),
+                            submitIcon: (
+                                <img src={CheckIcon} className="w-6 h-6" />
+                            ),
+                            cancelIcon: (
+                                <div className="w-6 h-6 flex items-center justify-center">
+                                    <img src={CancelIcon} />
+                                </div>
+                            ),
+                        }}
                         icon={FolderClose}
                         expandedIcon={FolderOpen}
                     ></TreeViewItem>
                     <TreeViewItem
+                        type="read"
                         label="Folder 1.2"
                         icon={FolderClose}
                         expandedIcon={FolderOpen}
                     >
                         <TreeViewItem
+                            type="read"
                             label="Folder 1.2.1"
                             icon={FolderClose}
                             expandedIcon={FolderOpen}
@@ -93,11 +79,13 @@ export const Primary: Story = {
                     </TreeViewItem>
                 </TreeViewItem>
                 <TreeViewItem
+                    type="read"
                     label="Folder 2"
                     icon={FolderClose}
                     expandedIcon={FolderOpen}
                 >
                     <TreeViewItem
+                        type="read"
                         label="Folder 2.1"
                         icon={FolderClose}
                         expandedIcon={FolderOpen}
@@ -126,32 +114,48 @@ const StyledTreeViewItem: React.FC<TreeViewItemProps> = props => {
 export const WithStyles: Story = {
     args: {
         label: 'Local Device',
+        type: 'read',
         initialOpen: true,
         icon: FolderClose,
         expandedIcon: FolderOpen,
-        secondaryIcon: SyncingIcon,
-        optionsContent,
         buttonProps: {
             className: itemClassName,
         },
         children: (
             <>
                 <StyledTreeViewItem
+                    type="read"
                     label="Folder 1"
                     icon={FolderClose}
                     expandedIcon={FolderOpen}
                 >
                     <StyledTreeViewItem
-                        label="Folder 1.1"
+                        type="write"
+                        inputProps={{
+                            initialValue: 'New Folder',
+                            placeholder: 'New Folder',
+                            onSubmit: action('submit'),
+                            onCancel: action('cancel'),
+                            submitIcon: (
+                                <img src={CheckIcon} className="w-6 h-6" />
+                            ),
+                            cancelIcon: (
+                                <div className="w-6 h-6 flex items-center justify-center">
+                                    <img src={CancelIcon} />
+                                </div>
+                            ),
+                        }}
                         icon={FolderClose}
                         expandedIcon={FolderOpen}
                     ></StyledTreeViewItem>
                     <StyledTreeViewItem
+                        type="read"
                         label="Folder 1.2"
                         icon={FolderClose}
                         expandedIcon={FolderOpen}
                     >
                         <StyledTreeViewItem
+                            type="read"
                             label="Folder 1.2.1"
                             icon={FolderClose}
                             expandedIcon={FolderOpen}
@@ -159,11 +163,13 @@ export const WithStyles: Story = {
                     </StyledTreeViewItem>
                 </StyledTreeViewItem>
                 <StyledTreeViewItem
+                    type="read"
                     label="Folder 2"
                     icon={FolderClose}
                     expandedIcon={FolderOpen}
                 >
                     <StyledTreeViewItem
+                        type="read"
                         label="Folder 2.1"
                         icon={FolderClose}
                         expandedIcon={FolderOpen}

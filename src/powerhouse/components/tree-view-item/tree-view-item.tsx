@@ -1,26 +1,34 @@
 import CaretIcon from '@/assets/icons/caret.svg';
 import React, { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
+import { TreeViewInput, TreeViewInputProps } from '..';
 
-export interface TreeViewItemProps
+export interface SharedTreeViewItemProps
     extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onClick'> {
-    label: string;
     children?: React.ReactNode;
     initialOpen?: boolean;
     expandedIcon?: string;
     icon?: string;
     level?: number;
     onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-    onOptionsClick?: (
-        event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    ) => void;
-    secondaryIcon?: string;
     buttonProps?: React.DetailedHTMLProps<
         React.HTMLAttributes<HTMLDivElement>,
         HTMLDivElement
     >;
-    optionsContent?: React.ReactNode;
+    'aria-label'?: string;
 }
+
+export type ReadTreeViewItemProps = SharedTreeViewItemProps & {
+    type: 'read';
+    label: string;
+};
+
+export type WriteTreeViewItemProps = SharedTreeViewItemProps & {
+    type: 'write';
+    inputProps: TreeViewInputProps;
+};
+
+export type TreeViewItemProps = ReadTreeViewItemProps | WriteTreeViewItemProps;
 
 const injectLevelProps = (
     children: React.ReactNode,
@@ -32,7 +40,7 @@ const injectLevelProps = (
                 return injectLevelProps(child.props.children, level);
             }
 
-            const customProps: Partial<TreeViewItemProps> = {
+            const customProps: Partial<SharedTreeViewItemProps> = {
                 level: level + 1,
             };
 
@@ -48,15 +56,12 @@ const injectLevelProps = (
 
 export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
     const {
+        type,
         icon,
-        label,
         onClick,
         children,
         initialOpen,
         expandedIcon,
-        secondaryIcon,
-        onOptionsClick,
-        optionsContent,
         level = 0,
         buttonProps = {},
         ...divProps
@@ -65,6 +70,7 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
     const [open, setOpen] = useState(initialOpen);
 
     const toggleOpen = () => {
+        if (type === 'write') return;
         setOpen(!open);
     };
 
@@ -76,7 +82,7 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
         e: React.MouseEvent<HTMLDivElement, MouseEvent>,
     ) => {
         toggleOpen();
-        onClick && onClick(e);
+        onClick?.(e);
     };
 
     const {
@@ -88,6 +94,19 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
     const levelPadding = level * 10;
     const caretPadding = children ? 0 : 24;
 
+    function Content() {
+        if (type === 'write') {
+            return <TreeViewInput {...props.inputProps} />;
+        }
+
+        return (
+            <div className="ml-2 flex flex-1 overflow-hidden whitespace-nowrap relative">
+                <span className="absolute right-0 w-12 h-full bg-gradient-to-r from-transparent to-inherit" />
+                {props.label}
+            </div>
+        );
+    }
+
     return (
         <div {...divProps}>
             <div
@@ -95,7 +114,6 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                 onClick={onClickItemHandler}
                 style={{
                     paddingLeft: `${levelPadding + caretPadding}px`,
-
                     ...containerButtonStyle,
                 }}
                 className={twMerge(
@@ -104,7 +122,7 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                 )}
                 {...containerButtonProps}
             >
-                {children && (
+                {!!children && (
                     <img
                         src={CaretIcon}
                         className={twMerge(
@@ -119,25 +137,9 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                         className="pointer-events-none"
                     />
                 )}
-                {label && (
-                    <div className="ml-2 flex flex-1 overflow-hidden whitespace-nowrap relative">
-                        <span className="absolute right-0 w-12 h-full bg-gradient-to-r from-transparent to-inherit" />
-                        {label}
-                    </div>
-                )}
-                {optionsContent && (
-                    <div className="w-6 h-6 px-3 box-content hidden group-hover/tree-item:inline-block">
-                        {optionsContent}
-                    </div>
-                )}
-                {secondaryIcon && (
-                    <img
-                        src={secondaryIcon}
-                        className="flex self-end w-6 h-6 mx-3 group-hover/tree-item:hidden pointer-events-none"
-                    />
-                )}
+                <Content />
             </div>
-            {children && (
+            {!!children && (
                 <div className={twMerge(!open && 'hidden')}>
                     {injectLevelProps(children, level)}
                 </div>

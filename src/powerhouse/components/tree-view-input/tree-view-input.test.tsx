@@ -31,11 +31,9 @@ describe('TreeViewInput Component', () => {
     it('should match snapshot', () => {
         const { asFragment } = render(
             <TreeViewInput
-                level={0}
                 aria-label="input-label"
                 onSubmit={() => {}}
                 onCancel={() => {}}
-                icon={<div>Icon</div>}
                 initialValue="My Documents"
                 submitIcon={<div>Submit Icon</div>}
                 cancelIcon={<div>Cancel Icon</div>}
@@ -46,7 +44,6 @@ describe('TreeViewInput Component', () => {
     });
 
     it('should render correctly', () => {
-        expect(screen.getByText(props.icon)).toBeInTheDocument();
         expect(
             screen.getByDisplayValue(props.initialValue),
         ).toBeInTheDocument();
