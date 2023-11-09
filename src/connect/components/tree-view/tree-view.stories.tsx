@@ -10,15 +10,14 @@ const meta = {
         items: { control: { type: 'object' } },
         onItemClick: { control: { type: 'action' } },
         onDropEvent: { control: { type: 'action' } },
-        onItemOptionsClick: { control: { type: 'action' } },
-        defaultItemOptions: { control: { type: 'object' } },
+        onOptionsClick: { control: { type: 'action' } },
         onSubmitInput: { control: { type: 'action' } },
         onCancelInput: { control: { type: 'action' } },
     },
 } satisfies Meta<typeof ConnectTreeView>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<{ items: TreeItem }>;
 
 const treeItem: TreeItem = {
     id: 'drive',
@@ -92,56 +91,48 @@ const treeItem: TreeItem = {
     ],
 };
 
-const TreeViewImpl = (args: ConnectTreeViewProps) => {
-    const {
-        onItemClick,
-        items: argItems,
-        onItemOptionsClick,
-        onCancelInput,
-        onSubmitInput,
-        ...treeViewProps
-    } = args;
-    const [items, setItems] = useState(argItems);
+export const TreeView: Story = {
+    args: {
+        items: treeItem,
+    },
+    render: function TreeViewImpl(args) {
+        const [items, setItems] = useState(args.items);
 
-    const traverseTree = (
-        item: TreeItem,
-        callback: (item: TreeItem) => TreeItem,
-    ): TreeItem => {
-        const treeItem = callback(item);
+        const traverseTree = (
+            item: TreeItem,
+            callback: (item: TreeItem) => TreeItem,
+        ): TreeItem => {
+            const treeItem = callback(item);
 
-        if (treeItem.children) {
-            treeItem.children = treeItem.children.map(child =>
-                traverseTree(child, callback),
-            );
-        }
+            if (treeItem.children) {
+                treeItem.children = treeItem.children.map(child =>
+                    traverseTree(child, callback),
+                );
+            }
 
-        return { ...treeItem };
-    };
+            return { ...treeItem };
+        };
 
-    const onItemClickHandler: ConnectTreeViewProps['onItemClick'] = (
-        e,
-        item,
-    ) => {
-        onItemClick?.(e, item);
-        setItems(prevState => {
-            const newTree = traverseTree(prevState, treeItem => {
-                if (treeItem.id === item.id) {
-                    treeItem.isSelected = !treeItem.isSelected;
-                } else {
-                    treeItem.isSelected = false;
-                }
+        const onItemClick: ConnectTreeViewProps['onItemClick'] = (e, item) => {
+            setItems(prevState => {
+                const newTree = traverseTree(prevState, treeItem => {
+                    if (treeItem.id === item.id) {
+                        treeItem.isSelected = !treeItem.isSelected;
+                    } else {
+                        treeItem.isSelected = false;
+                    }
 
-                return treeItem;
+                    return treeItem;
+                });
+
+                return newTree;
             });
+        };
 
-            return newTree;
-        });
-    };
-
-    const onItemOptionsClickHandler: ConnectTreeViewProps['onItemOptionsClick'] =
-        (item, option) => {
-            onItemOptionsClick?.(item, option);
-
+        const onOptionsClick: ConnectTreeViewProps['onOptionsClick'] = (
+            item,
+            option,
+        ) => {
             if (option === 'rename') {
                 const newTree = traverseTree(items, treeItem => {
                     if (treeItem.id === item.id) {
@@ -179,9 +170,7 @@ const TreeViewImpl = (args: ConnectTreeViewProps) => {
             }
         };
 
-    const onCancelInputHandler: ConnectTreeViewProps['onCancelInput'] =
-        item => {
-            onCancelInput?.(item);
+        const onCancelInput: ConnectTreeViewProps['onCancelInput'] = item => {
             const newTree = traverseTree(items, treeItem => {
                 if (treeItem.id === item.id) {
                     treeItem.action = undefined;
@@ -193,9 +182,7 @@ const TreeViewImpl = (args: ConnectTreeViewProps) => {
             setItems(newTree);
         };
 
-    const onSubmitInputHandler: ConnectTreeViewProps['onSubmitInput'] =
-        item => {
-            onSubmitInput?.(item);
+        const onSubmitInput: ConnectTreeViewProps['onSubmitInput'] = item => {
             const newTree = traverseTree(items, treeItem => {
                 if (treeItem.id === item.id) {
                     treeItem.action = undefined;
@@ -212,23 +199,16 @@ const TreeViewImpl = (args: ConnectTreeViewProps) => {
             setItems(newTree);
         };
 
-    return (
-        <div className="p-10 bg-white">
-            <ConnectTreeView
-                items={items}
-                onItemClick={onItemClickHandler}
-                onCancelInput={onCancelInputHandler}
-                onSubmitInput={onSubmitInputHandler}
-                onItemOptionsClick={onItemOptionsClickHandler}
-                {...treeViewProps}
-            />
-        </div>
-    );
-};
-
-export const TreeView: Story = {
-    args: {
-        items: treeItem,
+        return (
+            <div className="p-10 bg-white">
+                <ConnectTreeView
+                    items={items}
+                    onItemClick={onItemClick}
+                    onCancelInput={onCancelInput}
+                    onSubmitInput={onSubmitInput}
+                    onOptionsClick={onOptionsClick}
+                />
+            </div>
+        );
     },
-    render: args => <TreeViewImpl {...args} />,
 };

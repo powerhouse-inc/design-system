@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 
 import {
     ActionType,
@@ -7,67 +7,75 @@ import {
     TreeItem,
 } from '../tree-view-item';
 
-import {
-    ConnectTreeViewInput,
-    ConnectTreeViewInputProps,
-} from '../tree-view-input';
-
-export interface ConnectTreeViewProps<T extends string = string>
+export interface ConnectTreeViewProps
     extends Omit<React.HTMLAttributes<HTMLElement>, 'onClick'> {
-    items: TreeItem<T>;
-    onDropEvent?: ConnectTreeViewItemProps<T>['onDropEvent'];
-    onItemClick?: (
+    items: TreeItem;
+    onDropEvent?: ConnectTreeViewItemProps['onDropEvent'];
+    onItemClick: (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        item: TreeItem<T>,
+        item: TreeItem,
     ) => void;
-    onItemOptionsClick?: ConnectTreeViewItemProps<T>['onOptionsClick'];
-    defaultItemOptions?: ConnectTreeViewItemProps<T>['defaultOptions'];
-    onSubmitInput?: ConnectTreeViewInputProps['onSubmit'];
-    onCancelInput?: ConnectTreeViewInputProps['onCancel'];
+    onOptionsClick: ConnectTreeViewItemProps['onOptionsClick'];
+    onSubmitInput: (item: TreeItem) => void;
+    onCancelInput: (item: TreeItem) => void;
 }
 
-export function ConnectTreeView<T extends string = string>(
-    props: ConnectTreeViewProps<T>,
-) {
+function getInteractionType(itemAction: ActionType | undefined) {
+    if (itemAction === ActionType.New || itemAction === ActionType.Update) {
+        return 'write';
+    }
+    return 'read';
+}
+
+export function ConnectTreeView(props: ConnectTreeViewProps) {
     const {
         items,
         onItemClick,
         onDropEvent,
-        defaultItemOptions,
-        onItemOptionsClick,
-        onSubmitInput = () => {},
-        onCancelInput = () => {},
-        ...elementProps
+        onOptionsClick,
+        onSubmitInput,
+        onCancelInput,
     } = props;
 
-    function renderTreeItems(item: TreeItem<T>, level = 0) {
-        if (
-            item.action === ActionType.New ||
-            item.action === ActionType.Update
-        ) {
+    function renderTreeItems(item: TreeItem, level = 0) {
+        const interactionType = getInteractionType(item.action);
+
+        const onClick: MouseEventHandler<HTMLDivElement> = e =>
+            onItemClick?.(e, item);
+
+        const readProps = {
+            item,
+            children: item.children?.map(item =>
+                renderTreeItems(item, level + 1),
+            ),
+            level,
+            key: item.id,
+            onClick,
+            onDropEvent,
+            onOptionsClick,
+        };
+
+        const writeProps = {
+            ...readProps,
+            onSubmitInput: (value: string) =>
+                onSubmitInput({ ...item, label: value }),
+            onCancelInput: () => onCancelInput(item),
+        };
+
+        if (interactionType === 'write') {
             return (
-                <ConnectTreeViewInput
-                    item={item}
-                    key={item.id}
-                    level={level}
-                    onSubmit={onSubmitInput}
-                    onCancel={onCancelInput}
+                <ConnectTreeViewItem
+                    interactionType={interactionType}
+                    {...writeProps}
                 />
             );
         }
 
         return (
-            <ConnectTreeViewItem<T>
-                item={item}
-                key={item.id}
-                onDropEvent={onDropEvent}
-                onClick={e => onItemClick?.(e, item)}
-                onOptionsClick={onItemOptionsClick}
-                defaultOptions={defaultItemOptions}
-                {...elementProps}
-            >
-                {item.children?.map(item => renderTreeItems(item, level + 1))}
-            </ConnectTreeViewItem>
+            <ConnectTreeViewItem
+                interactionType={interactionType}
+                {...readProps}
+            />
         );
     }
 

@@ -22,6 +22,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const onItemOptionsClick = action('onItemOptionsClick');
+const onSubmitInput = action('onSubmitInput');
+const onCancelInput = action('onCancelInput');
 
 const items = [
     {
@@ -104,6 +106,8 @@ export const Sidebar: Story = {
                     type="public"
                     name="Public Drives"
                     className="mx-2 mb-2"
+                    onSubmitInput={onSubmitInput}
+                    onCancelInput={onCancelInput}
                     onItemOptionsClick={onItemOptionsClick}
                     drives={[
                         {
@@ -119,6 +123,8 @@ export const Sidebar: Story = {
                     type="cloud"
                     name="Secure Cloud Storage"
                     className="mb-2"
+                    onSubmitInput={onSubmitInput}
+                    onCancelInput={onCancelInput}
                     onItemOptionsClick={onItemOptionsClick}
                     drives={[
                         {
@@ -140,6 +146,8 @@ export const Sidebar: Story = {
                 <DriveView
                     type="local"
                     name="My Local Drives"
+                    onSubmitInput={onSubmitInput}
+                    onCancelInput={onCancelInput}
                     onItemOptionsClick={onItemOptionsClick}
                     drives={[
                         {

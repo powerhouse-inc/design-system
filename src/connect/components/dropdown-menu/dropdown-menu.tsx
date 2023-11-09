@@ -1,26 +1,23 @@
-import { DropdownMenu, SharedDropdownMenuProps } from '@/powerhouse';
+import { ControlledDropdownMenuProps, DropdownMenu } from '@/powerhouse';
 import { useMemo } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-export interface ConnectDropdownMenuItem<T extends string = string> {
-    id: T;
+export interface ConnectDropdownMenuItem {
+    id: React.Key;
     icon?: string;
     label: string;
     className?: string;
 }
 
-export interface ConnectDropdownMenuProps<T extends string = string>
-    extends Omit<SharedDropdownMenuProps<T>, 'items'> {
-    items: ConnectDropdownMenuItem<T>[];
+export interface ConnectDropdownMenuProps
+    extends Omit<ControlledDropdownMenuProps, 'items' | 'type'> {
+    items: ConnectDropdownMenuItem[];
 }
 
-export function ConnectDropdownMenu<T extends string = string>(
-    props: ConnectDropdownMenuProps<T>,
-) {
-    const { items, children, onItemClick, menuClassName, ...dropDownProps } =
-        props;
+export function ConnectDropdownMenu(props: ConnectDropdownMenuProps) {
+    const { items, onItemClick, menuClassName, ...dropDownProps } = props;
 
-    const dropdownItems = useMemo<SharedDropdownMenuProps<T>['items']>(
+    const dropdownItems = useMemo<ControlledDropdownMenuProps['items']>(
         () =>
             items.map(item => ({
                 id: item.id,
@@ -43,16 +40,15 @@ export function ConnectDropdownMenu<T extends string = string>(
     );
 
     return (
-        <DropdownMenu<T>
+        <DropdownMenu
+            {...dropDownProps}
+            type="controlled"
             items={dropdownItems}
             onItemClick={onItemClick}
             menuClassName={twMerge(
                 'py-3 rounded-2xl modal-shadow text-sm font-medium text-[#6F767E]',
                 menuClassName,
             )}
-            {...dropDownProps}
-        >
-            {children}
-        </DropdownMenu>
+        ></DropdownMenu>
     );
 }

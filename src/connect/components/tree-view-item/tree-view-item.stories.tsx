@@ -1,5 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ConnectTreeViewItem, ItemStatus, ItemType } from './tree-view-item';
+import {
+    ActionType,
+    ConnectTreeViewItem,
+    ItemStatus,
+    ItemType,
+    ReadConnectTreeViewItemProps,
+    TreeItem,
+    WriteConnectTreeViewItemProps,
+} from './tree-view-item';
 
 const meta: Meta<typeof ConnectTreeViewItem> = {
     title: 'Connect/Components/TreeView',
@@ -11,29 +19,31 @@ const meta: Meta<typeof ConnectTreeViewItem> = {
             </div>
         ),
     ],
-    argTypes: {
-        onClick: { control: { type: 'action' } },
-        onOptionsClick: { control: { type: 'action' } },
-        buttonProps: { control: { type: 'object' } },
-        level: { control: { type: 'number' } },
-        item: { control: { type: 'object' } },
-        defaultOptions: { control: { type: 'object' } },
-    },
 };
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type ReadStory = StoryObj<ReadConnectTreeViewItemProps>;
+type WriteStory = StoryObj<WriteConnectTreeViewItemProps>;
 
-export const TreeViewItem: Story = {
+const mockItem: TreeItem = {
+    id: 'drive/folder1',
+    label: 'Lorem ipsum dolor sit amet',
+    type: ItemType.Folder,
+    status: ItemStatus.Syncing,
+    expanded: false,
+    isSelected: false,
+};
+
+export const Read: ReadStory = {
     args: {
-        level: 0,
-        item: {
-            id: 'drive/folder1',
-            label: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
-            type: ItemType.Folder,
-            status: ItemStatus.Syncing,
-            expanded: false,
-            isSelected: false,
-        },
+        item: mockItem,
+        interactionType: 'read',
+    },
+};
+
+export const Write: WriteStory = {
+    args: {
+        item: { ...mockItem, action: ActionType.Update },
+        interactionType: 'write',
     },
 };

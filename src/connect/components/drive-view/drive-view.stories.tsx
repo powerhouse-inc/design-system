@@ -27,7 +27,6 @@ const meta: Meta<typeof DriveView> = {
         onItemClick: { control: { type: 'action' } },
         onDropEvent: { control: { type: 'action' } },
         onItemOptionsClick: { control: { type: 'action' } },
-        defaultItemOptions: { control: { type: 'object' } },
     },
 };
 

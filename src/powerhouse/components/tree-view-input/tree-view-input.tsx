@@ -53,7 +53,7 @@ export const TreeViewInput: React.FC<TreeViewInputProps> = props => {
         <ClickAwayListener onClickAway={() => onSubmit(text)}>
             <div
                 className={twMerge(
-                    'flex items-center justify-between pr-5 w-full',
+                    'flex items-center justify-between pr-1 w-full',
                     className,
                 )}
                 style={{

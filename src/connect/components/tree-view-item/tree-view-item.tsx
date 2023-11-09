@@ -3,12 +3,11 @@ import {
     ConnectDropdownMenuItem,
 } from '@/connect/components/dropdown-menu';
 import {
-    ReadTreeViewItemProps,
     TreeViewItem,
     UseDraggableTargetProps,
     useDraggableTarget,
 } from '@/powerhouse';
-import { useRef } from 'react';
+import { MouseEventHandler, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 import CheckFilledIcon from '@/assets/icons/check-filled.svg';
@@ -25,6 +24,8 @@ import ServerIcon from '@/assets/icons/server-fill.svg';
 import SyncingIcon from '@/assets/icons/syncing.svg';
 import TrashIcon from '@/assets/icons/trash-fill.svg';
 import DotsIcon from '@/assets/icons/vertical-dots.svg';
+import CancelIcon from '@/assets/icons/xmark.svg';
+import { ItemContainerProps } from '@/powerhouse/components/tree-view-item';
 
 export enum ItemType {
     Folder = 'folder',
@@ -46,19 +47,19 @@ export enum ItemStatus {
     Offline = 'offline',
 }
 
-export interface TreeItem<T extends string = string> {
+export interface TreeItem {
     id: string;
     label: string;
     type: ItemType;
     action?: ActionType;
     status?: ItemStatus;
     expanded?: boolean;
-    children?: TreeItem<T>[];
+    children?: TreeItem[];
     isSelected?: boolean;
-    options?: ConnectDropdownMenuItem<T>[];
+    options?: ConnectDropdownMenuItem[];
 }
 
-export const DefaultOptions = [
+export const defaultOptions = [
     {
         id: 'duplicate',
         label: 'Duplicate',
@@ -80,20 +81,31 @@ export const DefaultOptions = [
         icon: TrashIcon,
         className: 'text-[#EA4335]',
     },
-] as const;
+];
 
-export type DefaultOptionId = (typeof DefaultOptions)[number]['id'];
+type SharedConnectTreeViewItemProps = {
+    children: React.ReactNode;
+    onClick: MouseEventHandler<HTMLDivElement>;
+    buttonProps?: ItemContainerProps;
+    level: number;
+    item: TreeItem;
+    onDropEvent?: UseDraggableTargetProps<TreeItem>['onDropEvent'];
+    onOptionsClick?: (item: TreeItem, option: React.Key) => void;
+};
 
-export interface ConnectTreeViewItemProps<T extends string = DefaultOptionId>
-    extends Pick<
-        ReadTreeViewItemProps,
-        'children' | 'onClick' | 'buttonProps' | 'level'
-    > {
-    item: TreeItem<T>;
-    onDropEvent?: UseDraggableTargetProps<TreeItem<T>>['onDropEvent'];
-    defaultOptions?: ConnectDropdownMenuItem<T>[];
-    onOptionsClick?: (item: TreeItem<T>, option: T) => void;
-}
+export type ReadConnectTreeViewItemProps = SharedConnectTreeViewItemProps & {
+    interactionType: 'read';
+};
+
+export type WriteConnectTreeViewItemProps = SharedConnectTreeViewItemProps & {
+    interactionType: 'write';
+    onSubmitInput: (value: string) => void;
+    onCancelInput: () => void;
+};
+
+export type ConnectTreeViewItemProps =
+    | ReadConnectTreeViewItemProps
+    | WriteConnectTreeViewItemProps;
 
 const getStatusIcon = (status: ItemStatus) => {
     switch (status) {
@@ -126,39 +138,120 @@ const getItemIcon = (type: ItemType) => {
     }
 };
 
-export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
-    props: ConnectTreeViewItemProps<T>,
-) {
+export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [mouseIsWithinButtonContainer, setMouseIsWithinButtonContainer] =
+        useState(false);
+    const [showDropdownMenu, setShowDropdownMenu] = useState(false);
+
     const {
         item,
-        onClick,
         children,
+        buttonProps,
         onDropEvent,
         onOptionsClick,
-        level = 0,
-        buttonProps = {},
-        defaultOptions = DefaultOptions,
-        ...divProps
+        ...delegatedProps
     } = props;
 
-    const containerRef = useRef(null);
+    const { dragProps, dropProps, isDropTarget } = useDraggableTarget<TreeItem>(
+        {
+            data: item,
+            onDropEvent: props.onDropEvent,
+        },
+    );
 
-    const { dragProps, dropProps, isDropTarget } = useDraggableTarget<
-        TreeItem<T>
-    >({
-        data: item,
-        onDropEvent,
-    });
+    const isWriting =
+        item.action === ActionType.New || item.action === ActionType.Update;
+    const isHighlighted = getIsHighlighted();
 
-    const { className: buttonClassName, ...restButtonProps } = buttonProps;
+    function getButtonProps() {
+        const { className: buttonClassName, ...restButtonProps } =
+            buttonProps ?? {};
 
-    const optionsContent = (defaultOptions || item.options) &&
-        onOptionsClick && (
-            <ConnectDropdownMenu<T>
-                items={
-                    item.options ||
-                    (defaultOptions as ConnectDropdownMenuItem<T>[])
+        const onMouseEnter: MouseEventHandler = event => {
+            event.stopPropagation();
+            if (event.target === event?.currentTarget) {
+                setMouseIsWithinButtonContainer(true);
+            }
+        };
+
+        const onMouseLeave: MouseEventHandler = event => {
+            event.stopPropagation();
+            if (event.target === event?.currentTarget) {
+                setMouseIsWithinButtonContainer(false);
+            }
+        };
+
+        const className = twMerge(
+            'py-3 rounded-lg transition-colors',
+            getButtonBackgroundClass(),
+            typeof buttonClassName === 'string' && buttonClassName,
+        );
+
+        return {
+            ...restButtonProps,
+            onMouseEnter,
+            onMouseLeave,
+            className,
+            ref: containerRef,
+        };
+    }
+
+    function getIsHighlighted() {
+        if (item.isSelected) return true;
+        if (isWriting) return true;
+        if (mouseIsWithinButtonContainer) return true;
+        if (showDropdownMenu) return true;
+        return false;
+    }
+
+    function getButtonBackgroundClass() {
+        if (isHighlighted) return 'bg-[#F1F5F9] to-[#F1F5F9]';
+
+        return '';
+    }
+
+    return (
+        <article className="relative">
+            <TreeViewItem
+                {...delegatedProps}
+                {...(onDropEvent && { ...dragProps, ...dropProps })}
+                label={item.label}
+                initialOpen={item.expanded}
+                className={twMerge(isDropTarget && 'rounded-lg bg-[#F4F4F4]')}
+                itemContainerProps={getButtonProps()}
+                submitIcon={<img src={CheckIcon} className="w-6 h-6" />}
+                cancelIcon={
+                    <div className="w-6 h-6 flex items-center justify-center">
+                        <img src={CancelIcon} alt="" />
+                    </div>
                 }
+                {...getItemIcon(item.type)}
+            >
+                {children}
+            </TreeViewItem>
+            {!!item.status && !isHighlighted && (
+                <img
+                    src={getStatusIcon(item.status)}
+                    className="w-6 h-6 pointer-events-none absolute right-1 top-3"
+                />
+            )}
+            {isHighlighted && !isWriting && (
+                <button
+                    onMouseEnter={() => setMouseIsWithinButtonContainer(true)}
+                    onClick={() => setShowDropdownMenu(true)}
+                    className="absolute right-1 top-3"
+                >
+                    <img src={DotsIcon} className="w-6 h-6" />
+                </button>
+            )}
+            <ConnectDropdownMenu
+                isOpen={showDropdownMenu}
+                onOpenChange={() => {
+                    setShowDropdownMenu(!showDropdownMenu);
+                    setMouseIsWithinButtonContainer(false);
+                }}
+                items={item.options || defaultOptions}
                 menuClassName="bg-white cursor-pointer"
                 menuItemClassName="hover:bg-[#F1F5F9] px-2"
                 onItemClick={option => onOptionsClick?.(item, option)}
@@ -167,36 +260,7 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
                     placement: 'bottom end',
                     offset: -10,
                 }}
-            >
-                <img src={DotsIcon} className="w-6 h-6 pointer-events-none" />
-            </ConnectDropdownMenu>
-        );
-
-    return (
-        <TreeViewItem
-            {...(onDropEvent && { ...dragProps, ...dropProps })}
-            level={level}
-            onClick={onClick}
-            label={item.label}
-            initialOpen={item.expanded}
-            className={twMerge(isDropTarget && 'rounded-lg bg-[#F4F4F4]')}
-            buttonProps={{
-                className: twMerge(
-                    'py-3 rounded-lg hover:bg-[#F1F5F9] hover:to-[#F1F5F9]',
-                    item.isSelected && 'bg-[#F1F5F9] to-[#F1F5F9]',
-                    typeof buttonClassName === 'string' && buttonClassName,
-                ),
-                ref: containerRef,
-                ...restButtonProps,
-            }}
-            DropdownMenu={optionsContent}
-            {...(item.status && {
-                secondaryIcon: getStatusIcon(item.status),
-            })}
-            {...getItemIcon(item.type)}
-            {...divProps}
-        >
-            {children}
-        </TreeViewItem>
+            ></ConnectDropdownMenu>
+        </article>
     );
 }

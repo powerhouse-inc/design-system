@@ -1,31 +1,36 @@
 import CaretIcon from '@/assets/icons/caret.svg';
 import React, { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { TreeViewInput, TreeViewInputProps } from '..';
+import { TreeViewInput } from '..';
 
 export interface SharedTreeViewItemProps
     extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onClick'> {
+    label: string;
     children?: React.ReactNode;
     initialOpen?: boolean;
     expandedIcon?: string;
+    submitIcon: React.ReactNode;
+    cancelIcon: React.ReactNode;
     icon?: string;
     level?: number;
     onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-    buttonProps?: React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLDivElement>,
-        HTMLDivElement
-    >;
+    itemContainerProps?: ItemContainerProps;
     'aria-label'?: string;
 }
 
+export type ItemContainerProps = React.DetailedHTMLProps<
+    React.HTMLAttributes<HTMLDivElement>,
+    HTMLDivElement
+>;
+
 export type ReadTreeViewItemProps = SharedTreeViewItemProps & {
-    type: 'read';
-    label: string;
+    interactionType: 'read';
 };
 
 export type WriteTreeViewItemProps = SharedTreeViewItemProps & {
-    type: 'write';
-    inputProps: TreeViewInputProps;
+    interactionType: 'write';
+    onSubmitInput: (value: string) => void;
+    onCancelInput: () => void;
 };
 
 export type TreeViewItemProps = ReadTreeViewItemProps | WriteTreeViewItemProps;
@@ -54,23 +59,24 @@ const injectLevelProps = (
     });
 };
 
-export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
+export function TreeViewItem(props: TreeViewItemProps) {
     const {
-        type,
+        label,
+        interactionType,
         icon,
         onClick,
         children,
         initialOpen,
         expandedIcon,
         level = 0,
-        buttonProps = {},
+        itemContainerProps: buttonProps = {},
         ...divProps
     } = props;
 
     const [open, setOpen] = useState(initialOpen);
 
     const toggleOpen = () => {
-        if (type === 'write') return;
+        if (interactionType === 'write') return;
         setOpen(!open);
     };
 
@@ -95,14 +101,22 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
     const caretPadding = children ? 0 : 24;
 
     function Content() {
-        if (type === 'write') {
-            return <TreeViewInput {...props.inputProps} />;
+        if (interactionType === 'write') {
+            return (
+                <TreeViewInput
+                    {...props}
+                    className={twMerge('rounded-lg', props.className)}
+                    initialValue={label}
+                    onSubmit={value => props.onSubmitInput(value)}
+                    onCancel={() => props.onCancelInput()}
+                />
+            );
         }
 
         return (
             <div className="ml-2 flex flex-1 overflow-hidden whitespace-nowrap relative">
                 <span className="absolute right-0 w-12 h-full bg-gradient-to-r from-transparent to-inherit" />
-                {props.label}
+                {label}
             </div>
         );
     }
@@ -117,7 +131,7 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                     ...containerButtonStyle,
                 }}
                 className={twMerge(
-                    'flex flex-row w-full cursor-pointer select-none group/tree-item focus:outline-none',
+                    'flex flex-row w-full cursor-pointer select-none focus:outline-none',
                     containerButtonClassName,
                 )}
                 {...containerButtonProps}
@@ -146,4 +160,4 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
             )}
         </div>
     );
-};
+}
