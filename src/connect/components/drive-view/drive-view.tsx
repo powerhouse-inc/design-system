@@ -1,4 +1,4 @@
-import IconGear from '@/assets/icons/gear.svg?react';
+import { Icon } from '@/powerhouse';
 import { DropItem } from '@/powerhouse/hooks';
 import type { DropEvent } from 'react-aria';
 import { Button } from 'react-aria-components';
@@ -72,7 +72,7 @@ export function DriveView<T extends string = DefaultOptionId>(
                     {name}
                 </p>
                 <Button>
-                    <IconGear />
+                    <Icon name="gear" className="w-4 h-4" />
                 </Button>
             </div>
             <div className="py-2">

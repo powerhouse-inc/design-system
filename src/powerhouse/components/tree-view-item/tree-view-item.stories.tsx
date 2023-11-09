@@ -1,14 +1,7 @@
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
+import { Icon } from '..';
 import { TreeViewItem, TreeViewItemProps } from './tree-view-item';
-
-import CheckFilledIcon from '@/assets/icons/check-filled.svg';
-import CheckIcon from '@/assets/icons/check.svg';
-import CloudSlashIcon from '@/assets/icons/cloud-slash.svg';
-import FolderClose from '@/assets/icons/folder-close-fill.svg';
-import FolderOpen from '@/assets/icons/folder-open-fill.svg';
-import SyncingIcon from '@/assets/icons/syncing.svg';
-import DotsIcon from '@/assets/icons/vertical-dots.svg';
 
 const meta: Meta<typeof TreeViewItem> = {
     title: 'Powerhouse/Components/TreeView/TreeViewItem',
@@ -24,21 +17,21 @@ const meta: Meta<typeof TreeViewItem> = {
         children: { control: { type: 'text' } },
         label: { control: { type: 'text' } },
         initialOpen: { control: { type: 'boolean' } },
-        expandedIcon: { control: { type: 'text' } },
-        icon: { control: { type: 'text' } },
+        expandedIconName: { control: { type: 'text' } },
+        iconName: { control: { type: 'text' } },
         onClick: { control: { type: 'action' } },
         onOptionsClick: { control: { type: 'action' } },
         level: { control: { type: 'number' } },
-        secondaryIcon: {
+        secondaryIconName: {
             control: {
                 type: 'select',
             },
             options: [
                 undefined,
-                CheckIcon,
-                CheckFilledIcon,
-                SyncingIcon,
-                CloudSlashIcon,
+                'check',
+                'check-filled',
+                'syncing',
+                'cloud-slash',
             ],
         },
     },
@@ -56,7 +49,7 @@ const optionsContent = (
         }}
         className="w-6 h-6 focus:outline-none"
     >
-        <img src={DotsIcon} className="w-6 h-6 pointer-events-none" />
+        <Icon name="vertical-dots" className="w-6 h-6 pointer-events-none" />
     </div>
 );
 
@@ -64,43 +57,43 @@ export const Primary: Story = {
     args: {
         label: 'Local Device',
         initialOpen: true,
-        icon: FolderClose,
-        expandedIcon: FolderOpen,
-        secondaryIcon: SyncingIcon,
+        iconName: 'folder-close-fill',
+        expandedIconName: 'folder-open-fill',
+        secondaryIconName: 'syncing',
         optionsContent,
         children: (
             <>
                 <TreeViewItem
                     label="Folder 1"
-                    icon={FolderClose}
-                    expandedIcon={FolderOpen}
+                    iconName={'folder-close-fill'}
+                    expandedIconName={'folder-open-fill'}
                 >
                     <TreeViewItem
                         label="Folder 1.1"
-                        icon={FolderClose}
-                        expandedIcon={FolderOpen}
+                        iconName={'folder-close-fill'}
+                        expandedIconName={'folder-open-fill'}
                     ></TreeViewItem>
                     <TreeViewItem
                         label="Folder 1.2"
-                        icon={FolderClose}
-                        expandedIcon={FolderOpen}
+                        iconName={'folder-close-fill'}
+                        expandedIconName={'folder-open-fill'}
                     >
                         <TreeViewItem
                             label="Folder 1.2.1"
-                            icon={FolderClose}
-                            expandedIcon={FolderOpen}
+                            iconName={'folder-close-fill'}
+                            expandedIconName={'folder-open-fill'}
                         ></TreeViewItem>
                     </TreeViewItem>
                 </TreeViewItem>
                 <TreeViewItem
                     label="Folder 2"
-                    icon={FolderClose}
-                    expandedIcon={FolderOpen}
+                    iconName={'folder-close-fill'}
+                    expandedIconName={'folder-open-fill'}
                 >
                     <TreeViewItem
                         label="Folder 2.1"
-                        icon={FolderClose}
-                        expandedIcon={FolderOpen}
+                        iconName={'folder-close-fill'}
+                        expandedIconName={'folder-open-fill'}
                     ></TreeViewItem>
                 </TreeViewItem>
             </>
@@ -127,9 +120,9 @@ export const WithStyles: Story = {
     args: {
         label: 'Local Device',
         initialOpen: true,
-        icon: FolderClose,
-        expandedIcon: FolderOpen,
-        secondaryIcon: SyncingIcon,
+        iconName: 'folder-close-fill',
+        expandedIconName: 'folder-open-fill',
+        secondaryIconName: 'syncing',
         optionsContent,
         buttonProps: {
             className: itemClassName,
@@ -138,35 +131,35 @@ export const WithStyles: Story = {
             <>
                 <StyledTreeViewItem
                     label="Folder 1"
-                    icon={FolderClose}
-                    expandedIcon={FolderOpen}
+                    iconName={'folder-close-fill'}
+                    expandedIconName={'folder-open-fill'}
                 >
                     <StyledTreeViewItem
                         label="Folder 1.1"
-                        icon={FolderClose}
-                        expandedIcon={FolderOpen}
+                        iconName={'folder-close-fill'}
+                        expandedIconName={'folder-open-fill'}
                     ></StyledTreeViewItem>
                     <StyledTreeViewItem
                         label="Folder 1.2"
-                        icon={FolderClose}
-                        expandedIcon={FolderOpen}
+                        iconName={'folder-close-fill'}
+                        expandedIconName={'folder-open-fill'}
                     >
                         <StyledTreeViewItem
                             label="Folder 1.2.1"
-                            icon={FolderClose}
-                            expandedIcon={FolderOpen}
+                            iconName={'folder-close-fill'}
+                            expandedIconName={'folder-open-fill'}
                         ></StyledTreeViewItem>
                     </StyledTreeViewItem>
                 </StyledTreeViewItem>
                 <StyledTreeViewItem
                     label="Folder 2"
-                    icon={FolderClose}
-                    expandedIcon={FolderOpen}
+                    iconName={'folder-close-fill'}
+                    expandedIconName={'folder-open-fill'}
                 >
                     <StyledTreeViewItem
                         label="Folder 2.1"
-                        icon={FolderClose}
-                        expandedIcon={FolderOpen}
+                        iconName={'folder-close-fill'}
+                        expandedIconName={'folder-open-fill'}
                     ></StyledTreeViewItem>
                 </StyledTreeViewItem>
             </>

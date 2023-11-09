@@ -1,5 +1,4 @@
-import IconArrowLeft from '@/assets/icons/arrow-left.svg?react';
-import { SidebarHeader, SidebarHeaderProps } from '@/powerhouse';
+import { Icon, SidebarHeader, SidebarHeaderProps } from '@/powerhouse';
 import { Button } from 'react-aria-components';
 import { twMerge } from 'tailwind-merge';
 
@@ -31,7 +30,7 @@ export const ConnectSidebarHeader: React.FC<ConnectSidebarHeaderProps> = ({
                 expanding:hidden`}
                 onPress={() => onToggle()}
             >
-                <IconArrowLeft />
+                <Icon name="arrow-left" className="w-4 h-4" />
             </Button>
         </SidebarHeader>
     );

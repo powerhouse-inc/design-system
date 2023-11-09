@@ -1,10 +1,10 @@
-import { DropdownMenu, DropdownMenuProps } from '@/powerhouse';
+import { DropdownMenu, DropdownMenuProps, Icon } from '@/powerhouse';
 import { useMemo } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 export interface ConnectDropdownMenuItem<T extends string = string> {
     id: T;
-    icon?: string;
+    iconName?: string;
     label: string;
     className?: string;
 }
@@ -32,8 +32,11 @@ export function ConnectDropdownMenu<T extends string = string>(
                             item.className,
                         )}
                     >
-                        {item.icon && (
-                            <img src={item.icon} className="h-6 w-6 mr-2" />
+                        {item.iconName && (
+                            <Icon
+                                name={item.iconName}
+                                className="h-6 w-6 mr-2"
+                            />
                         )}
                         <div>{item.label}</div>
                     </div>

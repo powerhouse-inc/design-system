@@ -1,20 +1,20 @@
-import CaretIcon from '@/assets/icons/caret.svg';
 import React, { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
+import { Icon } from '..';
 
 export interface TreeViewItemProps
     extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onClick'> {
     label: string;
     children?: React.ReactNode;
     initialOpen?: boolean;
-    expandedIcon?: string;
-    icon?: string;
+    expandedIconName?: string;
+    iconName?: string;
     level?: number;
     onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     onOptionsClick?: (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     ) => void;
-    secondaryIcon?: string;
+    secondaryIconName?: string;
     buttonProps?: React.DetailedHTMLProps<
         React.HTMLAttributes<HTMLDivElement>,
         HTMLDivElement
@@ -48,13 +48,13 @@ const injectLevelProps = (
 
 export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
     const {
-        icon,
+        iconName,
         label,
         onClick,
         children,
         initialOpen,
-        expandedIcon,
-        secondaryIcon,
+        expandedIconName,
+        secondaryIconName,
         onOptionsClick,
         optionsContent,
         level = 0,
@@ -105,18 +105,18 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                 {...containerButtonProps}
             >
                 {children && (
-                    <img
-                        src={CaretIcon}
+                    <Icon
+                        name="caret"
                         className={twMerge(
                             open && 'rotate-90',
-                            'transition ease delay-50 pointer-events-none',
+                            'transition ease delay-50 pointer-events-none w-6 h-6',
                         )}
                     />
                 )}
-                {icon && (
-                    <img
-                        src={open ? expandedIcon || icon : icon}
-                        className="pointer-events-none"
+                {iconName && (
+                    <Icon
+                        name={open ? expandedIconName || iconName : iconName}
+                        className="pointer-events-none w-6 h-6"
                     />
                 )}
                 {label && (
@@ -130,9 +130,9 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                         {optionsContent}
                     </div>
                 )}
-                {secondaryIcon && (
-                    <img
-                        src={secondaryIcon}
+                {secondaryIconName && (
+                    <Icon
+                        name={secondaryIconName}
                         className="flex self-end w-6 h-6 mx-3 group-hover/tree-item:hidden pointer-events-none"
                     />
                 )}

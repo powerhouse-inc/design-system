@@ -3,7 +3,6 @@ import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import { libInjectCss } from 'vite-plugin-lib-inject-css';
-import svgr from 'vite-plugin-svgr';
 import tsConfigPaths from 'vite-tsconfig-paths';
 import pkg from './package.json';
 
@@ -11,7 +10,6 @@ export default defineConfig(props => {
     return {
         plugins: [
             tsConfigPaths(),
-            svgr(),
             react(),
             libInjectCss(),
             dts({

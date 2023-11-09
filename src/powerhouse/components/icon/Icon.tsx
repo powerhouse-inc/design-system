@@ -1,13 +1,13 @@
 import { ComponentProps } from 'react';
 
-type Props = ComponentProps<'svg'> & {
+export type IconProps = ComponentProps<'svg'> & {
     name: string;
 };
 
-export function Icon({ name, ...props }: Props) {
+export function Icon({ name, ...props }: IconProps) {
     return (
         <svg {...props}>
-            <use href={`/sprite.svg#${name}`} />
+            <use href={`/icons.svg#${name}`} />
         </svg>
     );
 }
