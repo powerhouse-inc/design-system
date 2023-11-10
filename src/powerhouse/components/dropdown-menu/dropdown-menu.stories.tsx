@@ -20,8 +20,8 @@ const meta = {
 } satisfies Meta<typeof DropdownMenu>;
 
 export default meta;
-type ControlledStory = StoryObj<ControlledDropdownMenuProps>;
-type UncontrolledStory = StoryObj<UncontrolledDropdownMenuProps>;
+type ControlledStory = StoryObj<ControlledDropdownMenuProps<string>>;
+type UncontrolledStory = StoryObj<UncontrolledDropdownMenuProps<string>>;
 
 const sharedArgs = {
     className:

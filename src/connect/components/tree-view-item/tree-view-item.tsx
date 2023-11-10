@@ -47,16 +47,16 @@ export enum ItemStatus {
     Offline = 'offline',
 }
 
-export interface TreeItem {
-    id: string;
+export interface TreeItem<TItemId extends string = string> {
+    id: TItemId;
     label: string;
     type: ItemType;
     action?: ActionType;
     status?: ItemStatus;
     expanded?: boolean;
-    children?: TreeItem[];
+    children?: TreeItem<TItemId>[];
     isSelected?: boolean;
-    options?: ConnectDropdownMenuItem[];
+    options?: ConnectDropdownMenuItem<TItemId>[];
 }
 
 export const defaultOptions = [
@@ -81,31 +81,39 @@ export const defaultOptions = [
         icon: TrashIcon,
         className: 'text-[#EA4335]',
     },
-];
+] as const;
 
-type SharedConnectTreeViewItemProps = {
-    children: React.ReactNode;
-    onClick: MouseEventHandler<HTMLDivElement>;
-    buttonProps?: ItemContainerProps;
-    level: number;
-    item: TreeItem;
-    onDropEvent?: UseDraggableTargetProps<TreeItem>['onDropEvent'];
-    onOptionsClick?: (item: TreeItem, option: React.Key) => void;
-};
+export type DefaultOptionId = (typeof defaultOptions)[number]['id'];
 
-export type ReadConnectTreeViewItemProps = SharedConnectTreeViewItemProps & {
+type SharedConnectTreeViewItemProps<TItemId extends string = DefaultOptionId> =
+    {
+        children: React.ReactNode;
+        onClick: MouseEventHandler<HTMLDivElement>;
+        buttonProps?: ItemContainerProps;
+        level: number;
+        item: TreeItem<TItemId>;
+        onDropEvent?: UseDraggableTargetProps<TreeItem<TItemId>>['onDropEvent'];
+        onOptionsClick?: (item: TreeItem<TItemId>, option: TItemId) => void;
+    };
+
+export type ReadConnectTreeViewItemProps<
+    TItemId extends string = DefaultOptionId,
+> = SharedConnectTreeViewItemProps<TItemId> & {
     interactionType: 'read';
 };
 
-export type WriteConnectTreeViewItemProps = SharedConnectTreeViewItemProps & {
+export type WriteConnectTreeViewItemProps<
+    TItemId extends string = DefaultOptionId,
+> = SharedConnectTreeViewItemProps<TItemId> & {
     interactionType: 'write';
     onSubmitInput: (value: string) => void;
     onCancelInput: () => void;
 };
 
-export type ConnectTreeViewItemProps =
-    | ReadConnectTreeViewItemProps
-    | WriteConnectTreeViewItemProps;
+export type ConnectTreeViewItemProps<TItemId extends string = DefaultOptionId> =
+
+        | ReadConnectTreeViewItemProps<TItemId>
+        | WriteConnectTreeViewItemProps<TItemId>;
 
 const getStatusIcon = (status: ItemStatus) => {
     switch (status) {
@@ -138,7 +146,9 @@ const getItemIcon = (type: ItemType) => {
     }
 };
 
-export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
+export function ConnectTreeViewItem<TItemId extends string = DefaultOptionId>(
+    props: ConnectTreeViewItemProps<TItemId>,
+) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [mouseIsWithinButtonContainer, setMouseIsWithinButtonContainer] =
         useState(false);
@@ -153,12 +163,12 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         ...delegatedProps
     } = props;
 
-    const { dragProps, dropProps, isDropTarget } = useDraggableTarget<TreeItem>(
-        {
-            data: item,
-            onDropEvent: props.onDropEvent,
-        },
-    );
+    const { dragProps, dropProps, isDropTarget } = useDraggableTarget<
+        TreeItem<TItemId>
+    >({
+        data: item,
+        onDropEvent: props.onDropEvent,
+    });
 
     const isWriting =
         item.action === ActionType.New || item.action === ActionType.Update;
@@ -211,6 +221,11 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         return '';
     }
 
+    const options =
+        item.options ??
+        // @ts-expect-error temp
+        (defaultOptions as ConnectDropdownMenuItem<TItemId>[]);
+
     return (
         <article className="relative">
             <TreeViewItem
@@ -245,13 +260,13 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                     <img src={DotsIcon} className="w-6 h-6" />
                 </button>
             )}
-            <ConnectDropdownMenu
+            <ConnectDropdownMenu<TItemId>
                 isOpen={showDropdownMenu}
                 onOpenChange={() => {
                     setShowDropdownMenu(!showDropdownMenu);
                     setMouseIsWithinButtonContainer(false);
                 }}
-                items={item.options || defaultOptions}
+                items={options}
                 menuClassName="bg-white cursor-pointer"
                 menuItemClassName="hover:bg-[#F1F5F9] px-2"
                 onItemClick={option => onOptionsClick?.(item, option)}

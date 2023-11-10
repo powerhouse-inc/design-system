@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { DropdownMenu, SharedDropdownMenuProps } from './dropdown-menu';
 
 const children = '☰';
-const items: SharedDropdownMenuProps['items'] = [
+const items: SharedDropdownMenuProps<string>['items'] = [
     {
         id: 'item-1',
         content: 'Item 1',

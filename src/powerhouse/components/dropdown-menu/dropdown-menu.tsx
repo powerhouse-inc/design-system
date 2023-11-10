@@ -9,32 +9,34 @@ import {
 } from 'react-aria-components';
 import { twMerge } from 'tailwind-merge';
 
-export interface SharedDropdownMenuProps {
-    onItemClick: (itemId: React.Key) => void;
-    items: Array<{ id: React.Key; content: React.ReactNode }>;
+export interface SharedDropdownMenuProps<TItemId extends string> {
+    onItemClick: (itemId: TItemId) => void;
+    items: Array<{ id: TItemId; content: React.ReactNode }>;
     className?: string;
     menuClassName?: string;
     menuItemClassName?: string;
     popoverProps?: PopoverProps;
 }
 
-export type ControlledDropdownMenuProps = SharedDropdownMenuProps & {
-    isOpen: boolean;
-    onOpenChange: (isOpen: boolean) => void;
-    defaultOpen?: undefined;
-    children?: undefined;
-};
+export type ControlledDropdownMenuProps<TItemId extends string> =
+    SharedDropdownMenuProps<TItemId> & {
+        isOpen: boolean;
+        onOpenChange: (isOpen: boolean) => void;
+        defaultOpen?: undefined;
+        children?: undefined;
+    };
 
-export type UncontrolledDropdownMenuProps = SharedDropdownMenuProps & {
-    children: React.ReactNode;
-    onOpenChange?: (isOpen: boolean) => void;
-    defaultOpen?: boolean;
-    isOpen?: undefined;
-};
+export type UncontrolledDropdownMenuProps<TItemId extends string> =
+    SharedDropdownMenuProps<TItemId> & {
+        children: React.ReactNode;
+        onOpenChange?: (isOpen: boolean) => void;
+        defaultOpen?: boolean;
+        isOpen?: undefined;
+    };
 
-export type DropdownMenuProps =
-    | ControlledDropdownMenuProps
-    | UncontrolledDropdownMenuProps;
+export type DropdownMenuProps<TItemId extends string> =
+    | ControlledDropdownMenuProps<TItemId>
+    | UncontrolledDropdownMenuProps<TItemId>;
 
 /**
  * A dropdown menu component based on react-aria-components' <Menu />.
@@ -47,7 +49,9 @@ export type DropdownMenuProps =
  *
  * Uncontrolled mode is useful when you want to use the default button and state provided by the component. In uncontrolled mode, you must pass a `children` prop to the component, which will be used as the content of the button that toggles the menu.
  */
-export function DropdownMenu(props: DropdownMenuProps) {
+export function DropdownMenu<TItemId extends string>(
+    props: DropdownMenuProps<TItemId>,
+) {
     const {
         items,
         className,
@@ -60,7 +64,7 @@ export function DropdownMenu(props: DropdownMenuProps) {
     const Component = () => (
         <Popover {...popoverProps}>
             <Menu
-                onAction={key => onItemClick(key)}
+                onAction={key => onItemClick(key as TItemId)}
                 className={twMerge(
                     'outline-none overflow-hidden',
                     menuClassName,

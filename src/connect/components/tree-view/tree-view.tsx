@@ -7,17 +7,17 @@ import {
     TreeItem,
 } from '../tree-view-item';
 
-export interface ConnectTreeViewProps
+export interface ConnectTreeViewProps<TItemId extends string = string>
     extends Omit<React.HTMLAttributes<HTMLElement>, 'onClick'> {
-    items: TreeItem;
-    onDropEvent?: ConnectTreeViewItemProps['onDropEvent'];
+    items: TreeItem<TItemId>;
+    onDropEvent?: ConnectTreeViewItemProps<TItemId>['onDropEvent'];
     onItemClick: (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        item: TreeItem,
+        item: TreeItem<TItemId>,
     ) => void;
-    onOptionsClick: ConnectTreeViewItemProps['onOptionsClick'];
-    onSubmitInput: (item: TreeItem) => void;
-    onCancelInput: (item: TreeItem) => void;
+    onOptionsClick: ConnectTreeViewItemProps<TItemId>['onOptionsClick'];
+    onSubmitInput: (item: TreeItem<TItemId>) => void;
+    onCancelInput: (item: TreeItem<TItemId>) => void;
 }
 
 function getInteractionType(itemAction: ActionType | undefined) {
@@ -27,7 +27,9 @@ function getInteractionType(itemAction: ActionType | undefined) {
     return 'read';
 }
 
-export function ConnectTreeView(props: ConnectTreeViewProps) {
+export function ConnectTreeView<TItemId extends string = string>(
+    props: ConnectTreeViewProps<TItemId>,
+) {
     const {
         items,
         onItemClick,
@@ -37,7 +39,7 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
         onCancelInput,
     } = props;
 
-    function renderTreeItems(item: TreeItem, level = 0) {
+    function renderTreeItems(item: TreeItem<TItemId>, level = 0) {
         const interactionType = getInteractionType(item.action);
 
         const onClick: MouseEventHandler<HTMLDivElement> = e =>
@@ -64,7 +66,7 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
 
         if (interactionType === 'write') {
             return (
-                <ConnectTreeViewItem
+                <ConnectTreeViewItem<TItemId>
                     interactionType={interactionType}
                     {...writeProps}
                 />
@@ -72,7 +74,7 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
         }
 
         return (
-            <ConnectTreeViewItem
+            <ConnectTreeViewItem<TItemId>
                 interactionType={interactionType}
                 {...readProps}
             />

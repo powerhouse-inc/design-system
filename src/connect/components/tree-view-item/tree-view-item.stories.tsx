@@ -22,10 +22,10 @@ const meta: Meta<typeof ConnectTreeViewItem> = {
 };
 
 export default meta;
-type ReadStory = StoryObj<ReadConnectTreeViewItemProps>;
-type WriteStory = StoryObj<WriteConnectTreeViewItemProps>;
+type ReadStory = StoryObj<ReadConnectTreeViewItemProps<string>>;
+type WriteStory = StoryObj<WriteConnectTreeViewItemProps<string>>;
 
-const mockItem: TreeItem = {
+const mockItem: TreeItem<string> = {
     id: 'drive/folder1',
     label: 'Lorem ipsum dolor sit amet',
     type: ItemType.Folder,
