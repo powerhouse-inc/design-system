@@ -7,43 +7,41 @@ import { ConnectTreeView, DefaultOptionId, ItemType, TreeItem } from '..';
 
 export type DriveType = 'public' | 'local' | 'cloud';
 
-export interface DriveTreeItem<TItemId extends string = DefaultOptionId>
-    extends TreeItem<TItemId> {
+export interface DriveTreeItem<T extends string = DefaultOptionId>
+    extends TreeItem<T> {
     type: ItemType.LocalDrive | ItemType.NetworkDrive | ItemType.PublicDrive;
 }
 
-export type OnItemOptionsClickHandler<
-    TItemId extends string = DefaultOptionId,
-> = (
-    item: TreeItem<TItemId>,
-    option: TItemId,
-    drive: DriveTreeItem<TItemId>,
+export type OnItemOptionsClickHandler<T extends string = DefaultOptionId> = (
+    item: TreeItem<T>,
+    option: T,
+    drive: DriveTreeItem<T>,
 ) => void;
 
-export interface DriveViewProps<TItemId extends string = DefaultOptionId>
+export interface DriveViewProps<T extends string = DefaultOptionId>
     extends React.HTMLAttributes<HTMLDivElement> {
     type: DriveType;
     name: string;
-    drives: DriveTreeItem<TItemId>[];
-    onSubmitInput: (item: TreeItem<TItemId>) => void;
-    onCancelInput: (item: TreeItem<TItemId>) => void;
+    drives: DriveTreeItem<T>[];
+    onSubmitInput: (item: TreeItem<T>) => void;
+    onCancelInput: (item: TreeItem<T>) => void;
     onDropEvent?: (
-        item: DropItem<TreeItem<TItemId>>,
-        target: TreeItem<TItemId>,
+        item: DropItem<TreeItem<T>>,
+        target: TreeItem<T>,
         event: DropEvent,
-        drive: DriveTreeItem<TItemId>,
+        drive: DriveTreeItem<T>,
     ) => void;
     onItemClick?: (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        item: TreeItem<TItemId>,
-        drive: DriveTreeItem<TItemId>,
+        item: TreeItem<T>,
+        drive: DriveTreeItem<T>,
     ) => void;
 
-    onItemOptionsClick?: OnItemOptionsClickHandler<TItemId>;
+    onItemOptionsClick?: OnItemOptionsClickHandler<T>;
 }
 
-export function DriveView<TItemId extends string = DefaultOptionId>(
-    props: DriveViewProps<TItemId>,
+export function DriveView<T extends string = DefaultOptionId>(
+    props: DriveViewProps<T>,
 ) {
     const {
         className,
@@ -76,7 +74,7 @@ export function DriveView<TItemId extends string = DefaultOptionId>(
             </div>
             <div className="py-2">
                 {drives.map(drive => (
-                    <ConnectTreeView<TItemId>
+                    <ConnectTreeView<T>
                         key={drive.id}
                         items={drive}
                         onSubmitInput={onSubmitInput}

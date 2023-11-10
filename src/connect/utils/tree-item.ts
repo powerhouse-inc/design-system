@@ -1,10 +1,10 @@
 import { DriveTreeItem } from '@/connect/components/drive-view';
-import { TreeItem } from '@/connect/components/tree-view-item';
+import { DefaultOptionId, TreeItem } from '@/connect/components/tree-view-item';
 
-export const traverseTree = (
-    item: TreeItem,
-    callback: (item: TreeItem) => TreeItem,
-): TreeItem => {
+export const traverseTree = <T extends string = DefaultOptionId>(
+    item: TreeItem<T>,
+    callback: (item: TreeItem<T>) => TreeItem<T>,
+): TreeItem<T> => {
     const treeItem = callback(item);
 
     if (treeItem.children) {
@@ -16,18 +16,18 @@ export const traverseTree = (
     return { ...treeItem };
 };
 
-export const traverseDriveById = (
-    drives: DriveTreeItem[],
+export const traverseDriveById = <T extends string = DefaultOptionId>(
+    drives: DriveTreeItem<T>[],
     driveID: string,
-    callback: (item: TreeItem) => TreeItem,
-): DriveTreeItem[] => {
+    callback: (item: TreeItem<T>) => TreeItem<T>,
+): DriveTreeItem<T>[] => {
     const newDrives = drives.map(drive => {
         if (drive.id === driveID) {
             return traverseTree(drive, callback);
         }
 
         return { ...drive };
-    }) as DriveTreeItem[];
+    }) as DriveTreeItem<T>[];
 
     return newDrives;
 };

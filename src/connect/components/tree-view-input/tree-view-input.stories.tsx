@@ -14,7 +14,6 @@ const meta: Meta<typeof ConnectTreeViewInput> = {
     ],
     argTypes: {
         placeholder: { control: { type: 'text' } },
-        level: { control: { type: 'number' } },
         onCancel: { control: { type: 'action' } },
         onSubmit: { control: { type: 'action' } },
         item: { control: { type: 'object' } },
@@ -32,7 +31,6 @@ export const TreeViewInput: Story = {
             type: ItemType.Folder,
             action: ActionType.Update,
         },
-        level: 0,
         placeholder: 'Folder Name',
     },
 };

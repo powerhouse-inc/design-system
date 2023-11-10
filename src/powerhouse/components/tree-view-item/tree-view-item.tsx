@@ -16,6 +16,8 @@ export interface SharedTreeViewItemProps
     onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     itemContainerProps?: ItemContainerProps;
     'aria-label'?: string;
+    topIndicator?: React.ReactNode;
+    bottomIndicator?: React.ReactNode;
 }
 
 export type ItemContainerProps = React.DetailedHTMLProps<
@@ -69,7 +71,9 @@ export function TreeViewItem(props: TreeViewItemProps) {
         initialOpen,
         expandedIcon,
         level = 0,
-        itemContainerProps: buttonProps = {},
+        itemContainerProps,
+        topIndicator,
+        bottomIndicator,
         ...divProps
     } = props;
 
@@ -95,7 +99,7 @@ export function TreeViewItem(props: TreeViewItemProps) {
         className: containerButtonClassName,
         style: containerButtonStyle,
         ...containerButtonProps
-    } = buttonProps;
+    } = itemContainerProps || {};
 
     const levelPadding = level * 10;
     const caretPadding = children ? 0 : 24;
@@ -123,6 +127,9 @@ export function TreeViewItem(props: TreeViewItemProps) {
 
     return (
         <div {...divProps}>
+            {topIndicator && (
+                <div className="absolute top-0 w-full">{topIndicator}</div>
+            )}
             <div
                 role="button"
                 onClick={onClickItemHandler}
@@ -152,6 +159,11 @@ export function TreeViewItem(props: TreeViewItemProps) {
                     />
                 )}
                 <Content />
+                {bottomIndicator && (
+                    <div className="absolute bottom-0 w-full">
+                        {bottomIndicator}
+                    </div>
+                )}
             </div>
             {!!children && (
                 <div className={twMerge(!open && 'hidden')}>

@@ -1,5 +1,4 @@
 import CheckIcon from '@/assets/icons/check-fill.svg';
-import FolderIcon from '@/assets/icons/folder-close-fill.svg';
 import CancelIcon from '@/assets/icons/xmark.svg';
 import {
     TreeViewInput,
@@ -31,7 +30,6 @@ export const ConnectTreeViewInput: React.FC<
 
     return (
         <TreeViewInput
-            icon={<img src={FolderIcon} />}
             submitIcon={<img src={CheckIcon} className="w-6 h-6" />}
             cancelIcon={
                 <div className="w-6 h-6 flex items-center justify-center">

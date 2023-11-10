@@ -33,11 +33,11 @@ const onItemOptionsClick = action('onItemOptionsClick');
 const onSubmitInput = action('onSubmitInput');
 const onCancelInput = action('onCancelInput');
 
-const DriveViewImpl = (args: DriveViewProps) => {
+const DriveViewImpl = (args: DriveViewProps<string>) => {
     const { drives: initialDrives, onItemClick, ...restArgs } = args;
     const [drives, setDrives] = useState(initialDrives);
 
-    const onItemClickHandler: DriveViewProps['onItemClick'] = (
+    const onItemClickHandler: DriveViewProps<string>['onItemClick'] = (
         e,
         item,
         drive,

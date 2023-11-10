@@ -7,17 +7,17 @@ import {
     TreeItem,
 } from '../tree-view-item';
 
-export interface ConnectTreeViewProps<TItemId extends string = string>
+export interface ConnectTreeViewProps<T extends string = string>
     extends Omit<React.HTMLAttributes<HTMLElement>, 'onClick'> {
-    items: TreeItem<TItemId>;
-    onDropEvent?: ConnectTreeViewItemProps<TItemId>['onDropEvent'];
+    items: TreeItem<T>;
+    onDropEvent?: ConnectTreeViewItemProps<T>['onDropEvent'];
     onItemClick: (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        item: TreeItem<TItemId>,
+        item: TreeItem<T>,
     ) => void;
-    onOptionsClick: ConnectTreeViewItemProps<TItemId>['onOptionsClick'];
-    onSubmitInput: (item: TreeItem<TItemId>) => void;
-    onCancelInput: (item: TreeItem<TItemId>) => void;
+    onOptionsClick: ConnectTreeViewItemProps<T>['onOptionsClick'];
+    onSubmitInput: (item: TreeItem<T>) => void;
+    onCancelInput: (item: TreeItem<T>) => void;
 }
 
 function getInteractionType(itemAction: ActionType | undefined) {
@@ -27,8 +27,8 @@ function getInteractionType(itemAction: ActionType | undefined) {
     return 'read';
 }
 
-export function ConnectTreeView<TItemId extends string = string>(
-    props: ConnectTreeViewProps<TItemId>,
+export function ConnectTreeView<T extends string = string>(
+    props: ConnectTreeViewProps<T>,
 ) {
     const {
         items,
@@ -39,7 +39,7 @@ export function ConnectTreeView<TItemId extends string = string>(
         onCancelInput,
     } = props;
 
-    function renderTreeItems(item: TreeItem<TItemId>, level = 0) {
+    function renderTreeItems(item: TreeItem<T>, level = 0) {
         const interactionType = getInteractionType(item.action);
 
         const onClick: MouseEventHandler<HTMLDivElement> = e =>
@@ -66,7 +66,7 @@ export function ConnectTreeView<TItemId extends string = string>(
 
         if (interactionType === 'write') {
             return (
-                <ConnectTreeViewItem<TItemId>
+                <ConnectTreeViewItem<T>
                     interactionType={interactionType}
                     {...writeProps}
                 />
@@ -74,7 +74,7 @@ export function ConnectTreeView<TItemId extends string = string>(
         }
 
         return (
-            <ConnectTreeViewItem<TItemId>
+            <ConnectTreeViewItem<T>
                 interactionType={interactionType}
                 {...readProps}
             />
