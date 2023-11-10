@@ -10,7 +10,7 @@ export interface ConnectDropdownMenuItem {
 }
 
 export interface ConnectDropdownMenuProps
-    extends Omit<ControlledDropdownMenuProps, 'items' | 'type'> {
+    extends Omit<ControlledDropdownMenuProps, 'items'> {
     items: ConnectDropdownMenuItem[];
 }
 
@@ -42,13 +42,12 @@ export function ConnectDropdownMenu(props: ConnectDropdownMenuProps) {
     return (
         <DropdownMenu
             {...dropDownProps}
-            type="controlled"
             items={dropdownItems}
             onItemClick={onItemClick}
             menuClassName={twMerge(
                 'py-3 rounded-2xl modal-shadow text-sm font-medium text-[#6F767E]',
                 menuClassName,
             )}
-        ></DropdownMenu>
+        />
     );
 }

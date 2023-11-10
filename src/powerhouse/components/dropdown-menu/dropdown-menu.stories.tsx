@@ -1,6 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import { DropdownMenu } from './dropdown-menu';
+import {
+    ControlledDropdownMenuProps,
+    DropdownMenu,
+    UncontrolledDropdownMenuProps,
+} from './dropdown-menu';
 
 const meta = {
     title: 'Powerhouse/Components/DropdownMenu',
@@ -16,7 +20,8 @@ const meta = {
 } satisfies Meta<typeof DropdownMenu>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type ControlledStory = StoryObj<ControlledDropdownMenuProps>;
+type UncontrolledStory = StoryObj<UncontrolledDropdownMenuProps>;
 
 const sharedArgs = {
     className:
@@ -24,7 +29,6 @@ const sharedArgs = {
     menuClassName:
         'border-2 border-indigo-600 w-64 rounded bg-white cursor-pointer',
     menuItemClassName: 'hover:bg-gray-200 px-2',
-    children: '☰',
     items: [
         {
             id: 'item-1',
@@ -41,14 +45,15 @@ const sharedArgs = {
     ],
 };
 
-export const Uncontrolled: Story = {
+export const Uncontrolled: UncontrolledStory = {
     args: {
-        type: 'uncontrolled',
         ...sharedArgs,
+        children: '☰',
+        defaultOpen: false,
     },
 };
 
-export const Controlled: Story = {
+export const Controlled: ControlledStory = {
     render: function ControlledWrapper(args) {
         const [isOpen, setIsOpen] = useState(false);
         function onOpenChange() {
@@ -60,7 +65,6 @@ export const Controlled: Story = {
                 <button onClick={onOpenChange}>Toggle</button>
                 <DropdownMenu
                     {...args}
-                    type="controlled"
                     isOpen={isOpen}
                     onOpenChange={onOpenChange}
                 />
@@ -68,7 +72,6 @@ export const Controlled: Story = {
         );
     },
     args: {
-        type: 'controlled',
         isOpen: false,
         onOpenChange: () => {},
         ...sharedArgs,

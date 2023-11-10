@@ -260,7 +260,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                     placement: 'bottom end',
                     offset: -10,
                 }}
-            ></ConnectDropdownMenu>
+            />
         </article>
     );
 }

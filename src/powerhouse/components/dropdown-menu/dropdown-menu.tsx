@@ -19,14 +19,17 @@ export interface SharedDropdownMenuProps {
 }
 
 export type ControlledDropdownMenuProps = SharedDropdownMenuProps & {
-    type: 'controlled';
     isOpen: boolean;
     onOpenChange: (isOpen: boolean) => void;
+    defaultOpen?: undefined;
+    children?: undefined;
 };
 
 export type UncontrolledDropdownMenuProps = SharedDropdownMenuProps & {
-    type: 'uncontrolled';
     children: React.ReactNode;
+    onOpenChange?: (isOpen: boolean) => void;
+    defaultOpen?: boolean;
+    isOpen?: undefined;
 };
 
 export type DropdownMenuProps =
@@ -76,17 +79,8 @@ export function DropdownMenu(props: DropdownMenuProps) {
         </Popover>
     );
 
-    if (props.type === 'controlled') {
-        const { isOpen, onOpenChange } = props;
-        return (
-            <MenuTrigger isOpen={isOpen} onOpenChange={onOpenChange}>
-                <Component />
-            </MenuTrigger>
-        );
-    }
-
     return (
-        <MenuTrigger>
+        <MenuTrigger {...props}>
             <Button
                 aria-label="menu"
                 className={twMerge('outline-none', className)}
