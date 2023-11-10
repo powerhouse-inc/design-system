@@ -94,6 +94,7 @@ type SharedConnectTreeViewItemProps<TItemId extends string = DefaultOptionId> =
         item: TreeItem<TItemId>;
         onDropEvent?: UseDraggableTargetProps<TreeItem<TItemId>>['onDropEvent'];
         onOptionsClick?: (item: TreeItem<TItemId>, option: TItemId) => void;
+        disableDropBetween?: boolean;
     };
 
 export type ReadConnectTreeViewItemProps<
@@ -160,6 +161,7 @@ export function ConnectTreeViewItem<TItemId extends string = DefaultOptionId>(
         buttonProps,
         onDropEvent,
         onOptionsClick,
+        disableDropBetween = false,
         ...delegatedProps
     } = props;
 
@@ -173,6 +175,26 @@ export function ConnectTreeViewItem<TItemId extends string = DefaultOptionId>(
     const isWriting =
         item.action === ActionType.New || item.action === ActionType.Update;
     const isHighlighted = getIsHighlighted();
+    const { dropProps: dropDividerProps, isDropTarget: isDropDividerTarget } =
+        useDraggableTarget({
+            data: item,
+            onDropEvent,
+            dropAfterItem: true,
+        });
+
+    const bottomIndicator = (
+        <div
+            {...dropDividerProps}
+            className="w-full bottom-[-2px] absolute h-1 flex flex-row items-center z-[1]"
+        >
+            <div
+                className={twMerge(
+                    'h-0.5 w-full',
+                    isDropDividerTarget && 'bg-[#3E90F0]',
+                )}
+            />
+        </div>
+    );
 
     function getButtonProps() {
         const { className: buttonClassName, ...restButtonProps } =
@@ -231,6 +253,7 @@ export function ConnectTreeViewItem<TItemId extends string = DefaultOptionId>(
             <TreeViewItem
                 {...delegatedProps}
                 {...(onDropEvent && { ...dragProps, ...dropProps })}
+                bottomIndicator={!disableDropBetween && bottomIndicator}
                 label={item.label}
                 initialOpen={item.expanded}
                 className={twMerge(isDropTarget && 'rounded-lg bg-[#F4F4F4]')}
