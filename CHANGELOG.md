@@ -1,3 +1,33 @@
+# [1.0.0-alpha.12](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.11...v1.0.0-alpha.12) (2023-11-10)
+
+
+### Features
+
+* added onSubmitInput handlers on drive-view ([9da2705](https://github.com/powerhouse-inc/design-system/commit/9da2705ca98402b9f0ac3c718ffb28313f52cee4))
+
+# [1.0.0-alpha.11](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.10...v1.0.0-alpha.11) (2023-11-10)
+
+
+### Features
+
+* removed react-click-away-listener as peer dependency ([8ed9266](https://github.com/powerhouse-inc/design-system/commit/8ed92661e8aad1c21c6760101686f8c7ce330e8b))
+
+# [1.0.0-alpha.10](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.9...v1.0.0-alpha.10) (2023-11-10)
+
+
+### Features
+
+* **tree-view-input:** 🚀 Added ConnectTreeViewInput component ([97a82bb](https://github.com/powerhouse-inc/design-system/commit/97a82bb8a8d52144a533fe18147d8a1b979ca3a3))
+* **tree-view-input:** 🚀 Added TreeViewInput Component ([bba0d1e](https://github.com/powerhouse-inc/design-system/commit/bba0d1e1b2946474098c86ef56145e012455d43d))
+
+# [1.0.0-alpha.9](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.8...v1.0.0-alpha.9) (2023-11-09)
+
+
+### Features
+
+* **drag-and-drop:** 🚀 Added drop between items support ([efb5ea9](https://github.com/powerhouse-inc/design-system/commit/efb5ea960c7023e84bbcd137029e70f44923ff83))
+* **drag-and-drop:** avoid render top and bottom when isn't needed ([50151d1](https://github.com/powerhouse-inc/design-system/commit/50151d1397b5516192692b7e54ec7043b684dac5))
+
 # [1.0.0-alpha.8](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.7...v1.0.0-alpha.8) (2023-11-08)
 
 

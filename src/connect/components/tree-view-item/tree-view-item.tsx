@@ -34,6 +34,11 @@ export enum ItemType {
     PublicDrive = 'public-drive',
 }
 
+export enum ActionType {
+    Update = 'update',
+    New = 'new',
+}
+
 export enum ItemStatus {
     Available = 'available',
     AvailableOffline = 'available-offline',
@@ -45,6 +50,7 @@ export interface TreeItem<T extends string = string> {
     id: string;
     label: string;
     type: ItemType;
+    action?: ActionType;
     status?: ItemStatus;
     expanded?: boolean;
     children?: TreeItem<T>[];
@@ -87,6 +93,7 @@ export interface ConnectTreeViewItemProps<T extends string = DefaultOptionId>
     onDropEvent?: UseDraggableTargetProps<TreeItem<T>>['onDropEvent'];
     defaultOptions?: ConnectDropdownMenuItem<T>[];
     onOptionsClick?: (item: TreeItem<T>, option: T) => void;
+    disableDropBetween?: boolean;
 }
 
 const getStatusIcon = (status: ItemStatus) => {
@@ -131,6 +138,7 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
         onOptionsClick,
         level = 0,
         buttonProps = {},
+        disableDropBetween = false,
         defaultOptions = DefaultOptions,
         ...divProps
     } = props;
@@ -143,6 +151,27 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
         data: item,
         onDropEvent,
     });
+
+    const { dropProps: dropDividerProps, isDropTarget: isDropDividerTarget } =
+        useDraggableTarget({
+            data: item,
+            onDropEvent,
+            dropAfterItem: true,
+        });
+
+    const bottomIndicator = (
+        <div
+            {...dropDividerProps}
+            className="w-full bottom-[-2px] absolute h-1 flex flex-row items-center z-[1]"
+        >
+            <div
+                className={twMerge(
+                    'h-0.5 w-full',
+                    isDropDividerTarget && 'bg-[#3E90F0]',
+                )}
+            />
+        </div>
+    );
 
     const { className: buttonClassName, ...restButtonProps } = buttonProps;
 
@@ -169,10 +198,11 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
     return (
         <TreeViewItem
             {...(onDropEvent && { ...dragProps, ...dropProps })}
+            bottomIndicator={!disableDropBetween && bottomIndicator}
             level={level}
             onClick={onClick}
             label={item.label}
-            initialOpen={item.expanded}
+            open={item.expanded}
             className={twMerge(isDropTarget && 'rounded-lg bg-[#F4F4F4]')}
             buttonProps={{
                 className: twMerge(
