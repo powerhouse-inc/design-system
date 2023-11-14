@@ -178,7 +178,7 @@ const PublicCloudOnlyTemplate: PublicOrCloudDriveStory = {
     },
 };
 
-const PublicCloudOnlyWithConnectionTemplate: PublicOrCloudDriveStory = {
+export const PublicCloudOnlyWithConnection: PublicOrCloudDriveStory = {
     ...PublicCloudOnlyTemplate,
     args: {
         ...PublicCloudOnlyTemplate.args,
@@ -186,47 +186,11 @@ const PublicCloudOnlyWithConnectionTemplate: PublicOrCloudDriveStory = {
     },
 };
 
-export const PublicCloudOnlyWithConnectionSyncing: PublicOrCloudDriveStory = {
-    ...PublicCloudOnlyWithConnectionTemplate,
-    args: {
-        ...PublicCloudOnlyWithConnectionTemplate.args,
-    },
-};
-
-export const PublicCloudOnlyWithConnectionSynced: PublicOrCloudDriveStory = {
-    ...PublicCloudOnlyWithConnectionTemplate,
-    args: {
-        ...PublicCloudOnlyWithConnectionTemplate.args,
-    },
-};
-
-export const PublicCloudOnlyWithConnectionFailed: PublicOrCloudDriveStory = {
-    ...PublicCloudOnlyWithConnectionTemplate,
-    args: {
-        ...PublicCloudOnlyWithConnectionTemplate.args,
-    },
-};
-
-const PublicCloudOnlyNoConnectionTemplate: PublicOrCloudDriveStory = {
+export const PublicCloudOnlyNoConnection: PublicOrCloudDriveStory = {
     ...PublicCloudOnlyTemplate,
     args: {
         ...PublicCloudOnlyTemplate.args,
         isConnected: false,
-    },
-};
-
-export const PublicCloudOnlyNoConnectionNotSyncedYet: PublicOrCloudDriveStory =
-    {
-        ...PublicCloudOnlyNoConnectionTemplate,
-        args: {
-            ...PublicCloudOnlyNoConnectionTemplate.args,
-        },
-    };
-
-export const PublicCloudOnlyNoConnectionFailed: PublicOrCloudDriveStory = {
-    ...PublicCloudOnlyNoConnectionTemplate,
-    args: {
-        ...PublicCloudOnlyNoConnectionTemplate.args,
     },
 };
 
@@ -237,7 +201,7 @@ const CloudCloudOnlyTemplate: PublicOrCloudDriveStory = {
     },
 };
 
-const CloudCloudOnlyWithConnectionTemplate: PublicOrCloudDriveStory = {
+export const CloudCloudOnlyWithConnection: PublicOrCloudDriveStory = {
     ...CloudCloudOnlyTemplate,
     args: {
         ...CloudCloudOnlyTemplate.args,
@@ -245,50 +209,10 @@ const CloudCloudOnlyWithConnectionTemplate: PublicOrCloudDriveStory = {
     },
 };
 
-export const CloudCloudOnlyWithConnectionSyncing: PublicOrCloudDriveStory = {
-    ...CloudCloudOnlyWithConnectionTemplate,
-    args: {
-        ...CloudCloudOnlyWithConnectionTemplate.args,
-        syncStatus: 'syncing',
-    },
-};
-
-export const CloudCloudOnlyWithConnectionSynced: PublicOrCloudDriveStory = {
-    ...CloudCloudOnlyWithConnectionTemplate,
-    args: {
-        ...CloudCloudOnlyWithConnectionTemplate.args,
-        syncStatus: 'synced',
-    },
-};
-
-export const CloudCloudOnlyWithConnectionFailed: PublicOrCloudDriveStory = {
-    ...CloudCloudOnlyWithConnectionTemplate,
-    args: {
-        ...CloudCloudOnlyWithConnectionTemplate.args,
-        syncStatus: 'failed',
-    },
-};
-
-const CloudCloudOnlyNoConnectionTemplate: PublicOrCloudDriveStory = {
+export const CloudCloudOnlyNoConnection: PublicOrCloudDriveStory = {
     ...CloudCloudOnlyTemplate,
     args: {
         ...CloudCloudOnlyTemplate.args,
         isConnected: false,
-    },
-};
-
-export const CloudCloudOnlyNoConnectionNotSyncedYet: PublicOrCloudDriveStory = {
-    ...CloudCloudOnlyNoConnectionTemplate,
-    args: {
-        ...CloudCloudOnlyNoConnectionTemplate.args,
-        syncStatus: 'not-synced-yet',
-    },
-};
-
-export const CloudCloudOnlyNoConnectionFailed: PublicOrCloudDriveStory = {
-    ...CloudCloudOnlyNoConnectionTemplate,
-    args: {
-        ...CloudCloudOnlyNoConnectionTemplate.args,
-        syncStatus: 'failed',
     },
 };
