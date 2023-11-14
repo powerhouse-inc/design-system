@@ -2,47 +2,47 @@ import { IconProps as DefaultIconProps, Icon } from '@/powerhouse';
 import { twMerge } from 'tailwind-merge';
 
 const defaultIconDimensions = 'w-5 h-5';
-type IconProps = Omit<DefaultIconProps, 'name'>;
-export const AvailableIcon = (props: IconProps) => (
+export type StatusIconProps = Omit<DefaultIconProps, 'name'>;
+export const AvailableIcon = (props: StatusIconProps) => (
     <Icon
         {...props}
         className={twMerge(
-            props.className,
             defaultIconDimensions,
             'text-[#34A853]',
+            props.className,
         )}
         name="available"
     />
 );
-export const SyncingIcon = (props: IconProps) => (
+export const SyncingIcon = (props: StatusIconProps) => (
     <Icon
         {...props}
         className={twMerge(
-            props.className,
             defaultIconDimensions,
             'text-[#3E90F0]',
+            props.className,
         )}
         name="syncing"
     />
 );
-export const SyncedIcon = (props: IconProps) => (
+export const SyncedIcon = (props: StatusIconProps) => (
     <Icon
         {...props}
         className={twMerge(
-            props.className,
             defaultIconDimensions,
             'text-[#34A853]',
+            props.className,
         )}
         name="synced"
     />
 );
-export const ErrorIcon = (props: IconProps) => (
+export const ErrorIcon = (props: StatusIconProps) => (
     <Icon
         {...props}
         className={twMerge(
-            props.className,
             defaultIconDimensions,
             'text-[#EA4335]',
+            props.className,
         )}
         name="error"
     />
