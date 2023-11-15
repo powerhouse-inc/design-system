@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { LocalDriveProps, PublicOrCloudDriveProps, StatusIndicator } from '.';
+import { LocalProps, PublicOrCloudDriveProps, StatusIndicator } from '.';
 
 const meta = {
     title: 'Connect/Components/StatusIndicator',
@@ -8,27 +8,25 @@ const meta = {
 
 export default meta;
 
-type LocalDriveStory = StoryObj<LocalDriveProps>;
+type LocalDriveStory = StoryObj<LocalProps>;
 type PublicOrCloudDriveStory = StoryObj<PublicOrCloudDriveProps>;
 
 export const LocalDriveSuccess: LocalDriveStory = {
     args: {
-        driveType: 'local',
-        status: 'success',
+        type: 'local',
     },
 };
 
 export const LocalDriveError: LocalDriveStory = {
     args: {
-        driveType: 'local',
-        status: 'error',
+        type: 'local',
+        error: new Error('Something went wrong'),
     },
 };
 
 export const LocalDriveWithStyles: LocalDriveStory = {
     args: {
-        driveType: 'local',
-        status: 'success',
+        type: 'local',
         iconProps: {
             className: 'text-[#000] hover:text-pink-500',
         },
@@ -37,7 +35,7 @@ export const LocalDriveWithStyles: LocalDriveStory = {
 
 const PublicAvailableOfflineTemplate: PublicOrCloudDriveStory = {
     args: {
-        driveType: 'public',
+        type: 'public',
         availability: 'available-offline',
     },
 };
@@ -73,7 +71,7 @@ export const PublicAvailableOfflineWithConnectionFailed: PublicOrCloudDriveStory
         ...PublicAvailableOfflineWithConnectionTemplate,
         args: {
             ...PublicAvailableOfflineWithConnectionTemplate.args,
-            syncStatus: 'failed',
+            error: new Error('Error syncing public drive'),
         },
     };
 
@@ -99,13 +97,13 @@ export const PublicAvailableOfflineNoConnectionFailed: PublicOrCloudDriveStory =
         ...PublicAvailableOfflineNoConnectionTemplate,
         args: {
             ...PublicAvailableOfflineNoConnectionTemplate.args,
-            syncStatus: 'failed',
+            error: new Error('Error syncing public drive'),
         },
     };
 
 const CloudAvailableOfflineTemplate: PublicOrCloudDriveStory = {
     args: {
-        driveType: 'cloud',
+        type: 'cloud',
         availability: 'available-offline',
     },
 };
@@ -141,7 +139,7 @@ export const CloudAvailableOfflineWithConnectionFailed: PublicOrCloudDriveStory 
         ...CloudAvailableOfflineWithConnectionTemplate,
         args: {
             ...CloudAvailableOfflineWithConnectionTemplate.args,
-            syncStatus: 'failed',
+            error: new Error('Error syncing cloud drive'),
         },
     };
 
@@ -167,13 +165,13 @@ export const CloudAvailableOfflineNoConnectionFailed: PublicOrCloudDriveStory =
         ...CloudAvailableOfflineNoConnectionTemplate,
         args: {
             ...CloudAvailableOfflineNoConnectionTemplate.args,
-            syncStatus: 'failed',
+            error: new Error('Error syncing cloud drive'),
         },
     };
 
 const PublicCloudOnlyTemplate: PublicOrCloudDriveStory = {
     args: {
-        driveType: 'public',
+        type: 'public',
         availability: 'cloud-only',
     },
 };
@@ -196,7 +194,7 @@ export const PublicCloudOnlyNoConnection: PublicOrCloudDriveStory = {
 
 const CloudCloudOnlyTemplate: PublicOrCloudDriveStory = {
     args: {
-        driveType: 'cloud',
+        type: 'cloud',
         availability: 'available-offline',
     },
 };

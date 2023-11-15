@@ -6,43 +6,41 @@ import {
     SyncingIcon,
 } from './status-icons';
 
-export type LocalDriveProps = {
-    driveType: 'local';
-    status: 'success' | 'error';
+type SharedProps = {
+    error?: Error;
     iconProps?: StatusIconProps;
 };
 
-export type SharedPublicOrCloudDriveProps = {
-    driveType: 'public' | 'cloud';
+export type LocalProps = SharedProps & {
+    type: 'local';
+};
+
+type SharedPublicOrCloudProps = SharedProps & {
+    type: 'public' | 'cloud';
     isConnected: boolean;
-    iconProps?: StatusIconProps;
 };
 
-export type CloudOnlyProps = SharedPublicOrCloudDriveProps & {
+type CloudOnlyProps = SharedPublicOrCloudProps & {
     availability: 'cloud-only';
 };
 
-export type AvailableOfflineProps = SharedPublicOrCloudDriveProps & {
+type AvailableOfflineProps = SharedPublicOrCloudProps & {
     availability: 'available-offline';
-    syncStatus: 'not-synced-yet' | 'syncing' | 'synced' | 'failed';
+    syncStatus: 'not-synced-yet' | 'syncing' | 'synced';
 };
 
 export type PublicOrCloudDriveProps = CloudOnlyProps | AvailableOfflineProps;
 
-export type StatusIndicatorProps = LocalDriveProps | PublicOrCloudDriveProps;
+export type StatusIndicatorProps = LocalProps | PublicOrCloudDriveProps;
 export function StatusIndicator(props: StatusIndicatorProps) {
-    if (props.driveType === 'local') {
-        return <LocalDriveStatusIndicator {...props} />;
+    if (props.error) {
+        return <ErrorIcon {...props.iconProps} />;
+    }
+    if (props.type === 'local') {
+        return <AvailableIcon {...props.iconProps} />;
     }
 
     return <PublicOrCloudDriveStatusIndicator {...props} />;
-}
-
-export function LocalDriveStatusIndicator(props: LocalDriveProps) {
-    if (props.status === 'success') {
-        return <AvailableIcon {...props.iconProps} />;
-    }
-    return <ErrorIcon {...props.iconProps} />;
 }
 
 export function PublicOrCloudDriveStatusIndicator(
