@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useRef } from 'react';
 import {
+    DragEndEvent,
+    DragStartEvent,
     DropEvent,
+    DropOptions,
     FileDropItem,
     TextDropItem,
     useDrag,
@@ -9,28 +12,51 @@ import {
 } from 'react-aria';
 import { CUSTOM_OBJECT_FORMAT } from '../components/drag-and-drop/constants';
 
-export interface CustomObjectDropItem<T = unknown> {
+export interface CustomDropItem {
+    dropAfterItem?: boolean;
+    dropBeforeItem?: boolean;
+}
+
+export interface CustomFileDropItem extends FileDropItem, CustomDropItem {}
+
+export interface CustomObjectDropItem<T = unknown> extends CustomDropItem {
     kind: 'object';
     type: string;
     data: T;
 }
 
-export type DropItem<T> = CustomObjectDropItem<T> | FileDropItem;
+export type DropItem<T> = CustomObjectDropItem<T> | CustomFileDropItem;
 
 export interface UseDraggableTargetProps<T = unknown> {
     data: T;
     onDropEvent?: (item: DropItem<T>, target: T, event: DropEvent) => void;
     dataType?: string;
+    dropAfterItem?: boolean;
+    dropBeforeItem?: boolean;
+    onDropActivate?: DropOptions['onDropActivate'];
+    onDragStart?: (dragItem: T, event: DragStartEvent) => void;
+    onDragEnd?: (dragItem: T, event: DragEndEvent) => void;
 }
 
 export function useDraggableTarget<T = unknown>(
     props: UseDraggableTargetProps<T>,
 ) {
-    const { data, onDropEvent, dataType } = props;
+    const {
+        data,
+        onDropEvent,
+        dataType,
+        dropAfterItem,
+        dropBeforeItem,
+        onDropActivate,
+        onDragStart,
+        onDragEnd,
+    } = props;
 
     const ref = useRef(null);
 
     const { dragProps, isDragging } = useDrag({
+        onDragEnd: e => onDragEnd?.(data, e),
+        onDragStart: e => onDragStart?.(data, e),
         getItems: () => [
             {
                 [dataType || CUSTOM_OBJECT_FORMAT]: JSON.stringify(data),
@@ -40,6 +66,7 @@ export function useDraggableTarget<T = unknown>(
 
     const { dropProps, isDropTarget } = useDrop({
         ref,
+        onDropActivate,
         async onDrop(e) {
             const item = e.items.find(
                 item =>
@@ -52,7 +79,11 @@ export function useDraggableTarget<T = unknown>(
                 | undefined;
 
             if (itemFile) {
-                onDropEvent?.(itemFile, data, e);
+                onDropEvent?.(
+                    { ...itemFile, dropAfterItem, dropBeforeItem },
+                    data,
+                    e,
+                );
             }
 
             if (item) {
@@ -64,6 +95,8 @@ export function useDraggableTarget<T = unknown>(
                     type: dataType || CUSTOM_OBJECT_FORMAT,
                     kind: 'object',
                     data: dropData,
+                    dropAfterItem,
+                    dropBeforeItem,
                 };
                 onDropEvent?.(dropEvent, data, e);
             }

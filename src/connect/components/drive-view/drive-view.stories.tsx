@@ -1,6 +1,8 @@
+import { traverseDriveById } from '@/connect/utils';
 import type { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
 import { ItemStatus, ItemType } from '../tree-view-item';
-import { DriveView } from './drive-view';
+import { DriveView, DriveViewProps } from './drive-view';
 
 const meta: Meta<typeof DriveView> = {
     title: 'Connect/Components/DriveView',
@@ -28,6 +30,10 @@ const meta: Meta<typeof DriveView> = {
         onDropEvent: { control: { type: 'action' } },
         onItemOptionsClick: { control: { type: 'action' } },
         defaultItemOptions: { control: { type: 'object' } },
+        onDragStart: { control: { type: 'action' } },
+        onDragEnd: { control: { type: 'action' } },
+        onDropActivate: { control: { type: 'action' } },
+        disableHighlightStyles: { control: { type: 'boolean' } },
     },
 };
 
@@ -92,6 +98,39 @@ const items = [
     },
 ];
 
+const DriveViewImpl = (args: DriveViewProps) => {
+    const { drives: initialDrives, onItemClick, ...restArgs } = args;
+    const [drives, setDrives] = useState(initialDrives);
+
+    const onItemClickHandler: DriveViewProps['onItemClick'] = (
+        e,
+        item,
+        drive,
+    ) => {
+        const newDrives = traverseDriveById(drives, drive.id, treeItem => {
+            if (treeItem.id === item.id) {
+                return {
+                    ...treeItem,
+                    expanded: !treeItem.expanded,
+                };
+            }
+
+            return treeItem;
+        });
+
+        setDrives(newDrives);
+        onItemClick?.(e, item, drive);
+    };
+
+    return (
+        <DriveView
+            {...restArgs}
+            drives={drives}
+            onItemClick={onItemClickHandler}
+        />
+    );
+};
+
 export const Public: Story = {
     args: {
         drives: [
@@ -106,6 +145,7 @@ export const Public: Story = {
         name: 'Public drives',
         type: 'public',
     },
+    render: args => <DriveViewImpl {...(args as DriveViewProps)} />,
 };
 
 export const Cloud: Story = {
@@ -119,7 +159,7 @@ export const Cloud: Story = {
                 children: items,
             },
             {
-                id: 'cloud',
+                id: 'cloud-2',
                 label: 'Powerhouse Team Drive',
                 type: ItemType.NetworkDrive,
                 expanded: true,
@@ -129,6 +169,7 @@ export const Cloud: Story = {
         name: 'Secure Cloud Storage',
         type: 'cloud',
     },
+    render: args => <DriveViewImpl {...(args as DriveViewProps)} />,
 };
 
 export const Local: Story = {
@@ -145,4 +186,5 @@ export const Local: Story = {
         name: 'My Local Drives',
         type: 'local',
     },
+    render: args => <DriveViewImpl {...(args as DriveViewProps)} />,
 };

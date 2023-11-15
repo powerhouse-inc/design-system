@@ -20,6 +20,11 @@ export enum ItemType {
     PublicDrive = 'public-drive',
 }
 
+export enum ActionType {
+    Update = 'update',
+    New = 'new',
+}
+
 export enum ItemStatus {
     Available = 'available',
     AvailableOffline = 'available-offline',
@@ -31,6 +36,7 @@ export interface TreeItem<T extends string = string> {
     id: string;
     label: string;
     type: ItemType;
+    action?: ActionType;
     status?: ItemStatus;
     expanded?: boolean;
     children?: TreeItem<T>[];
@@ -71,8 +77,13 @@ export interface ConnectTreeViewItemProps<T extends string = DefaultOptionId>
     > {
     item: TreeItem<T>;
     onDropEvent?: UseDraggableTargetProps<TreeItem<T>>['onDropEvent'];
+    onDropActivate?: (dropTargetItem: TreeItem<T>) => void;
     defaultOptions?: ConnectDropdownMenuItem<T>[];
     onOptionsClick?: (item: TreeItem<T>, option: T) => void;
+    disableDropBetween?: boolean;
+    onDragStart?: UseDraggableTargetProps<TreeItem<T>>['onDragStart'];
+    onDragEnd?: UseDraggableTargetProps<TreeItem<T>>['onDragEnd'];
+    disableHighlightStyles?: boolean;
 }
 
 const getStatusIcon = (status: ItemStatus) => {
@@ -113,22 +124,50 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
         item,
         onClick,
         children,
+        onDragEnd,
+        onDragStart,
         onDropEvent,
         onOptionsClick,
+        onDropActivate,
         level = 0,
         buttonProps = {},
+        disableDropBetween = false,
+        disableHighlightStyles = false,
         defaultOptions = DefaultOptions,
         ...divProps
     } = props;
 
     const containerRef = useRef(null);
 
-    const { dragProps, dropProps, isDropTarget } = useDraggableTarget<
-        TreeItem<T>
-    >({
-        data: item,
-        onDropEvent,
-    });
+    const { dragProps, dropProps, isDropTarget, isDragging } =
+        useDraggableTarget<TreeItem<T>>({
+            onDragEnd,
+            onDragStart,
+            data: item,
+            onDropEvent,
+            onDropActivate: () => onDropActivate?.(item),
+        });
+
+    const { dropProps: dropDividerProps, isDropTarget: isDropDividerTarget } =
+        useDraggableTarget({
+            data: item,
+            onDropEvent,
+            dropAfterItem: true,
+        });
+
+    const bottomIndicator = (
+        <div
+            {...dropDividerProps}
+            className="w-full bottom-[-2px] absolute h-1 flex flex-row items-center z-[1]"
+        >
+            <div
+                className={twMerge(
+                    'h-0.5 w-full',
+                    isDropDividerTarget && 'bg-[#3E90F0]',
+                )}
+            />
+        </div>
+    );
 
     const { className: buttonClassName, ...restButtonProps } = buttonProps;
 
@@ -158,16 +197,21 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
     return (
         <TreeViewItem
             {...(onDropEvent && { ...dragProps, ...dropProps })}
+            bottomIndicator={!disableDropBetween && bottomIndicator}
             level={level}
             onClick={onClick}
             label={item.label}
-            initialOpen={item.expanded}
-            className={twMerge(isDropTarget && 'rounded-lg bg-[#F4F4F4]')}
+            open={item.expanded}
             buttonProps={{
                 className: twMerge(
-                    'py-3 rounded-lg hover:bg-[#F1F5F9] hover:to-[#F1F5F9]',
-                    item.isSelected && 'bg-[#F1F5F9] to-[#F1F5F9]',
+                    'py-3 rounded-lg',
+                    !disableHighlightStyles &&
+                        'hover:bg-[#F1F5F9] hover:to-[#F1F5F9]',
+                    item.isSelected &&
+                        !disableHighlightStyles &&
+                        'bg-[#F1F5F9] to-[#F1F5F9]',
                     typeof buttonClassName === 'string' && buttonClassName,
+                    isDropTarget && !isDragging && 'rounded-lg bg-[#F1F5F9]',
                 ),
                 ref: containerRef,
                 ...restButtonProps,
