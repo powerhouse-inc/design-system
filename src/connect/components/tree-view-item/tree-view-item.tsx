@@ -91,7 +91,7 @@ const getStatusIcon = (status: ItemStatus) => {
         case ItemStatus.Available:
             return 'check';
         case ItemStatus.AvailableOffline:
-            return 'check-filled';
+            return 'check-fill';
         case ItemStatus.Syncing:
             return 'syncing';
         case ItemStatus.Offline:

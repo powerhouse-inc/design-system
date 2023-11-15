@@ -109,7 +109,7 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                             name={
                                 open ? expandedIconName || iconName : iconName
                             }
-                            className="pointer-events-none w-6 h-6 h-6 w-6"
+                            className="pointer-events-none h-6 w-6"
                         />
                     )}
                     {label && (

@@ -16,7 +16,6 @@ const meta: Meta<typeof TreeViewItem> = {
     argTypes: {
         children: { control: { type: 'text' } },
         label: { control: { type: 'text' } },
-        initialOpen: { control: { type: 'boolean' } },
         expandedIconName: { control: { type: 'text' } },
         iconName: { control: { type: 'text' } },
         onClick: { control: { type: 'action' } },
@@ -29,7 +28,7 @@ const meta: Meta<typeof TreeViewItem> = {
             options: [
                 undefined,
                 'check',
-                'check-filled',
+                'check-fill',
                 'syncing',
                 'cloud-slash',
             ],

@@ -1,6 +1,4 @@
-import CheckIcon from '@/assets/icons/check-fill.svg';
-import FolderIcon from '@/assets/icons/folder-close-fill.svg';
-import CancelIcon from '@/assets/icons/xmark.svg';
+import { Icon } from '@/powerhouse';
 import {
     TreeViewInput,
     TreeViewInputProps,
@@ -31,13 +29,9 @@ export const ConnectTreeViewInput: React.FC<
 
     return (
         <TreeViewInput
-            icon={<img src={FolderIcon} className="h-6 w-6" />}
-            submitIcon={<img src={CheckIcon} className="w-6 h-6" />}
-            cancelIcon={
-                <div className="w-6 h-6 flex items-center justify-center">
-                    <img src={CancelIcon} alt="" />
-                </div>
-            }
+            icon={<Icon name="folder-close-fill" className="h-6 w-6" />}
+            submitIcon={<Icon name="check-fill" className="w-6 h-6" />}
+            cancelIcon={<Icon name="xmark" className="w-6 h-6" />}
             className={twMerge('bg-[#F1F5F9] rounded-lg h-12', className)}
             initialValue={item.label}
             onSubmit={value => onSubmit({ ...item, label: value })}
