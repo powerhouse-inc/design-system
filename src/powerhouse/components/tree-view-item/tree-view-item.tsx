@@ -7,14 +7,14 @@ export interface TreeViewItemProps
     label: string;
     children?: React.ReactNode;
     open?: boolean;
-    expandedIconName?: string;
-    iconName?: string;
+    icon?: React.ReactElement;
+    expandedIcon?: React.ReactElement;
+    secondaryIcon?: React.ReactElement;
     level?: number;
     onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     onOptionsClick?: (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     ) => void;
-    secondaryIconName?: string;
     buttonProps?: React.DetailedHTMLProps<
         React.HTMLAttributes<HTMLDivElement>,
         HTMLDivElement
@@ -50,16 +50,16 @@ const injectLevelProps = (
 
 export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
     const {
-        iconName,
         open,
         label,
         onClick,
         children,
-        topIndicator,
-        expandedIconName,
-        secondaryIconName,
+        icon,
+        expandedIcon,
+        secondaryIcon,
         onOptionsClick,
         optionsContent,
+        topIndicator,
         bottomIndicator,
         level = 0,
         buttonProps = {},
@@ -104,13 +104,10 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                             )}
                         />
                     )}
-                    {iconName && (
-                        <Icon
-                            name={
-                                open ? expandedIconName || iconName : iconName
-                            }
-                            className="pointer-events-none h-6 w-6"
-                        />
+                    {icon && (
+                        <span className="pointer-events-none [&>svg]:w-6 [&>svg]:h-6">
+                            {open ? expandedIcon || icon : icon}
+                        </span>
                     )}
                     {label && (
                         <div className="ml-2 flex flex-1 overflow-hidden whitespace-nowrap relative">
@@ -123,11 +120,10 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                             {optionsContent}
                         </div>
                     )}
-                    {secondaryIconName && (
-                        <Icon
-                            name={secondaryIconName}
-                            className="flex self-end w-6 h-6 mx-3 group-hover/tree-item:hidden pointer-events-none"
-                        />
+                    {secondaryIcon && (
+                        <span className="flex self-end w-6 h-6 mx-3 group-hover/tree-item:hidden pointer-events-none">
+                            {secondaryIcon}
+                        </span>
                     )}
                 </div>
                 {bottomIndicator && (

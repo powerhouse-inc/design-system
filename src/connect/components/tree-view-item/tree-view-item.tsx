@@ -48,22 +48,22 @@ export const DefaultOptions = [
     {
         id: 'duplicate',
         label: 'Duplicate',
-        iconName: 'files-earmark-fill',
+        icon: <Icon name="files-earmark-fill" />,
     },
     {
         id: 'new-folder',
         label: 'New Folder',
-        iconName: 'folder-plus-fill',
+        icon: <Icon name="folder-plus-fill" />,
     },
     {
         id: 'rename',
         label: 'Rename',
-        iconName: 'pencil-fill',
+        icon: <Icon name="pencil-fill" />,
     },
     {
         id: 'delete',
         label: 'Delete',
-        iconName: 'trash-fill',
+        icon: <Icon name="trash-fill" />,
         className: 'text-[#EA4335]',
     },
 ] as const;
@@ -89,13 +89,13 @@ export interface ConnectTreeViewItemProps<T extends string = DefaultOptionId>
 const getStatusIcon = (status: ItemStatus) => {
     switch (status) {
         case ItemStatus.Available:
-            return 'check';
+            return <Icon name="check" />;
         case ItemStatus.AvailableOffline:
-            return 'check-fill';
+            return <Icon name="check-fill" />;
         case ItemStatus.Syncing:
-            return 'syncing';
+            return <Icon name="syncing" />;
         case ItemStatus.Offline:
-            return 'cloud-slash';
+            return <Icon name="cloud-slash" />;
     }
 };
 
@@ -103,17 +103,17 @@ const getItemIcon = (type: ItemType) => {
     switch (type) {
         case ItemType.Folder:
             return {
-                iconName: 'folder-close-fill',
-                expandedIconName: 'folder-open-fill',
+                icon: <Icon name="folder-close-fill" />,
+                expandedIcon: <Icon name="folder-open-fill" />,
             };
         case ItemType.File:
             return {};
         case ItemType.LocalDrive:
-            return { iconName: 'hdd-fill' };
+            return { icon: <Icon name="hdd-fill" /> };
         case ItemType.NetworkDrive:
-            return { iconName: 'server-fill' };
+            return { icon: <Icon name="server-fill" /> };
         case ItemType.PublicDrive:
-            return { iconName: 'm-fill' };
+            return { icon: <Icon name="m-fill" /> };
     }
 };
 
@@ -218,7 +218,7 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
             }}
             optionsContent={optionsContent}
             {...(item.status && {
-                secondaryIconName: getStatusIcon(item.status),
+                secondaryIcon: getStatusIcon(item.status),
             })}
             {...getItemIcon(item.type)}
             {...divProps}

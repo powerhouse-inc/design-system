@@ -5,27 +5,22 @@ const filterItems: ConnectSearchBarProps['filterItems'] = [
     {
         id: 'project',
         label: '.project',
-        iconName: 'project-fill',
     },
     {
         id: 'budget',
         label: '.budget',
-        iconName: 'bar-chart-fill',
     },
     {
         id: 'profile',
         label: '.profile',
-        iconName: 'person-fill',
     },
     {
         id: 'legal',
         label: '.legal',
-        iconName: 'briefcase-fill',
     },
     {
         id: 'atlas',
         label: '.Atlas',
-        iconName: 'globe',
     },
 ];
 

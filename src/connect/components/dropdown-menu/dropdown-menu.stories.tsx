@@ -1,3 +1,4 @@
+import { Icon } from '@/powerhouse';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ConnectDropdownMenu } from './dropdown-menu';
 
@@ -28,22 +29,22 @@ export const Primary: Story = {
             {
                 id: 'duplicate',
                 label: 'Duplicate',
-                iconName: 'files-earmark-fill',
+                icon: <Icon name="files-earmark-fill" />,
             },
             {
                 id: 'new-folder',
                 label: 'New Folder',
-                iconName: 'folder-plus-fill',
+                icon: <Icon name="folder-plus-fill" />,
             },
             {
                 id: 'rename',
                 label: 'Rename',
-                iconName: 'pencil-fill',
+                icon: <Icon name="pencil-fill" />,
             },
             {
                 id: 'delete',
                 label: 'Delete',
-                iconName: 'trash-fill',
+                icon: <Icon name="trash-fill" />,
                 className: 'text-[#EA4335]',
             },
         ],
