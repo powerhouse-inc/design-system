@@ -6,7 +6,8 @@ exports[`ConnectSearchBar Component should match snapshot 1`] = `
     class="flex flex-row bg-[#FCFCFC] px-4 h-[52px] items-center rounded-xl border border-[#EFEFEF]"
   >
     <svg
-      class="mr-3 w-6 h-6"
+      class="mr-3"
+      style="width: 24px; height: 24px;"
     >
       <use
         href="/icons.svg#search"
@@ -41,7 +42,7 @@ exports[`ConnectSearchBar Component should match snapshot 1`] = `
         File type
       </div>
       <svg
-        class="w-6 h-6"
+        style="width: 24px; height: 24px;"
       >
         <use
           href="/icons.svg#chevron-down"

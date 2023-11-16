@@ -4,7 +4,7 @@ import { twMerge } from 'tailwind-merge';
 
 export interface ConnectDropdownMenuItem<T extends string = string> {
     id: T;
-    icon?: React.ReactElement;
+    icon?: React.JSX.Element;
     label: string;
     className?: string;
 }
@@ -33,7 +33,7 @@ export function ConnectDropdownMenu<T extends string = string>(
                         )}
                     >
                         {item.icon && (
-                            <span className="mr-2 text-[#6F767E] [&>svg]:w-6 [&>svg]:h-6">
+                            <span className="inline-block mr-2 text-[#6F767E]">
                                 {item.icon}
                             </span>
                         )}

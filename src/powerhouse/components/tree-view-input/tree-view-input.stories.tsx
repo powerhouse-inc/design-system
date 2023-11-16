@@ -22,9 +22,9 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
     args: {
-        icon: <Icon name="folder-open-fill" className="h-6 w-6" />,
-        submitIcon: <Icon name="check-fill" className="w-6 h-6" />,
-        cancelIcon: <Icon name="xmark" className="w-6 h-6" />,
+        icon: <Icon name="folder-open-fill" />,
+        submitIcon: <Icon name="check-fill" />,
+        cancelIcon: <Icon name="xmark" />,
         initialValue: 'My Documents',
         level: 0,
         placeholder: 'Folder Name',
@@ -40,9 +40,9 @@ export const WithStyles: Story = {
         ),
     ],
     args: {
-        icon: <Icon name="folder-open-fill" className="h-6 w-6" />,
-        submitIcon: <Icon name="check-fill" className="w-6 h-6" />,
-        cancelIcon: <Icon name="xmark" className="w-6 h-6" />,
+        icon: <Icon name="folder-open-fill" />,
+        submitIcon: <Icon name="check-fill" />,
+        cancelIcon: <Icon name="xmark" />,
         className: 'bg-[#F1F5F9] rounded-lg h-12',
         initialValue: 'My Documents',
         level: 0,

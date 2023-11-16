@@ -49,7 +49,7 @@ export const ConnectSearchBar: React.FC<ConnectSearchBarProps> = props => {
         )
     );
 
-    const startAdornment = <Icon name="search" className="mr-3 w-6 h-6" />;
+    const startAdornment = <Icon name="search" className="mr-3" />;
 
     const endAdornment = (
         <DropdownMenu
@@ -61,7 +61,7 @@ export const ConnectSearchBar: React.FC<ConnectSearchBarProps> = props => {
             menuItemClassName="hover:bg-[#F4F4F4] rounded-lg overflow-hidden cursor-pointer h-10"
         >
             {filterLabelContent}
-            <Icon name="chevron-down" className="w-6 h-6" />
+            <Icon name="chevron-down" />
         </DropdownMenu>
     );
 

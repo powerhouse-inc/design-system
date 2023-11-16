@@ -26,7 +26,7 @@ exports[`Connect Sidebar Component should match snapshot 1`] = `
           type="button"
         >
           <svg
-            class="w-4 h-4"
+            style="width: 16px; height: 16px;"
           >
             <use
               href="/icons.svg#arrow-left"
@@ -75,7 +75,7 @@ exports[`Connect Sidebar Component should match snapshot 1`] = `
         type="button"
       >
         <svg
-          class="w-6 h-6"
+          style="width: 24px; height: 24px;"
         >
           <use
             href="/icons.svg#settings"

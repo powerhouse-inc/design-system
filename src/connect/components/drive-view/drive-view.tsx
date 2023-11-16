@@ -99,7 +99,7 @@ export function DriveView<T extends string = DefaultOptionId>(
                     {name}
                 </p>
                 <Button>
-                    <Icon name="gear" className="w-4 h-4" />
+                    <Icon name="gear" size={16} />
                 </Button>
             </div>
             <div className="py-2">
