@@ -7,9 +7,9 @@ export interface TreeViewItemProps
     label: string;
     children?: React.ReactNode;
     open?: boolean;
-    icon?: React.ReactElement;
-    expandedIcon?: React.ReactElement;
-    secondaryIcon?: React.ReactElement;
+    icon?: React.JSX.Element;
+    expandedIcon?: React.JSX.Element;
+    secondaryIcon?: React.JSX.Element;
     level?: number;
     onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     onOptionsClick?: (
