@@ -98,14 +98,13 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                         <Icon
                             name="caret"
                             className={twMerge(
-                                'h-6 w-6',
                                 open && 'rotate-90',
-                                'transition ease delay-50 pointer-events-none w-6 h-6',
+                                'transition ease delay-50 pointer-events-none',
                             )}
                         />
                     )}
                     {icon && (
-                        <span className="pointer-events-none [&>svg]:w-6 [&>svg]:h-6">
+                        <span className="pointer-events-none">
                             {open ? expandedIcon || icon : icon}
                         </span>
                     )}
@@ -121,7 +120,7 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                         </div>
                     )}
                     {secondaryIcon && (
-                        <span className="flex self-end w-6 h-6 mx-3 group-hover/tree-item:hidden pointer-events-none">
+                        <span className="flex self-end mx-3 group-hover/tree-item:hidden pointer-events-none">
                             {secondaryIcon}
                         </span>
                     )}
