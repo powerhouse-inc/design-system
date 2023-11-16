@@ -1,10 +1,12 @@
 import CaretIcon from '@/assets/icons/caret.svg';
+import { ItemType } from '@/connect';
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
 
 export interface TreeViewItemProps
     extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onClick'> {
     label: string;
+    type: ItemType;
     children?: React.ReactNode;
     open?: boolean;
     expandedIcon?: string;

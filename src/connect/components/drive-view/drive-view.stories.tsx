@@ -150,14 +150,14 @@ export const Cloud: Story = {
             {
                 id: 'cloud',
                 label: 'Powerhouse Team Drive',
-                type: ItemType.NetworkDrive,
+                type: ItemType.CloudDrive,
                 expanded: false,
                 children: items,
             },
             {
                 id: 'cloud-2',
                 label: 'Powerhouse Team Drive',
-                type: ItemType.NetworkDrive,
+                type: ItemType.CloudDrive,
                 expanded: true,
                 children: items,
             },

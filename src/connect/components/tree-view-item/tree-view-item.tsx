@@ -30,7 +30,7 @@ export enum ItemType {
     Folder = 'folder',
     File = 'file',
     LocalDrive = 'local-drive',
-    NetworkDrive = 'network-drive',
+    CloudDrive = 'cloud-drive',
     PublicDrive = 'public-drive',
 }
 
@@ -120,7 +120,7 @@ const getItemIcon = (type: ItemType) => {
             return {};
         case ItemType.LocalDrive:
             return { icon: HDDIcon };
-        case ItemType.NetworkDrive:
+        case ItemType.CloudDrive:
             return { icon: ServerIcon };
         case ItemType.PublicDrive:
             return { icon: MIcon };
