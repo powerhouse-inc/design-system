@@ -89,13 +89,13 @@ export interface ConnectTreeViewItemProps<T extends string = DefaultOptionId>
 const getStatusIcon = (status: ItemStatus) => {
     switch (status) {
         case ItemStatus.Available:
-            return <Icon name="check" />;
+            return <Icon name="check" color="#34A853" />;
         case ItemStatus.AvailableOffline:
-            return <Icon name="check-fill" />;
+            return <Icon name="check-fill" color="#34A853" />;
         case ItemStatus.Syncing:
-            return <Icon name="syncing" />;
+            return <Icon name="syncing" color="#3E90F0" />;
         case ItemStatus.Offline:
-            return <Icon name="cloud-slash" />;
+            return <Icon name="cloud-slash" color="#EA4335" />;
     }
 };
 
@@ -103,8 +103,8 @@ const getItemIcon = (type: ItemType) => {
     switch (type) {
         case ItemType.Folder:
             return {
-                icon: <Icon name="folder-close-fill" />,
-                expandedIcon: <Icon name="folder-open-fill" />,
+                icon: <Icon name="folder-close-fill" color="#6C7275" />,
+                expandedIcon: <Icon name="folder-open-fill" color="#6C7275" />,
             };
         case ItemType.File:
             return {};
@@ -189,7 +189,8 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
             >
                 <Icon
                     name="vertical-dots"
-                    className="w-6 h-6 pointer-events-none"
+                    className="pointer-events-none"
+                    color="#6C7275"
                 />
             </ConnectDropdownMenu>
         );

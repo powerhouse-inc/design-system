@@ -2,6 +2,10 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Icon } from '..';
 import { TreeViewInput } from './tree-view-input';
 
+const icon = <Icon name="folder-open-fill" color="#6C7275" />;
+const submitIcon = <Icon name="check-fill" color="#6C7275" />;
+const cancelIcon = <Icon name="xmark" color="#6C7275" />;
+
 const meta: Meta<typeof TreeViewInput> = {
     title: 'Powerhouse/Components/TreeView/TreeViewInput',
     component: TreeViewInput,
@@ -22,9 +26,9 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
     args: {
-        icon: <Icon name="folder-open-fill" />,
-        submitIcon: <Icon name="check-fill" />,
-        cancelIcon: <Icon name="xmark" />,
+        icon,
+        submitIcon,
+        cancelIcon,
         initialValue: 'My Documents',
         level: 0,
         placeholder: 'Folder Name',
@@ -40,9 +44,9 @@ export const WithStyles: Story = {
         ),
     ],
     args: {
-        icon: <Icon name="folder-open-fill" />,
-        submitIcon: <Icon name="check-fill" />,
-        cancelIcon: <Icon name="xmark" />,
+        icon,
+        submitIcon,
+        cancelIcon,
         className: 'bg-[#F1F5F9] rounded-lg h-12',
         initialValue: 'My Documents',
         level: 0,

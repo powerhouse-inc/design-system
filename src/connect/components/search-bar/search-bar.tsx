@@ -74,7 +74,7 @@ export const ConnectSearchBar: React.FC<ConnectSearchBarProps> = props => {
             inputProps={{ placeholder, className: 'text-sm' }}
             {...mergeClassNameProps(
                 containerProps,
-                'bg-[#FCFCFC] px-4 h-[52px] items-center rounded-xl border border-[#EFEFEF]',
+                'text-[#6F767E] bg-[#FCFCFC] px-4 h-[52px] items-center rounded-xl border border-[#EFEFEF]',
             )}
         />
     );

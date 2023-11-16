@@ -26,7 +26,7 @@ exports[`Connect Sidebar Component should match snapshot 1`] = `
           type="button"
         >
           <svg
-            style="width: 16px; height: 16px;"
+            style="color: rgb(124, 135, 142); width: 16px; height: 16px;"
           >
             <use
               href="/icons.svg#arrow-left"

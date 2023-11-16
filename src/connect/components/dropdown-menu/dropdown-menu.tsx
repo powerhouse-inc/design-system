@@ -33,7 +33,7 @@ export function ConnectDropdownMenu<T extends string = string>(
                         )}
                     >
                         {item.icon && (
-                            <span className="inline-block mr-2 text-[#6F767E]">
+                            <span className="inline-block mr-2">
                                 {item.icon}
                             </span>
                         )}

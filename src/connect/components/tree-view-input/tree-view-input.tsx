@@ -29,9 +29,19 @@ export const ConnectTreeViewInput: React.FC<
 
     return (
         <TreeViewInput
-            icon={<Icon name="folder-close-fill" />}
-            submitIcon={<Icon name="check-fill" />}
-            cancelIcon={<Icon name="xmark" />}
+            icon={<Icon name="folder-close-fill" color="#6C7275" />}
+            submitIcon={
+                <Icon
+                    name="check-fill"
+                    className="hover:text-[#34A853] transition-colors"
+                />
+            }
+            cancelIcon={
+                <Icon
+                    name="xmark"
+                    className="hover:text-[#EA4335] transition-colors"
+                />
+            }
             className={twMerge('bg-[#F1F5F9] rounded-lg h-12', className)}
             initialValue={item.label}
             onSubmit={value => onSubmit({ ...item, label: value })}
