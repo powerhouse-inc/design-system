@@ -15,6 +15,9 @@ const meta = {
         defaultItemOptions: { control: { type: 'object' } },
         onSubmitInput: { control: { type: 'action' } },
         onCancelInput: { control: { type: 'action' } },
+        onDropActivate: { control: { type: 'action' } },
+        onDragStart: { control: { type: 'action' } },
+        onDragEnd: { control: { type: 'action' } },
     },
 } satisfies Meta<typeof ConnectTreeView>;
 
@@ -100,9 +103,13 @@ const TreeViewImpl = (args: ConnectTreeViewProps) => {
         onItemOptionsClick,
         onCancelInput,
         onSubmitInput,
+        onDropActivate,
+        onDragStart,
+        onDragEnd,
         ...treeViewProps
     } = args;
     const [items, setItems] = useState(argItems);
+    const [disableHighlight, setDisableHighlight] = useState(false);
 
     const onItemClickHandler: ConnectTreeViewProps['onItemClick'] = (
         e,
@@ -112,7 +119,7 @@ const TreeViewImpl = (args: ConnectTreeViewProps) => {
         setItems(prevState => {
             const newTree = traverseTree(prevState, treeItem => {
                 if (treeItem.id === item.id) {
-                    treeItem.isSelected = !treeItem.isSelected;
+                    treeItem.isSelected = true;
                     treeItem.expanded = !treeItem.expanded;
                 } else {
                     treeItem.isSelected = false;
@@ -199,6 +206,39 @@ const TreeViewImpl = (args: ConnectTreeViewProps) => {
             setItems(newTree);
         };
 
+    const onDropActivateHandler: ConnectTreeViewProps['onDropActivate'] =
+        item => {
+            onDropActivate?.(item);
+
+            setItems(prevState => {
+                const newTree = traverseTree(prevState, treeItem => {
+                    if (treeItem.id === item.id) {
+                        treeItem.expanded = true;
+                    }
+
+                    return treeItem;
+                });
+
+                return newTree;
+            });
+        };
+
+    const onDragStartHandler: ConnectTreeViewProps['onDragStart'] = (
+        item,
+        event,
+    ) => {
+        onDragStart?.(item, event);
+        setDisableHighlight(true);
+    };
+
+    const onDragEndHandler: ConnectTreeViewProps['onDragEnd'] = (
+        item,
+        event,
+    ) => {
+        onDragEnd?.(item, event);
+        setDisableHighlight(false);
+    };
+
     return (
         <div className="p-10 bg-white">
             <ConnectTreeView
@@ -207,6 +247,10 @@ const TreeViewImpl = (args: ConnectTreeViewProps) => {
                 onCancelInput={onCancelInputHandler}
                 onSubmitInput={onSubmitInputHandler}
                 onItemOptionsClick={onItemOptionsClickHandler}
+                onDropActivate={onDropActivateHandler}
+                disableHighlightStyles={disableHighlight}
+                onDragStart={onDragStartHandler}
+                onDragEnd={onDragEndHandler}
                 {...treeViewProps}
             />
         </div>

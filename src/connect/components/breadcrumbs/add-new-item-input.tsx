@@ -71,10 +71,10 @@ export const AddNewItemInput: React.FC<AddNewItemInputProps> = props => {
                 </TextField>
                 <div className="flex items-center gap-1">
                     <Button onPress={e => onSubmit(text, e)}>
-                        <Icon name="check" className="w-6 h-6" />
+                        <Icon name="check" />
                     </Button>
                     <Button onPress={onCancel}>
-                        <Icon name="xmark" className="w-6 h-6" />
+                        <Icon name="xmark" />
                     </Button>
                 </div>
             </div>

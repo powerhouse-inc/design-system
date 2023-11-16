@@ -103,7 +103,8 @@ export function Breadcrumbs<T extends string = string>(
                     onClick={onAddNew}
                     className="flex flex-row items-center justify-center gap-2 ml-1 px-2 py-[6px] bg-[#FCFCFC] rounded-[6px] hover:bg-[#EFEFEF] hover:text-[#404446] transition-colors"
                 >
-                    <Icon name="plus" className="w-[14px] h-[14px]" /> Add new
+                    <Icon name="plus" size={14} />
+                    Add new
                 </button>
             )}
         </div>
