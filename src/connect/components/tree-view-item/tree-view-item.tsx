@@ -30,6 +30,7 @@ export enum ItemStatus {
     AvailableOffline = 'available-offline',
     Syncing = 'syncing',
     Offline = 'offline',
+    Error = 'error',
 }
 
 export interface TreeItem<T extends string = string> {
@@ -91,7 +92,7 @@ const getStatusIcon = (status: ItemStatus) => {
         case ItemStatus.Available:
             return <Icon name="check" color="#34A853" />;
         case ItemStatus.AvailableOffline:
-            return <Icon name="check" color="#34A853" />;
+            return <Icon name="check-circle" color="#34A853" />;
         case ItemStatus.Syncing:
             return <Icon name="syncing" color="#3E90F0" />;
         case ItemStatus.Offline:

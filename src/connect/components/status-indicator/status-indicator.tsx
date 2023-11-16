@@ -12,11 +12,11 @@ type SharedProps = {
 };
 
 export type LocalProps = SharedProps & {
-    type: 'local';
+    type: 'local-drive';
 };
 
 type SharedPublicOrCloudProps = SharedProps & {
-    type: 'public' | 'cloud';
+    type: 'public-drive' | 'cloud-drive';
     isConnected: boolean;
 };
 
@@ -36,7 +36,7 @@ export function StatusIndicator(props: StatusIndicatorProps) {
     if (props.error) {
         return <ErrorIcon {...props.iconProps} />;
     }
-    if (props.type === 'local') {
+    if (props.type === 'local-drive') {
         return <AvailableIcon {...props.iconProps} />;
     }
 
