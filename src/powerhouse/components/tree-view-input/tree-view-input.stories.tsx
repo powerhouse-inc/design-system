@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Icon } from '..';
 import { TreeViewInput } from './tree-view-input';
 
-const icon = <Icon name="folder-open-fill" color="#6C7275" />;
-const submitIcon = <Icon name="check-fill" color="#6C7275" />;
+const icon = <Icon name="folder-open" color="#6C7275" />;
+const submitIcon = <Icon name="check" color="#6C7275" />;
 const cancelIcon = <Icon name="xmark" color="#6C7275" />;
 
 const meta: Meta<typeof TreeViewInput> = {

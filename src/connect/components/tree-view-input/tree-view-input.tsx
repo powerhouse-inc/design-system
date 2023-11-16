@@ -29,10 +29,10 @@ export const ConnectTreeViewInput: React.FC<
 
     return (
         <TreeViewInput
-            icon={<Icon name="folder-close-fill" color="#6C7275" />}
+            icon={<Icon name="folder-close" color="#6C7275" />}
             submitIcon={
                 <Icon
-                    name="check-fill"
+                    name="check"
                     className="hover:text-[#34A853] transition-colors"
                 />
             }

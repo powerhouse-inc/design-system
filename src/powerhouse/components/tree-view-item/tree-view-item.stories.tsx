@@ -2,8 +2,8 @@ import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Icon } from '..';
 import { TreeViewItem, TreeViewItemProps } from './tree-view-item';
-const folderCloseIcon = <Icon name="folder-close-fill" color="#6C7275" />;
-const folderOpenIcon = <Icon name="folder-open-fill" color="#6C7275" />;
+const folderCloseIcon = <Icon name="folder-close" color="#6C7275" />;
+const folderOpenIcon = <Icon name="folder-open" color="#6C7275" />;
 const syncingIcon = <Icon name="syncing" color="#3E90F0" />;
 
 const meta: Meta<typeof TreeViewItem> = {

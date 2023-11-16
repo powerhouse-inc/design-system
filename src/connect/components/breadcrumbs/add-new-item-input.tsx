@@ -71,7 +71,7 @@ export const AddNewItemInput: React.FC<AddNewItemInputProps> = props => {
                 </TextField>
                 <div className="flex items-center gap-1">
                     <Button onPress={e => onSubmit(text, e)}>
-                        <Icon name="check-fill" />
+                        <Icon name="check" />
                     </Button>
                     <Button onPress={onCancel}>
                         <Icon name="xmark" />

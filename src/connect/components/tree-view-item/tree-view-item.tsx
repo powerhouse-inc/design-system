@@ -48,22 +48,22 @@ export const DefaultOptions = [
     {
         id: 'duplicate',
         label: 'Duplicate',
-        icon: <Icon name="files-earmark-fill" />,
+        icon: <Icon name="files-earmark" />,
     },
     {
         id: 'new-folder',
         label: 'New Folder',
-        icon: <Icon name="folder-plus-fill" />,
+        icon: <Icon name="folder-plus" />,
     },
     {
         id: 'rename',
         label: 'Rename',
-        icon: <Icon name="pencil-fill" />,
+        icon: <Icon name="pencil" />,
     },
     {
         id: 'delete',
         label: 'Delete',
-        icon: <Icon name="trash-fill" />,
+        icon: <Icon name="trash" />,
         className: 'text-[#EA4335]',
     },
 ] as const;
@@ -91,7 +91,7 @@ const getStatusIcon = (status: ItemStatus) => {
         case ItemStatus.Available:
             return <Icon name="check" color="#34A853" />;
         case ItemStatus.AvailableOffline:
-            return <Icon name="check-fill" color="#34A853" />;
+            return <Icon name="check" color="#34A853" />;
         case ItemStatus.Syncing:
             return <Icon name="syncing" color="#3E90F0" />;
         case ItemStatus.Offline:
@@ -103,17 +103,17 @@ const getItemIcon = (type: ItemType) => {
     switch (type) {
         case ItemType.Folder:
             return {
-                icon: <Icon name="folder-close-fill" color="#6C7275" />,
-                expandedIcon: <Icon name="folder-open-fill" color="#6C7275" />,
+                icon: <Icon name="folder-close" color="#6C7275" />,
+                expandedIcon: <Icon name="folder-open" color="#6C7275" />,
             };
         case ItemType.File:
             return {};
         case ItemType.LocalDrive:
-            return { icon: <Icon name="hdd-fill" /> };
+            return { icon: <Icon name="hdd" /> };
         case ItemType.NetworkDrive:
-            return { icon: <Icon name="server-fill" /> };
+            return { icon: <Icon name="server" /> };
         case ItemType.PublicDrive:
-            return { icon: <Icon name="m-fill" /> };
+            return { icon: <Icon name="m" /> };
     }
 };
 
