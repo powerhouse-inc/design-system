@@ -1,3 +1,4 @@
+import { Icon } from '@/powerhouse';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ConnectSearchBar, ConnectSearchBarProps } from './search-bar';
 
@@ -5,22 +6,27 @@ const filterItems: ConnectSearchBarProps['filterItems'] = [
     {
         id: 'project',
         label: '.project',
+        icon: <Icon name="project" color="#FF6A55" size={16} />,
     },
     {
         id: 'budget',
         label: '.budget',
+        icon: <Icon name="bar-chart" color="#8E55EA" size={16} />,
     },
     {
         id: 'profile',
         label: '.profile',
+        icon: <Icon name="person" color="#3E90F0" size={16} />,
     },
     {
         id: 'legal',
         label: '.legal',
+        icon: <Icon name="briefcase" color="#4BAB71" size={16} />,
     },
     {
         id: 'atlas',
         label: '.Atlas',
+        icon: <Icon name="globe" color="#FF8A00" size={16} />,
     },
 ];
 
