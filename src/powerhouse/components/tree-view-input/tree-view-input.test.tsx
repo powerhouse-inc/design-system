@@ -33,8 +33,8 @@ describe('TreeViewInput Component', () => {
             <TreeViewInput
                 level={0}
                 aria-label="input-label"
-                onSubmit={() => undefined}
-                onCancel={() => undefined}
+                onSubmit={() => {}}
+                onCancel={() => {}}
                 icon={<div>Icon</div>}
                 initialValue="My Documents"
                 submitIcon={<div>Submit Icon</div>}

@@ -20,7 +20,7 @@ const items: DropdownMenuProps['items'] = [
 describe('DropDownMenu Component', () => {
     it('should match snapshot', () => {
         const { asFragment } = render(
-            <DropdownMenu onItemClick={() => undefined} items={items}>
+            <DropdownMenu onItemClick={() => {}} items={items}>
                 <div>{children}</div>
             </DropdownMenu>,
         );
@@ -30,7 +30,7 @@ describe('DropDownMenu Component', () => {
 
     it('should match snapshot (open menu)', () => {
         const { asFragment } = render(
-            <DropdownMenu onItemClick={() => undefined} items={items}>
+            <DropdownMenu onItemClick={() => {}} items={items}>
                 <div>{children}</div>
             </DropdownMenu>,
         );
@@ -48,7 +48,7 @@ describe('DropDownMenu Component', () => {
 
     it('should render correctly', () => {
         render(
-            <DropdownMenu onItemClick={() => undefined} items={items}>
+            <DropdownMenu onItemClick={() => {}} items={items}>
                 <div>{children}</div>
             </DropdownMenu>,
         );
@@ -58,7 +58,7 @@ describe('DropDownMenu Component', () => {
 
     it('should open menu when click in menu button', () => {
         render(
-            <DropdownMenu onItemClick={() => undefined} items={items}>
+            <DropdownMenu onItemClick={() => {}} items={items}>
                 <div>{children}</div>
             </DropdownMenu>,
         );

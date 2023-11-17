@@ -83,10 +83,7 @@ describe('DragAndDrop Components', () => {
     describe('DraggableTarget', () => {
         it('should match snapshot', () => {
             const { asFragment } = render(
-                <DraggableTarget
-                    item={{ id: 'item-1' }}
-                    onDropEvent={() => undefined}
-                >
+                <DraggableTarget item={{ id: 'item-1' }} onDropEvent={() => {}}>
                     {() => <div style={{ width: '100px', height: '100px' }} />}
                 </DraggableTarget>,
             );

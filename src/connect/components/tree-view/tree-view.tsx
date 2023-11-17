@@ -42,8 +42,8 @@ export function ConnectTreeView<T extends string = string>(
         onDropEvent,
         defaultItemOptions,
         onItemOptionsClick,
-        onSubmitInput = () => undefined,
-        onCancelInput = () => undefined,
+        onSubmitInput = () => {},
+        onCancelInput = () => {},
         ...elementProps
     } = props;
 

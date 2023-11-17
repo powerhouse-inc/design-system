@@ -22,7 +22,7 @@ export const ConnectSearchBar: React.FC<ConnectSearchBarProps> = props => {
         filterLabel,
         filterItems,
         selectedFilter,
-        onFilterSelect = () => undefined,
+        onFilterSelect = () => {},
         ...containerProps
     } = props;
 

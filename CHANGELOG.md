@@ -1,3 +1,24 @@
+# [1.0.0-alpha.22](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.21...v1.0.0-alpha.22) (2023-11-17)
+
+
+### Features
+
+* 75 drive status indicator local cloud available offline ([#92](https://github.com/powerhouse-inc/design-system/issues/92)) ([f0d98ad](https://github.com/powerhouse-inc/design-system/commit/f0d98ad87a2a729213e0061511e8b3318ea5acaa))
+
+# [1.0.0-alpha.21](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.20...v1.0.0-alpha.21) (2023-11-17)
+
+
+### Features
+
+* **modal:** added upgrade drive modal ([6ac9f40](https://github.com/powerhouse-inc/design-system/commit/6ac9f406f4f1e2cfcc78d9348dabc1fa4aa6d200))
+
+# [1.0.0-alpha.20](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.19...v1.0.0-alpha.20) (2023-11-17)
+
+
+### Features
+
+* add official tailwind prettier plugin ([#91](https://github.com/powerhouse-inc/design-system/issues/91)) ([a44956d](https://github.com/powerhouse-inc/design-system/commit/a44956d62b3c7720bc53fc5c0e53742469c26fdb))
+
 # [1.0.0-alpha.19](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.18...v1.0.0-alpha.19) (2023-11-16)
 
 

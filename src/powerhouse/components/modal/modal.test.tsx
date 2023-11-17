@@ -4,7 +4,7 @@ import { Modal } from './modal';
 describe('Modal Component', () => {
     it('should match snapshot', () => {
         render(
-            <Modal open={true} onClose={() => undefined} data-testid="modal">
+            <Modal open={true} onClose={() => {}} data-testid="modal">
                 <div>Modal Content</div>
             </Modal>,
         );
@@ -16,7 +16,7 @@ describe('Modal Component', () => {
 
     it('should display modal content when open', () => {
         render(
-            <Modal open={true} onClose={() => undefined}>
+            <Modal open={true} onClose={() => {}}>
                 <div>Modal Content</div>
             </Modal>,
         );
