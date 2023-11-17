@@ -220,19 +220,6 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
                 );
             }
         }
-
-        switch (item.status) {
-            case ItemStatus.Available:
-                return <Icon name="check" color="#34A853" />;
-            case ItemStatus.AvailableOffline:
-                return <Icon name="check" color="#34A853" />;
-            case ItemStatus.Syncing:
-                return <Icon name="syncing" color="#3E90F0" />;
-            case ItemStatus.Offline:
-                return <Icon name="cloud-slash" color="#EA4335" />;
-            default:
-                return undefined;
-        }
     };
 
     return (
