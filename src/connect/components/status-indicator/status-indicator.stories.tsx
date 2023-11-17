@@ -13,20 +13,20 @@ type PublicOrCloudDriveStory = StoryObj<PublicOrCloudDriveProps>;
 
 export const LocalDriveSuccess: LocalDriveStory = {
     args: {
-        type: 'local',
+        type: 'local-drive',
     },
 };
 
 export const LocalDriveError: LocalDriveStory = {
     args: {
-        type: 'local',
+        type: 'local-drive',
         error: new Error('Something went wrong'),
     },
 };
 
 export const LocalDriveWithStyles: LocalDriveStory = {
     args: {
-        type: 'local',
+        type: 'local-drive',
         iconProps: {
             className: 'text-[#000] hover:text-pink-500',
         },
@@ -35,7 +35,7 @@ export const LocalDriveWithStyles: LocalDriveStory = {
 
 const PublicAvailableOfflineTemplate: PublicOrCloudDriveStory = {
     args: {
-        type: 'public',
+        type: 'public-drive',
         availability: 'available-offline',
     },
 };
@@ -103,7 +103,7 @@ export const PublicAvailableOfflineNoConnectionFailed: PublicOrCloudDriveStory =
 
 const CloudAvailableOfflineTemplate: PublicOrCloudDriveStory = {
     args: {
-        type: 'cloud',
+        type: 'cloud-drive',
         availability: 'available-offline',
     },
 };
@@ -171,7 +171,7 @@ export const CloudAvailableOfflineNoConnectionFailed: PublicOrCloudDriveStory =
 
 const PublicCloudOnlyTemplate: PublicOrCloudDriveStory = {
     args: {
-        type: 'public',
+        type: 'public-drive',
         availability: 'cloud-only',
     },
 };
@@ -194,7 +194,7 @@ export const PublicCloudOnlyNoConnection: PublicOrCloudDriveStory = {
 
 const CloudCloudOnlyTemplate: PublicOrCloudDriveStory = {
     args: {
-        type: 'cloud',
+        type: 'cloud-drive',
         availability: 'available-offline',
     },
 };
