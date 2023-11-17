@@ -7,7 +7,7 @@ describe('Connect Sidebar Component', () => {
         const { asFragment } = render(
             <ConnectSidebar
                 data-testid="sidebar"
-                onToggle={() => {}}
+                onToggle={() => undefined}
                 username="Willow"
                 address="0x123"
                 collapsed={false}
@@ -20,7 +20,7 @@ describe('Connect Sidebar Component', () => {
         render(
             <ConnectSidebar
                 data-testid="sidebar"
-                onToggle={() => {}}
+                onToggle={() => undefined}
                 username="Willow"
                 address="0x123"
                 collapsed={false}
@@ -33,7 +33,7 @@ describe('Connect Sidebar Component', () => {
         render(
             <ConnectSidebar
                 data-testid="sidebar"
-                onToggle={() => {}}
+                onToggle={() => undefined}
                 username="Willow"
                 address="0x123"
                 collapsed={false}
@@ -46,7 +46,7 @@ describe('Connect Sidebar Component', () => {
         render(
             <ConnectSidebar
                 data-testid="sidebar"
-                onToggle={() => {}}
+                onToggle={() => undefined}
                 username="Willow"
                 address="0x123"
                 collapsed={true}

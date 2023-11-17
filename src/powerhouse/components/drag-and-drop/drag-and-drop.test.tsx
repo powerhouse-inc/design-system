@@ -83,7 +83,10 @@ describe('DragAndDrop Components', () => {
     describe('DraggableTarget', () => {
         it('should match snapshot', () => {
             const { asFragment } = render(
-                <DraggableTarget item={{ id: 'item-1' }} onDropEvent={() => {}}>
+                <DraggableTarget
+                    item={{ id: 'item-1' }}
+                    onDropEvent={() => undefined}
+                >
                     {() => <div style={{ width: '100px', height: '100px' }} />}
                 </DraggableTarget>,
             );
@@ -111,7 +114,7 @@ describe('DragAndDrop Components', () => {
             });
         });
 
-        it('should inject props to the div wrapper elements', async () => {
+        it('should inject props to the div wrapper elements', () => {
             const onDropEvent = jest.fn();
 
             render(

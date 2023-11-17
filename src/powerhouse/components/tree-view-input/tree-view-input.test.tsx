@@ -2,8 +2,8 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { TreeViewInput } from './tree-view-input';
 
 describe('TreeViewInput Component', () => {
-    let onSubmit: jest.Mock<any, any, any>;
-    let onCancel: jest.Mock<any, any, any>;
+    let onSubmit: jest.Mock;
+    let onCancel: jest.Mock;
 
     const props = {
         level: 0,
@@ -33,8 +33,8 @@ describe('TreeViewInput Component', () => {
             <TreeViewInput
                 level={0}
                 aria-label="input-label"
-                onSubmit={() => {}}
-                onCancel={() => {}}
+                onSubmit={() => undefined}
+                onCancel={() => undefined}
                 icon={<div>Icon</div>}
                 initialValue="My Documents"
                 submitIcon={<div>Submit Icon</div>}
