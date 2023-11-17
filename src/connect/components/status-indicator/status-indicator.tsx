@@ -37,7 +37,7 @@ export function StatusIndicator(props: StatusIndicatorProps) {
         return <ErrorIcon {...props.iconProps} />;
     }
     if (props.type === 'local-drive') {
-        return <AvailableIcon {...props.iconProps} />;
+        return <SyncedIcon {...props.iconProps} />;
     }
 
     return <PublicOrCloudDriveStatusIndicator {...props} />;
@@ -60,7 +60,6 @@ export function PublicOrCloudDriveStatusIndicator(
         if (props.syncStatus === 'synced') {
             return <SyncedIcon {...props.iconProps} />;
         }
-        return <ErrorIcon {...props.iconProps} />;
     }
 
     if (props.syncStatus === 'not-synced-yet') {

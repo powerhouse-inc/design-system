@@ -120,7 +120,7 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                         </div>
                     )}
                     {secondaryIcon && (
-                        <span className="pointer-events-none mx-3 flex self-end group-hover/tree-item:hidden">
+                        <span className="pointer-events-none mx-3 flex self-center group-hover/tree-item:hidden">
                             {secondaryIcon}
                         </span>
                     )}
