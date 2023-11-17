@@ -92,7 +92,7 @@ const getStatusIcon = (status: ItemStatus) => {
         case ItemStatus.Available:
             return <Icon name="check" color="#34A853" />;
         case ItemStatus.AvailableOffline:
-            return <Icon name="check-circle" color="#34A853" />;
+            return <Icon name="check" color="#34A853" />;
         case ItemStatus.Syncing:
             return <Icon name="syncing" color="#3E90F0" />;
         case ItemStatus.Offline:
@@ -159,7 +159,7 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
     const bottomIndicator = (
         <div
             {...dropDividerProps}
-            className="w-full bottom-[-2px] absolute h-1 flex flex-row items-center z-[1]"
+            className="absolute bottom-[-2px] z-[1] flex h-1 w-full flex-row items-center"
         >
             <div
                 className={twMerge(
