@@ -18,12 +18,12 @@ export interface ConnectTreeViewProps<T extends string = string>
         'onClick' | 'onDragStart' | 'onDragEnd'
     > {
     items: TreeItem<T>;
-    onDropEvent?: ConnectTreeViewItemProps<T>['onDropEvent'];
-    onItemClick?: (
+    onItemClick: (
         event: React.MouseEvent<HTMLDivElement>,
         item: TreeItem<T>,
     ) => void;
-    onItemOptionsClick?: ConnectTreeViewItemProps<T>['onOptionsClick'];
+    onItemOptionsClick: ConnectTreeViewItemProps<T>['onOptionsClick'];
+    onDropEvent?: ConnectTreeViewItemProps<T>['onDropEvent'];
     defaultItemOptions?: ConnectTreeViewItemProps<T>['defaultOptions'];
     onSubmitInput?: ConnectTreeViewInputProps['onSubmit'];
     onCancelInput?: ConnectTreeViewInputProps['onCancel'];
@@ -70,7 +70,7 @@ export function ConnectTreeView<T extends string = string>(
                 onDropEvent={onDropEvent}
                 onOptionsClick={onItemOptionsClick}
                 defaultOptions={defaultItemOptions}
-                onClick={e => onItemClick?.(e, item)}
+                onClick={e => onItemClick(e, item)}
                 disableDropBetween={level === 0 && !item.expanded}
                 {...elementProps}
             >
