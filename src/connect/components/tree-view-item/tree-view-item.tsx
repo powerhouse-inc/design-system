@@ -1,3 +1,4 @@
+import { getIsMouseInsideContainer } from '@/connect';
 import {
     ConnectDropdownMenu,
     ConnectDropdownMenuItem,
@@ -10,7 +11,7 @@ import {
     useDraggableTarget,
 } from '@/powerhouse';
 import { MouseEventHandler, useEffect, useRef, useState } from 'react';
-import { twMerge } from 'tailwind-merge';
+import { twJoin, twMerge } from 'tailwind-merge';
 import { StatusIndicator } from '../status-indicator';
 
 export enum ItemType {
@@ -90,7 +91,7 @@ export type ConnectTreeViewItemProps<T extends string = DefaultOptionId> = {
     disableHighlightStyles?: boolean;
 };
 
-const getItemIcon = (type: ItemType) => {
+function getItemIcon(type: ItemType) {
     switch (type) {
         case ItemType.Folder:
             return {
@@ -106,7 +107,7 @@ const getItemIcon = (type: ItemType) => {
         case ItemType.PublicDrive:
             return { icon: <Icon name="m" /> };
     }
-};
+}
 
 export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
     props: ConnectTreeViewItemProps<T>,
@@ -136,9 +137,9 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
 
     const { dragProps, dropProps, isDropTarget, isDragging } =
         useDraggableTarget<TreeItem<T>>({
-            onDragEnd: (event, item) => {
+            onDragEnd: (item, event) => {
                 setHasRoundedCorners(true);
-                onDragEnd?.(event, item);
+                onDragEnd?.(item, event);
             },
             onDragStart,
             data: item,
@@ -155,13 +156,31 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
             dropAfterItem: true,
         });
 
+    useEffect(() => {
+        window.addEventListener('mousemove', onMouseMove);
+
+        return () => {
+            window.removeEventListener('mousemove', onMouseMove);
+        };
+    }, []);
+
+    const isHighlighted = getIsHighlighted();
+
+    const statusIcon = getStatusIcon();
+
+    const dropdownMenuButton = (
+        <button onClick={() => setIsDropdownMenuOpen(true)}>
+            <Icon name="vertical-dots" color="#6C7275" />
+        </button>
+    );
+
     const bottomIndicator = (
         <div
             {...dropDividerProps}
             className="absolute bottom-[-2px] z-[1] flex h-1 w-full flex-row items-center"
         >
             <div
-                className={twMerge(
+                className={twJoin(
                     'h-0.5 w-full',
                     isDropDividerTarget && 'bg-[#3E90F0]',
                 )}
@@ -169,41 +188,38 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
         </div>
     );
 
-    const isHighlighted = getIsHighlighted();
+    function onMouseDown() {
+        setHasRoundedCorners(false);
+    }
+
+    function onMouseUp() {
+        setHasRoundedCorners(true);
+    }
+
+    function onMouseMove(event: MouseEvent) {
+        const isMouseInsideContainer = getIsMouseInsideContainer(
+            containerRef,
+            event,
+        );
+        setMouseIsWithinItemContainer(isMouseInsideContainer);
+    }
+
+    function onDropdownMenuOpenChange() {
+        setIsDropdownMenuOpen(!isDropdownMenuOpen);
+    }
+
+    function onItemClick(option: T) {
+        onOptionsClick(item, option);
+    }
 
     function getIsHighlighted() {
-        if (disableHighlightStyles) return false;
         if (isDropTarget) return true;
+        if (disableHighlightStyles) return false;
         if (isDragging) return false;
         if (item.isSelected) return true;
         if (mouseIsWithinItemContainer) return true;
         if (isDropdownMenuOpen) return true;
         return false;
-    }
-
-    useEffect(() => {
-        window.addEventListener('mousemove', getIsMouseInsideContainer);
-
-        return () => {
-            window.removeEventListener('mousemove', getIsMouseInsideContainer);
-        };
-    }, []);
-
-    function getIsMouseInsideContainer(event: MouseEvent) {
-        if (!containerRef.current) return false;
-        const dimensions = containerRef.current.getBoundingClientRect();
-
-        const { x, y, width, height } = dimensions;
-
-        const mouseX = event.clientX;
-        const mouseY = event.clientY;
-
-        const isWithinX = mouseX >= x && mouseX <= x + width;
-        const isWithinY = mouseY >= y && mouseY <= y + height;
-
-        const isWithinContainer = isWithinX && isWithinY;
-
-        setMouseIsWithinItemContainer(isWithinContainer);
     }
 
     function getItemContainerProps() {
@@ -219,11 +235,9 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
             itemContainerClassName,
         );
 
-        const ref = containerRef;
-
         return {
             className,
-            ref,
+            ref: containerRef,
             ...restItemContainerProps,
         };
     }
@@ -274,23 +288,11 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
         }
     }
 
-    const statusIcon = getStatusIcon();
-
-    const dropdownMenuButton = (
-        <button onClick={() => setIsDropdownMenuOpen(true)}>
-            <Icon name="vertical-dots" color="#6C7275" />
-        </button>
-    );
-
-    function onDropdownMenuOpenChange() {
-        setIsDropdownMenuOpen(!isDropdownMenuOpen);
-    }
-
     return (
         <article
             className="relative"
-            onMouseDown={() => setHasRoundedCorners(false)}
-            onMouseUp={() => setHasRoundedCorners(true)}
+            onMouseDown={onMouseDown}
+            onMouseUp={onMouseUp}
         >
             <TreeViewItem
                 {...(onDropEvent && { ...dragProps, ...dropProps })}
@@ -317,7 +319,7 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
                 }
                 menuClassName="bg-white cursor-pointer"
                 menuItemClassName="hover:bg-[#F1F5F9] px-2"
-                onItemClick={option => onOptionsClick(item, option)}
+                onItemClick={onItemClick}
                 popoverProps={{
                     triggerRef: containerRef,
                     placement: 'bottom end',
