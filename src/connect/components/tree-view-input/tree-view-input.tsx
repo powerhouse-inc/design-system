@@ -32,12 +32,14 @@ export const ConnectTreeViewInput: React.FC<
             icon={<Icon name="folder-close" color="#6C7275" />}
             submitIcon={
                 <Icon
+                    color="#6C7275"
                     name="check"
                     className="transition-colors hover:text-[#34A853]"
                 />
             }
             cancelIcon={
                 <Icon
+                    color="#6C7275"
                     name="xmark"
                     className="transition-colors hover:text-[#EA4335]"
                 />

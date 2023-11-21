@@ -59,7 +59,7 @@ export const TreeViewInput: React.FC<TreeViewInputProps> = props => {
         <ClickAwayListener onClickAway={() => onSubmit(text)}>
             <div
                 className={twMerge(
-                    'flex flex-row items-center pr-5',
+                    'flex flex-row items-center pr-4',
                     className,
                 )}
                 style={{
@@ -84,20 +84,17 @@ export const TreeViewInput: React.FC<TreeViewInputProps> = props => {
                     />
                 </TextField>
                 <div className="flex flex-row items-center">
+                    {cancelIcon && (
+                        <Button onPress={onCancel} className="outline-none">
+                            {cancelIcon}
+                        </Button>
+                    )}
                     <Button
                         className="outline-none"
                         onPress={e => onSubmit(text, e)}
                     >
                         {submitIcon}
                     </Button>
-                    {cancelIcon && (
-                        <Button
-                            onPress={onCancel}
-                            className="ml-1 outline-none"
-                        >
-                            {cancelIcon}
-                        </Button>
-                    )}
                 </div>
             </div>
         </ClickAwayListener>
