@@ -237,6 +237,8 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
 
         return {
             className,
+            onMouseDown,
+            onMouseUp,
             ref: containerRef,
             ...restItemContainerProps,
         };
@@ -289,11 +291,7 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
     }
 
     return (
-        <article
-            className="relative"
-            onMouseDown={onMouseDown}
-            onMouseUp={onMouseUp}
-        >
+        <article className="relative">
             <TreeViewItem
                 {...(onDropEvent && { ...dragProps, ...dropProps })}
                 bottomIndicator={!disableDropBetween && bottomIndicator}
