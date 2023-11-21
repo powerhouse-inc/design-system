@@ -132,14 +132,20 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
     const [mouseIsWithinItemContainer, setMouseIsWithinItemContainer] =
         useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
+    const [hasRoundedCorners, setHasRoundedCorners] = useState(true);
 
     const { dragProps, dropProps, isDropTarget, isDragging } =
         useDraggableTarget<TreeItem<T>>({
-            onDragEnd,
+            onDragEnd: (event, item) => {
+                setHasRoundedCorners(true);
+                onDragEnd?.(event, item);
+            },
             onDragStart,
             data: item,
             onDropEvent,
-            onDropActivate: () => onDropActivate?.(item),
+            onDropActivate: () => {
+                onDropActivate?.(item);
+            },
         });
 
     const { dropProps: dropDividerProps, isDropTarget: isDropDividerTarget } =
@@ -167,8 +173,8 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
 
     function getIsHighlighted() {
         if (disableHighlightStyles) return false;
-        if (isDragging) return false;
         if (isDropTarget) return true;
+        if (isDragging) return false;
         if (item.isSelected) return true;
         if (mouseIsWithinItemContainer) return true;
         if (isDropdownMenuOpen) return true;
@@ -207,7 +213,8 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
         const backgroundClass = isHighlighted ? 'bg-[#F1F5F9]' : '';
 
         const className = twMerge(
-            'py-3 rounded-lg transition-colors',
+            hasRoundedCorners ? 'rounded-lg' : '',
+            'py-3 transition-colors',
             backgroundClass,
             itemContainerClassName,
         );
@@ -222,8 +229,17 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
     }
 
     function getStatusIcon() {
+        const iconProps = {
+            className: 'm-1.5',
+        };
         if (item.type === ItemType.LocalDrive) {
-            return <StatusIndicator type="local-drive" error={item.error} />;
+            return (
+                <StatusIndicator
+                    type="local-drive"
+                    error={item.error}
+                    iconProps={iconProps}
+                />
+            );
         }
 
         if (
@@ -234,6 +250,7 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
                 type: item.type,
                 error: item.error,
                 isConnected: item.isConnected ?? false,
+                iconProps,
             };
 
             if (item.status === ItemStatus.AvailableOffline) {
@@ -270,7 +287,11 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
     }
 
     return (
-        <article className="relative">
+        <article
+            className="relative"
+            onMouseDown={() => setHasRoundedCorners(false)}
+            onMouseUp={() => setHasRoundedCorners(true)}
+        >
             <TreeViewItem
                 {...(onDropEvent && { ...dragProps, ...dropProps })}
                 bottomIndicator={!disableDropBetween && bottomIndicator}

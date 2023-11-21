@@ -74,7 +74,7 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                 onClick={onClick}
                 style={containerStyle}
                 className={twMerge(
-                    'flex w-full cursor-pointer select-none flex-col focus:outline-none',
+                    'flex w-full cursor-pointer select-none flex-col bg-transparent focus:outline-none',
                     containerClassName,
                 )}
                 {...containerProps}

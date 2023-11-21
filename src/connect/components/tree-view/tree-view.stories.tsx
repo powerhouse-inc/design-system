@@ -115,7 +115,7 @@ const TreeViewImpl = (args: ConnectTreeViewProps) => {
         e,
         item,
     ) => {
-        onItemClick?.(e, item);
+        onItemClick(e, item);
         setItems(prevState => {
             const newTree = traverseTree(prevState, treeItem => {
                 if (treeItem.id === item.id) {
@@ -134,7 +134,7 @@ const TreeViewImpl = (args: ConnectTreeViewProps) => {
 
     const onItemOptionsClickHandler: ConnectTreeViewProps['onItemOptionsClick'] =
         (item, option) => {
-            onItemOptionsClick?.(item, option);
+            onItemOptionsClick(item, option);
 
             if (option === 'rename') {
                 const newTree = traverseTree(items, treeItem => {
