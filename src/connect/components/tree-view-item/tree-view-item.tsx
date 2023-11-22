@@ -146,14 +146,10 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
     const [mouseIsWithinItemContainer, setMouseIsWithinItemContainer] =
         useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
-    const [hasRoundedCorners, setHasRoundedCorners] = useState(true);
 
     const { dragProps, dropProps, isDropTarget, isDragging } =
         useDraggableTarget<TreeItem>({
-            onDragEnd: (item, event) => {
-                setHasRoundedCorners(true);
-                onDragEnd?.(item, event);
-            },
+            onDragEnd,
             onDragStart,
             data: item,
             onDropEvent,
@@ -201,14 +197,6 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         </div>
     );
 
-    function onMouseDown() {
-        setHasRoundedCorners(false);
-    }
-
-    function onMouseUp() {
-        setHasRoundedCorners(true);
-    }
-
     function onMouseMove(event: MouseEvent) {
         const isMouseInsideContainer = getIsMouseInsideContainer(
             containerRef,
@@ -255,17 +243,13 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         const backgroundClass = isHighlighted ? 'bg-[#F1F5F9]' : '';
 
         const className = twMerge(
-            'hover:bg-[#F1F5F9] peer-hover:bg-[#F1F5F9]',
-            hasRoundedCorners ? 'rounded-lg' : '',
-            'py-3 transition-colors',
+            'hover:bg-[#F1F5F9] peer-hover:bg-[#F1F5F9] py-3 transition-colors rounded-lg',
             backgroundClass,
             itemContainerClassName,
         );
 
         return {
             className,
-            onMouseDown,
-            onMouseUp,
             ref: containerRef,
             ...restItemContainerProps,
         };
