@@ -10,13 +10,12 @@ describe('TreeViewInput Component', () => {
         level: 0,
         'aria-label': 'input',
         icon: 'Icon',
-        initialValue: 'My Documents',
-        submitIcon: 'Submit Icon',
-        cancelIcon: 'Cancel Icon',
+        defaultValue: 'My Documents',
+        submitIcon: <div>submit</div>,
+        cancelIcon: <div>cancel</div>,
     };
 
     beforeEach(() => {
-        // jest.useFakeTimers();
         onSubmit = vi.fn();
         onCancel = vi.fn();
 
@@ -32,14 +31,12 @@ describe('TreeViewInput Component', () => {
     it('should match snapshot', () => {
         const { asFragment } = render(
             <TreeViewInput
-                level={0}
                 aria-label="input-label"
                 onSubmit={() => {}}
                 onCancel={() => {}}
-                icon={<div>Icon</div>}
-                initialValue="My Documents"
-                submitIcon={<div>Submit Icon</div>}
-                cancelIcon={<div>Cancel Icon</div>}
+                defaultValue="My Documents"
+                submitIcon={<div>submit</div>}
+                cancelIcon={<div>cancel</div>}
             />,
         );
 
@@ -49,14 +46,14 @@ describe('TreeViewInput Component', () => {
     it('should render correctly', () => {
         expect(screen.getByText(props.icon)).toBeInTheDocument();
         expect(
-            screen.getByDisplayValue(props.initialValue),
+            screen.getByDisplayValue(props.defaultValue),
         ).toBeInTheDocument();
-        expect(screen.getByText(props.submitIcon)).toBeInTheDocument();
-        expect(screen.getByText(props.cancelIcon)).toBeInTheDocument();
+        expect(screen.getByText('submit')).toBeInTheDocument();
+        expect(screen.getByText('cancel')).toBeInTheDocument();
     });
 
     it('should call onSubmit when click submit icon', () => {
-        fireEvent.click(screen.getByText(props.submitIcon));
+        fireEvent.click(screen.getByText('submit'));
 
         expect(onSubmit).toHaveBeenCalled();
     });
@@ -70,7 +67,7 @@ describe('TreeViewInput Component', () => {
     });
 
     it('should call onSubmit when click outside', async () => {
-        await waitFor(() => screen.getByText(props.submitIcon), {
+        await waitFor(() => screen.getByText('submit'), {
             timeout: 100,
         });
         fireEvent.click(document.body);
@@ -79,7 +76,7 @@ describe('TreeViewInput Component', () => {
     });
 
     it('should call onCancel when click cancel icon', () => {
-        fireEvent.click(screen.getByText(props.cancelIcon));
+        fireEvent.click(screen.getByText('cancel'));
 
         expect(onCancel).toHaveBeenCalled();
     });
@@ -97,7 +94,7 @@ describe('TreeViewInput Component', () => {
             target: { value: 'new value' },
         });
 
-        fireEvent.click(screen.getByText(props.submitIcon));
+        fireEvent.click(screen.getByText('submit'));
         expect(onSubmit).toHaveBeenCalledWith('new value', expect.anything());
     });
 });
