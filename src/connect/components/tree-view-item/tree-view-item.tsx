@@ -255,7 +255,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         const backgroundClass = isHighlighted ? 'bg-[#F1F5F9]' : '';
 
         const className = twMerge(
-            'hover:bg-[#F1F5F9]',
+            'hover:bg-[#F1F5F9] peer-hover:bg-[#F1F5F9]',
             hasRoundedCorners ? 'rounded-lg' : '',
             'py-3 transition-colors',
             backgroundClass,
