@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { usePathContent } from '../../hooks/tree-view/usePathContent';
 import {
     ActionType,
     ConnectTreeViewItem,
@@ -7,66 +8,79 @@ import {
     TreeItem,
 } from '../tree-view-item';
 
-
-export interface ConnectTreeViewProps<T extends string = string>
+export interface ConnectTreeViewProps
     extends Omit<
         React.HTMLAttributes<HTMLElement>,
         'onClick' | 'onDragStart' | 'onDragEnd'
     > {
-    items: TreeItem<T>;
-    onItemClick: (
+    onItemClick?: (
         event: React.MouseEvent<HTMLDivElement>,
-        item: TreeItem<T>,
+        item: TreeItem,
     ) => void;
-    onItemOptionsClick: ConnectTreeViewItemProps<T>['onOptionsClick'];
-    onDropEvent?: ConnectTreeViewItemProps<T>['onDropEvent'];
-    defaultItemOptions?: ConnectTreeViewItemProps<T>['defaultOptions'];
+    onItemOptionsClick: ConnectTreeViewItemProps['onOptionsClick'];
+    onDropEvent?: ConnectTreeViewItemProps['onDropEvent'];
+    defaultItemOptions?: ConnectTreeViewItemProps['defaultOptions'];
     onSubmitInput?: ConnectTreeViewItemProps['onSubmitInput'];
     onCancelInput?: ConnectTreeViewItemProps['onCancelInput'];
-    onDropActivate?: ConnectTreeViewItemProps<T>['onDropActivate'];
-    onDragStart?: ConnectTreeViewItemProps<T>['onDragStart'];
-    onDragEnd?: ConnectTreeViewItemProps<T>['onDragEnd'];
+    onDropActivate?: ConnectTreeViewItemProps['onDropActivate'];
+    onDragStart?: ConnectTreeViewItemProps['onDragStart'];
+    onDragEnd?: ConnectTreeViewItemProps['onDragEnd'];
     disableHighlightStyles?: boolean;
+    filterPath?: string;
+    level?: number;
+    allowedPaths?: string[];
 }
 
-export function ConnectTreeView<T extends string = string>(
-    props: ConnectTreeViewProps<T>,
-) {
+export function ConnectTreeView(props: ConnectTreeViewProps) {
     const {
-        items,
         onItemClick,
         onDropEvent,
         defaultItemOptions,
         onItemOptionsClick,
         onSubmitInput = () => {},
         onCancelInput = () => {},
+        filterPath,
+        level = 0,
+        allowedPaths,
         ...elementProps
     } = props;
 
-    function renderTreeItems(item: TreeItem<T>, level = 0) {
-        const mode =
-            item.action === ActionType.New || item.action === ActionType.Update
-                ? 'write'
-                : 'read';
+    const items = usePathContent(filterPath, allowedPaths);
 
-        return (
-            <ConnectTreeViewItem<T>
-                item={item}
-                key={item.id}
-                mode={mode}
-                onSubmitInput={onSubmitInput}
-                onCancelInput={onCancelInput}
-                onDropEvent={onDropEvent}
-                onOptionsClick={onItemOptionsClick}
-                defaultOptions={defaultItemOptions}
-                onClick={e => onItemClick(e, item)}
-                disableDropBetween={level === 0 && !item.expanded}
-                {...elementProps}
-            >
-                {item.children?.map(item => renderTreeItems(item, level + 1))}
-            </ConnectTreeViewItem>
-        );
-    }
+    return (
+        <>
+            {items.map(item => {
+                const mode =
+                    item.action === ActionType.New ||
+                    item.action === ActionType.Update
+                        ? 'write'
+                        : 'read';
 
-    return renderTreeItems(items);
+                return (
+                    <ConnectTreeViewItem
+                        mode={mode}
+                        item={item}
+                        level={level}
+                        key={item.id}
+                        onSubmitInput={onSubmitInput}
+                        onCancelInput={onCancelInput}
+                        onDropEvent={onDropEvent}
+                        onOptionsClick={onItemOptionsClick}
+                        defaultOptions={defaultItemOptions}
+                        onClick={e => onItemClick?.(e, item)}
+                        disableDropBetween={level === 0 && !item.expanded}
+                        {...elementProps}
+                    >
+                        {item.expanded && (
+                            <ConnectTreeView
+                                {...props}
+                                level={level + 1}
+                                filterPath={item.path}
+                            />
+                        )}
+                    </ConnectTreeViewItem>
+                );
+            })}
+        </>
+    );
 }
