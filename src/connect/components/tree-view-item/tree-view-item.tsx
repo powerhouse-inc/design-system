@@ -96,7 +96,7 @@ export type ConnectTreeViewItemProps = {
     onDropEvent?: UseDraggableTargetProps<TreeItem>['onDropEvent'];
     onDropActivate?: (dropTargetItem: TreeItem) => void;
     defaultOptions?: ConnectDropdownMenuItem[];
-    onOptionsClick: (item: TreeItem, option: string) => void;
+    onOptionsClick?: (item: TreeItem, option: string) => void;
     itemContainerProps?: ItemContainerProps;
     disableDropBetween?: boolean;
     onDragStart?: UseDraggableTargetProps<TreeItem>['onDragStart'];
@@ -222,7 +222,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
     }
 
     function onItemClick(option: string) {
-        onOptionsClick(item, option);
+        onOptionsClick?.(item, option);
     }
 
     const onClickHandler: MouseEventHandler<HTMLDivElement> = event => {

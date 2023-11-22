@@ -68,7 +68,7 @@ const TreeViewImpl = (args: ConnectTreeViewProps) => {
 
     const onItemOptionsClickHandler: ConnectTreeViewProps['onItemOptionsClick'] =
         (item, option) => {
-            onItemOptionsClick(item, option);
+            onItemOptionsClick?.(item, option);
 
             if (option === 'rename') {
                 actions.setItemAction(item.id, ActionType.Update);

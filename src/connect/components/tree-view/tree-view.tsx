@@ -17,7 +17,7 @@ export interface ConnectTreeViewProps
         event: React.MouseEvent<HTMLDivElement>,
         item: TreeItem,
     ) => void;
-    onItemOptionsClick: ConnectTreeViewItemProps['onOptionsClick'];
+    onItemOptionsClick?: ConnectTreeViewItemProps['onOptionsClick'];
     onDropEvent?: ConnectTreeViewItemProps['onDropEvent'];
     defaultItemOptions?: ConnectTreeViewItemProps['defaultOptions'];
     onSubmitInput?: ConnectTreeViewItemProps['onSubmitInput'];
