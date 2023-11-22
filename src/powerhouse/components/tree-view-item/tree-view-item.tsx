@@ -44,8 +44,8 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
         label,
         mode = 'read',
         onClick,
-        onSubmit,
-        onCancel,
+        onSubmitInput,
+        onCancelInput,
         children,
         icon,
         expandedIcon,
@@ -69,21 +69,13 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
 
     const inputProps = {
         defaultValue: label,
-        onSubmit,
-        onCancel,
+        onSubmitInput,
+        onCancelInput,
         submitIcon,
         cancelIcon,
     };
 
-    const content =
-        mode === 'read' ? (
-            <div className="relative w-full overflow-hidden whitespace-nowrap">
-                <span className="absolute right-0 h-full w-12 bg-gradient-to-r from-transparent to-inherit" />
-                {label}
-            </div>
-        ) : (
-            <TreeViewInput {...inputProps} />
-        );
+    const content = mode === 'read' ? label : <TreeViewInput {...inputProps} />;
 
     return (
         <div {...divProps}>
@@ -92,7 +84,7 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                 onClick={onClick}
                 style={containerStyle}
                 className={twMerge(
-                    'cursor-pointer select-none bg-transparent focus:outline-none',
+                    'cursor-pointer select-none bg-transparent pl-1 focus:outline-none',
                     containerClassName,
                 )}
                 {...containerProps}
@@ -118,7 +110,10 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                             {open ? expandedIcon || icon : icon}
                         </span>
                     )}
-                    {content}
+                    <div className="relative w-full overflow-hidden whitespace-nowrap">
+                        <span className="absolute right-0 h-full w-12 bg-gradient-to-r from-transparent to-inherit" />
+                        {content}
+                    </div>
                 </div>
                 {bottomIndicator && (
                     <div className="absolute bottom-0 w-full">

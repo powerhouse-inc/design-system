@@ -8,16 +8,16 @@ export interface TreeViewInputProps
     extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'> {
     cancelIcon?: React.JSX.Element;
     submitIcon?: React.JSX.Element;
-    onCancel?: () => void;
-    onSubmit?: (value: string, event?: PressEvent) => void;
+    onCancelInput?: () => void;
+    onSubmitInput?: (value: string, event?: PressEvent) => void;
 }
 
 export const TreeViewInput: React.FC<TreeViewInputProps> = props => {
     const {
         submitIcon,
         cancelIcon,
-        onSubmit,
-        onCancel,
+        onSubmitInput,
+        onCancelInput,
         className,
         style,
         placeholder,
@@ -38,16 +38,16 @@ export const TreeViewInput: React.FC<TreeViewInputProps> = props => {
     const { keyboardProps } = useKeyboard({
         onKeyUp(e) {
             if (e.key === 'Enter') {
-                onSubmit?.(text);
+                onSubmitInput?.(text);
             }
             if (e.key === 'Escape') {
-                onCancel?.();
+                onCancelInput?.();
             }
         },
     });
 
     return (
-        <ClickAwayListener onClickAway={() => onSubmit?.(text)}>
+        <ClickAwayListener onClickAway={() => onSubmitInput?.(text)}>
             <div
                 className={twMerge('flex items-center', className)}
                 style={{
@@ -71,12 +71,12 @@ export const TreeViewInput: React.FC<TreeViewInputProps> = props => {
                 </TextField>
                 <div className="flex items-center gap-1">
                     <Button
-                        onPress={e => onSubmit?.(text, e)}
+                        onPress={e => onSubmitInput?.(text, e)}
                         className="outline-none"
                     >
                         {submitIcon}
                     </Button>
-                    <Button className="outline-none" onPress={onCancel}>
+                    <Button className="outline-none" onPress={onCancelInput}>
                         {cancelIcon}
                     </Button>
                 </div>

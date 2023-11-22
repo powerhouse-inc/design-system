@@ -7,10 +7,7 @@ import {
     TreeItem,
 } from '../tree-view-item';
 
-import {
-    ConnectTreeViewInput,
-    ConnectTreeViewInputProps,
-} from '../tree-view-input';
+import { ConnectTreeViewInputProps } from '../tree-view-input';
 
 export interface ConnectTreeViewProps<T extends string = string>
     extends Omit<
@@ -48,25 +45,18 @@ export function ConnectTreeView<T extends string = string>(
     } = props;
 
     function renderTreeItems(item: TreeItem<T>, level = 0) {
-        if (
-            item.action === ActionType.New ||
-            item.action === ActionType.Update
-        ) {
-            return (
-                <ConnectTreeViewInput
-                    item={item}
-                    key={item.id}
-                    level={level}
-                    onSubmit={onSubmitInput}
-                    onCancel={onCancelInput}
-                />
-            );
-        }
+        const mode =
+            item.action === ActionType.New || item.action === ActionType.Update
+                ? 'write'
+                : 'read';
 
         return (
             <ConnectTreeViewItem<T>
                 item={item}
                 key={item.id}
+                mode={mode}
+                onSubmitInput={onSubmitInput}
+                onCancelInput={onCancelInput}
                 onDropEvent={onDropEvent}
                 onOptionsClick={onItemOptionsClick}
                 defaultOptions={defaultItemOptions}

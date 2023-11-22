@@ -4,8 +4,8 @@ import {
     ConnectDropdownMenuItem,
 } from '@/connect/components/dropdown-menu';
 import {
+    DivProps,
     Icon,
-    ItemContainerProps,
     TreeViewItem,
     UseDraggableTargetProps,
     useDraggableTarget,
@@ -34,7 +34,7 @@ export enum ItemStatus {
     Offline = 'offline',
 }
 
-export interface TreeItem<T extends string = string> {
+export type TreeItem<T extends string = string> = {
     id: string;
     label: string;
     type: ItemType;
@@ -47,7 +47,7 @@ export interface TreeItem<T extends string = string> {
     isSelected?: boolean;
     options?: ConnectDropdownMenuItem<T>[];
     error?: Error;
-}
+};
 
 export const defaultDropdownMenuOptions = [
     {
@@ -78,9 +78,12 @@ export type DefaultOptionId = (typeof defaultDropdownMenuOptions)[number]['id'];
 export type ConnectTreeViewItemProps<T extends string = DefaultOptionId> = {
     item: TreeItem<T>;
     children: React.ReactNode;
+    mode?: 'read' | 'write';
     onClick: MouseEventHandler<HTMLDivElement>;
+    onSubmitInput?: (item: TreeItem) => void;
+    onCancelInput?: (item: TreeItem) => void;
     level?: number;
-    itemContainerProps?: ItemContainerProps;
+    divPropsDivProps?: DivProps;
     onDropEvent?: UseDraggableTargetProps<TreeItem<T>>['onDropEvent'];
     onDropActivate?: (dropTargetItem: TreeItem<T>) => void;
     defaultOptions?: ConnectDropdownMenuItem<T>[];
@@ -115,6 +118,8 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
     const {
         item,
         onClick,
+        onSubmitInput,
+        onCancelInput,
         children,
         onDragEnd,
         onDragStart,
@@ -122,7 +127,7 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
         onOptionsClick,
         onDropActivate,
         level = 0,
-        itemContainerProps = {},
+        divPropsDivProps = {},
         disableDropBetween = false,
         disableHighlightStyles = false,
         defaultOptions = defaultDropdownMenuOptions,
@@ -212,18 +217,32 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
         onOptionsClick(item, option);
     }
 
+    const onClickHandler: MouseEventHandler<HTMLDivElement> = event => {
+        if (props.mode === 'write') return;
+        onClick(event);
+    };
+
+    function onSubmitHandler(value: string) {
+        onSubmitInput?.({ ...item, label: value });
+    }
+
+    function onCancelHandler() {
+        onCancelInput?.(item);
+    }
+
     function getIsHighlighted() {
         if (isDropTarget) return true;
         if (disableHighlightStyles) return false;
         if (isDragging) return false;
+        if (props.mode === "write") return true;
         if (item.isSelected) return true;
         if (isDropdownMenuOpen) return true;
         return false;
     }
 
     function getItemContainerProps() {
-        const { className: itemContainerClassName, ...restItemContainerProps } =
-            itemContainerProps;
+        const { className: itemContainerClassName, ...restDivProps } =
+            divPropsDivProps;
 
         const backgroundClass = isHighlighted ? 'bg-[#F1F5F9]' : '';
 
@@ -240,7 +259,7 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
             onMouseDown,
             onMouseUp,
             ref: containerRef,
-            ...restItemContainerProps,
+            ...restDivProps,
         };
     }
 
@@ -296,7 +315,9 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
                 {...(onDropEvent && { ...dragProps, ...dropProps })}
                 bottomIndicator={!disableDropBetween && bottomIndicator}
                 level={level}
-                onClick={onClick}
+                onClick={onClickHandler}
+                onSubmitInput={onSubmitHandler}
+                onCancelInput={onCancelHandler}
                 label={item.label}
                 open={item.expanded}
                 itemContainerProps={getItemContainerProps()}
