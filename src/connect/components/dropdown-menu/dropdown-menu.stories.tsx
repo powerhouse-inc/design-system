@@ -48,7 +48,7 @@ export const Default: Story = {
             {
                 id: 'duplicate',
                 label: 'Duplicate',
-                icon: <Icon name="files" />,
+                icon: <Icon name="files-earmark" />,
             },
             {
                 id: 'new-folder',
