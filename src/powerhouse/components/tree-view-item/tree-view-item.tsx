@@ -78,13 +78,17 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                     className="flex w-full cursor-pointer"
                     style={{ paddingLeft: `${levelPadding}px` }}
                 >
-                    <Icon
-                        name="caret"
-                        className={twMerge(
-                            open && 'rotate-90',
-                            'ease delay-50 pointer-events-none transition',
-                        )}
-                    />
+                    {mode === 'read' ? (
+                        <Icon
+                            name="caret"
+                            className={twMerge(
+                                open && 'rotate-90',
+                                'ease delay-50 pointer-events-none transition',
+                            )}
+                        />
+                    ) : (
+                        <span className="inline-block h-6 w-6" />
+                    )}
                     {icon && (
                         <span className="pointer-events-none mr-2">
                             {open ? expandedIcon || icon : icon}
