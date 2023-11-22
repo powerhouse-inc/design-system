@@ -52,7 +52,9 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
             {items.map(item => {
                 const mode =
                     item.action === ActionType.New ||
-                    item.action === ActionType.Update
+                    item.action === ActionType.Update ||
+                    item.action === ActionType.UpdateAndCopy ||
+                    item.action === ActionType.UpdateAndMove
                         ? 'write'
                         : 'read';
 
