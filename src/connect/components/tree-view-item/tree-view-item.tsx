@@ -25,6 +25,8 @@ export enum ItemType {
 export enum ActionType {
     Update = 'update',
     New = 'new',
+    UpdateAndMove = 'update-and-move',
+    UpdateAndCopy = 'update-and-copy',
 }
 
 export enum ItemStatus {
@@ -34,20 +36,26 @@ export enum ItemStatus {
     Offline = 'offline',
 }
 
-export interface TreeItem<T extends string = string> {
+export interface BaseTreeItem {
     id: string;
+    path: string;
     label: string;
     type: ItemType;
-    isConnected?: boolean;
-    syncStatus?: 'not-synced-yet' | 'syncing' | 'synced';
-    action?: ActionType;
-    status?: ItemStatus;
-    expanded?: boolean;
-    children?: TreeItem<T>[];
-    isSelected?: boolean;
-    options?: ConnectDropdownMenuItem<T>[];
     error?: Error;
+    status?: ItemStatus;
+    isConnected?: boolean;
+    options?: ConnectDropdownMenuItem[];
+    syncStatus?: 'not-synced-yet' | 'syncing' | 'synced';
+    expanded?: boolean;
 }
+
+export interface UITreeItem {
+    action?: ActionType;
+    expanded?: boolean;
+    isSelected?: boolean;
+}
+
+export type TreeItem = BaseTreeItem & UITreeItem;
 
 export const defaultDropdownMenuOptions = [
     {
@@ -75,19 +83,19 @@ export const defaultDropdownMenuOptions = [
 
 export type DefaultOptionId = (typeof defaultDropdownMenuOptions)[number]['id'];
 
-export type ConnectTreeViewItemProps<T extends string = DefaultOptionId> = {
-    item: TreeItem<T>;
+export type ConnectTreeViewItemProps = {
+    item: TreeItem;
     children: React.ReactNode;
     onClick: MouseEventHandler<HTMLDivElement>;
     level?: number;
     itemContainerProps?: ItemContainerProps;
-    onDropEvent?: UseDraggableTargetProps<TreeItem<T>>['onDropEvent'];
-    onDropActivate?: (dropTargetItem: TreeItem<T>) => void;
-    defaultOptions?: ConnectDropdownMenuItem<T>[];
-    onOptionsClick: (item: TreeItem<T>, option: T) => void;
+    onDropEvent?: UseDraggableTargetProps<TreeItem>['onDropEvent'];
+    onDropActivate?: (dropTargetItem: TreeItem) => void;
+    defaultOptions?: ConnectDropdownMenuItem[];
+    onOptionsClick?: (item: TreeItem, option: string) => void;
     disableDropBetween?: boolean;
-    onDragStart?: UseDraggableTargetProps<TreeItem<T>>['onDragStart'];
-    onDragEnd?: UseDraggableTargetProps<TreeItem<T>>['onDragEnd'];
+    onDragStart?: UseDraggableTargetProps<TreeItem>['onDragStart'];
+    onDragEnd?: UseDraggableTargetProps<TreeItem>['onDragEnd'];
     disableHighlightStyles?: boolean;
 };
 
@@ -109,9 +117,7 @@ function getItemIcon(type: ItemType) {
     }
 }
 
-export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
-    props: ConnectTreeViewItemProps<T>,
-) {
+export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
     const {
         item,
         onClick,
@@ -136,7 +142,7 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
     const [hasRoundedCorners, setHasRoundedCorners] = useState(true);
 
     const { dragProps, dropProps, isDropTarget, isDragging } =
-        useDraggableTarget<TreeItem<T>>({
+        useDraggableTarget<TreeItem>({
             onDragEnd: (item, event) => {
                 setHasRoundedCorners(true);
                 onDragEnd?.(item, event);
@@ -208,8 +214,8 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
         setIsDropdownMenuOpen(!isDropdownMenuOpen);
     }
 
-    function onItemClick(option: T) {
-        onOptionsClick(item, option);
+    function onItemClick(option: string) {
+        onOptionsClick?.(item, option);
     }
 
     function getIsHighlighted() {
@@ -308,12 +314,12 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
             <div className="absolute right-1 top-3">
                 {showDropdownMenuButton ? dropdownMenuButton : statusIcon}
             </div>
-            <ConnectDropdownMenu<T>
+            <ConnectDropdownMenu
                 isOpen={isDropdownMenuOpen}
                 onOpenChange={onDropdownMenuOpenChange}
                 items={
                     item.options ??
-                    (defaultOptions as ConnectDropdownMenuItem<T>[])
+                    (defaultOptions as ConnectDropdownMenuItem[])
                 }
                 menuClassName="bg-white cursor-pointer"
                 menuItemClassName="hover:bg-[#F1F5F9] px-2"
