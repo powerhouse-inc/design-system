@@ -174,7 +174,8 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
     }, []);
 
     const isHighlighted = getIsHighlighted();
-    const showDropdownMenuButton = mouseIsWithinItemContainer || isHighlighted;
+    const showDropdownMenuButton =
+        props.mode === 'read' && (mouseIsWithinItemContainer || isHighlighted);
     const statusIcon = getStatusIcon();
 
     const dropdownMenuButton = (
