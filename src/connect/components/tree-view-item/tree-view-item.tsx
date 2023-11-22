@@ -165,7 +165,7 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
     }, []);
 
     const isHighlighted = getIsHighlighted();
-
+    const showDropdownMenuButton = mouseIsWithinItemContainer || isHighlighted;
     const statusIcon = getStatusIcon();
 
     const dropdownMenuButton = (
@@ -217,7 +217,6 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
         if (disableHighlightStyles) return false;
         if (isDragging) return false;
         if (item.isSelected) return true;
-        if (mouseIsWithinItemContainer) return true;
         if (isDropdownMenuOpen) return true;
         return false;
     }
@@ -229,6 +228,7 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
         const backgroundClass = isHighlighted ? 'bg-[#F1F5F9]' : '';
 
         const className = twMerge(
+            'hover:bg-[#F1F5F9]',
             hasRoundedCorners ? 'rounded-lg' : '',
             'py-3 transition-colors',
             backgroundClass,
@@ -306,7 +306,7 @@ export function ConnectTreeViewItem<T extends string = DefaultOptionId>(
                 {children}
             </TreeViewItem>
             <div className="absolute right-1 top-3">
-                {isHighlighted ? dropdownMenuButton : statusIcon}
+                {showDropdownMenuButton ? dropdownMenuButton : statusIcon}
             </div>
             <ConnectDropdownMenu<T>
                 isOpen={isDropdownMenuOpen}
