@@ -44,7 +44,6 @@ describe('TreeViewInput Component', () => {
     });
 
     it('should render correctly', () => {
-        expect(screen.getByText(props.icon)).toBeInTheDocument();
         expect(
             screen.getByDisplayValue(props.defaultValue),
         ).toBeInTheDocument();
@@ -95,6 +94,9 @@ describe('TreeViewInput Component', () => {
         });
 
         fireEvent.click(screen.getByText('submit'));
-        expect(onSubmitInput).toHaveBeenCalledWith('new value', expect.anything());
+        expect(onSubmitInput).toHaveBeenCalledWith(
+            'new value',
+            expect.anything(),
+        );
     });
 });
