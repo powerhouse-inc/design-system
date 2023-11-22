@@ -7,7 +7,6 @@ import {
     TreeItem,
 } from '../tree-view-item';
 
-import { ConnectTreeViewInputProps } from '../tree-view-input';
 
 export interface ConnectTreeViewProps<T extends string = string>
     extends Omit<
@@ -22,8 +21,8 @@ export interface ConnectTreeViewProps<T extends string = string>
     onItemOptionsClick: ConnectTreeViewItemProps<T>['onOptionsClick'];
     onDropEvent?: ConnectTreeViewItemProps<T>['onDropEvent'];
     defaultItemOptions?: ConnectTreeViewItemProps<T>['defaultOptions'];
-    onSubmitInput?: ConnectTreeViewInputProps['onSubmit'];
-    onCancelInput?: ConnectTreeViewInputProps['onCancel'];
+    onSubmitInput?: ConnectTreeViewItemProps['onSubmitInput'];
+    onCancelInput?: ConnectTreeViewItemProps['onCancelInput'];
     onDropActivate?: ConnectTreeViewItemProps<T>['onDropActivate'];
     onDragStart?: ConnectTreeViewItemProps<T>['onDragStart'];
     onDragEnd?: ConnectTreeViewItemProps<T>['onDragEnd'];

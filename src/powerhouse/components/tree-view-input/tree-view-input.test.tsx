@@ -3,8 +3,8 @@ import { Mock } from 'vitest';
 import { TreeViewInput } from './tree-view-input';
 
 describe('TreeViewInput Component', () => {
-    let onSubmit: Mock;
-    let onCancel: Mock;
+    let onSubmitInput: Mock;
+    let onCancelInput: Mock;
 
     const props = {
         level: 0,
@@ -16,14 +16,14 @@ describe('TreeViewInput Component', () => {
     };
 
     beforeEach(() => {
-        onSubmit = vi.fn();
-        onCancel = vi.fn();
+        onSubmitInput = vi.fn();
+        onCancelInput = vi.fn();
 
         render(
             <TreeViewInput
                 {...props}
-                onSubmit={onSubmit}
-                onCancel={onCancel}
+                onSubmitInput={onSubmitInput}
+                onCancelInput={onCancelInput}
             />,
         );
     });
@@ -32,8 +32,8 @@ describe('TreeViewInput Component', () => {
         const { asFragment } = render(
             <TreeViewInput
                 aria-label="input-label"
-                onSubmit={() => {}}
-                onCancel={() => {}}
+                onSubmitInput={() => {}}
+                onCancelInput={() => {}}
                 defaultValue="My Documents"
                 submitIcon={<div>submit</div>}
                 cancelIcon={<div>cancel</div>}
@@ -52,49 +52,49 @@ describe('TreeViewInput Component', () => {
         expect(screen.getByText('cancel')).toBeInTheDocument();
     });
 
-    it('should call onSubmit when click submit icon', () => {
+    it('should call onSubmitInput when click submit icon', () => {
         fireEvent.click(screen.getByText('submit'));
 
-        expect(onSubmit).toHaveBeenCalled();
+        expect(onSubmitInput).toHaveBeenCalled();
     });
 
-    it('should call onSubmit when press enter key', () => {
+    it('should call onSubmitInput when press enter key', () => {
         fireEvent.keyUp(screen.getByLabelText('input'), {
             key: 'Enter',
         });
 
-        expect(onSubmit).toHaveBeenCalled();
+        expect(onSubmitInput).toHaveBeenCalled();
     });
 
-    it('should call onSubmit when click outside', async () => {
+    it('should call onSubmitInput when click outside', async () => {
         await waitFor(() => screen.getByText('submit'), {
             timeout: 100,
         });
         fireEvent.click(document.body);
 
-        expect(onSubmit).toHaveBeenCalled();
+        expect(onSubmitInput).toHaveBeenCalled();
     });
 
-    it('should call onCancel when click cancel icon', () => {
+    it('should call onCancelInput when click cancel icon', () => {
         fireEvent.click(screen.getByText('cancel'));
 
-        expect(onCancel).toHaveBeenCalled();
+        expect(onCancelInput).toHaveBeenCalled();
     });
 
-    it('should call onCancel when press Esc key', () => {
+    it('should call onCancelInput when press Esc key', () => {
         fireEvent.keyUp(screen.getByLabelText('input'), {
             key: 'Escape',
         });
 
-        expect(onCancel).toHaveBeenCalled();
+        expect(onCancelInput).toHaveBeenCalled();
     });
 
-    it('should call onSubmit with text value', () => {
+    it('should call onSubmitInput with text value', () => {
         fireEvent.change(screen.getByLabelText('input'), {
             target: { value: 'new value' },
         });
 
         fireEvent.click(screen.getByText('submit'));
-        expect(onSubmit).toHaveBeenCalledWith('new value', expect.anything());
+        expect(onSubmitInput).toHaveBeenCalledWith('new value', expect.anything());
     });
 });

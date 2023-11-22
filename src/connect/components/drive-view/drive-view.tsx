@@ -115,8 +115,8 @@ export function DriveView<T extends string = DefaultOptionId>(
                         onDropActivate={(...args) =>
                             onDropActivate?.(drive, ...args)
                         }
-                        onCancelInput={(...args) =>
-                            onCancelInput?.(...args, drive)
+                        onCancelInput={(item) =>
+                            onCancelInput?.(item, drive)
                         }
                         onSubmitInput={(...args) =>
                             onSubmitInput?.(...args, drive)
