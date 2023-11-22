@@ -1,27 +1,22 @@
-import React from 'react';
+import React, { ComponentPropsWithoutRef } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { Icon } from '..';
+import { Icon, TreeViewInput, TreeViewInputProps } from '..';
 
-export type TreeViewItemProps = Omit<
-    React.HTMLAttributes<HTMLDivElement>,
-    'onClick'
-> & {
+export type DivProps = ComponentPropsWithoutRef<'div'>;
+
+export type TreeViewItemProps = ComponentPropsWithoutRef<'div'> & {
     label: string;
+    mode?: 'read' | 'write';
     children?: React.ReactNode;
     open?: boolean;
     icon?: React.JSX.Element;
     expandedIcon?: React.JSX.Element;
     secondaryIcon?: React.ReactNode;
     level?: number;
-    onClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
-    onOptionsClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
-    itemContainerProps?: ItemContainerProps;
-    optionsContent?: React.ReactNode;
+    itemContainerProps?: DivProps;
     topIndicator?: React.ReactNode;
     bottomIndicator?: React.ReactNode;
-};
-
-export type ItemContainerProps = React.ComponentProps<'div'>;
+} & Partial<TreeViewInputProps>;
 
 const injectLevelProps = (
     children: React.ReactNode,
@@ -47,10 +42,15 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
     const {
         open,
         label,
+        mode = 'read',
         onClick,
+        onSubmit,
+        onCancel,
         children,
         icon,
         expandedIcon,
+        submitIcon,
+        cancelIcon,
         topIndicator,
         bottomIndicator,
         level = 0,
@@ -67,6 +67,24 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
     const levelPadding = level * 10;
     const caretPadding = children ? 0 : 24;
 
+    const inputProps = {
+        defaultValue: label,
+        onSubmit,
+        onCancel,
+        submitIcon,
+        cancelIcon,
+    };
+
+    const content =
+        mode === 'read' ? (
+            <div className="relative w-full overflow-hidden whitespace-nowrap">
+                <span className="absolute right-0 h-full w-12 bg-gradient-to-r from-transparent to-inherit" />
+                {label}
+            </div>
+        ) : (
+            <TreeViewInput {...inputProps} />
+        );
+
     return (
         <div {...divProps}>
             <div
@@ -74,7 +92,7 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                 onClick={onClick}
                 style={containerStyle}
                 className={twMerge(
-                    'flex w-full cursor-pointer select-none flex-col bg-transparent focus:outline-none',
+                    'cursor-pointer select-none bg-transparent focus:outline-none',
                     containerClassName,
                 )}
                 {...containerProps}
@@ -83,7 +101,7 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                     <div className="absolute top-0 w-full">{topIndicator}</div>
                 )}
                 <div
-                    className="flex w-full cursor-pointer"
+                    className="flex cursor-pointer"
                     style={{ paddingLeft: levelPadding + caretPadding }}
                 >
                     {children && (
@@ -96,16 +114,11 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                         />
                     )}
                     {icon && (
-                        <span className="pointer-events-none">
+                        <span className="pointer-events-none mr-2">
                             {open ? expandedIcon || icon : icon}
                         </span>
                     )}
-                    {label && (
-                        <div className="relative ml-2 overflow-hidden whitespace-nowrap">
-                            <span className="absolute right-0 h-full w-12 bg-gradient-to-r from-transparent to-inherit" />
-                            {label}
-                        </div>
-                    )}
+                    {content}
                 </div>
                 {bottomIndicator && (
                     <div className="absolute bottom-0 w-full">
