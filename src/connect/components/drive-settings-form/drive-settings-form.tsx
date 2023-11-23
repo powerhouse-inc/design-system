@@ -24,7 +24,7 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
     const sharingTypeOptions = [
         {
             value: 'Private',
-            icon: <Icon name="hdd" />,
+            icon: <Icon name="lock" />,
             description: 'Only available to you',
         },
         {
@@ -43,9 +43,11 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
     const onSubmit: SubmitHandler<Inputs> = data => console.log(data);
 
     return (
-        <form onSubmit={void handleSubmit(onSubmit)}>
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        <form onSubmit={handleSubmit(onSubmit)}>
             <label htmlFor="driveName">Drive Name</label>
             <input id="driveName" {...register('driveName')} />
+            <label htmlFor="sharingType">Sharing Type</label>
             <Controller
                 name="sharingType"
                 control={control}
