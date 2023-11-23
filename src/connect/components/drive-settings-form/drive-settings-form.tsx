@@ -1,6 +1,6 @@
 import { Icon } from '@/powerhouse';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { DriveSettingsSelect } from '..';
+import { DriveSettingsSelect, Toggle } from '..';
 
 type Inputs = {
     driveName: string;
@@ -54,16 +54,13 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
                 render={({ field }) => (
                     <DriveSettingsSelect
                         {...field}
+                        id="sharingType"
                         items={sharingTypeOptions}
                     />
                 )}
             />
             <label htmlFor="availableOffline">Make available offline</label>
-            <input
-                id="availableOffline"
-                type="checkbox"
-                {...register('availableOffline')}
-            />
+            <Toggle id="availableOffline" {...register('availableOffline')} />
             <input type="submit" />
         </form>
     );

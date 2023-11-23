@@ -13,6 +13,7 @@ export type SelectItem = {
 export type DriveSettingsSelectProps = {
     items: SelectItem[];
     value: string;
+    id: string;
     onChange: (value: string) => void;
 };
 
@@ -28,6 +29,7 @@ export const DriveSettingsSelect = forwardRef(function DriveSettingsSelect(
         <Select.Root value={props.value} onValueChange={props.onChange}>
             <Select.Trigger
                 ref={ref}
+                id={props.id}
                 className="group flex w-[360px] cursor-pointer items-center justify-between rounded-t-xl bg-[#F4F4F4] py-3 pr-3 text-[#6C7275] outline-none data-[state=closed]:rounded-b-xl"
             >
                 <Select.Value>
