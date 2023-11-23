@@ -12,7 +12,7 @@ export type SelectItem = {
 export type DriveSettingsSelectProps = {
     items: SelectItem[];
     value: string;
-    onValueChange: (value: string) => void;
+    onChange: (value: string) => void;
 };
 
 export function DriveSettingsSelect(props: DriveSettingsSelectProps) {
@@ -21,7 +21,7 @@ export function DriveSettingsSelect(props: DriveSettingsSelectProps) {
         return props.items.find(item => item.value === value);
     }
     return (
-        <Select.Root value={props.value} onValueChange={props.onValueChange}>
+        <Select.Root value={props.value} onValueChange={props.onChange}>
             <Select.Trigger className="group flex w-[360px] cursor-pointer items-center justify-between rounded-t-xl bg-[#F4F4F4] py-3 pr-3 text-[#6C7275] outline-none data-[state=closed]:rounded-b-xl">
                 <Select.Value>
                     <ItemContainer {...selectedItem} />

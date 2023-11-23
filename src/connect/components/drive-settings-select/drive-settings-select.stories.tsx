@@ -50,11 +50,7 @@ export const Default: Story = {
         const [value, setValue] = useState(args.items[0].value);
 
         return (
-            <DriveSettingsSelect
-                {...args}
-                value={value}
-                onValueChange={setValue}
-            />
+            <DriveSettingsSelect {...args} value={value} onChange={setValue} />
         );
     },
 };
