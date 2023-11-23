@@ -12,18 +12,36 @@ export default meta;
 
 type Story = StoryObj<{
     items: SelectItem[];
-    icon?: React.JSX.Element;
 }>;
 
 const Template: Story = {
     args: {
         items: [
-            { value: 'Private', icon: <Icon name="folder-close" /> },
-            { value: 'Shared', icon: <Icon name="briefcase" /> },
-            { value: 'Public', icon: <Icon name="syncing" /> },
+            {
+                value: 'Private',
+                icon: <Icon name="hdd" />,
+                description: 'Only available to you',
+            },
+            {
+                value: 'Shared',
+                icon: <Icon name="people" />,
+                description: 'Only available to people in this drive',
+            },
+            {
+                value: 'Public',
+                icon: <Icon name="globe" />,
+                description: 'Available to everyone',
+                disabled: true,
+            },
         ],
-        icon: <div>icon</div>,
     },
+    decorators: [
+        Story => (
+            <div className="h-[420px] bg-white p-8">
+                <Story />
+            </div>
+        ),
+    ],
 };
 
 export const Default: Story = {
