@@ -1,4 +1,5 @@
 export * from './breadcrumbs';
+export * from './drive-settings-select';
 export * from './drive-view';
 export * from './dropdown-menu';
 export * from './modal';
