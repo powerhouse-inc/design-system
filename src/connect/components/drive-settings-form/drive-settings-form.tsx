@@ -9,6 +9,7 @@ type Inputs = {
 };
 
 export type DriveSettingsFormProps = Inputs & {
+    onSubmit: SubmitHandler<Inputs>;
     location: 'cloud' | 'local' | 'switchboard';
 };
 
@@ -40,11 +41,8 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
         },
     ];
 
-    const onSubmit: SubmitHandler<Inputs> = data => console.log(data);
-
     return (
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(props.onSubmit)}>
             <label htmlFor="driveName">Drive Name</label>
             <input id="driveName" {...register('driveName')} />
             <label htmlFor="sharingType">Sharing Type</label>

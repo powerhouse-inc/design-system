@@ -12,6 +12,9 @@ type Story = StoryObj<typeof meta>;
 
 const Template: Story = {
     args: {
+        onSubmit: data => {
+            console.log(data);
+        },
         driveName: 'My Drive',
         sharingType: 'private',
         availableOffline: false,
