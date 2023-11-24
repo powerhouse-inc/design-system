@@ -1,6 +1,8 @@
 import { Icon } from '@/powerhouse';
+import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { DriveSettingsSelect, Toggle } from '..';
+import { twJoin } from 'tailwind-merge';
+import { Divider, DriveSettingsSelect, Toggle } from '..';
 
 type Inputs = {
     driveName: string;
@@ -14,6 +16,8 @@ export type DriveSettingsFormProps = Inputs & {
 };
 
 export function DriveSettingsForm(props: DriveSettingsFormProps) {
+    const [showLocationSettings, setShowLocationSettings] = useState(false);
+    const [showDangerZone, setShowDangerZone] = useState(false);
     const { register, handleSubmit, control } = useForm<Inputs>({
         defaultValues: {
             driveName: props.driveName,
@@ -40,12 +44,54 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
             disabled: true,
         },
     ];
+    const locationInfo = getLocationInfo();
+
+    function getLocationInfo() {
+        switch (props.location) {
+            case 'cloud':
+                return {
+                    title: 'Secure cloud',
+                    description: 'End to end encryption between members.',
+                    icon: <Icon name="lock" />,
+                };
+            case 'local':
+                return {
+                    title: 'Local',
+                    description: 'Private and only available to you.',
+                    icon: <Icon name="hdd" />,
+                };
+            case 'switchboard':
+                return {
+                    title: 'Switchboard',
+                    description: 'Public and available to everyone.',
+                    icon: <Icon name="drive" />,
+                };
+        }
+    }
 
     return (
         <form onSubmit={handleSubmit(props.onSubmit)}>
-            <label htmlFor="driveName">Drive Name</label>
-            <input id="driveName" {...register('driveName')} />
-            <label htmlFor="sharingType">Sharing Type</label>
+            <label
+                htmlFor="driveName"
+                className="mb-3 block font-semibold text-[#9EA0A1]"
+            >
+                Drive Name
+            </label>
+            <div className="flex gap-2 rounded-xl bg-[#F4F4F4] p-3 text-[#6C7275]">
+                <Icon name="drive" />
+                <input
+                    id="driveName"
+                    className="w-full bg-transparent font-semibold outline-none"
+                    {...register('driveName')}
+                />
+            </div>
+            <Divider className="mb-[18px] mt-4" />
+            <label
+                htmlFor="sharingType"
+                className="mb-3 block font-semibold text-[#9EA0A1]"
+            >
+                Sharing settings
+            </label>
             <Controller
                 name="sharingType"
                 control={control}
@@ -57,9 +103,87 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
                     />
                 )}
             />
-            <label htmlFor="availableOffline">Make available offline</label>
-            <Toggle id="availableOffline" {...register('availableOffline')} />
-            <input type="submit" />
+            <Divider className="my-3" />
+            <div
+                className="mb-3 flex cursor-pointer justify-between text-[#9EA0A1]"
+                onClick={() => setShowLocationSettings(!showLocationSettings)}
+            >
+                <h2 className=" font-semibold text-[#9EA0A1]">Location</h2>
+                <Icon
+                    name="chevron-down"
+                    className={twJoin(
+                        'transition',
+                        showLocationSettings ? '' : '-rotate-90',
+                    )}
+                />
+            </div>
+            {showLocationSettings && (
+                <>
+                    <div
+                        className="mb-3 flex items-center gap-2 rounded-xl border border-[#F4F4F4] p-3 text-[#404446]"
+                        style={{
+                            boxShadow:
+                                '0px 4px 8px -4px rgba(0, 0, 0, 0.02), 0px -1px 1px 0px rgba(0, 0, 0, 0.04) inset',
+                        }}
+                    >
+                        {locationInfo.icon}
+                        <div>
+                            <p>{locationInfo.title}</p>
+                            <p className="text-xs text-[#6C7275]">
+                                {locationInfo.description}
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex items-center rounded-xl bg-[#F4F4F4] p-3 text-[#6C7275]">
+                        <div className="flex-1">
+                            <label
+                                htmlFor="availableOffline"
+                                className="font-semibold"
+                            >
+                                Make available offline
+                            </label>
+                            <p className="text-xs text-[#9EA0A1]">
+                                Check this options if you keep a local backup
+                                <br />
+                                available at all times.
+                            </p>
+                        </div>
+                        <Toggle
+                            id="availableOffline"
+                            {...register('availableOffline')}
+                        />
+                    </div>
+                </>
+            )}
+            <Divider className="my-3" />
+            <div
+                className="mb-3 flex cursor-pointer justify-between text-[#9EA0A1]"
+                onClick={() => setShowDangerZone(!showDangerZone)}
+            >
+                <h2 className=" font-semibold text-[#9EA0A1]">Danger zone</h2>
+                <Icon
+                    name="chevron-down"
+                    className={twJoin(
+                        'transition',
+                        showDangerZone ? '' : '-rotate-90',
+                    )}
+                />
+            </div>
+            {showDangerZone && (
+                <button className="flex gap-2 py-3 font-semibold text-[#EA4335]">
+                    <Icon name="trash" />
+                    Delete drive
+                </button>
+            )}
+            <Divider className="my-3" />
+            <input
+                type="submit"
+                value="Confirm"
+                className="mb-4 w-full cursor-pointer rounded-xl bg-[#404446] px-6 py-3 text-center font-semibold text-[#FEFEFE]"
+            />
+            <button className="w-full rounded-xl border border-[#E7E9EA] bg-[#F3F5F7] px-6 py-3 text-center font-semibold text-[#6C7275]">
+                Cancel
+            </button>
         </form>
     );
 }

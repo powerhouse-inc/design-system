@@ -30,7 +30,7 @@ export const DriveSettingsSelect = forwardRef(function DriveSettingsSelect(
             <Select.Trigger
                 ref={ref}
                 id={props.id}
-                className="group flex w-[360px] cursor-pointer items-center justify-between rounded-t-xl bg-[#F4F4F4] py-3 pr-3 text-[#6C7275] outline-none data-[state=closed]:rounded-b-xl"
+                className="group flex min-w-[360px] cursor-pointer items-center justify-between rounded-t-xl bg-[#F4F4F4] py-3 pr-3 text-[#404446] outline-none data-[state=closed]:rounded-b-xl"
             >
                 <Select.Value>
                     <ItemContainer {...selectedItem} />
@@ -42,22 +42,24 @@ export const DriveSettingsSelect = forwardRef(function DriveSettingsSelect(
                     />
                 </Select.Icon>
             </Select.Trigger>
-            <Select.Content position="popper" className="group">
-                {props.items
-                    .filter(item => item.value !== props.value)
-                    .map(item => (
-                        <Select.Item
-                            key={item.value}
-                            value={item.value}
-                            disabled={item.disabled}
-                            className="h-[--radix-select-trigger-height] w-[--radix-select-trigger-width] cursor-pointer bg-[#F4F4F4] outline-none last:rounded-b-xl"
-                        >
-                            <Select.ItemText asChild>
-                                <ItemContainer {...item} />
-                            </Select.ItemText>
-                        </Select.Item>
-                    ))}
-            </Select.Content>
+            <Select.Portal>
+                <Select.Content position="popper" className="group">
+                    {props.items
+                        .filter(item => item.value !== props.value)
+                        .map(item => (
+                            <Select.Item
+                                key={item.value}
+                                value={item.value}
+                                disabled={item.disabled}
+                                className="h-[--radix-select-trigger-height] w-[--radix-select-trigger-width] cursor-pointer bg-[#F4F4F4] outline-none last:rounded-b-xl"
+                            >
+                                <Select.ItemText asChild>
+                                    <ItemContainer {...item} />
+                                </Select.ItemText>
+                            </Select.Item>
+                        ))}
+                </Select.Content>
+            </Select.Portal>
         </Select.Root>
     );
 });
@@ -67,7 +69,7 @@ const ItemContainer = forwardRef(function ItemContainer(
     ref: ForwardedRef<HTMLDivElement>,
 ) {
     const className = twJoin(
-        props.disabled ? 'text-[#9EA0A1]' : 'text-[#6C7275]',
+        props.disabled ? 'text-[#9EA0A1]' : 'text-[#404446]',
         'flex h-full items-center gap-2 pl-3 text-start',
     );
     return (
@@ -75,7 +77,7 @@ const ItemContainer = forwardRef(function ItemContainer(
             {props.icon}
             <div>
                 <p>{props.value}</p>
-                {props.description}
+                <p className="text-xs">{props.description}</p>
             </div>
         </div>
     );

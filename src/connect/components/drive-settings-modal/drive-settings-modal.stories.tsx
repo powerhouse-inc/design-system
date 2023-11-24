@@ -61,6 +61,7 @@ export const Default: Story = {
                     formProps={{
                         ...args.formProps,
                         onSubmit: data => {
+                            console.log(data);
                             setArgs({
                                 ...args,
                                 formProps: {
