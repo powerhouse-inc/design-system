@@ -177,6 +177,7 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
             </div>
             {showDangerZone && (
                 <button
+                    type="button"
                     className="flex gap-2 py-3 font-semibold text-[#EA4335]"
                     onClick={() => setShowDeleteDrive(true)}
                 >
