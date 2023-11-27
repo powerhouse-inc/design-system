@@ -250,12 +250,28 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
 
     const driveSettingsFormSubmitHandler: DriveSettingsFormSubmitHandler =
         data => {
-            console.log(data);
+            onOptionsClick?.(
+                { ...item, label: data.driveName },
+                'rename-drive',
+            );
+            onOptionsClick?.(
+                { ...item, sharingType: data.sharingType },
+                'change-sharing-type',
+            );
+            onOptionsClick?.(
+                {
+                    ...item,
+                    status: data.availableOffline
+                        ? ItemStatus.AvailableOffline
+                        : ItemStatus.Available,
+                },
+                'change-availability',
+            );
             setIsDriveSettingsModalOpen(false);
         };
 
     function onDeleteDriveHandler() {
-        onOptionsClick?.(item, 'delete');
+        onOptionsClick?.(item, 'delete-drive');
     }
 
     function onCancelHandler() {

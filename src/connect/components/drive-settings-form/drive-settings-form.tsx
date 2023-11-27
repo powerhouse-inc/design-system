@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { twJoin } from 'tailwind-merge';
 import { Divider, DriveSettingsSelect, Toggle } from '..';
-import { DeleteDriveModal } from '../delete-drive-modal';
+import { DeleteDrive } from './delete-drive';
 
 type Inputs = {
     driveName: string;
@@ -23,7 +23,7 @@ export type DriveSettingsFormSubmitHandler = SubmitHandler<Inputs>;
 export function DriveSettingsForm(props: DriveSettingsFormProps) {
     const [showLocationSettings, setShowLocationSettings] = useState(false);
     const [showDangerZone, setShowDangerZone] = useState(false);
-    const [isDeleteDriveModalOpen, setIsDeleteDriveModalOpen] = useState(false);
+    const [showDeleteDrive, setShowDeleteDrive] = useState(false);
     const { register, handleSubmit, control } = useForm<Inputs>({
         defaultValues: {
             driveName: props.driveName,
@@ -178,31 +178,33 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
             {showDangerZone && (
                 <button
                     className="flex gap-2 py-3 font-semibold text-[#EA4335]"
-                    onClick={() => setIsDeleteDriveModalOpen(true)}
+                    onClick={() => setShowDeleteDrive(true)}
                 >
                     <Icon name="trash" />
                     Delete drive
                 </button>
             )}
-            <Divider className="my-3" />
-            <input
-                type="submit"
-                value="Confirm"
-                className="mb-4 w-full cursor-pointer rounded-xl bg-[#404446] px-6 py-3 text-center font-semibold text-[#FEFEFE]"
-            />
-            <button
-                onClick={props.onCancel}
-                className="w-full rounded-xl border border-[#E7E9EA] bg-[#F3F5F7] px-6 py-3 text-center font-semibold text-[#6C7275]"
-            >
-                Cancel
-            </button>
-            <DeleteDriveModal
-                {...props}
-                modalProps={{
-                    isOpen: isDeleteDriveModalOpen,
-                    onClose: () => setIsDeleteDriveModalOpen(false),
-                }}
-            />
+            {showDeleteDrive ? (
+                <DeleteDrive
+                    {...props}
+                    onCancel={() => setShowDeleteDrive(false)}
+                />
+            ) : (
+                <>
+                    <Divider className="my-3" />
+                    <input
+                        type="submit"
+                        value="Confirm"
+                        className="mb-4 w-full cursor-pointer rounded-xl bg-[#404446] px-6 py-3 text-center font-semibold text-[#FEFEFE]"
+                    />
+                    <button
+                        onClick={props.onCancel}
+                        className="w-full rounded-xl border border-[#E7E9EA] bg-[#F3F5F7] px-6 py-3 text-center font-semibold text-[#6C7275]"
+                    >
+                        Cancel
+                    </button>
+                </>
+            )}
         </form>
     );
 }

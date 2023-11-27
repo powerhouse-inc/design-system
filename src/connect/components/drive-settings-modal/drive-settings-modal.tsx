@@ -31,7 +31,7 @@ export function DriveSettingsModal(props: DriveSettingsModalProps) {
             <div
                 {...props.containerProps}
                 className={twMerge(
-                    'rounded-2xl p-6',
+                    'max-w-[408px] rounded-2xl p-6',
                     props.containerProps?.className,
                 )}
             >
