@@ -1,6 +1,5 @@
-import { Icon } from '@/powerhouse';
+import { Icon, Modal } from '@/powerhouse';
 import { ComponentPropsWithoutRef, useState } from 'react';
-import { Modal } from 'react-aria-components';
 import { twMerge } from 'tailwind-merge';
 import { Divider } from '..';
 
@@ -24,7 +23,12 @@ export function DeleteDriveModal(props: DeleteDriveModalProps) {
     }
 
     return (
-        <Modal {...props.modalProps}>
+        <Modal
+            {...props.modalProps}
+            dialogProps={{
+                className: 'rounded-3xl',
+            }}
+        >
             <div
                 {...props.containerProps}
                 style={{

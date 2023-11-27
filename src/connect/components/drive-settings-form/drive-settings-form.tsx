@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { twJoin } from 'tailwind-merge';
 import { Divider, DriveSettingsSelect, Toggle } from '..';
+import { DeleteDriveModal } from '../delete-drive-modal';
 
 type Inputs = {
     driveName: string;
@@ -11,13 +12,16 @@ type Inputs = {
 };
 
 export type DriveSettingsFormProps = Inputs & {
-    onSubmit: SubmitHandler<Inputs>;
     location: 'cloud' | 'local' | 'switchboard';
+    onSubmit: SubmitHandler<Inputs>;
+    onCancel: () => void;
+    onDeleteDrive: () => void;
 };
 
 export function DriveSettingsForm(props: DriveSettingsFormProps) {
     const [showLocationSettings, setShowLocationSettings] = useState(false);
     const [showDangerZone, setShowDangerZone] = useState(false);
+    const [isDeleteDriveModalOpen, setIsDeleteDriveModalOpen] = useState(false);
     const { register, handleSubmit, control } = useForm<Inputs>({
         defaultValues: {
             driveName: props.driveName,
@@ -170,7 +174,10 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
                 />
             </div>
             {showDangerZone && (
-                <button className="flex gap-2 py-3 font-semibold text-[#EA4335]">
+                <button
+                    className="flex gap-2 py-3 font-semibold text-[#EA4335]"
+                    onClick={() => setIsDeleteDriveModalOpen(true)}
+                >
                     <Icon name="trash" />
                     Delete drive
                 </button>
@@ -181,9 +188,19 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
                 value="Confirm"
                 className="mb-4 w-full cursor-pointer rounded-xl bg-[#404446] px-6 py-3 text-center font-semibold text-[#FEFEFE]"
             />
-            <button className="w-full rounded-xl border border-[#E7E9EA] bg-[#F3F5F7] px-6 py-3 text-center font-semibold text-[#6C7275]">
+            <button
+                onClick={props.onCancel}
+                className="w-full rounded-xl border border-[#E7E9EA] bg-[#F3F5F7] px-6 py-3 text-center font-semibold text-[#6C7275]"
+            >
                 Cancel
             </button>
+            <DeleteDriveModal
+                {...props}
+                modalProps={{
+                    isOpen: isDeleteDriveModalOpen,
+                    onClose: () => setIsDeleteDriveModalOpen(false),
+                }}
+            />
         </form>
     );
 }

@@ -19,6 +19,8 @@ export const Default: Story = {
             availableOffline: false,
             location: 'cloud',
             onSubmit() {},
+            onCancel() {},
+            onDeleteDrive() {},
         },
         modalProps: {
             open: true,

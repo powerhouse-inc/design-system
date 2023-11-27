@@ -13,6 +13,14 @@ export type DriveSettingsModalProps = {
     containerProps?: ContainerProps;
 };
 export function DriveSettingsModal(props: DriveSettingsModalProps) {
+    function handleDeleteDrive() {
+        props.formProps.onDeleteDrive();
+        props.modalProps?.onClose?.();
+    }
+    function handleCancel() {
+        props.formProps.onCancel();
+        props.modalProps?.onClose?.();
+    }
     return (
         <Modal
             {...props.modalProps}
@@ -29,7 +37,11 @@ export function DriveSettingsModal(props: DriveSettingsModalProps) {
             >
                 <h1 className="text-xl font-bold">Drive Settings</h1>
                 <Divider className="mb-[18px] mt-4" />
-                <DriveSettingsForm {...props.formProps} />
+                <DriveSettingsForm
+                    {...props.formProps}
+                    onDeleteDrive={handleDeleteDrive}
+                    onCancel={handleCancel}
+                />
             </div>
         </Modal>
     );
