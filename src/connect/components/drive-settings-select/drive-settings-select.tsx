@@ -1,6 +1,6 @@
 import { Icon } from '@/powerhouse';
 import { ForwardedRef, forwardRef, useState } from 'react';
-import { twJoin } from 'tailwind-merge';
+import { twJoin, twMerge } from 'tailwind-merge';
 
 export type SelectItem = {
     value: string;
@@ -51,17 +51,20 @@ export const DriveSettingsSelect = forwardRef(function DriveSettingsSelect(
                     )}
                 />
             </div>
-            {showItems && (
-                <>
-                    {itemsToShow.map(item => (
-                        <ItemContainer
-                            key={item.value}
-                            {...item}
-                            onItemClick={() => onItemClick(item)}
-                        />
-                    ))}
-                </>
-            )}
+            <div
+                className={twMerge(
+                    'max-h-0 overflow-hidden transition-[max-height]',
+                    showItems && 'max-h-[9999px]',
+                )}
+            >
+                {itemsToShow.map(item => (
+                    <ItemContainer
+                        key={item.value}
+                        {...item}
+                        onItemClick={() => onItemClick(item)}
+                    />
+                ))}
+            </div>
         </div>
     );
 });
