@@ -13,10 +13,12 @@ type Inputs = {
 
 export type DriveSettingsFormProps = Inputs & {
     location: 'cloud' | 'local' | 'switchboard';
-    onSubmit: SubmitHandler<Inputs>;
+    onSubmit: DriveSettingsFormSubmitHandler;
     onCancel: () => void;
     onDeleteDrive: () => void;
 };
+
+export type DriveSettingsFormSubmitHandler = SubmitHandler<Inputs>;
 
 export function DriveSettingsForm(props: DriveSettingsFormProps) {
     const [showLocationSettings, setShowLocationSettings] = useState(false);
