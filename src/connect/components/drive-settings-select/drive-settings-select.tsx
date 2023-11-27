@@ -53,8 +53,8 @@ export const DriveSettingsSelect = forwardRef(function DriveSettingsSelect(
             </div>
             <div
                 className={twMerge(
-                    'max-h-0 overflow-hidden transition-[max-height]',
-                    showItems && 'max-h-[9999px]',
+                    'max-h-0 overflow-hidden transition-[max-height] duration-300 ease-in-out',
+                    showItems && 'max-h-[100vh]',
                 )}
             >
                 {itemsToShow.map(item => (

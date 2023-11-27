@@ -37,14 +37,14 @@ export function DeleteDrive(props: DeleteDriveProps) {
             <div className="flex gap-3">
                 <button
                     onClick={props.onCancel}
-                    className="w-full rounded-xl bg-[#F3F5F7] px-6 py-3 text-[#6C7275]"
+                    className="w-full rounded-xl bg-[#F3F5F7] px-6 py-3 text-[#6C7275] transition hover:opacity-80"
                 >
                     Cancel
                 </button>
                 <button
                     onClick={handleDeleteDrive}
                     disabled={!isAllowedToDelete}
-                    className="w-full rounded-xl bg-[#EA4335] px-6 py-3 text-[#EFEFEF] disabled:cursor-not-allowed disabled:opacity-50"
+                    className="w-full rounded-xl bg-[#EA4335] px-6 py-3 text-[#EFEFEF] transition hover:brightness-125 disabled:cursor-not-allowed disabled:opacity-50 disabled:brightness-100"
                 >
                     Delete
                 </button>
