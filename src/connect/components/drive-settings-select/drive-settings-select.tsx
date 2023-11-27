@@ -1,6 +1,5 @@
 import { Icon } from '@/powerhouse';
-import * as Select from '@radix-ui/react-select';
-import { ForwardedRef, forwardRef } from 'react';
+import { ForwardedRef, forwardRef, useState } from 'react';
 import { twJoin } from 'tailwind-merge';
 
 export type SelectItem = {
@@ -19,61 +18,61 @@ export type DriveSettingsSelectProps = {
 
 export const DriveSettingsSelect = forwardRef(function DriveSettingsSelect(
     props: DriveSettingsSelectProps,
-    ref: ForwardedRef<HTMLButtonElement>,
+    ref: ForwardedRef<HTMLDivElement>,
 ) {
+    const [showItems, setShowItems] = useState(false);
     const selectedItem = getItemByValue(props.value) ?? props.items[0];
+    function onItemClick(item: SelectItem) {
+        if (item.disabled) return;
+        props.onChange(item.value);
+        setShowItems(false);
+    }
     function getItemByValue(value: string) {
         return props.items.find(item => item.value === value);
     }
+
+    const itemsToShow = props.items.filter(item => item.value !== props.value);
+
     return (
-        <Select.Root value={props.value} onValueChange={props.onChange}>
-            <Select.Trigger
-                ref={ref}
+        <div className="rounded-xl bg-[#F4F4F4]" ref={ref}>
+            <div
+                onClick={() => setShowItems(!showItems)}
                 id={props.id}
-                className="group flex min-w-[360px] cursor-pointer items-center justify-between rounded-t-xl bg-[#F4F4F4] py-3 pr-3 text-[#404446] outline-none data-[state=closed]:rounded-b-xl"
+                className={twJoin(
+                    'flex min-w-[360px] cursor-pointer items-center justify-between  pr-3 text-[#404446] outline-none',
+                )}
             >
-                <Select.Value>
-                    <ItemContainer {...selectedItem} />
-                </Select.Value>
-                <Select.Icon>
-                    <Icon
-                        name="chevron-down"
-                        className="transition group-data-[state=open]:rotate-180"
-                    />
-                </Select.Icon>
-            </Select.Trigger>
-            <Select.Portal>
-                <Select.Content position="popper" className="group">
-                    {props.items
-                        .filter(item => item.value !== props.value)
-                        .map(item => (
-                            <Select.Item
-                                key={item.value}
-                                value={item.value}
-                                disabled={item.disabled}
-                                className="h-[--radix-select-trigger-height] w-[--radix-select-trigger-width] cursor-pointer bg-[#F4F4F4] outline-none last:rounded-b-xl"
-                            >
-                                <Select.ItemText asChild>
-                                    <ItemContainer {...item} />
-                                </Select.ItemText>
-                            </Select.Item>
-                        ))}
-                </Select.Content>
-            </Select.Portal>
-        </Select.Root>
+                <ItemContainer {...selectedItem} />
+                <Icon
+                    name="chevron-down"
+                    className={twJoin(
+                        'transition',
+                        showItems ? '' : '-rotate-90',
+                    )}
+                />
+            </div>
+            {showItems && (
+                <>
+                    {itemsToShow.map(item => (
+                        <ItemContainer
+                            key={item.value}
+                            {...item}
+                            onItemClick={() => onItemClick(item)}
+                        />
+                    ))}
+                </>
+            )}
+        </div>
     );
 });
 
-const ItemContainer = forwardRef(function ItemContainer(
-    props: SelectItem,
-    ref: ForwardedRef<HTMLDivElement>,
-) {
+function ItemContainer(props: SelectItem & { onItemClick?: () => void }) {
     const className = twJoin(
-        props.disabled ? 'text-[#9EA0A1]' : 'text-[#404446]',
-        'flex h-full items-center gap-2 pl-3 text-start',
+        props.disabled ? 'text-[#9EA0A1] cursor-not-allowed' : 'text-[#404446]',
+        'flex h-full items-center gap-2 py-3 pl-3 text-start cursor-pointer outline-none last:rounded-b-xl',
     );
     return (
-        <div ref={ref} className={className}>
+        <div className={className} onClick={props.onItemClick}>
             {props.icon}
             <div>
                 <p>{props.value}</p>
@@ -81,4 +80,4 @@ const ItemContainer = forwardRef(function ItemContainer(
             </div>
         </div>
     );
-});
+}

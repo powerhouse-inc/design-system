@@ -16,7 +16,7 @@ const Template: Story = {
             console.log(data);
         },
         driveName: 'My Drive',
-        sharingType: 'private',
+        sharingType: 'Private',
         availableOffline: false,
         location: 'cloud',
     },

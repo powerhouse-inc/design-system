@@ -11,11 +11,13 @@ const meta = {
 export default meta;
 
 type Story = StoryObj<{
+    id: string;
     items: SelectItem[];
 }>;
 
 const Template: Story = {
     args: {
+        id: 'drive-settings-select',
         items: [
             {
                 value: 'Private',

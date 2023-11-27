@@ -6,7 +6,7 @@ import { Divider, DriveSettingsSelect, Toggle } from '..';
 
 type Inputs = {
     driveName: string;
-    sharingType: 'private' | 'shared' | 'public';
+    sharingType: 'Private' | 'Shared' | 'Public';
     availableOffline: boolean;
 };
 

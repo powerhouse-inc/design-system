@@ -15,7 +15,7 @@ export const Default: Story = {
     args: {
         formProps: {
             driveName: 'My Drive',
-            sharingType: 'private',
+            sharingType: 'Private',
             availableOffline: false,
             location: 'cloud',
             onSubmit() {},
