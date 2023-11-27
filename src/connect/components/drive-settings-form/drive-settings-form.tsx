@@ -6,7 +6,7 @@ import { Divider, DriveSettingsSelect, Toggle } from '..';
 
 type Inputs = {
     driveName: string;
-    sharingType: 'Private' | 'Shared' | 'Public';
+    sharingType: 'private' | 'shared' | 'public';
     availableOffline: boolean;
 };
 
@@ -28,17 +28,17 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
 
     const sharingTypeOptions = [
         {
-            value: 'Private',
+            value: 'private',
             icon: <Icon name="lock" />,
             description: 'Only available to you',
         },
         {
-            value: 'Shared',
+            value: 'shared',
             icon: <Icon name="people" />,
             description: 'Only available to people in this drive',
         },
         {
-            value: 'Public',
+            value: 'public',
             icon: <Icon name="globe" />,
             description: 'Available to everyone',
             disabled: true,

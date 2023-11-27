@@ -75,7 +75,7 @@ function ItemContainer(props: SelectItem & { onItemClick?: () => void }) {
         <div className={className} onClick={props.onItemClick}>
             {props.icon}
             <div>
-                <p>{props.value}</p>
+                <p className="capitalize">{props.value}</p>
                 <p className="text-xs">{props.description}</p>
             </div>
         </div>
