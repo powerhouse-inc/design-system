@@ -1,4 +1,4 @@
-import { useAnimation } from '@/powerhouse/hooks/animation';
+import { useAnimation } from '@/powerhouse';
 import { useEffect, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 

@@ -1,4 +1,4 @@
-import { mergeClassNameProps } from '@/powerhouse/utils';
+import { mergeClassNameProps } from '@/powerhouse';
 import React from 'react';
 import {
     Input,

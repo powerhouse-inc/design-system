@@ -6,7 +6,6 @@ import {
 import {
     DivProps,
     Icon,
-    ItemContainerProps,
     TreeViewItem,
     UseDraggableTargetProps,
     useDraggableTarget,
@@ -100,7 +99,7 @@ export type ConnectTreeViewItemProps = {
     onDropActivate?: (dropTargetItem: TreeItem) => void;
     defaultOptions?: ConnectDropdownMenuItem[];
     onOptionsClick?: (item: TreeItem, option: string) => void;
-    itemContainerProps?: ItemContainerProps;
+    itemContainerProps?: DivProps;
     disableDropBetween?: boolean;
     onDragStart?: UseDraggableTargetProps<TreeItem>['onDragStart'];
     onDragEnd?: UseDraggableTargetProps<TreeItem>['onDragEnd'];

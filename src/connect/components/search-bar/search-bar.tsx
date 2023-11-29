@@ -1,9 +1,11 @@
-import { DropdownMenu } from '@/powerhouse/components/dropdown-menu';
-import { TextInput, TextInputProps } from '@/powerhouse/components/text-input';
-import { mergeClassNameProps } from '@/powerhouse/utils';
+import {
+    DropdownMenu,
+    Icon,
+    TextInput,
+    TextInputProps,
+    mergeClassNameProps,
+} from '@/powerhouse';
 import React, { useMemo } from 'react';
-
-import { Icon } from '@/powerhouse';
 import { FilterItem, FilterItemType } from './filter-item';
 
 export interface ConnectSearchBarProps extends TextInputProps {

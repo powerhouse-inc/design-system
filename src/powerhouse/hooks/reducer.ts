@@ -4,7 +4,7 @@ import {
     Document,
     ExtendedState,
     Reducer,
-} from '@/powerhouse/types';
+} from '@/powerhouse';
 import { useReducer } from 'react';
 
 export function wrapReducer<State, A extends Action>(

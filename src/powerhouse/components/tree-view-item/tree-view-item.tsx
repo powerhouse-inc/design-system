@@ -1,4 +1,4 @@
-import { DivProps } from '@/powerhouse/types';
+import { DivProps } from '@/powerhouse';
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
 import { Icon, TreeViewInput, TreeViewInputProps } from '..';
