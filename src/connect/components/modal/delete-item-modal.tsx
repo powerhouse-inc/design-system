@@ -1,5 +1,4 @@
 import { Modal, ModalProps } from '@/powerhouse';
-import React from 'react';
 import { Button } from 'react-aria-components';
 import { twMerge } from 'tailwind-merge';
 

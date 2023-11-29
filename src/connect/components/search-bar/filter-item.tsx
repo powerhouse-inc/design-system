@@ -1,5 +1,4 @@
 import { mergeClassNameProps } from '@/powerhouse';
-import React from 'react';
 
 export type FilterItemType = {
     id: string;

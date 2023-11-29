@@ -2,22 +2,14 @@ import {
     ConnectTreeView,
     ConnectTreeViewItemProps,
     ConnectTreeViewProps,
-    DefaultOptionId,
     DriveTreeItem,
     DriveType,
-    TreeItem,
     TreeItemType,
     usePathContent,
 } from '@/connect';
 import { Icon } from '@/powerhouse';
 import { Button } from 'react-aria-components';
 import { twMerge } from 'tailwind-merge';
-
-export type OnItemOptionsClickHandler = (
-    item: TreeItem,
-    option: DefaultOptionId,
-    drive: DriveTreeItem,
-) => void;
 
 export interface DriveViewProps
     extends Omit<

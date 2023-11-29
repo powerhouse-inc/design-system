@@ -5,7 +5,7 @@ import {
     TextInputProps,
     mergeClassNameProps,
 } from '@/powerhouse';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { FilterItem, FilterItemType } from './filter-item';
 
 export interface ConnectSearchBarProps extends TextInputProps {
