@@ -1,8 +1,4 @@
-import {
-    BaseTreeItem,
-    TreeItem,
-    UITreeItem,
-} from '@/connect/components/tree-view-item';
+import { BaseTreeItem, TreeItem, UITreeItem } from '@/connect';
 import React, { useContext, useState } from 'react';
 
 export interface TreeItemContext {

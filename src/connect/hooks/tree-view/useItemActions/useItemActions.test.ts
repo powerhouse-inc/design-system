@@ -1,10 +1,10 @@
-import { ActionType, ItemType } from '@/connect/components/tree-view-item';
-import { TreeItemContext } from '@/connect/context/ItemsContext';
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { ActionType, ItemType, TreeItemContext } from '@/connect';
 import { renderHook } from '@testing-library/react';
 import { treeItems } from '../mocks';
 import { useItemActions } from './useItemActions';
 
-/* eslint-disable */
 const baseItem = {
     id: 'base-item',
     expanded: true,

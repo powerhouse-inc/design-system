@@ -1,8 +1,4 @@
-import {
-    ItemStatus,
-    ItemType,
-    TreeItem,
-} from '@/connect/components/tree-view-item';
+import { ItemStatus, ItemType, TreeItem } from '@/connect';
 
 export const driveItem: TreeItem = {
     id: 'drive',

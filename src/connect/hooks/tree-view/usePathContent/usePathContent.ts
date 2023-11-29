@@ -1,6 +1,10 @@
-import { ItemType, TreeItem } from '@/connect/components/tree-view-item';
-import { useItemsContext } from '@/connect/context/ItemsContext';
-import { filterItemsByPath, isSubPath } from '@/connect/utils/path';
+import {
+    ItemType,
+    TreeItem,
+    filterItemsByPath,
+    isSubPath,
+    useItemsContext,
+} from '@/connect';
 
 /**
  * Custom hook that retrieves the content of a specific path in a tree view,

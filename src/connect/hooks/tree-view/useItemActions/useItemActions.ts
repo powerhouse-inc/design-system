@@ -1,8 +1,9 @@
-import { ActionType, TreeItem } from '@/connect/components/tree-view-item';
 import {
+    ActionType,
+    TreeItem,
     UITreeItemState,
     useItemsContext,
-} from '@/connect/context/ItemsContext';
+} from '@/connect';
 
 export const useItemActions = () => {
     const { setUIState, setVirtualItems, baseItems } = useItemsContext();
