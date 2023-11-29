@@ -5,7 +5,7 @@ import {
     DriveSettingsModal,
     StatusIndicator,
     TreeItem,
-    TreeItemType,
+    defaultDropdownMenuOptions,
     getIsMouseInsideContainer,
 } from '@/connect';
 import {
@@ -17,32 +17,6 @@ import {
 } from '@/powerhouse';
 import { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
-
-export const defaultDropdownMenuOptions = [
-    {
-        id: 'duplicate',
-        label: 'Duplicate',
-        icon: <Icon name="files-earmark" />,
-    },
-    {
-        id: 'new-folder',
-        label: 'New Folder',
-        icon: <Icon name="folder-plus" />,
-    },
-    {
-        id: 'rename',
-        label: 'Rename',
-        icon: <Icon name="pencil" />,
-    },
-    {
-        id: 'delete',
-        label: 'Delete',
-        icon: <Icon name="trash" />,
-        className: 'text-[#EA4335]',
-    },
-] as const;
-
-export type DefaultOptionId = (typeof defaultDropdownMenuOptions)[number]['id'];
 
 export type ConnectTreeViewItemProps = {
     item: TreeItem;
@@ -63,24 +37,6 @@ export type ConnectTreeViewItemProps = {
     onDragEnd?: UseDraggableTargetProps<TreeItem>['onDragEnd'];
     disableHighlightStyles?: boolean;
 };
-
-function getItemIcon(type: TreeItemType) {
-    switch (type) {
-        case 'folder':
-            return {
-                icon: <Icon name="folder-close" color="#6C7275" />,
-                expandedIcon: <Icon name="folder-open" color="#6C7275" />,
-            };
-        case 'file':
-            return {};
-        case 'local-drive':
-            return { icon: <Icon name="hdd" /> };
-        case 'cloud-drive':
-            return { icon: <Icon name="server" /> };
-        case 'public-drive':
-            return { icon: <Icon name="m" /> };
-    }
-}
 
 export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
     const {
@@ -245,6 +201,24 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         return false;
     }
 
+    function getItemIcon() {
+        switch (item.type) {
+            case 'folder':
+                return {
+                    icon: <Icon name="folder-close" color="#6C7275" />,
+                    expandedIcon: <Icon name="folder-open" color="#6C7275" />,
+                };
+            case 'file':
+                return {};
+            case 'local-drive':
+                return { icon: <Icon name="hdd" /> };
+            case 'cloud-drive':
+                return { icon: <Icon name="server" /> };
+            case 'public-drive':
+                return { icon: <Icon name="m" /> };
+        }
+    }
+
     function getItemContainerProps() {
         const { className: itemContainerClassName, ...restItemContainerProps } =
             itemContainerProps;
@@ -319,7 +293,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                 label={item.label}
                 open={item.expanded}
                 itemContainerProps={getItemContainerProps()}
-                {...getItemIcon(item.type)}
+                {...getItemIcon()}
                 {...divProps}
             >
                 {children}

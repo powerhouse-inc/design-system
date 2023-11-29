@@ -1,4 +1,4 @@
-import { ConnectDropdownMenuItem } from '@/connect';
+import { ConnectDropdownMenuItem, defaultDropdownMenuOptions } from '@/connect';
 
 export type TreeItemType =
     | 'folder'
@@ -44,3 +44,5 @@ export type UITreeItem = {
 };
 
 export type TreeItem = BaseTreeItem & UITreeItem;
+
+export type DefaultOptionId = (typeof defaultDropdownMenuOptions)[number]['id'];
