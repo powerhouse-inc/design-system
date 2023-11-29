@@ -1,15 +1,15 @@
-import { TreeItemType } from '@/connect';
-import { usePathContent } from '@/connect/hooks/tree-view/usePathContent';
-import { Icon } from '@/powerhouse';
-import { Button } from 'react-aria-components';
-import { twMerge } from 'tailwind-merge';
 import {
     ConnectTreeView,
     ConnectTreeViewItemProps,
     ConnectTreeViewProps,
     DefaultOptionId,
     TreeItem,
-} from '..';
+    TreeItemType,
+    usePathContent,
+} from '@/connect';
+import { Icon } from '@/powerhouse';
+import { Button } from 'react-aria-components';
+import { twMerge } from 'tailwind-merge';
 
 export type DriveType = 'public' | 'local' | 'cloud';
 

@@ -1,17 +1,15 @@
 import {
+    BaseTreeItem,
     ItemsContextProvider,
-    useItemsContext,
-} from '@/connect/context/ItemsContext';
-import { useGetItemByPath } from '@/connect/hooks/tree-view/useGetItemByPath';
-import { useItemActions } from '@/connect/hooks/tree-view/useItemActions';
-import {
     generateMockDriveData,
     randomId,
-} from '@/connect/utils/mocks/tree-item';
+    useGetItemByPath,
+    useItemActions,
+    useItemsContext,
+} from '@/connect';
 import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { BreadcrumbProps, Breadcrumbs, BreadcrumbsProps } from '.';
-import { BaseTreeItem } from '../tree-view-item';
 
 const treeItems = generateMockDriveData({
     path: 'drive',

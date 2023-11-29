@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { TreeItemType } from '@/connect';
-import { usePathContent } from '../../hooks/tree-view/usePathContent';
 import {
     ConnectTreeViewItem,
     ConnectTreeViewItemProps,
     TreeItem,
-} from '../tree-view-item';
+    TreeItemType,
+    usePathContent,
+} from '@/connect';
 
 export interface ConnectTreeViewProps
     extends Omit<

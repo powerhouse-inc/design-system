@@ -1,4 +1,4 @@
-import { TreeItem } from '@/connect/components/tree-view-item';
+import { TreeItem } from '@/connect';
 
 export const randomId = function (length = 10) {
     return Math.random()

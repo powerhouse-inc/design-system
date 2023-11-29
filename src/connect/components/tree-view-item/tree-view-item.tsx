@@ -1,13 +1,13 @@
 import {
-    TreeItemAction,
-    TreeItemStatus,
+    ConnectDropdownMenu,
+    ConnectDropdownMenuItem,
+    DriveSettingsFormSubmitHandler,
+    DriveSettingsModal,
+    StatusIndicator,
+    TreeItem,
     TreeItemType,
     getIsMouseInsideContainer,
 } from '@/connect';
-import {
-    ConnectDropdownMenu,
-    ConnectDropdownMenuItem,
-} from '@/connect/components/dropdown-menu';
 import {
     DivProps,
     Icon,
@@ -17,31 +17,6 @@ import {
 } from '@/powerhouse';
 import { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
-import { DriveSettingsFormSubmitHandler } from '../drive-settings-form';
-import { DriveSettingsModal } from '../drive-settings-modal';
-import { StatusIndicator } from '../status-indicator';
-
-export interface BaseTreeItem {
-    id: string;
-    path: string;
-    label: string;
-    type: TreeItemType;
-    error?: Error;
-    status?: TreeItemStatus;
-    isConnected?: boolean;
-    options?: ConnectDropdownMenuItem[];
-    syncStatus?: 'not-synced-yet' | 'syncing' | 'synced';
-    sharingType?: 'private' | 'shared' | 'public';
-    expanded?: boolean;
-}
-
-export interface UITreeItem {
-    action?: TreeItemAction;
-    expanded?: boolean;
-    isSelected?: boolean;
-}
-
-export type TreeItem = BaseTreeItem & UITreeItem;
 
 export const defaultDropdownMenuOptions = [
     {
