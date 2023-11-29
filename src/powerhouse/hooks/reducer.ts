@@ -1,10 +1,10 @@
-import type {
+import {
     Action,
     BaseAction,
     Document,
     ExtendedState,
     Reducer,
-} from 'document-model/document';
+} from '@/powerhouse/types';
 import { useReducer } from 'react';
 
 export function wrapReducer<State, A extends Action>(
