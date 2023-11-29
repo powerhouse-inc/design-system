@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { ActionType, ItemType, TreeItemContext } from '@/connect';
+import { ActionType, TreeItemContext } from '@/connect';
 import { renderHook } from '@testing-library/react';
 import { treeItems } from '../mocks';
 import { useItemActions } from './useItemActions';
@@ -10,7 +10,7 @@ const baseItem = {
     expanded: true,
     path: 'drive-id/base-item',
     label: 'Base Item',
-    type: ItemType.Folder,
+    type: 'folder' as const,
 };
 
 const setItems = vi.fn();

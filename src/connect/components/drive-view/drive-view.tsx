@@ -1,3 +1,4 @@
+import { ItemType } from '@/connect';
 import { usePathContent } from '@/connect/hooks/tree-view/usePathContent';
 import { Icon } from '@/powerhouse';
 import { Button } from 'react-aria-components';
@@ -7,14 +8,13 @@ import {
     ConnectTreeViewItemProps,
     ConnectTreeViewProps,
     DefaultOptionId,
-    ItemType,
     TreeItem,
 } from '..';
 
 export type DriveType = 'public' | 'local' | 'cloud';
 
 export interface DriveTreeItem extends TreeItem {
-    type: ItemType.LocalDrive | ItemType.CloudDrive | ItemType.PublicDrive;
+    type: 'local-drive' | 'cloud-drive' | 'public-drive';
 }
 
 export type OnItemOptionsClickHandler = (
@@ -46,11 +46,11 @@ export interface DriveViewProps
 const filterDriveByType = (drive: DriveTreeItem, type: DriveType) => {
     switch (type) {
         case 'public':
-            return drive.type === ItemType.PublicDrive;
+            return drive.type === 'public-drive';
         case 'local':
-            return drive.type === ItemType.LocalDrive;
+            return drive.type === 'local-drive';
         case 'cloud':
-            return drive.type === ItemType.CloudDrive;
+            return drive.type === 'cloud-drive';
         default:
             return false;
     }
@@ -77,11 +77,11 @@ export function DriveView(props: DriveViewProps) {
 
     const drives = usePathContent(drivePath) as DriveTreeItem[];
 
-    const allowedTypes = [
-        ItemType.CloudDrive,
-        ItemType.Folder,
-        ItemType.LocalDrive,
-        ItemType.PublicDrive,
+    const allowedTypes: ItemType[] = [
+        'cloud-drive',
+        'folder',
+        'local-drive',
+        'public-drive',
     ];
     const allowedDrives = drives
         .filter(drive => filterDriveByType(drive, type))

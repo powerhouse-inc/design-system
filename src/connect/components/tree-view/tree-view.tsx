@@ -1,11 +1,11 @@
 import React from 'react';
 
+import { ItemType } from '@/connect';
 import { usePathContent } from '../../hooks/tree-view/usePathContent';
 import {
     ActionType,
     ConnectTreeViewItem,
     ConnectTreeViewItemProps,
-    ItemType,
     TreeItem,
 } from '../tree-view-item';
 

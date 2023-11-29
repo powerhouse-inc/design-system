@@ -11,12 +11,12 @@ import {
 import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { BreadcrumbProps, Breadcrumbs, BreadcrumbsProps } from '.';
-import { ActionType, BaseTreeItem, ItemType } from '../tree-view-item';
+import { ActionType, BaseTreeItem } from '../tree-view-item';
 
 const treeItems = generateMockDriveData({
     path: 'drive',
     label: 'Local Drive',
-    type: ItemType.LocalDrive,
+    type: 'local-drive',
     expanded: false,
     isSelected: false,
 });
@@ -84,7 +84,7 @@ export const Default: Story = {
                 id: randomId(),
                 path: `${basepath}/${label}`,
                 label,
-                type: ItemType.Folder,
+                type: 'folder',
             };
 
             setBaseItems(prev => [...prev, newItem]);
@@ -102,7 +102,7 @@ export const Default: Story = {
                 id: randomId(),
                 path: `${basePath}/new-folder`,
                 label: option,
-                type: ItemType.Folder,
+                type: 'folder',
                 action: ActionType.New,
             });
         };

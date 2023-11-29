@@ -6,13 +6,13 @@ import { useItemActions } from '@/connect/hooks/tree-view/useItemActions';
 import { generateMockDriveData } from '@/connect/utils/mocks/tree-item';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import { ActionType, ItemType } from '../tree-view-item';
+import { ActionType } from '../tree-view-item';
 import { ConnectTreeView, ConnectTreeViewProps } from './tree-view';
 
 const treeItems = generateMockDriveData({
     path: 'drive',
     label: 'Local Drive',
-    type: ItemType.LocalDrive,
+    type: 'local-drive',
     expanded: false,
     isSelected: false,
 });
@@ -81,7 +81,7 @@ const TreeViewImpl = (args: ConnectTreeViewProps) => {
                     id: `${item.id}/new-folder`,
                     path: `${item.path}/new-folder`,
                     label: 'New Folder',
-                    type: ItemType.Folder,
+                    type: 'folder',
                     action: ActionType.New,
                 });
             }

@@ -1,4 +1,4 @@
-import { getIsMouseInsideContainer } from '@/connect';
+import { ItemType, getIsMouseInsideContainer } from '@/connect';
 import {
     ConnectDropdownMenu,
     ConnectDropdownMenuItem,
@@ -15,14 +15,6 @@ import { twJoin, twMerge } from 'tailwind-merge';
 import { DriveSettingsFormSubmitHandler } from '../drive-settings-form';
 import { DriveSettingsModal } from '../drive-settings-modal';
 import { StatusIndicator } from '../status-indicator';
-
-export enum ItemType {
-    Folder = 'folder',
-    File = 'file',
-    LocalDrive = 'local-drive',
-    CloudDrive = 'cloud-drive',
-    PublicDrive = 'public-drive',
-}
 
 export enum ActionType {
     Update = 'update',
@@ -108,18 +100,18 @@ export type ConnectTreeViewItemProps = {
 
 function getItemIcon(type: ItemType) {
     switch (type) {
-        case ItemType.Folder:
+        case 'folder':
             return {
                 icon: <Icon name="folder-close" color="#6C7275" />,
                 expandedIcon: <Icon name="folder-open" color="#6C7275" />,
             };
-        case ItemType.File:
+        case 'file':
             return {};
-        case ItemType.LocalDrive:
+        case 'local-drive':
             return { icon: <Icon name="hdd" /> };
-        case ItemType.CloudDrive:
+        case 'cloud-drive':
             return { icon: <Icon name="server" /> };
-        case ItemType.PublicDrive:
+        case 'public-drive':
             return { icon: <Icon name="m" /> };
     }
 }
@@ -182,9 +174,9 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         props.mode === 'read' && (mouseIsWithinItemContainer || isHighlighted);
     const statusIcon = getStatusIcon();
     const isDrive =
-        item.type === ItemType.LocalDrive ||
-        item.type === ItemType.CloudDrive ||
-        item.type === ItemType.PublicDrive;
+        item.type === 'local-drive' ||
+        item.type === 'cloud-drive' ||
+        item.type === 'public-drive';
     const itemOptions =
         item.options ?? (defaultOptions as ConnectDropdownMenuItem[]);
     const dropdownMenuItems = isDrive
@@ -310,7 +302,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         const iconProps = {
             className: 'm-1.5',
         };
-        if (item.type === ItemType.LocalDrive) {
+        if (item.type === 'local-drive') {
             return (
                 <StatusIndicator
                     type="local-drive"
@@ -320,10 +312,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
             );
         }
 
-        if (
-            item.type === ItemType.CloudDrive ||
-            item.type === ItemType.PublicDrive
-        ) {
+        if (item.type === 'cloud-drive' || item.type === 'public-drive') {
             const sharedProps = {
                 type: item.type,
                 error: item.error,
@@ -394,9 +383,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                         availableOffline:
                             item.status === ItemStatus.AvailableOffline,
                         location:
-                            item.type === ItemType.LocalDrive
-                                ? 'local'
-                                : 'cloud',
+                            item.type === 'local-drive' ? 'local' : 'cloud',
                         onCancel() {
                             setIsDriveSettingsModalOpen(false);
                         },
