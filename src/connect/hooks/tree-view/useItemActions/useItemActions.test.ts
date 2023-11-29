@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { ActionType, TreeItemContext } from '@/connect';
+import { TreeItemContext } from '@/connect';
 import { renderHook } from '@testing-library/react';
 import { treeItems } from '../mocks';
 import { useItemActions } from './useItemActions';
@@ -405,7 +405,7 @@ describe('TreeView hooks', () => {
             it('should create a new uiState with action when there is no state for the current item', () => {
                 const { result } = renderHook(() => useItemActions());
                 const itemID = treeItems[1].id;
-                const action = ActionType.Update;
+                const action = 'update';
 
                 result.current.setItemAction(itemID, action);
                 const [setUIStateCallback] = setUIState.mock.calls[0];
@@ -419,12 +419,12 @@ describe('TreeView hooks', () => {
             it('should update item action', () => {
                 const { result } = renderHook(() => useItemActions());
                 const itemID = treeItems[1].id;
-                const action = ActionType.Update;
+                const action = 'update';
 
                 result.current.setItemAction(itemID, action);
                 const [setUIStateCallback] = setUIState.mock.calls[0];
                 const newState = setUIStateCallback({
-                    [itemID]: { action: ActionType.New },
+                    [itemID]: { action: 'new' },
                 });
 
                 expect(newState).toEqual({
@@ -439,7 +439,7 @@ describe('TreeView hooks', () => {
                 result.current.setItemAction(itemID, null);
                 const [setUIStateCallback] = setUIState.mock.calls[0];
                 const newState = setUIStateCallback({
-                    [itemID]: { action: ActionType.New },
+                    [itemID]: { action: 'new' },
                 });
 
                 expect(newState).toEqual({
@@ -454,7 +454,7 @@ describe('TreeView hooks', () => {
                 result.current.setItemAction(itemID, undefined);
                 const [setUIStateCallback] = setUIState.mock.calls[0];
                 const newState = setUIStateCallback({
-                    [itemID]: { action: ActionType.New },
+                    [itemID]: { action: 'new' },
                 });
 
                 expect(newState).toEqual({
@@ -465,7 +465,7 @@ describe('TreeView hooks', () => {
             it('should not change another property besides action', () => {
                 const { result } = renderHook(() => useItemActions());
                 const itemID = treeItems[1].id;
-                const action = ActionType.Update;
+                const action = 'update';
 
                 result.current.setItemAction(itemID, action);
                 const [setUIStateCallback] = setUIState.mock.calls[0];
@@ -481,18 +481,18 @@ describe('TreeView hooks', () => {
             it('should not change another item state properties', () => {
                 const { result } = renderHook(() => useItemActions());
                 const itemID = treeItems[1].id;
-                const action = ActionType.Update;
+                const action = 'update';
 
                 result.current.setItemAction(itemID, action);
                 const [setUIStateCallback] = setUIState.mock.calls[0];
                 const newState = setUIStateCallback({
-                    'other-item': { action: ActionType.New, isSelected: true },
+                    'other-item': { action: 'new', isSelected: true },
                     'other-item2': { isSelected: false },
-                    [itemID]: { action: ActionType.New, isSelected: false },
+                    [itemID]: { action: 'new', isSelected: false },
                 });
 
                 expect(newState).toEqual({
-                    'other-item': { action: ActionType.New, isSelected: true },
+                    'other-item': { action: 'new', isSelected: true },
                     'other-item2': { isSelected: false },
                     [itemID]: { action, isSelected: false },
                 });

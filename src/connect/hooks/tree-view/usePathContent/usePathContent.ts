@@ -1,6 +1,6 @@
 import {
-    ItemType,
     TreeItem,
+    TreeItemType,
     filterItemsByPath,
     isSubPath,
     useItemsContext,
@@ -17,7 +17,7 @@ import {
 export const usePathContent = (
     path = '',
     allowedPaths = [''],
-    allowedTypes: Array<ItemType> = [],
+    allowedTypes: Array<TreeItemType> = [],
 ) => {
     const { items } = useItemsContext();
 

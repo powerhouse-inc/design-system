@@ -1,4 +1,8 @@
-import { ItemType, getIsMouseInsideContainer } from '@/connect';
+import {
+    TreeItemAction,
+    TreeItemType,
+    getIsMouseInsideContainer,
+} from '@/connect';
 import {
     ConnectDropdownMenu,
     ConnectDropdownMenuItem,
@@ -16,13 +20,6 @@ import { DriveSettingsFormSubmitHandler } from '../drive-settings-form';
 import { DriveSettingsModal } from '../drive-settings-modal';
 import { StatusIndicator } from '../status-indicator';
 
-export enum ActionType {
-    Update = 'update',
-    New = 'new',
-    UpdateAndMove = 'update-and-move',
-    UpdateAndCopy = 'update-and-copy',
-}
-
 export enum ItemStatus {
     Available = 'available',
     AvailableOffline = 'available-offline',
@@ -34,7 +31,7 @@ export interface BaseTreeItem {
     id: string;
     path: string;
     label: string;
-    type: ItemType;
+    type: TreeItemType;
     error?: Error;
     status?: ItemStatus;
     isConnected?: boolean;
@@ -45,7 +42,7 @@ export interface BaseTreeItem {
 }
 
 export interface UITreeItem {
-    action?: ActionType;
+    action?: TreeItemAction;
     expanded?: boolean;
     isSelected?: boolean;
 }
@@ -98,7 +95,7 @@ export type ConnectTreeViewItemProps = {
     disableHighlightStyles?: boolean;
 };
 
-function getItemIcon(type: ItemType) {
+function getItemIcon(type: TreeItemType) {
     switch (type) {
         case 'folder':
             return {

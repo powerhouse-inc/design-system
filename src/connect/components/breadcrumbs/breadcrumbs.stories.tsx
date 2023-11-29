@@ -11,7 +11,7 @@ import {
 import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { BreadcrumbProps, Breadcrumbs, BreadcrumbsProps } from '.';
-import { ActionType, BaseTreeItem } from '../tree-view-item';
+import { BaseTreeItem } from '../tree-view-item';
 
 const treeItems = generateMockDriveData({
     path: 'drive',
@@ -103,7 +103,7 @@ export const Default: Story = {
                 path: `${basePath}/new-folder`,
                 label: option,
                 type: 'folder',
-                action: ActionType.New,
+                action: 'new',
             });
         };
 

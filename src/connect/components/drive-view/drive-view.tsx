@@ -1,4 +1,4 @@
-import { ItemType } from '@/connect';
+import { TreeItemType } from '@/connect';
 import { usePathContent } from '@/connect/hooks/tree-view/usePathContent';
 import { Icon } from '@/powerhouse';
 import { Button } from 'react-aria-components';
@@ -77,7 +77,7 @@ export function DriveView(props: DriveViewProps) {
 
     const drives = usePathContent(drivePath) as DriveTreeItem[];
 
-    const allowedTypes: ItemType[] = [
+    const allowedTypes: TreeItemType[] = [
         'cloud-drive',
         'folder',
         'local-drive',

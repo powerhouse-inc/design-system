@@ -6,7 +6,6 @@ import { useItemActions } from '@/connect/hooks/tree-view/useItemActions';
 import { generateMockDriveData } from '@/connect/utils/mocks/tree-item';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import { ActionType } from '../tree-view-item';
 import { ConnectTreeView, ConnectTreeViewProps } from './tree-view';
 
 const treeItems = generateMockDriveData({
@@ -71,7 +70,7 @@ const TreeViewImpl = (args: ConnectTreeViewProps) => {
             onItemOptionsClick?.(item, option);
 
             if (option === 'rename') {
-                actions.setItemAction(item.id, ActionType.Update);
+                actions.setItemAction(item.id, 'update');
                 return;
             }
 
@@ -82,7 +81,7 @@ const TreeViewImpl = (args: ConnectTreeViewProps) => {
                     path: `${item.path}/new-folder`,
                     label: 'New Folder',
                     type: 'folder',
-                    action: ActionType.New,
+                    action: 'new',
                 });
             }
         };
@@ -98,7 +97,7 @@ const TreeViewImpl = (args: ConnectTreeViewProps) => {
         item => {
             onSubmitInput?.(item);
             switch (item.action) {
-                case ActionType.New:
+                case 'new':
                     setItems(prevState => {
                         // eslint-disable-next-line @typescript-eslint/no-unused-vars
                         const { action, expanded, isSelected, ...newItem } =
@@ -107,7 +106,7 @@ const TreeViewImpl = (args: ConnectTreeViewProps) => {
                     });
                     actions.deleteVirtualItem(item.id);
                     break;
-                case ActionType.Update:
+                case 'update':
                     setItems(prevItems =>
                         prevItems.map(prevItem => {
                             actions.setItemAction(item.id, null);
