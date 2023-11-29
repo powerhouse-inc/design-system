@@ -9,7 +9,7 @@ import {
 } from 'react-aria-components';
 import { twMerge } from 'tailwind-merge';
 
-export interface SharedDropdownMenuProps<T = string> {
+export interface SharedDropdownMenuProps<T extends string = string> {
     onItemClick: (itemId: T) => void;
     items: Array<{ id: T; content: React.ReactNode }>;
     className?: string;
@@ -18,7 +18,7 @@ export interface SharedDropdownMenuProps<T = string> {
     popoverProps?: PopoverProps;
 }
 
-export type ControlledDropdownMenuProps<T = string> =
+export type ControlledDropdownMenuProps<T extends string = string> =
     SharedDropdownMenuProps<T> & {
         isOpen: boolean;
         onOpenChange: (isOpen: boolean) => void;
@@ -26,7 +26,7 @@ export type ControlledDropdownMenuProps<T = string> =
         children?: undefined;
     };
 
-export type UncontrolledDropdownMenuProps<T = string> =
+export type UncontrolledDropdownMenuProps<T extends string = string> =
     SharedDropdownMenuProps<T> & {
         children: React.ReactNode;
         onOpenChange?: (isOpen: boolean) => void;
@@ -34,7 +34,7 @@ export type UncontrolledDropdownMenuProps<T = string> =
         isOpen?: undefined;
     };
 
-export type DropdownMenuProps<T = string> =
+export type DropdownMenuProps<T extends string = string> =
     | ControlledDropdownMenuProps<T>
     | UncontrolledDropdownMenuProps<T>;
 
