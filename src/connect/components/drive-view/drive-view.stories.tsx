@@ -182,7 +182,7 @@ const DriveViewImpl = (args: DriveViewProps) => {
 export const Public: Story = {
     args: {
         name: 'Public drives',
-        type: 'public',
+        type: 'public-drive',
     },
     render: args => <DriveViewImpl {...(args as DriveViewProps)} />,
 };
@@ -190,7 +190,7 @@ export const Public: Story = {
 export const Cloud: Story = {
     args: {
         name: 'Secure Cloud Storage',
-        type: 'cloud',
+        type: 'cloud-drive',
     },
     render: args => <DriveViewImpl {...(args as DriveViewProps)} />,
 };
@@ -198,7 +198,7 @@ export const Cloud: Story = {
 export const Local: Story = {
     args: {
         name: 'My Local Drives',
-        type: 'local',
+        type: 'local-drive',
     },
     render: args => <DriveViewImpl {...(args as DriveViewProps)} />,
 };

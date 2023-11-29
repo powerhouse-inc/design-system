@@ -3,6 +3,8 @@ import {
     ConnectTreeViewItemProps,
     ConnectTreeViewProps,
     DefaultOptionId,
+    DriveTreeItem,
+    DriveType,
     TreeItem,
     TreeItemType,
     usePathContent,
@@ -10,12 +12,6 @@ import {
 import { Icon } from '@/powerhouse';
 import { Button } from 'react-aria-components';
 import { twMerge } from 'tailwind-merge';
-
-export type DriveType = 'public' | 'local' | 'cloud';
-
-export interface DriveTreeItem extends TreeItem {
-    type: 'local-drive' | 'cloud-drive' | 'public-drive';
-}
 
 export type OnItemOptionsClickHandler = (
     item: TreeItem,
@@ -45,11 +41,11 @@ export interface DriveViewProps
 
 const filterDriveByType = (drive: DriveTreeItem, type: DriveType) => {
     switch (type) {
-        case 'public':
+        case 'public-drive':
             return drive.type === 'public-drive';
-        case 'local':
+        case 'local-drive':
             return drive.type === 'local-drive';
-        case 'cloud':
+        case 'cloud-drive':
             return drive.type === 'cloud-drive';
         default:
             return false;
@@ -91,7 +87,7 @@ export function DriveView(props: DriveViewProps) {
         <div
             className={twMerge(
                 'pb-2',
-                type === 'public' && 'rounded-lg bg-bg to-bg',
+                type === 'public-drive' && 'rounded-lg bg-bg to-bg',
                 className,
             )}
             {...restProps}

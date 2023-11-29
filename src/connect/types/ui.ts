@@ -45,4 +45,10 @@ export type UITreeItem = {
 
 export type TreeItem = BaseTreeItem & UITreeItem;
 
+export type DriveType = 'public-drive' | 'local-drive' | 'cloud-drive';
+
+export type DriveTreeItem = TreeItem & {
+    type: DriveType;
+};
+
 export type DefaultOptionId = (typeof defaultDropdownMenuOptions)[number]['id'];

@@ -1,12 +1,12 @@
 import {
     ItemsContextProvider,
+    generateMockDriveData,
+    useItemActions,
     useItemsContext,
-} from '@/connect/context/ItemsContext';
-import { useItemActions } from '@/connect/hooks/tree-view/useItemActions';
-import { generateMockDriveData } from '@/connect/utils/mocks/tree-item';
+} from '@/connect';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import { ConnectTreeView, ConnectTreeViewProps } from './tree-view';
+import { ConnectTreeView, ConnectTreeViewProps } from '.';
 
 const treeItems = generateMockDriveData({
     path: 'drive',
