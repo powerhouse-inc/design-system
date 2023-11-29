@@ -1,5 +1,6 @@
 import {
     ComponentPropsWithoutRef,
+    useCallback,
     useEffect,
     useRef,
     type MouseEvent,
@@ -10,31 +11,28 @@ import { twMerge } from 'tailwind-merge';
 export type ModalProps = {
     children: ReactNode;
     isOpen: boolean;
-    onOpenChange?: (isOpen: boolean) => void;
+    onClose?: () => void;
     dialogProps?: ComponentPropsWithoutRef<'dialog'>;
 };
 
 export function Modal(props: ModalProps) {
     const dialogRef = useRef<HTMLDialogElement>(null);
-
-    useEffect(() => {
-        if (!dialogRef.current) return;
-        props.onOpenChange?.(props.isOpen);
-        if (props.isOpen) showModal();
-        else closeModal();
-    });
-
     function showModal() {
         if (!dialogRef.current) return;
-        document.body.classList.add('overflow-hidden');
         dialogRef.current.showModal();
     }
 
-    function closeModal() {
+    const closeModal = useCallback(() => {
         if (!dialogRef.current) return;
-        document.body.classList.remove('overflow-hidden');
         dialogRef.current.close();
-    }
+        props.onClose?.();
+    }, [props]);
+    useEffect(() => {
+        if (!dialogRef.current) return;
+        if (props.isOpen) showModal();
+        else closeModal();
+    }, [props.isOpen, closeModal]);
+
     function onClick(event: MouseEvent) {
         if (!dialogRef.current) return;
         if (isClickOnBackdrop(event)) closeModal();
@@ -53,16 +51,25 @@ export function Modal(props: ModalProps) {
     }
 
     return (
-        <dialog
-            ref={dialogRef}
-            onClick={onClick}
-            {...props.dialogProps}
-            className={twMerge(
-                props.dialogProps?.className,
-                'backdrop:bg-pink-500',
-            )}
-        >
-            {props.children}
-        </dialog>
+        <>
+            <div
+                className={twMerge(
+                    'pointer-events-none fixed h-screen w-screen overflow-hidden bg-slate-900/0 transition-colors duration-1000',
+                    props.isOpen && 'bg-slate-900/50',
+                )}
+            />
+            <dialog
+                ref={dialogRef}
+                onClick={onClick}
+                {...props.dialogProps}
+                className={twMerge(
+                    props.dialogProps?.className,
+                    'fixed grid place-items-center overflow-hidden transition duration-1000 backdrop:bg-transparent open:overflow-y-scroll',
+                    props.isOpen ? 'opacity-100' : 'opacity-0',
+                )}
+            >
+                {props.children}
+            </dialog>
+        </>
     );
 }

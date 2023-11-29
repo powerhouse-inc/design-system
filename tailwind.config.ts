@@ -11,7 +11,25 @@ const config = {
         '.storybook/**/*.{html,js,ts,tsx}',
     ],
     theme: {
-        extend: {},
+        extend: {
+            keyframes: {
+                'fade-in': {
+                    '0%': { opacity: '0%' },
+                    '100%': { opacity: '100%' },
+                },
+                'fade-out': {
+                    '0%': { opacity: '100%' },
+                    '100%': { opacity: '0%' },
+                },
+            },
+            animation: {
+                'fade-in': 'fade-in 0.5s ease-in',
+                'fade-out': 'fade-out 0.5s ease-out',
+            },
+        },
+    },
+    colors: {
+        'slate-900': 'hsl(var(--color-slate-900) / <alpha-value>)',
     },
     plugins: [
         animate,
