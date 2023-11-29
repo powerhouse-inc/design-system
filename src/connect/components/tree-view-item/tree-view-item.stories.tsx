@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ConnectTreeViewItem, ItemStatus } from './tree-view-item';
+import { ConnectTreeViewItem } from './tree-view-item';
 
 const meta: Meta<typeof ConnectTreeViewItem> = {
     title: 'Connect/Components/TreeView',
@@ -33,7 +33,7 @@ export const TreeViewItem: Story = {
             path: 'drive/folder1',
             label: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
             type: 'folder',
-            status: ItemStatus.Syncing,
+            status: 'syncing',
             expanded: false,
             isSelected: false,
         },

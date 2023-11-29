@@ -10,3 +10,9 @@ export type TreeItemAction =
     | 'new'
     | 'update-and-move'
     | 'update-and-copy';
+
+export type TreeItemStatus =
+    | 'available'
+    | 'available-offline'
+    | 'syncing'
+    | 'offline';

@@ -1,5 +1,6 @@
 import {
     TreeItemAction,
+    TreeItemStatus,
     TreeItemType,
     getIsMouseInsideContainer,
 } from '@/connect';
@@ -20,20 +21,13 @@ import { DriveSettingsFormSubmitHandler } from '../drive-settings-form';
 import { DriveSettingsModal } from '../drive-settings-modal';
 import { StatusIndicator } from '../status-indicator';
 
-export enum ItemStatus {
-    Available = 'available',
-    AvailableOffline = 'available-offline',
-    Syncing = 'syncing',
-    Offline = 'offline',
-}
-
 export interface BaseTreeItem {
     id: string;
     path: string;
     label: string;
     type: TreeItemType;
     error?: Error;
-    status?: ItemStatus;
+    status?: TreeItemStatus;
     isConnected?: boolean;
     options?: ConnectDropdownMenuItem[];
     syncStatus?: 'not-synced-yet' | 'syncing' | 'synced';
@@ -250,8 +244,8 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                 {
                     ...item,
                     status: data.availableOffline
-                        ? ItemStatus.AvailableOffline
-                        : ItemStatus.Available,
+                        ? 'available-offline'
+                        : 'available',
                 },
                 'change-availability',
             );
@@ -317,7 +311,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                 iconProps,
             };
 
-            if (item.status === ItemStatus.AvailableOffline) {
+            if (item.status === 'available-offline') {
                 return (
                     <StatusIndicator
                         {...sharedProps}
@@ -327,7 +321,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                 );
             }
 
-            if (item.status === ItemStatus.Available) {
+            if (item.status === 'available') {
                 return (
                     <StatusIndicator
                         {...sharedProps}
@@ -377,8 +371,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                         driveName: item.label,
                         // todo: make this required for drives
                         sharingType: item.sharingType ?? 'public',
-                        availableOffline:
-                            item.status === ItemStatus.AvailableOffline,
+                        availableOffline: item.status === 'available-offline',
                         location:
                             item.type === 'local-drive' ? 'local' : 'cloud',
                         onCancel() {
