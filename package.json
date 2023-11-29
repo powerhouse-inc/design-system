@@ -12,12 +12,12 @@
         "access": "public"
     },
     "scripts": {
-        "predev": "tsx scripts/create-icon-type-names-definition.ts",
-        "prepublish": "predev",
-        "build": "vite build",
+        "create-icon-name-type": "tsx scripts/create-icon-type-names-definition.ts",
+        "prepublish": "yarn create-icon-name-type",
+        "build": "yarn create-icon-name-type && vite build",
         "check-types": "tsc --noemit --emitDeclarationOnly false --project tsconfig.json",
-        "storybook": "storybook dev -p 6006",
-        "build-storybook": "storybook build",
+        "storybook": "yarn create-icon-name-type && storybook dev -p 6006",
+        "build-storybook": "yarn create-icon-name-type && storybook build",
         "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
         "lint:fix": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
         "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|tsx|json)\"",
