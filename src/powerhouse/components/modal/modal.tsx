@@ -10,26 +10,33 @@ type Props = {
     contentProps?: ComponentPropsWithoutRef<typeof Content>;
 };
 export function Modal(props: Props) {
-    const { open, onOpenChange, ...delegated } = props;
+    const {
+        open,
+        onOpenChange,
+        contentProps,
+        overlayProps,
+        children,
+        ...delegated
+    } = props;
     return (
         <Root open={open} defaultOpen={open} onOpenChange={onOpenChange}>
             <Portal>
                 <Overlay
-                    {...props.overlayProps}
+                    {...overlayProps}
                     className={twMerge(
                         'fixed inset-0 grid place-items-center overflow-y-auto bg-slate-900/50 data-[state=closed]:animate-fade-out data-[state=open]:animate-fade-in',
-                        props.overlayProps?.className,
+                        overlayProps?.className,
                     )}
                 >
                     <Content
                         {...delegated}
-                        {...props.contentProps}
+                        {...contentProps}
                         className={twMerge(
                             'bg-white data-[state=closed]:animate-zoom-out data-[state=open]:animate-zoom-in',
-                            props.contentProps?.className,
+                            contentProps?.className,
                         )}
                     >
-                        {props.children}
+                        {children}
                     </Content>
                 </Overlay>
             </Portal>
