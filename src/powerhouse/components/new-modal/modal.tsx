@@ -27,7 +27,7 @@ export function Modal(props: Props) {
                     <Content
                         {...props.contentProps}
                         className={twMerge(
-                            'isolate -z-10 min-w-[300px] max-w-[400px] rounded-xl bg-white p-6 data-[state=closed]:animate-zoom-out data-[state=open]:animate-zoom-in',
+                            'bg-white data-[state=closed]:animate-zoom-out data-[state=open]:animate-zoom-in',
                             props.contentProps?.className,
                         )}
                     >
