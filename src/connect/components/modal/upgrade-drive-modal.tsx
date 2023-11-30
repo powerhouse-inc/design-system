@@ -1,4 +1,4 @@
-import { Modal } from '@/powerhouse/components/new-modal';
+import { Modal } from '@/powerhouse';
 import React, { ComponentPropsWithoutRef } from 'react';
 import { Button } from 'react-aria-components';
 import { twMerge } from 'tailwind-merge';

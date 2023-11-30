@@ -1,4 +1,4 @@
-import { Modal } from '@/powerhouse/components/new-modal';
+import { Modal } from '@/powerhouse';
 import { ComponentPropsWithoutRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { Divider } from '..';
