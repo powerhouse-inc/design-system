@@ -21,10 +21,20 @@ const config = {
                     '0%': { opacity: '100%' },
                     '100%': { opacity: '0%' },
                 },
+                'zoom-in': {
+                    '0%': { transform: 'scale(0.95)' },
+                    '100%': { transform: 'scale(1)' },
+                },
+                'zoom-out': {
+                    '0%': { transform: 'scale(1)' },
+                    '100%': { transform: 'scale(0.95)' },
+                },
             },
             animation: {
-                'fade-in': 'fade-in 0.5s ease-in',
-                'fade-out': 'fade-out 0.5s ease-out',
+                'fade-in': 'fade-in 300ms ease-in',
+                'fade-out': 'fade-out 200ms ease-out',
+                'zoom-in': 'zoom-in 300ms ease-in',
+                'zoom-out': 'zoom-out 200ms ease-out',
             },
         },
     },
