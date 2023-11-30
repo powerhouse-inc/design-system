@@ -4,7 +4,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { Modal } from '.';
 
 const meta = {
-    title: 'Powerhouse/Components/NewModal',
+    title: 'Powerhouse/Components/Modal',
     component: Modal,
     parameters: {
         layout: 'fullscreen',

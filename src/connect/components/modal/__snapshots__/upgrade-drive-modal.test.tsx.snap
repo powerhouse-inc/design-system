@@ -9,7 +9,6 @@ exports[`UpgradeDriveModal Component > should match snapshot 1`] = `
   data-state="open"
   data-testid="upgrade-drive-modal"
   id="radix-:r0:"
-  open=""
   overlayprops="[object Object]"
   role="dialog"
   style="pointer-events: auto;"

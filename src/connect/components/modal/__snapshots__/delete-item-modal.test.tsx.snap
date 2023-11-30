@@ -9,7 +9,6 @@ exports[`Modal Component > should match snapshot 1`] = `
   data-state="open"
   data-testid="delete-modal"
   id="radix-:r0:"
-  open=""
   overlayprops="[object Object]"
   role="dialog"
   style="pointer-events: auto;"
