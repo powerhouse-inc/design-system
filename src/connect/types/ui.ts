@@ -2,7 +2,7 @@ import { ConnectDropdownMenuItem, defaultDropdownMenuOptions } from '@/connect';
 
 export type DriveType = 'PUBLIC_DRIVE' | 'LOCAL_DRIVE' | 'CLOUD_DRIVE';
 
-export type TreeItemType = ('FOLDER' | 'FILE') & DriveType;
+export type TreeItemType = ('FOLDER' | 'FILE') | DriveType;
 
 export type TreeItemAction =
     | 'UPDATE'
