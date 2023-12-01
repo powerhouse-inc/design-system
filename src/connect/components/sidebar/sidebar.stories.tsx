@@ -87,19 +87,19 @@ export const Sidebar: Story = {
         children: (
             <>
                 <DriveViewImpl
-                    type="public-drive"
+                    type="PUBLIC_DRIVE"
                     name="Public Drives"
                     className="mx-2 mb-2"
                     onItemOptionsClick={onItemOptionsClick}
                 />
                 <DriveViewImpl
-                    type="cloud-drive"
+                    type="CLOUD_DRIVE"
                     name="Secure Cloud Storage"
                     className="mx-2 mb-2"
                     onItemOptionsClick={onItemOptionsClick}
                 />
                 <DriveViewImpl
-                    type="local-drive"
+                    type="LOCAL_DRIVE"
                     name="My Local Drives"
                     className="mx-2 mb-2"
                     onItemOptionsClick={onItemOptionsClick}

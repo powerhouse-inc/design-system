@@ -245,7 +245,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         if (item.type === 'LOCAL_DRIVE') {
             return (
                 <StatusIndicator
-                    type="local-drive"
+                    type="LOCAL_DRIVE"
                     error={item.error}
                     iconProps={iconProps}
                 />
@@ -264,7 +264,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                 return (
                     <StatusIndicator
                         {...sharedProps}
-                        availability="available-offline"
+                        availability="AVAILABLE_OFFLINE"
                         syncStatus={item.syncStatus ?? 'NOT_SYNCED_YET'}
                     />
                 );
