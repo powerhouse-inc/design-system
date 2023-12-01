@@ -73,7 +73,7 @@ export function useDraggableTarget<T = unknown>(
                     item.types.has(dataType || CUSTOM_OBJECT_FORMAT),
             ) as TextDropItem | undefined;
 
-            const itemFile = e.items.find(item => item.kind === 'FILE') as
+            const itemFile = e.items.find(item => item.kind === 'file') as
                 | FileDropItem
                 | undefined;
 
