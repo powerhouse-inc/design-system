@@ -1,6 +1,6 @@
 export type IconName =
     | 'arrow-left'
-    | 'available'
+    | 'AVAILABLE'
     | 'bar-chart'
     | 'briefcase'
     | 'caret'
@@ -27,8 +27,8 @@ export type IconName =
     | 'search'
     | 'server'
     | 'settings'
-    | 'synced'
-    | 'syncing'
+    | 'SYNCED'
+    | 'SYNCING'
     | 'trash'
     | 'vertical-dots'
     | 'xmark';

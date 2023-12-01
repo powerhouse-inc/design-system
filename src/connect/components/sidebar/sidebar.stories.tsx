@@ -10,25 +10,25 @@ const drives = [
     ...generateMockDriveData({
         path: 'drive',
         label: 'MakerDAO Atlas',
-        type: 'public-drive',
+        type: 'PUBLIC_DRIVE',
         expanded: true,
     }),
     ...generateMockDriveData({
         path: 'cloud',
         label: 'Powerhouse Team Drive',
-        type: 'cloud-drive',
+        type: 'CLOUD_DRIVE',
         expanded: false,
     }),
     ...generateMockDriveData({
         path: 'cloud-2',
         label: 'Powerhouse Team Drive 2',
-        type: 'cloud-drive',
+        type: 'CLOUD_DRIVE',
         expanded: true,
     }),
     ...generateMockDriveData({
         path: 'local',
         label: 'Local Device',
-        type: 'local-drive',
+        type: 'LOCAL_DRIVE',
         expanded: true,
     }),
 ];
