@@ -1,6 +1,5 @@
 import type { Config } from 'tailwindcss';
 import animate from 'tailwindcss-animate';
-import reactAriaComponents from 'tailwindcss-react-aria-components';
 // @ts-expect-error this is only used in legacy components and can be removed. it does not have a types file
 import themeSwapper from 'tailwindcss-theme-swapper';
 import defaultTheme from 'tailwindcss/defaultTheme';
@@ -78,7 +77,6 @@ const config = {
     },
     plugins: [
         animate,
-        reactAriaComponents(),
         // todo: theme swapper is only used in legacy components and can be removed
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         themeSwapper({
