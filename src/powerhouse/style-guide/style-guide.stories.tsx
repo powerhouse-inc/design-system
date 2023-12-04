@@ -1,4 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
+import { twJoin } from 'tailwind-merge';
 import twConfig from '../../../tailwind.config';
 
 const meta = {
@@ -22,6 +23,34 @@ export const Colors: StoryObj<typeof meta> = {
                         >
                             <div className="bg-white p-1 text-xs">{key}</div>
                         </div>
+                    );
+                })}
+            </div>
+        );
+    },
+};
+
+export const TextSizes: StoryObj<typeof meta> = {
+    render: function Wrapper() {
+        const textSizes = [
+            'text-xs',
+            'text-sm',
+            'text-base',
+            'text-lg',
+            'text-xl',
+            'text-2xl',
+            'text-3xl',
+            'text-4xl',
+            'text-5xl',
+        ];
+
+        return (
+            <div className="mx-auto flex max-w-[650px] flex-wrap gap-1 bg-white p-6">
+                {textSizes.map(key => {
+                    return (
+                        <p key={key} className={twJoin(key, 'mb-2')}>
+                            {key} — Lorem ipsus dolor amet
+                        </p>
                     );
                 })}
             </div>
