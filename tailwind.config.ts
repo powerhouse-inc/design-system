@@ -3,6 +3,7 @@ import animate from 'tailwindcss-animate';
 import reactAriaComponents from 'tailwindcss-react-aria-components';
 // @ts-expect-error this is only used in legacy components and can be removed. it does not have a types file
 import themeSwapper from 'tailwindcss-theme-swapper';
+import defaultTheme from 'tailwindcss/defaultTheme';
 import plugin from 'tailwindcss/plugin';
 
 const config = {
@@ -11,6 +12,9 @@ const config = {
         '.storybook/**/*.{html,js,ts,tsx}',
     ],
     theme: {
+        fontFamily: {
+            sans: ['Inter', ...defaultTheme.fontFamily.sans],
+        },
         colors: {
             transparent: 'transparent',
             white: 'hsl(var(--color-white) / <alpha-value>)',
