@@ -11,6 +11,27 @@ const config = {
         '.storybook/**/*.{html,js,ts,tsx}',
     ],
     theme: {
+        colors: {
+            transparent: 'transparent',
+            white: 'hsl(var(--color-white) / <alpha-value>)',
+            black: 'hsl(var(--color-black) / <alpha-value>)',
+            'grey-100': 'hsl(var(--color-grey-100) / <alpha-value>)',
+            'grey-200': 'hsl(var(--color-grey-200) / <alpha-value>)',
+            'grey-300': 'hsl(var(--color-grey-300) / <alpha-value>)',
+            'slate-50': 'hsl(var(--color-slate-50) / <alpha-value>)',
+            'slate-100': 'hsl(var(--color-slate-100) / <alpha-value>)',
+            'slate-200': 'hsl(var(--color-slate-200) / <alpha-value>)',
+            'slate-300': 'hsl(var(--color-slate-300) / <alpha-value>)',
+            'slate-700': 'hsl(var(--color-slate-700) / <alpha-value>)',
+            'slate-800': 'hsl(var(--color-slate-800) / <alpha-value>)',
+            'slate-900': 'hsl(var(--color-slate-900) / <alpha-value>)',
+            'blue-500': 'hsl(var(--color-blue-500) / <alpha-value>)',
+            'green-500': 'hsl(var(--color-green-500) / <alpha-value>)',
+            'red-400': 'hsl(var(--color-red-400) / <alpha-value>)',
+            'red-500': 'hsl(var(--color-red-500) / <alpha-value>)',
+            'purple-500': 'hsl(var(--color-purple-500) / <alpha-value>)',
+            'orange-500': 'hsl(var(--color-orange-500) / <alpha-value>)',
+        },
         extend: {
             keyframes: {
                 'fade-in': {
@@ -37,9 +58,6 @@ const config = {
                 'zoom-out': 'zoom-out 200ms ease-out',
             },
         },
-    },
-    colors: {
-        'slate-900': 'hsl(var(--color-slate-900) / <alpha-value>)',
     },
     plugins: [
         animate,
