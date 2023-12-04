@@ -15,7 +15,20 @@ const config = {
         fontFamily: {
             sans: ['Inter', ...defaultTheme.fontFamily.sans],
         },
+        fontSize: {
+            ...defaultTheme.fontSize,
+            xs: ['0.75rem', '1.125rem'],
+            sm: ['0.875rem', '1.5rem'],
+            base: ['1rem', '1.5rem'],
+            lg: ['1.125rem', '1.75rem'],
+            xl: ['1.25rem', '1.875rem'],
+            '2xl': ['1.5rem', '2.25rem'],
+            '3xl': ['2rem', '3rem'],
+            '4xl': ['2.5rem', '4rem'],
+            '5xl': ['4rem', '5rem'],
+        },
         colors: {
+            ...defaultTheme.colors,
             transparent: 'transparent',
             white: 'hsl(var(--color-white) / <alpha-value>)',
             black: 'hsl(var(--color-black) / <alpha-value>)',
