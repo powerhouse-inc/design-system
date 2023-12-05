@@ -37,7 +37,7 @@ export function Breadcrumbs(props: BreadcrumbsProps) {
                     key={routeSegment}
                     filterPath={routeSegment}
                     onClick={e => props.onItemClick?.(e, routeSegment)}
-                    className="transition-colors last-of-type:text-[#404446] hover:text-[#404446]"
+                    className="transition-colors last-of-type:text-grey-800 hover:text-grey-800"
                 />
             ))}
             {isAddingNewItem ? (
@@ -56,7 +56,7 @@ export function Breadcrumbs(props: BreadcrumbsProps) {
             ) : (
                 <button
                     onClick={onAddNew}
-                    className="ml-1 flex flex-row items-center justify-center gap-2 rounded-[6px] bg-grey-50 px-2 py-[6px] transition-colors hover:bg-[#EFEFEF] hover:text-[#404446]"
+                    className="ml-1 flex flex-row items-center justify-center gap-2 rounded-[6px] bg-grey-50 px-2 py-[6px] transition-colors hover:bg-[#EFEFEF] hover:text-grey-800"
                 >
                     <Icon name="plus" size={14} />
                     Add new

@@ -16,7 +16,7 @@ exports[`UpgradeDriveModal Component > should match snapshot 1`] = `
     class="w-[400px] p-6 text-[#565868]"
   >
     <div
-      class="border-b border-[#E5E7E8] pb-2 text-2xl font-bold text-[#404446]"
+      class="border-b border-[#E5E7E8] pb-2 text-2xl font-bold text-grey-800"
     >
       Upgrade to cloud drive
     </div>
@@ -38,7 +38,7 @@ exports[`UpgradeDriveModal Component > should match snapshot 1`] = `
         Cancel
       </button>
       <button
-        class="min-h-[48px] min-w-[142px] text-base font-semibold py-3 px-6 rounded-xl outline-none active:opacity-75 hover:scale-105 transform transition-all flex-1 bg-[#404446] text-[#FEFEFE]"
+        class="min-h-[48px] min-w-[142px] text-base font-semibold py-3 px-6 rounded-xl outline-none active:opacity-75 hover:scale-105 transform transition-all flex-1 bg-grey-800 text-[#FEFEFE]"
         data-rac=""
         type="button"
       >

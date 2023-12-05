@@ -134,7 +134,7 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
                 )}
             >
                 <div
-                    className="my-3 flex items-center gap-2 rounded-xl border border-[#F4F4F4] p-3 text-[#404446]"
+                    className="my-3 flex items-center gap-2 rounded-xl border border-[#F4F4F4] p-3 text-grey-800"
                     style={{
                         boxShadow:
                             '0px 4px 8px -4px rgba(0, 0, 0, 0.02), 0px -1px 1px 0px rgba(0, 0, 0, 0.04) inset',
@@ -208,7 +208,7 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
                     <input
                         type="submit"
                         value="Confirm"
-                        className="mb-4 w-full cursor-pointer rounded-xl bg-[#404446] px-6 py-3 text-center font-semibold text-[#FEFEFE] transition hover:brightness-125"
+                        className="mb-4 w-full cursor-pointer rounded-xl bg-grey-800 px-6 py-3 text-center font-semibold text-[#FEFEFE] transition hover:brightness-125"
                     />
                     <button
                         onClick={props.onCancel}
