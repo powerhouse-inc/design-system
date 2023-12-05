@@ -20,7 +20,7 @@ export function DeleteDrive(props: DeleteDriveProps) {
 
     return (
         <div>
-            <p className="mb-2 rounded-[6px] bg-[#F3F5F7] p-4 text-center text-[#6C7275]">
+            <p className="mb-2 rounded-[6px] bg-slate-50 p-4 text-center text-[#6C7275]">
                 Are you sure you want to delete this drive? All files and
                 subfolders within it will be removed. Do you want to proceed?
             </p>
@@ -37,7 +37,7 @@ export function DeleteDrive(props: DeleteDriveProps) {
             <div className="flex gap-3">
                 <button
                     onClick={props.onCancel}
-                    className="w-full rounded-xl bg-[#F3F5F7] px-6 py-3 text-[#6C7275] transition hover:opacity-80"
+                    className="w-full rounded-xl bg-slate-50 px-6 py-3 text-[#6C7275] transition hover:opacity-80"
                 >
                     Cancel
                 </button>

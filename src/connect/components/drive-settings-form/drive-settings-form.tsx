@@ -212,7 +212,7 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
                     />
                     <button
                         onClick={props.onCancel}
-                        className="w-full rounded-xl border border-[#E7E9EA] bg-[#F3F5F7] px-6 py-3 text-center font-semibold text-[#6C7275] transition hover:opacity-80"
+                        className="w-full rounded-xl border border-[#E7E9EA] bg-slate-50 px-6 py-3 text-center font-semibold text-[#6C7275] transition hover:opacity-80"
                     >
                         Cancel
                     </button>
