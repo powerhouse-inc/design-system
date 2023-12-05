@@ -134,7 +134,7 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
                 )}
             >
                 <div
-                    className="my-3 flex items-center gap-2 rounded-xl border border-[#F4F4F4] p-3 text-grey-800"
+                    className="my-3 flex items-center gap-2 rounded-xl border border-grey-100 p-3 text-grey-800"
                     style={{
                         boxShadow:
                             '0px 4px 8px -4px rgba(0, 0, 0, 0.02), 0px -1px 1px 0px rgba(0, 0, 0, 0.04) inset',
@@ -148,7 +148,7 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
                         </p>
                     </div>
                 </div>
-                <div className="flex items-center rounded-xl bg-[#F4F4F4] p-3 text-slate-200">
+                <div className="flex items-center rounded-xl bg-grey-100 p-3 text-slate-200">
                     <div className="flex-1">
                         <label
                             htmlFor="availableOffline"
@@ -190,7 +190,7 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
             >
                 <button
                     type="button"
-                    className="mt-3 flex gap-2 py-3 font-semibold text-[#EA4335] transition hover:brightness-125"
+                    className="mt-3 flex gap-2 py-3 font-semibold text-red-900 transition hover:brightness-125"
                     onClick={() => setShowDeleteDrive(true)}
                 >
                     <Icon name="trash" />

@@ -38,7 +38,7 @@ exports[`Modal Component > should match snapshot 1`] = `
         Cancel
       </button>
       <button
-        class="min-h-[48px] min-w-[142px] text-base font-semibold py-3 px-6 rounded-xl outline-none active:opacity-75 hover:scale-105 transform transition-all bg-[#EA4335] text-[#FEFEFE]"
+        class="min-h-[48px] min-w-[142px] text-base font-semibold py-3 px-6 rounded-xl outline-none active:opacity-75 hover:scale-105 transform transition-all bg-red-900 text-[#FEFEFE]"
         data-rac=""
         type="button"
       >

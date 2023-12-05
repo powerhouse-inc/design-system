@@ -34,7 +34,7 @@ export const DriveSettingsSelect = forwardRef(function DriveSettingsSelect(
     const itemsToShow = props.items.filter(item => item.value !== props.value);
 
     return (
-        <div className="rounded-xl bg-[#F4F4F4]" ref={ref}>
+        <div className="rounded-xl bg-grey-100" ref={ref}>
             <div
                 onClick={() => setShowItems(!showItems)}
                 id={props.id}

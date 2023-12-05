@@ -59,8 +59,8 @@ export const ConnectSearchBar: React.FC<ConnectSearchBarProps> = props => {
             onItemClick={onFilterSelect}
             popoverProps={{ placement: 'bottom right', offset: 4 }}
             className="ml-3 flex h-full flex-row items-center outline-none"
-            menuClassName="bg-grey-50 border border-[#F4F4F4] rounded-xl p-2"
-            menuItemClassName="hover:bg-[#F4F4F4] rounded-lg overflow-hidden cursor-pointer h-10"
+            menuClassName="bg-grey-50 border border-grey-100 rounded-xl p-2"
+            menuItemClassName="hover:bg-grey-100 rounded-lg overflow-hidden cursor-pointer h-10"
         >
             {filterLabelContent}
             <Icon name="chevron-down" />
