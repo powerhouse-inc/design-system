@@ -52,7 +52,7 @@ export const ConnectDeleteItemModal = (props: ConnectDeleteItemModalProps) => {
                         onPress={() => onOpenChange?.(false)}
                         className={twMerge(
                             buttonStyles,
-                            'bg-[#E8ECEFBF] text-[#141718]',
+                            'bg-grey-600/75 text-slate-700',
                         )}
                     >
                         {cancelLabel}
