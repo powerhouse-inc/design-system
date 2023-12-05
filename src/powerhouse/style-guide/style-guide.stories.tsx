@@ -45,7 +45,7 @@ export const TextSizes: StoryObj<typeof meta> = {
         ];
 
         return (
-            <div className="mx-auto flex max-w-[650px] flex-wrap gap-1 bg-white p-6">
+            <div className="mx-auto flex max-w-[720px] flex-wrap gap-1 bg-white p-6">
                 {textSizes.map(key => {
                     return (
                         <p key={key} className={twJoin(key, 'mb-2')}>

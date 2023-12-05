@@ -117,9 +117,9 @@
     --slate-400: hsl(var(--color-slate-400));
     --slate-500: hsl(var(--color-slate-500));
     --slate-600: hsl(var(--color-slate-600));
-    --slate-700: hsl(var(--color-slate-800));
+    --slate-700: hsl(var(--color-slate-700));
     --slate-800: hsl(var(--color-slate-900));
-    --slate-900: hsl(var(--color-slate-950));
+    --slate-900: hsl(var(--color-slate-900));
     --blue-100: hsl(var(--color-blue-100));
     --blue-200: hsl(var(--color-blue-200));
     --blue-300: hsl(var(--color-blue-300));
