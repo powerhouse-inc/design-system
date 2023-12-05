@@ -71,7 +71,7 @@ export const DriveSettingsSelect = forwardRef(function DriveSettingsSelect(
 
 function ItemContainer(props: SelectItem & { onItemClick?: () => void }) {
     const className = twJoin(
-        props.disabled ? 'text-[#9EA0A1] cursor-not-allowed' : 'text-grey-800',
+        props.disabled ? 'text-grey-500 cursor-not-allowed' : 'text-grey-800',
         'flex h-full items-center gap-2 py-3 pl-3 text-start cursor-pointer outline-none last:rounded-b-xl',
     );
     return (

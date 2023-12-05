@@ -85,7 +85,7 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
         <form onSubmit={handleSubmit(props.onSubmit)}>
             <label
                 htmlFor="driveName"
-                className="mb-3 block font-semibold text-[#9EA0A1]"
+                className="mb-3 block font-semibold text-grey-500"
             >
                 Drive Name
             </label>
@@ -98,7 +98,7 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
             <Divider className="mb-[18px] mt-4" />
             <label
                 htmlFor="sharingType"
-                className="mb-3 block font-semibold text-[#9EA0A1]"
+                className="mb-3 block font-semibold text-grey-500"
             >
                 Sharing settings
             </label>
@@ -115,10 +115,10 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
             />
             <Divider className="my-3" />
             <div
-                className="flex cursor-pointer justify-between text-[#9EA0A1]"
+                className="flex cursor-pointer justify-between text-grey-500"
                 onClick={() => setShowLocationSettings(!showLocationSettings)}
             >
-                <h2 className=" font-semibold text-[#9EA0A1]">Location</h2>
+                <h2 className=" font-semibold text-grey-500">Location</h2>
                 <Icon
                     name="chevron-down"
                     className={twJoin(
@@ -156,7 +156,7 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
                         >
                             Make available offline
                         </label>
-                        <p className="text-xs text-[#9EA0A1]">
+                        <p className="text-xs text-grey-500">
                             Check this options if you keep a local backup
                             <br />
                             available at all times.
@@ -170,10 +170,10 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
             </div>
             <Divider className="my-3" />
             <div
-                className="flex cursor-pointer justify-between text-[#9EA0A1]"
+                className="flex cursor-pointer justify-between text-grey-500"
                 onClick={() => setShowDangerZone(!showDangerZone)}
             >
-                <h2 className=" font-semibold text-[#9EA0A1]">Danger zone</h2>
+                <h2 className=" font-semibold text-grey-500">Danger zone</h2>
                 <Icon
                     name="chevron-down"
                     className={twJoin(

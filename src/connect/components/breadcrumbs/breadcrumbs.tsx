@@ -31,7 +31,7 @@ export function Breadcrumbs(props: BreadcrumbsProps) {
         .map((_, index, arr) => arr.slice(0, index + 1).join('/'));
 
     return (
-        <div className="flex h-9 flex-row items-center gap-2 p-6 text-[#9EA0A1]">
+        <div className="flex h-9 flex-row items-center gap-2 p-6 text-grey-500">
             {filterSegments.map(routeSegment => (
                 <Breadcrumb
                     key={routeSegment}
