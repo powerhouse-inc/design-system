@@ -129,7 +129,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
             <div
                 className={twJoin(
                     'h-0.5 w-full',
-                    isDropDividerTarget && 'bg-[#3E90F0]',
+                    isDropDividerTarget && 'bg-blue-800',
                 )}
             />
         </div>

@@ -24,7 +24,9 @@ export const SidebarUser: React.FC<SidebarUserProps> = ({
         />
         <div className="collapsed:hidden expanding:hidden">
             <p className="text-sm font-semibold text-grey-800">{username}</p>
-            <p className="text-xs font-semibold text-[#94A3B8]">{address}</p>
+            <p className="text-text-grey-600 text-xs font-semibold">
+                {address}
+            </p>
         </div>
     </div>
 );

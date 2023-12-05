@@ -45,7 +45,7 @@ export const ConnectUpgradeDriveModal = (
             {...restProps}
         >
             <div className="w-[400px] p-6 text-slate-300">
-                <div className="border-b border-[#E5E7E8] pb-2 text-2xl font-bold text-grey-800">
+                <div className="border-b border-slate-50 pb-2 text-2xl font-bold text-grey-800">
                     {header}
                 </div>
                 <div className="my-6 rounded-md bg-slate-50 p-4 text-center text-slate-200">
@@ -56,7 +56,7 @@ export const ConnectUpgradeDriveModal = (
                         onPress={() => onOpenChange?.(false)}
                         className={twMerge(
                             buttonStyles,
-                            'flex-1 bg-slate-50 text-[##141718]',
+                            'flex-1 bg-slate-50 text-slate-800',
                         )}
                     >
                         {cancelLabel}
