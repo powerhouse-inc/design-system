@@ -43,7 +43,7 @@ export const Default: Story = {
         className:
             'bg-blue-500 text-white w-8 h-8 rounded justify-center items-center flex',
         menuClassName: 'bg-white cursor-pointer',
-        menuItemClassName: 'hover:bg-[#F1F5F9] px-2',
+        menuItemClassName: 'hover:bg-slate-50 px-2',
         items: [
             {
                 id: 'duplicate',
