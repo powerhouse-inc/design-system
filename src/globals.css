@@ -167,10 +167,6 @@
     --orange-900: hsl(var(--color-orange-900));
 }
 
-html {
-    --test: #000;
-}
-
 html:has(dialog[open]) {
     overflow: hidden;
 }
