@@ -143,12 +143,12 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
                     {locationInfo.icon}
                     <div>
                         <p>{locationInfo.title}</p>
-                        <p className="text-xs text-[#6C7275]">
+                        <p className="text-xs text-slate-200">
                             {locationInfo.description}
                         </p>
                     </div>
                 </div>
-                <div className="flex items-center rounded-xl bg-[#F4F4F4] p-3 text-[#6C7275]">
+                <div className="flex items-center rounded-xl bg-[#F4F4F4] p-3 text-slate-200">
                     <div className="flex-1">
                         <label
                             htmlFor="availableOffline"
@@ -212,7 +212,7 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
                     />
                     <button
                         onClick={props.onCancel}
-                        className="w-full rounded-xl border border-[#E7E9EA] bg-slate-50 px-6 py-3 text-center font-semibold text-[#6C7275] transition hover:opacity-80"
+                        className="w-full rounded-xl border border-[#E7E9EA] bg-slate-50 px-6 py-3 text-center font-semibold text-slate-200 transition hover:opacity-80"
                     >
                         Cancel
                     </button>

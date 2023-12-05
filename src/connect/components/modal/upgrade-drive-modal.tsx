@@ -48,7 +48,7 @@ export const ConnectUpgradeDriveModal = (
                 <div className="border-b border-[#E5E7E8] pb-2 text-2xl font-bold text-grey-800">
                     {header}
                 </div>
-                <div className="my-6 rounded-md bg-slate-50 p-4 text-center text-[#6C7275]">
+                <div className="my-6 rounded-md bg-slate-50 p-4 text-center text-slate-200">
                     {body}
                 </div>
                 <div className="mt-8 flex justify-between gap-3">

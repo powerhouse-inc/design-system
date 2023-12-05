@@ -82,7 +82,7 @@ export const FormInput = forwardRef(function FormInput(
                 )}
             >
                 <span
-                    className={twJoin((!dirty || isError) && 'text-[#6C7275]')}
+                    className={twJoin((!dirty || isError) && 'text-slate-200')}
                 >
                     {props.icon}
                 </span>
