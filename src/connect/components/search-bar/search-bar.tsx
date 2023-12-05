@@ -45,7 +45,7 @@ export const ConnectSearchBar: React.FC<ConnectSearchBarProps> = props => {
         <FilterItem item={selectedItemFilter} className="gap-x-1" />
     ) : (
         filterLabel && (
-            <div className="mr-2 text-sm font-semibold text-[#6F767E]">
+            <div className="mr-2 text-sm font-semibold text-slate-200">
                 {filterLabel}
             </div>
         )
@@ -76,7 +76,7 @@ export const ConnectSearchBar: React.FC<ConnectSearchBarProps> = props => {
             inputProps={{ placeholder, className: 'text-sm' }}
             {...mergeClassNameProps(
                 containerProps,
-                'text-[#6F767E] bg-grey-50 px-4 h-[52px] items-center rounded-xl border border-grey-200',
+                'text-slate-200 bg-grey-50 px-4 h-[52px] items-center rounded-xl border border-grey-200',
             )}
         />
     );
