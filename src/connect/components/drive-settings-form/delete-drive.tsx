@@ -44,7 +44,7 @@ export function DeleteDrive(props: DeleteDriveProps) {
                 <button
                     onClick={handleDeleteDrive}
                     disabled={!isAllowedToDelete}
-                    className="w-full rounded-xl bg-[#EA4335] px-6 py-3 text-[#EFEFEF] transition hover:brightness-125 disabled:cursor-not-allowed disabled:opacity-50 disabled:brightness-100"
+                    className="w-full rounded-xl bg-[#EA4335] px-6 py-3 text-grey-200 transition hover:brightness-125 disabled:cursor-not-allowed disabled:opacity-50 disabled:brightness-100"
                 >
                     Delete
                 </button>
