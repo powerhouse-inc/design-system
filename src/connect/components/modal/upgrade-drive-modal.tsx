@@ -44,7 +44,7 @@ export const ConnectUpgradeDriveModal = (
             onOpenChange={onOpenChange}
             {...restProps}
         >
-            <div className="w-[400px] p-6 text-[#565868]">
+            <div className="w-[400px] p-6 text-slate-300">
                 <div className="border-b border-[#E5E7E8] pb-2 text-2xl font-bold text-grey-800">
                     {header}
                 </div>

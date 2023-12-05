@@ -13,7 +13,7 @@ exports[`Modal Component > should match snapshot 1`] = `
   tabindex="-1"
 >
   <div
-    class="w-[465px] px-8 py-12 text-[#565868]"
+    class="w-[465px] px-8 py-12 text-slate-300"
   >
     <div
       class="text-center text-2xl font-semibold"

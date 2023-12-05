@@ -13,7 +13,7 @@ exports[`UpgradeDriveModal Component > should match snapshot 1`] = `
   tabindex="-1"
 >
   <div
-    class="w-[400px] p-6 text-[#565868]"
+    class="w-[400px] p-6 text-slate-300"
   >
     <div
       class="border-b border-[#E5E7E8] pb-2 text-2xl font-bold text-grey-800"

@@ -42,7 +42,7 @@ export const ConnectDeleteItemModal = (props: ConnectDeleteItemModalProps) => {
             onOpenChange={onOpenChange}
             {...restProps}
         >
-            <div className="w-[465px] px-8 py-12 text-[#565868]">
+            <div className="w-[465px] px-8 py-12 text-slate-300">
                 <div className="text-center text-2xl font-semibold">
                     {header}
                 </div>
