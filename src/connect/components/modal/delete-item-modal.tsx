@@ -61,7 +61,7 @@ export const ConnectDeleteItemModal = (props: ConnectDeleteItemModalProps) => {
                         onPress={onDelete}
                         className={twMerge(
                             buttonStyles,
-                            'bg-red-900 text-[#FEFEFE]',
+                            'bg-red-900 text-grey-50',
                         )}
                     >
                         {deleteLabel}

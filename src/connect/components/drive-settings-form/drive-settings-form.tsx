@@ -208,7 +208,7 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
                     <input
                         type="submit"
                         value="Confirm"
-                        className="mb-4 w-full cursor-pointer rounded-xl bg-grey-800 px-6 py-3 text-center font-semibold text-[#FEFEFE] transition hover:brightness-125"
+                        className="mb-4 w-full cursor-pointer rounded-xl bg-grey-800 px-6 py-3 text-center font-semibold text-grey-50 transition hover:brightness-125"
                     />
                     <button
                         onClick={props.onCancel}

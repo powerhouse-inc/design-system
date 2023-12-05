@@ -65,7 +65,7 @@ export const ConnectUpgradeDriveModal = (
                         onPress={onContinue}
                         className={twMerge(
                             buttonStyles,
-                            'flex-1 bg-grey-800 text-[#FEFEFE]',
+                            'flex-1 bg-grey-800 text-grey-50',
                         )}
                     >
                         {continueLabel}
