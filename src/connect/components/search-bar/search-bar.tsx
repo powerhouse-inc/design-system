@@ -59,7 +59,7 @@ export const ConnectSearchBar: React.FC<ConnectSearchBarProps> = props => {
             onItemClick={onFilterSelect}
             popoverProps={{ placement: 'bottom right', offset: 4 }}
             className="ml-3 flex h-full flex-row items-center outline-none"
-            menuClassName="bg-[#FCFCFC] border border-[#F4F4F4] rounded-xl p-2"
+            menuClassName="bg-grey-50 border border-[#F4F4F4] rounded-xl p-2"
             menuItemClassName="hover:bg-[#F4F4F4] rounded-lg overflow-hidden cursor-pointer h-10"
         >
             {filterLabelContent}
@@ -76,7 +76,7 @@ export const ConnectSearchBar: React.FC<ConnectSearchBarProps> = props => {
             inputProps={{ placeholder, className: 'text-sm' }}
             {...mergeClassNameProps(
                 containerProps,
-                'text-[#6F767E] bg-[#FCFCFC] px-4 h-[52px] items-center rounded-xl border border-[#EFEFEF]',
+                'text-[#6F767E] bg-grey-50 px-4 h-[52px] items-center rounded-xl border border-[#EFEFEF]',
             )}
         />
     );
