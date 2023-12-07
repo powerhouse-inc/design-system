@@ -42,3 +42,21 @@ export const sharingTypeOptions = [
         disabled: true,
     },
 ] as const;
+
+export const locationInfoByLocation = {
+    cloud: {
+        title: 'Secure cloud',
+        description: 'End to end encryption between members.',
+        icon: <Icon name="lock" />,
+    },
+    local: {
+        title: 'Local',
+        description: 'Private and only available to you.',
+        icon: <Icon name="hdd" />,
+    },
+    switchboard: {
+        title: 'Switchboard',
+        description: 'Public and available to everyone.',
+        icon: <Icon name="drive" />,
+    },
+} as const;

@@ -3,6 +3,7 @@ import {
     DriveSettingsSelect,
     SharingType,
     Toggle,
+    locationInfoByLocation,
     sharingTypeOptions,
 } from '@/connect';
 import { Icon } from '@/powerhouse';
@@ -39,30 +40,7 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
         },
     });
 
-    const locationInfo = getLocationInfo();
-
-    function getLocationInfo() {
-        switch (props.location) {
-            case 'cloud':
-                return {
-                    title: 'Secure cloud',
-                    description: 'End to end encryption between members.',
-                    icon: <Icon name="lock" />,
-                };
-            case 'local':
-                return {
-                    title: 'Local',
-                    description: 'Private and only available to you.',
-                    icon: <Icon name="hdd" />,
-                };
-            case 'switchboard':
-                return {
-                    title: 'Switchboard',
-                    description: 'Public and available to everyone.',
-                    icon: <Icon name="drive" />,
-                };
-        }
-    }
+    const locationInfo = locationInfoByLocation[props.location];
 
     return (
         <form onSubmit={handleSubmit(props.onSubmit)}>
@@ -111,13 +89,7 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
                     showLocationSettings && 'max-h-[100vh]',
                 )}
             >
-                <div
-                    className="my-3 flex items-center gap-2 rounded-xl border border-gray-100 p-3 text-gray-800"
-                    style={{
-                        boxShadow:
-                            '0px 4px 8px -4px rgba(0, 0, 0, 0.02), 0px -1px 1px 0px rgba(0, 0, 0, 0.04) inset',
-                    }}
-                >
+                <div className="my-3 flex items-center gap-2 rounded-xl border border-gray-100 p-3 text-gray-800 shadow">
                     {locationInfo.icon}
                     <div>
                         <p>{locationInfo.title}</p>
