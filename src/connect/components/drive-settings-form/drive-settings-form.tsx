@@ -1,15 +1,12 @@
-import {
-    Divider,
-    SharingType,
-    Toggle,
-    locationInfoByLocation,
-} from '@/connect';
+import { Divider, DriveLocation, SharingType, Toggle } from '@/connect';
 import { Icon } from '@/powerhouse';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { twJoin, twMerge } from 'tailwind-merge';
 import { DriveNameInput } from '../drive-name-input/drive-name-input';
 import { DeleteDrive } from './delete-drive';
+import { Disclosure } from './disclosure';
+import { LocationInfo } from './location-info';
 import { SharingTypeFormInput } from './sharing-type-form-input';
 
 export type Inputs = {
@@ -19,7 +16,7 @@ export type Inputs = {
 };
 
 export type DriveSettingsFormProps = Inputs & {
-    location: 'cloud' | 'local' | 'switchboard';
+    location: DriveLocation;
     onSubmit: DriveSettingsFormSubmitHandler;
     onCancel: () => void;
     onDeleteDrive: () => void;
@@ -39,8 +36,6 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
         },
     });
 
-    const locationInfo = locationInfoByLocation[props.location];
-
     return (
         <form onSubmit={handleSubmit(props.onSubmit)}>
             <label
@@ -59,34 +54,14 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
             </label>
             <SharingTypeFormInput control={control} />
             <Divider className="my-3" />
-            <div
-                className="flex cursor-pointer justify-between text-gray-500"
-                onClick={() => setShowLocationSettings(!showLocationSettings)}
+            <Disclosure
+                title="Location"
+                isOpen={showLocationSettings}
+                onOpenChange={() =>
+                    setShowLocationSettings(!showLocationSettings)
+                }
             >
-                <h2 className=" font-semibold text-gray-500">Location</h2>
-                <Icon
-                    name="chevron-down"
-                    className={twJoin(
-                        'transition',
-                        showLocationSettings ? '' : '-rotate-90',
-                    )}
-                />
-            </div>
-            <div
-                className={twMerge(
-                    'max-h-0 overflow-hidden transition-[max-height] duration-300 ease-in-out',
-                    showLocationSettings && 'max-h-[100vh]',
-                )}
-            >
-                <div className="my-3 flex items-center gap-2 rounded-xl border border-gray-100 p-3 text-gray-800 shadow">
-                    {locationInfo.icon}
-                    <div>
-                        <p>{locationInfo.title}</p>
-                        <p className="text-xs text-slate-200">
-                            {locationInfo.description}
-                        </p>
-                    </div>
-                </div>
+                <LocationInfo location={props.location} />
                 <div className="flex items-center rounded-xl bg-gray-100 p-3 text-slate-200">
                     <div className="flex-1">
                         <label
@@ -106,7 +81,7 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
                         {...register('availableOffline')}
                     />
                 </div>
-            </div>
+            </Disclosure>
             <Divider className="my-3" />
             <div
                 className="flex cursor-pointer justify-between text-gray-500"

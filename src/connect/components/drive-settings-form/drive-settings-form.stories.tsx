@@ -18,7 +18,7 @@ const Template: Story = {
         driveName: 'My Drive',
         sharingType: 'PRIVATE',
         availableOffline: false,
-        location: 'cloud',
+        location: 'CLOUD',
     },
     decorators: [
         Story => (
