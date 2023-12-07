@@ -1,19 +1,18 @@
 import {
     Divider,
-    DriveSettingsSelect,
     SharingType,
     Toggle,
     locationInfoByLocation,
-    sharingTypeOptions,
 } from '@/connect';
 import { Icon } from '@/powerhouse';
 import { useState } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { twJoin, twMerge } from 'tailwind-merge';
 import { DriveNameInput } from '../drive-name-input/drive-name-input';
 import { DeleteDrive } from './delete-drive';
+import { SharingTypeFormInput } from './sharing-type-form-input';
 
-type Inputs = {
+export type Inputs = {
     driveName: string;
     sharingType: SharingType;
     availableOffline: boolean;
@@ -58,17 +57,7 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
             >
                 Sharing settings
             </label>
-            <Controller
-                name="sharingType"
-                control={control}
-                render={({ field }) => (
-                    <DriveSettingsSelect
-                        {...field}
-                        id="sharingType"
-                        items={sharingTypeOptions}
-                    />
-                )}
-            />
+            <SharingTypeFormInput control={control} />
             <Divider className="my-3" />
             <div
                 className="flex cursor-pointer justify-between text-gray-500"
