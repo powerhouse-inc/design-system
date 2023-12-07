@@ -46,6 +46,14 @@ export const DefaultActive: Story = {
     },
 };
 
+export const DefaultDisabled: Story = {
+    ...Default,
+    args: {
+        ...Default.args,
+        disabled: true,
+    },
+};
+
 export const Light: Story = {
     ...Template,
     args: {
@@ -106,6 +114,14 @@ export const RedActive: Story = {
     },
 };
 
+export const RedDisabled: Story = {
+    ...Red,
+    args: {
+        ...Red.args,
+        disabled: true,
+    },
+};
+
 export const Blue: Story = {
     ...Template,
     args: {
@@ -129,6 +145,14 @@ export const BlueActive: Story = {
         pseudo: {
             active: true,
         },
+    },
+};
+
+export const BlueDisabled: Story = {
+    ...Blue,
+    args: {
+        ...Blue.args,
+        disabled: true,
     },
 };
 

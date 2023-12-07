@@ -23,7 +23,7 @@ export const Button = forwardRef(function Button(
     const colorAndSizeStyle = twJoin(getColorStyle(color), getSizeStyle(size));
 
     const finalClassName = twMerge(
-        'flex items-center justify-center gap-2 outline-none transition',
+        'flex items-center justify-center gap-2 border border-none outline-none transition',
         colorAndSizeStyle,
         className,
     );
@@ -49,15 +49,15 @@ function getColorStyle(color: ButtonProps['color']) {
     switch (color) {
         case 'light':
             return twJoin(
-                'active: border border-grey-200 bg-slate-50 text-grey-600 hover:text-grey-800 active:border-grey-500 disabled:text-grey-500',
+                'bg-gray-200 text-gray-700 hover:border-gray-300 active:border-slate-100 active:text-gray-600 disabled:text-gray-400',
             );
         case 'dark':
             return twJoin(
-                'border border-none bg-grey-800 text-grey-200 hover:bg-slate-600 active:border-slate-600',
+                'bg-gray-800 text-slate-50 hover:bg-slate-800 active:border-slate-700 disabled:bg-gray-300 disabled:text-slate-100',
             );
         case 'red':
-            return 'bg-red-900 text-grey-200 hover:opacity-80';
+            return 'bg-red-900 text-slate-50 hover:opacity-80 active:border-red-800 disabled:text-red-400';
         case 'blue':
-            return 'bg-blue-900 text-grey-200 hover:opacity-80';
+            return 'bg-blue-900 text-slate-50 hover:opacity-80 active:border-blue-800 disabled:text-blue-400';
     }
 }
