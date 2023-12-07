@@ -6,6 +6,7 @@ import { twJoin, twMerge } from 'tailwind-merge';
 import { DriveNameInput } from '../drive-name-input/drive-name-input';
 import { DeleteDrive } from './delete-drive';
 import { Disclosure } from './disclosure';
+import { Label } from './label';
 import { LocationInfo } from './location-info';
 import { SharingTypeFormInput } from './sharing-type-form-input';
 
@@ -38,20 +39,10 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
 
     return (
         <form onSubmit={handleSubmit(props.onSubmit)}>
-            <label
-                htmlFor="driveName"
-                className="mb-3 block font-semibold text-gray-500"
-            >
-                Drive Name
-            </label>
+            <Label htmlFor="driveName">Drive Name</Label>
             <DriveNameInput {...register('driveName')} />
             <Divider className="mb-[18px] mt-4" />
-            <label
-                htmlFor="sharingType"
-                className="mb-3 block font-semibold text-gray-500"
-            >
-                Sharing settings
-            </label>
+            <Label htmlFor="sharingType">Sharing settings</Label>
             <SharingTypeFormInput control={control} />
             <Divider className="my-3" />
             <Disclosure
@@ -119,11 +110,12 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
             ) : (
                 <>
                     <Divider className="my-3" />
-                    <input
+                    <button
                         type="submit"
-                        value="Confirm"
                         className="mb-4 w-full cursor-pointer rounded-xl bg-gray-800 px-6 py-3 text-center font-semibold text-gray-50 transition hover:brightness-125"
-                    />
+                    >
+                        Confirm
+                    </button>
                     <button
                         onClick={props.onCancel}
                         className="w-full rounded-xl border border-gray-200 bg-slate-50 px-6 py-3 text-center font-semibold text-slate-200 transition hover:opacity-80"
