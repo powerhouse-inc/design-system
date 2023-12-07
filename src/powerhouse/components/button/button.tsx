@@ -48,13 +48,9 @@ function getSizeStyle(size: ButtonProps['size']) {
 function getColorStyle(color: ButtonProps['color']) {
     switch (color) {
         case 'light':
-            return twJoin(
-                'bg-gray-200 text-gray-700 hover:border-gray-300 active:border-slate-100 active:text-gray-600 disabled:text-gray-400',
-            );
+            return 'bg-gray-200 text-gray-700 hover:border-gray-300 active:border-slate-100 active:text-gray-600 disabled:text-gray-400';
         case 'dark':
-            return twJoin(
-                'bg-gray-800 text-slate-50 hover:bg-slate-800 active:border-slate-700 disabled:bg-gray-300 disabled:text-slate-100',
-            );
+            return 'bg-gray-800 text-slate-50 hover:bg-slate-800 active:border-slate-700 disabled:bg-gray-300 disabled:text-slate-100';
         case 'red':
             return 'bg-red-900 text-slate-50 hover:opacity-80 active:border-red-800 disabled:text-red-400';
         case 'blue':
