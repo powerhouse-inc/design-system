@@ -1,14 +1,15 @@
 import {
     Divider,
     DriveSettingsSelect,
-    FormInput,
     SharingType,
     Toggle,
+    sharingTypeOptions,
 } from '@/connect';
 import { Icon } from '@/powerhouse';
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { twJoin, twMerge } from 'tailwind-merge';
+import { DriveNameInput } from '../drive-name-input/drive-name-input';
 import { DeleteDrive } from './delete-drive';
 
 type Inputs = {
@@ -38,24 +39,6 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
         },
     });
 
-    const sharingTypeOptions = [
-        {
-            value: 'PRIVATE',
-            icon: <Icon name="lock" />,
-            description: 'Only available to you',
-        },
-        {
-            value: 'SHARED',
-            icon: <Icon name="people" />,
-            description: 'Only available to people in this drive',
-        },
-        {
-            value: 'PUBLIC',
-            icon: <Icon name="globe" />,
-            description: 'Available to everyone',
-            disabled: true,
-        },
-    ];
     const locationInfo = getLocationInfo();
 
     function getLocationInfo() {
@@ -89,12 +72,7 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
             >
                 Drive Name
             </label>
-            <FormInput
-                icon={<Icon name="drive" />}
-                id="driveName"
-                required
-                {...register('driveName')}
-            />
+            <DriveNameInput {...register('driveName')} />
             <Divider className="mb-[18px] mt-4" />
             <label
                 htmlFor="sharingType"

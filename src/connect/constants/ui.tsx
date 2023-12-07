@@ -23,3 +23,22 @@ export const defaultDropdownMenuOptions = [
         className: 'text-red-900',
     },
 ] as const;
+
+export const sharingTypeOptions = [
+    {
+        value: 'PRIVATE',
+        icon: <Icon name="lock" />,
+        description: 'Only available to you',
+    },
+    {
+        value: 'SHARED',
+        icon: <Icon name="people" />,
+        description: 'Only available to people in this drive',
+    },
+    {
+        value: 'PUBLIC',
+        icon: <Icon name="globe" />,
+        description: 'Available to everyone',
+        disabled: true,
+    },
+] as const;

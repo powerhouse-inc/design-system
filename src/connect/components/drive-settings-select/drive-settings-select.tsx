@@ -10,7 +10,7 @@ export type SelectItem = {
 };
 
 export type DriveSettingsSelectProps = {
-    items: SelectItem[];
+    items: readonly SelectItem[];
     value: string;
     id: string;
     onChange: (value: string) => void;
@@ -78,7 +78,7 @@ function ItemContainer(props: SelectItem & { onItemClick?: () => void }) {
         <div className={className} onClick={props.onItemClick}>
             {props.icon}
             <div>
-                <p className="capitalize">{props.value}</p>
+                <p className="capitalize">{props.value.toLowerCase()}</p>
                 <p className="text-xs">{props.description}</p>
             </div>
         </div>
