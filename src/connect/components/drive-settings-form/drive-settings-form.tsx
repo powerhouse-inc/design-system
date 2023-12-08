@@ -1,5 +1,5 @@
 import { Divider, DriveLocation, SharingType } from '@/connect';
-import { Icon } from '@/powerhouse';
+import { Button, Icon } from '@/powerhouse';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { DriveNameInput } from '../drive-name-input/drive-name-input';
@@ -78,18 +78,9 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
             ) : (
                 <>
                     <Divider className="my-3" />
-                    <button
-                        type="submit"
-                        className="mb-4 w-full cursor-pointer rounded-xl bg-gray-800 px-6 py-3 text-center font-semibold text-gray-50 transition hover:brightness-125"
-                    >
+                    <Button type="submit" className="mb-4 w-full">
                         Confirm
-                    </button>
-                    <button
-                        onClick={props.onCancel}
-                        className="w-full rounded-xl border border-gray-200 bg-slate-50 px-6 py-3 text-center font-semibold text-slate-200 transition hover:opacity-80"
-                    >
-                        Cancel
-                    </button>
+                    </Button>
                 </>
             )}
         </form>
