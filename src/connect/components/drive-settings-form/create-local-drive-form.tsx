@@ -19,7 +19,6 @@ export type CreateLocalDriveFormProps = Inputs & {
     location: DriveLocation;
     onSubmit: CreateLocalDriveFormSubmitHandler;
     onCancel: () => void;
-    onDeleteDrive: () => void;
 };
 
 export type CreateLocalDriveFormSubmitHandler = SubmitHandler<Inputs>;
