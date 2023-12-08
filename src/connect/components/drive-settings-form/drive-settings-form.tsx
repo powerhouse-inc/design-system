@@ -1,9 +1,10 @@
-import { Divider, DriveLocation, SharingType, Toggle } from '@/connect';
+import { Divider, DriveLocation, SharingType } from '@/connect';
 import { Icon } from '@/powerhouse';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { twJoin, twMerge } from 'tailwind-merge';
 import { DriveNameInput } from '../drive-name-input/drive-name-input';
+import { AvailableOfflineToggle } from './available-offline-toggle';
 import { DeleteDrive } from './delete-drive';
 import { Disclosure } from './disclosure';
 import { Label } from './label';
@@ -53,25 +54,7 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
                 }
             >
                 <LocationInfo location={props.location} />
-                <div className="flex items-center rounded-xl bg-gray-100 p-3 text-slate-200">
-                    <div className="flex-1">
-                        <label
-                            htmlFor="availableOffline"
-                            className="font-semibold"
-                        >
-                            Make available offline
-                        </label>
-                        <p className="text-xs text-gray-500">
-                            Check this options if you keep a local backup
-                            <br />
-                            available at all times.
-                        </p>
-                    </div>
-                    <Toggle
-                        id="availableOffline"
-                        {...register('availableOffline')}
-                    />
-                </div>
+                <AvailableOfflineToggle {...register('availableOffline')} />
             </Disclosure>
             <Divider className="my-3" />
             <div
