@@ -4,13 +4,15 @@ import {
     FormEventHandler,
     ForwardedRef,
     forwardRef,
+    useCallback,
+    useEffect,
     useState,
 } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
 type InputProps = ComponentPropsWithRef<'input'>;
 type FormInputProps = Omit<InputProps, 'className'> & {
     icon: React.JSX.Element;
-    type?: 'text' | 'password' | 'email';
+    type?: 'text' | 'password' | 'email' | 'url';
     inputClassName?: string;
     containerClassName?: string;
     customErrorMessages?: {
@@ -20,6 +22,7 @@ type FormInputProps = Omit<InputProps, 'className'> & {
         typeMismatch?: React.ReactNode;
         valueMissing?: React.ReactNode;
     };
+    onError?: (error?: React.ReactNode) => void;
 };
 export const FormInput = forwardRef(function FormInput(
     props: FormInputProps,
@@ -29,6 +32,24 @@ export const FormInput = forwardRef(function FormInput(
     const [error, setError] = useState<React.ReactNode>('');
     const isError = error !== '';
     const type = props.type ?? 'text';
+    const {
+        icon,
+        containerClassName,
+        inputClassName,
+        onError,
+        ...delegatedProps
+    } = props;
+
+    const onErrorCallback = useCallback(
+        (error: React.ReactNode) => onError?.(error),
+        [onError],
+    );
+
+    useEffect(() => {
+        if (isError) {
+            onErrorCallback(error);
+        }
+    }, [error, isError, onErrorCallback]);
 
     const onBlur: FocusEventHandler<HTMLInputElement> = e => {
         const { validity, value } = e.currentTarget;
@@ -78,23 +99,23 @@ export const FormInput = forwardRef(function FormInput(
                 className={twMerge(
                     'mb-1 flex gap-2 rounded-xl border border-transparent bg-gray-100 p-3 text-gray-800 placeholder:text-gray-500',
                     isError && 'border-red-900',
-                    props.containerClassName,
+                    containerClassName,
                 )}
             >
                 <span
                     className={twJoin((!dirty || isError) && 'text-slate-200')}
                 >
-                    {props.icon}
+                    {icon}
                 </span>
                 <input
-                    {...props}
+                    {...delegatedProps}
                     type={type}
                     onBlur={onBlur}
                     onInput={onInput}
                     ref={ref}
                     className={twMerge(
                         'w-full bg-transparent font-semibold outline-none',
-                        props.inputClassName,
+                        inputClassName,
                     )}
                 />
             </div>
