@@ -2,7 +2,6 @@ import { Divider, DriveLocation, SharingType } from '@/connect';
 import { Icon } from '@/powerhouse';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { twJoin, twMerge } from 'tailwind-merge';
 import { DriveNameInput } from '../drive-name-input/drive-name-input';
 import { AvailableOfflineToggle } from './available-offline-toggle';
 import { DeleteDrive } from './delete-drive';
@@ -57,34 +56,20 @@ export function DriveSettingsForm(props: DriveSettingsFormProps) {
                 <AvailableOfflineToggle {...register('availableOffline')} />
             </Disclosure>
             <Divider className="my-3" />
-            <div
-                className="flex cursor-pointer justify-between text-gray-500"
-                onClick={() => setShowDangerZone(!showDangerZone)}
-            >
-                <h2 className=" font-semibold text-gray-500">Danger zone</h2>
-                <Icon
-                    name="chevron-down"
-                    className={twJoin(
-                        'transition',
-                        showDangerZone ? '' : '-rotate-90',
-                    )}
-                />
-            </div>
-            <div
-                className={twMerge(
-                    'max-h-0 overflow-hidden transition-[max-height] duration-300 ease-in-out',
-                    showDangerZone && 'max-h-[100vh]',
-                )}
+            <Disclosure
+                title="Danger zone"
+                isOpen={showDangerZone}
+                onOpenChange={() => setShowDangerZone(!showDangerZone)}
             >
                 <button
                     type="button"
-                    className="mt-3 flex gap-2 py-3 font-semibold text-red-900 transition hover:brightness-125"
+                    className="flex gap-2 py-3 font-semibold text-red-900 transition hover:brightness-125"
                     onClick={() => setShowDeleteDrive(true)}
                 >
                     <Icon name="trash" />
                     Delete drive
                 </button>
-            </div>
+            </Disclosure>
             {showDeleteDrive && showDangerZone ? (
                 <DeleteDrive
                     {...props}
