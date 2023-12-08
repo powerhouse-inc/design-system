@@ -1,5 +1,6 @@
 export type IconName =
     | 'arrow-left'
+    | 'arrow-up'
     | 'available'
     | 'bar-chart'
     | 'briefcase'
