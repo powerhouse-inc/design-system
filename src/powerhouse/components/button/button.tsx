@@ -26,16 +26,16 @@ export const Button = forwardRef(function Button(
     };
 
     const colorStyles = {
-        light: 'bg-gray-200 text-gray-700 hover:border-gray-300 active:border-slate-100 active:text-gray-600 disabled:text-gray-400',
+        light: 'bg-gray-200 text-gray-600 hover:text-grey-700 hover:border-gray-300 active:border-slate-100 active:text-gray-600 disabled:text-gray-400',
         dark: 'bg-gray-800 text-slate-50 hover:bg-slate-800 active:border-slate-700 disabled:bg-gray-300 disabled:text-slate-100',
-        red: 'bg-red-900 text-slate-50 hover:opacity-80 active:border-red-800 disabled:text-red-400',
-        blue: 'bg-blue-900 text-slate-50 hover:opacity-80 active:border-blue-800 disabled:text-blue-400',
+        red: 'bg-red-900 text-slate-50 hover:opacity-80 active:border-red-800 disabled:text-red-400 disabled:opacity-100',
+        blue: 'bg-blue-900 text-slate-50 hover:opacity-80 active:border-blue-800 disabled:text-blue-400 disabled:opacity-100',
     };
 
     const colorAndSizeStyle = twJoin(colorStyles[color], sizeStyles[size]);
 
     const finalClassName = twMerge(
-        'flex items-center justify-center gap-2 border border-none outline-none transition',
+        'flex items-center justify-center gap-2 border border-none outline-none transition disabled:cursor-not-allowed',
         colorAndSizeStyle,
         className,
     );
