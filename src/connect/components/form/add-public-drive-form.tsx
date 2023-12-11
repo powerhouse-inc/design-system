@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDebounce } from 'usehooks-ts';
 import { Disclosure } from '../disclosure';
-import { AvailableOfflineToggle } from './available-offline-toggle';
-import { Label } from './label';
-import { LocationInfo } from './location-info';
+import { AvailableOfflineToggle } from './inputs/available-offline-toggle';
+import { Label } from './inputs/label';
+import { LocationInfo } from './inputs/location-info';
 
 type PublicDriveDetails = {
     id: string;

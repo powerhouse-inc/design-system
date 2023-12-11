@@ -3,20 +3,20 @@ import { Button, Icon } from '@/powerhouse';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Disclosure } from '../disclosure';
-import { AvailableOfflineToggle } from './available-offline-toggle';
-import { DeleteDrive } from './delete-drive';
-import { DriveNameInput } from './drive-name-input';
-import { Label } from './label';
-import { LocationInfo } from './location-info';
-import { SharingTypeFormInput } from './sharing-type-form-input';
+import { AvailableOfflineToggle } from './inputs/available-offline-toggle';
+import { DeleteDrive } from './inputs/delete-drive';
+import { DriveNameInput } from './inputs/drive-name-input';
+import { Label } from './inputs/label';
+import { LocationInfo } from './inputs/location-info';
+import { SharingTypeFormInput } from './inputs/sharing-type-form-input';
 
-export type Inputs = {
+type Inputs = {
     driveName: string;
     sharingType: SharingType;
     availableOffline: boolean;
 };
 
-export type DriveSettingsFormProps = Inputs & {
+type DriveSettingsFormProps = Inputs & {
     location: DriveLocation;
     onSubmit: DriveSettingsFormSubmitHandler;
     onCancel: () => void;

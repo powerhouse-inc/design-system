@@ -3,25 +3,25 @@ import { Button, Icon } from '@/powerhouse';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Disclosure } from '../disclosure';
-import { AvailableOfflineToggle } from './available-offline-toggle';
-import { DriveNameInput } from './drive-name-input';
-import { Label } from './label';
-import { LocationInfo } from './location-info';
-import { SharingTypeFormInput } from './sharing-type-form-input';
+import { AvailableOfflineToggle } from './inputs/available-offline-toggle';
+import { DriveNameInput } from './inputs/drive-name-input';
+import { Label } from './inputs/label';
+import { LocationInfo } from './inputs/location-info';
+import { SharingTypeFormInput } from './inputs/sharing-type-form-input';
 
-export type Inputs = {
+type Inputs = {
     driveName: string;
     sharingType: SharingType;
     availableOffline: boolean;
 };
 
-export type CreateLocalDriveFormProps = Inputs & {
+type CreateLocalDriveFormProps = Inputs & {
     location: DriveLocation;
     onSubmit: CreateLocalDriveFormSubmitHandler;
     onCancel: () => void;
 };
 
-export type CreateLocalDriveFormSubmitHandler = SubmitHandler<Inputs>;
+type CreateLocalDriveFormSubmitHandler = SubmitHandler<Inputs>;
 
 export function CreateLocalDriveForm(props: CreateLocalDriveFormProps) {
     const [showLocationSettings, setShowLocationSettings] = useState(false);
