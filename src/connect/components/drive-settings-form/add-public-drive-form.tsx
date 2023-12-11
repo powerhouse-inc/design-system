@@ -71,6 +71,7 @@ export function AddPublicDriveForm(props: AddPublicDriveFormProps) {
         <Button
             type="button"
             color="light"
+            className="mt-4 w-full"
             onClick={e => {
                 e.preventDefault();
                 setHasConfirmedUrl(true);
@@ -82,7 +83,7 @@ export function AddPublicDriveForm(props: AddPublicDriveFormProps) {
     );
 
     const addDriveButton = (
-        <Button type="submit" color="dark">
+        <Button type="submit" color="dark" className="mt-4 w-full">
             Add drive
         </Button>
     );
@@ -105,22 +106,18 @@ export function AddPublicDriveForm(props: AddPublicDriveFormProps) {
                 errorOverride={errorMessage}
             />
             {hasConfirmedUrl && (
-                <>
-                    <Disclosure
-                        title="Location"
-                        isOpen={showLocationSettings}
-                        onOpenChange={() =>
-                            setShowLocationSettings(!showLocationSettings)
-                        }
-                    >
-                        <LocationInfo location="SWITCHBOARD" />
-                        <AvailableOfflineToggle
-                            {...register('availableOffline')}
-                        />
-                    </Disclosure>
-                    <Divider className="my-3" />
-                </>
+                <Disclosure
+                    title="Location"
+                    isOpen={showLocationSettings}
+                    onOpenChange={() =>
+                        setShowLocationSettings(!showLocationSettings)
+                    }
+                >
+                    <LocationInfo location="SWITCHBOARD" />
+                    <AvailableOfflineToggle {...register('availableOffline')} />
+                </Disclosure>
             )}
+            <Divider className="mb-3" />
             {hasConfirmedUrl ? addDriveButton : confirmDriveButton}
         </form>
     );
