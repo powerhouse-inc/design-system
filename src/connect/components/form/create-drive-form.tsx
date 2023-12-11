@@ -17,24 +17,26 @@ type Inputs = {
     driveName: string;
     sharingType: SharingType;
     availableOffline: boolean;
+    location: DriveLocation;
 };
 
-type CreateLocalDriveFormProps = Inputs & {
+type CreateDriveFormProps = {
     location: DriveLocation;
-    onSubmit: CreateLocalDriveFormSubmitHandler;
+    onSubmit: CreateDriveFormSubmitHandler;
     onCancel: () => void;
 };
 
-type CreateLocalDriveFormSubmitHandler = SubmitHandler<Inputs>;
+type CreateDriveFormSubmitHandler = SubmitHandler<Inputs>;
 
-export function CreateLocalDriveForm(props: CreateLocalDriveFormProps) {
+export function CreateDriveForm(props: CreateDriveFormProps) {
     const [showLocationSettings, setShowLocationSettings] = useState(false);
     const [showUpload, setShowUpload] = useState(false);
     const { register, handleSubmit, control } = useForm<Inputs>({
         defaultValues: {
-            driveName: props.driveName,
-            sharingType: props.sharingType,
-            availableOffline: props.availableOffline,
+            driveName: '',
+            sharingType: 'PRIVATE',
+            availableOffline: false,
+            location: props.location,
         },
     });
 

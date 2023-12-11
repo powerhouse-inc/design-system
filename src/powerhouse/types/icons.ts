@@ -25,6 +25,7 @@ export type IconName =
     | 'people'
     | 'person'
     | 'plus'
+    | 'plus-circle'
     | 'project'
     | 'search'
     | 'server'

@@ -1,16 +1,16 @@
-import { CreateLocalDriveForm, Divider } from '@/connect';
+import { CreateDriveForm, Divider } from '@/connect';
 import { DivProps, Modal } from '@/powerhouse';
 import { ComponentPropsWithoutRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 type ModalProps = ComponentPropsWithoutRef<typeof Modal>;
-type FormProps = ComponentPropsWithoutRef<typeof CreateLocalDriveForm>;
-export type CreateLocalDriveModalProps = {
+type FormProps = ComponentPropsWithoutRef<typeof CreateDriveForm>;
+export type CreateDriveModalProps = {
     formProps: FormProps;
     modalProps?: ModalProps;
     containerProps?: DivProps;
 };
-export function CreateLocalDriveModal(props: CreateLocalDriveModalProps) {
+export function CreateDriveModal(props: CreateDriveModalProps) {
     function handleCancel() {
         props.formProps.onCancel();
         props.modalProps?.onOpenChange?.(false);
@@ -31,10 +31,7 @@ export function CreateLocalDriveModal(props: CreateLocalDriveModalProps) {
             >
                 <h1 className="text-xl font-bold">Create new drive</h1>
                 <Divider className="mb-[18px] mt-4" />
-                <CreateLocalDriveForm
-                    {...props.formProps}
-                    onCancel={handleCancel}
-                />
+                <CreateDriveForm {...props.formProps} onCancel={handleCancel} />
             </div>
         </Modal>
     );
