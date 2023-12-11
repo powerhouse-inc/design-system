@@ -1,22 +1,24 @@
-import { DriveSettingsSelect, Inputs, sharingTypeOptions } from '@/connect';
+import { Select, SharingType, sharingTypeOptions } from '@/connect';
 import { ComponentPropsWithRef } from 'react';
-import { Control, Controller } from 'react-hook-form';
+import { Control, Controller, Path } from 'react-hook-form';
 
-type SharingTypeFormInputProps = Omit<
-    ComponentPropsWithRef<typeof DriveSettingsSelect>,
+type SharingTypeFormInputProps<T extends { sharingType: SharingType }> = Omit<
+    ComponentPropsWithRef<typeof Select>,
     'id' | 'items' | 'value' | 'onChange'
 > & {
-    control: Control<Inputs>;
+    control: Control<T>;
 };
-export function SharingTypeFormInput(props: SharingTypeFormInputProps) {
+export function SharingTypeFormInput<T extends { sharingType: SharingType }>(
+    props: SharingTypeFormInputProps<T>,
+) {
     const { control, ...delegatedProps } = props;
 
     return (
         <Controller
-            name="sharingType"
+            name={'sharingType' as Path<T>}
             control={control}
             render={({ field }) => (
-                <DriveSettingsSelect
+                <Select
                     {...delegatedProps}
                     {...field}
                     id="sharingType"
