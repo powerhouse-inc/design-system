@@ -2,6 +2,7 @@ import {
     AvailableOfflineToggle,
     Disclosure,
     Divider,
+    DriveName,
     FormInput,
     Label,
     LocationInfo,
@@ -70,27 +71,6 @@ export function AddPublicDriveForm(props: AddPublicDriveFormProps) {
         }
     }, [debouncedUrl, setValue]);
 
-    const confirmDriveButton = (
-        <Button
-            type="button"
-            color="light"
-            className="mt-4 w-full"
-            onClick={e => {
-                e.preventDefault();
-                setHasConfirmedUrl(true);
-            }}
-            disabled={!isUrlValid || url === ''}
-        >
-            Confirm URL
-        </Button>
-    );
-
-    const addDriveButton = (
-        <Button type="submit" color="dark" className="mt-4 w-full">
-            Add drive
-        </Button>
-    );
-
     function onSubmit({ availableOffline }: Inputs) {
         if (!publicDriveDetails) return;
         props.onSubmit({ ...publicDriveDetails, availableOffline, url });
@@ -99,29 +79,55 @@ export function AddPublicDriveForm(props: AddPublicDriveFormProps) {
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <Label htmlFor="url">Add existing drive</Label>
-            <FormInput
-                type="url"
-                icon={<Icon name="brick-globe" />}
-                value={url}
-                placeholder="Drive URL"
-                required
-                onChange={e => setUrl(e.target.value)}
-                errorOverride={errorMessage}
-            />
-            {hasConfirmedUrl && (
-                <Disclosure
-                    title="Location"
-                    isOpen={showLocationSettings}
-                    onOpenChange={() =>
-                        setShowLocationSettings(!showLocationSettings)
-                    }
-                >
-                    <LocationInfo location="SWITCHBOARD" />
-                    <AvailableOfflineToggle {...register('availableOffline')} />
-                </Disclosure>
+            {hasConfirmedUrl ? (
+                <>
+                    <DriveName
+                        driveName={publicDriveDetails?.driveName ?? 'New drive'}
+                    />
+                    <Divider className="my-3" />
+                    <Disclosure
+                        title="Location"
+                        isOpen={showLocationSettings}
+                        onOpenChange={() =>
+                            setShowLocationSettings(!showLocationSettings)
+                        }
+                    >
+                        <LocationInfo location="SWITCHBOARD" />
+                        <AvailableOfflineToggle
+                            {...register('availableOffline')}
+                        />
+                    </Disclosure>
+                    <Divider className="my-3" />
+                    <Button type="submit" color="dark" className="mt-4 w-full">
+                        Add drive
+                    </Button>
+                </>
+            ) : (
+                <>
+                    <FormInput
+                        type="url"
+                        icon={<Icon name="brick-globe" />}
+                        value={url}
+                        placeholder="Drive URL"
+                        required
+                        onChange={e => setUrl(e.target.value)}
+                        errorOverride={errorMessage}
+                    />
+                    <Divider className="mb-3" />
+                    <Button
+                        type="button"
+                        color="light"
+                        className="mt-4 w-full"
+                        onClick={e => {
+                            e.preventDefault();
+                            setHasConfirmedUrl(true);
+                        }}
+                        disabled={!isUrlValid || url === ''}
+                    >
+                        Confirm URL
+                    </Button>
+                </>
             )}
-            <Divider className="mb-3" />
-            {hasConfirmedUrl ? addDriveButton : confirmDriveButton}
         </form>
     );
 }
