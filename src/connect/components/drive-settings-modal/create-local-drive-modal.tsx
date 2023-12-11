@@ -2,7 +2,7 @@ import { DivProps, Modal } from '@/powerhouse';
 import { ComponentPropsWithoutRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { Divider } from '..';
-import { CreateLocalDriveForm } from '../drive-settings-form/create-local-drive-form';
+import { CreateLocalDriveForm } from '../form/create-local-drive-form';
 
 type ModalProps = ComponentPropsWithoutRef<typeof Modal>;
 type FormProps = ComponentPropsWithoutRef<typeof CreateLocalDriveForm>;
