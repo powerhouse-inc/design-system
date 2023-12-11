@@ -3,8 +3,8 @@ import { Button, Icon } from '@/powerhouse';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDebounce } from 'usehooks-ts';
+import { Disclosure } from '../disclosure';
 import { AvailableOfflineToggle } from './available-offline-toggle';
-import { Disclosure } from './disclosure';
 import { Label } from './label';
 import { LocationInfo } from './location-info';
 
