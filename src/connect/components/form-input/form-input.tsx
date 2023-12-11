@@ -1,7 +1,7 @@
 import {
+    ChangeEventHandler,
     ComponentPropsWithRef,
     FocusEventHandler,
-    FormEventHandler,
     ForwardedRef,
     forwardRef,
     useCallback,
@@ -22,28 +22,37 @@ type FormInputProps = Omit<InputProps, 'className'> & {
         typeMismatch?: React.ReactNode;
         valueMissing?: React.ReactNode;
     };
+    errorOverride?: React.ReactNode;
     onError?: (error?: React.ReactNode) => void;
 };
 export const FormInput = forwardRef(function FormInput(
     props: FormInputProps,
     ref: ForwardedRef<HTMLInputElement>,
 ) {
-    const [dirty, setDirty] = useState(props.value !== '');
-    const [error, setError] = useState<React.ReactNode>('');
-    const isError = error !== '';
-    const type = props.type ?? 'text';
     const {
         icon,
         containerClassName,
         inputClassName,
+        errorOverride,
         onError,
         ...delegatedProps
     } = props;
+
+    const [dirty, setDirty] = useState(props.value !== '');
+    const [error, setError] = useState<React.ReactNode>(errorOverride ?? '');
+    const isError = error !== '';
+    const type = props.type ?? 'text';
 
     const onErrorCallback = useCallback(
         (error: React.ReactNode) => onError?.(error),
         [onError],
     );
+
+    useEffect(() => {
+        if (errorOverride) {
+            setError(errorOverride);
+        }
+    }, [errorOverride]);
 
     useEffect(() => {
         if (isError) {
@@ -86,11 +95,11 @@ export const FormInput = forwardRef(function FormInput(
         props.onBlur?.(e);
     };
 
-    const onInput: FormEventHandler<HTMLInputElement> = e => {
+    const onChange: ChangeEventHandler<HTMLInputElement> = e => {
         if (e.currentTarget.value !== '') {
             setError('');
         }
-        props.onInput?.(e);
+        props.onChange?.(e);
     };
 
     return (
@@ -111,7 +120,7 @@ export const FormInput = forwardRef(function FormInput(
                     {...delegatedProps}
                     type={type}
                     onBlur={onBlur}
-                    onInput={onInput}
+                    onChange={onChange}
                     ref={ref}
                     className={twMerge(
                         'w-full bg-transparent font-semibold outline-none',

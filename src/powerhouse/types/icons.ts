@@ -3,6 +3,7 @@ export type IconName =
     | 'arrow-up'
     | 'available'
     | 'bar-chart'
+    | 'brick-globe'
     | 'briefcase'
     | 'caret'
     | 'check'
