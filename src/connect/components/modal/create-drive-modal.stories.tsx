@@ -14,9 +14,6 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
     args: {
         formProps: {
-            driveName: 'My Drive',
-            sharingType: 'PRIVATE',
-            availableOffline: false,
             location: 'CLOUD',
             onSubmit() {},
             onCancel() {},

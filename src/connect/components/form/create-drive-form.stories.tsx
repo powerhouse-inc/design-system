@@ -15,9 +15,6 @@ const Template: Story = {
         onSubmit: data => {
             console.log(data);
         },
-        driveName: 'My Drive',
-        sharingType: 'PRIVATE',
-        availableOffline: false,
         location: 'CLOUD',
     },
     decorators: [
