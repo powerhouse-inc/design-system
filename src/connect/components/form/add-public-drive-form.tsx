@@ -1,12 +1,15 @@
-import { Divider, FormInput } from '@/connect';
+import {
+    AvailableOfflineToggle,
+    Disclosure,
+    Divider,
+    FormInput,
+    Label,
+    LocationInfo,
+} from '@/connect';
 import { Button, Icon } from '@/powerhouse';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDebounce } from 'usehooks-ts';
-import { Disclosure } from '../disclosure';
-import { AvailableOfflineToggle } from './inputs/available-offline-toggle';
-import { Label } from './inputs/label';
-import { LocationInfo } from './inputs/location-info';
 
 type PublicDriveDetails = {
     id: string;

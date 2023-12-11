@@ -1,4 +1,5 @@
 export * from './breadcrumbs';
+export * from './disclosure';
 export * from './divider';
 export * from './drive-view';
 export * from './dropdown-menu';

@@ -1,8 +1,7 @@
+import { AddPublicDriveForm, Divider } from '@/connect';
 import { DivProps, Modal } from '@/powerhouse';
 import { ComponentPropsWithoutRef } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { Divider } from '..';
-import { AddPublicDriveForm } from '../form/add-public-drive-form';
 
 type ModalProps = ComponentPropsWithoutRef<typeof Modal>;
 type FormProps = ComponentPropsWithoutRef<typeof AddPublicDriveForm>;

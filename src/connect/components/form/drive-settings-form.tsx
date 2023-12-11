@@ -1,14 +1,18 @@
-import { Divider, DriveLocation, SharingType } from '@/connect';
+import {
+    AvailableOfflineToggle,
+    DeleteDrive,
+    Disclosure,
+    Divider,
+    DriveLocation,
+    DriveNameInput,
+    Label,
+    LocationInfo,
+    SharingType,
+    SharingTypeFormInput,
+} from '@/connect';
 import { Button, Icon } from '@/powerhouse';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Disclosure } from '../disclosure';
-import { AvailableOfflineToggle } from './inputs/available-offline-toggle';
-import { DeleteDrive } from './inputs/delete-drive';
-import { DriveNameInput } from './inputs/drive-name-input';
-import { Label } from './inputs/label';
-import { LocationInfo } from './inputs/location-info';
-import { SharingTypeFormInput } from './inputs/sharing-type-form-input';
 
 type Inputs = {
     driveName: string;

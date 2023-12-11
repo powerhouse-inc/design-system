@@ -1,6 +1,6 @@
+import { DriveNameInput } from '@/connect';
 import { Button, Icon } from '@/powerhouse';
 import { useState } from 'react';
-import { DriveNameInput } from './drive-name-input';
 
 export type DeleteDriveProps = {
     driveName: string;
