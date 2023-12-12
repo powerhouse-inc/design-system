@@ -44,7 +44,12 @@
         "@typescript-eslint/no-confusing-void-expression": "off",
         "@typescript-eslint/consistent-type-definitions": "off",
         "@typescript-eslint/no-empty-function": "off",
-        "@typescript-eslint/no-misused-promises": "off"
+        "@typescript-eslint/no-misused-promises": "off",
+        "tailwindcss/classnames-order": [
+            1, {
+                "callees": ["twMerge", "twJoin"]
+            }
+        ]
     },
     "settings": {
         "react": {
