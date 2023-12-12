@@ -1,3 +1,17 @@
+# [1.0.0-alpha.38](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.37...v1.0.0-alpha.38) (2023-12-12)
+
+
+### Bug Fixes
+
+* hover styles in FolderItem ([da6d610](https://github.com/powerhouse-inc/design-system/commit/da6d610c0c8d8d5d751ce9e1e143a5d4cf19522b))
+
+# [1.0.0-alpha.37](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.36...v1.0.0-alpha.37) (2023-12-12)
+
+
+### Features
+
+* 🚀 added FileItem and FolderItem Components ([64b8e65](https://github.com/powerhouse-inc/design-system/commit/64b8e6515ec4a3e7e5914bf1a3a274ac13ce2067))
+
 # [1.0.0-alpha.36](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.35...v1.0.0-alpha.36) (2023-12-06)
 
 
