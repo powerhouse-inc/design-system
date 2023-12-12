@@ -10,6 +10,7 @@
         "plugin:@typescript-eslint/strict-type-checked",
         "plugin:@typescript-eslint/stylistic-type-checked",
         "plugin:storybook/recommended",
+        "plugin:tailwindcss/recommended",
         "prettier"
     ],
     "overrides": [
