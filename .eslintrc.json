@@ -60,11 +60,6 @@
                 "callees": ["twMerge", "twJoin"]
             }
         ],
-        "tailwindcss/no-arbitrary-value": [
-            1, {
-                "callees": ["twMerge", "twJoin"]
-            }
-        ],
         "tailwindcss/no-contradicting-classname": [
             1, {
                 "callees": ["twMerge", "twJoin"]
