@@ -124,7 +124,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
     const bottomIndicator = (
         <div
             {...dropDividerProps}
-            className="absolute bottom-[-2px] z-[1] flex h-1 w-full flex-row items-center"
+            className="absolute -bottom-0.5 z-10 flex h-1 w-full flex-row items-center"
         >
             <div
                 className={twJoin(
