@@ -1,11 +1,9 @@
 import type { Config } from 'tailwindcss';
 import animate from 'tailwindcss-animate';
 import defaultTheme from 'tailwindcss/defaultTheme';
-// @ts-expect-error this is only used in legacy components and can be removed. it does not have a types file
-import themeSwapper from 'tailwindcss-theme-swapper';
 import plugin from 'tailwindcss/plugin';
 
-export const theme = {
+const theme = {
     fontFamily: {
         sans: ['Inter', ...defaultTheme.fontFamily.sans],
     },
@@ -22,7 +20,6 @@ export const theme = {
         '5xl': ['4rem', '5rem'],
     },
     colors: {
-        ...defaultTheme.colors,
         transparent: 'transparent',
         inherit: 'inherit',
         white: 'hsl(var(--color-white) / <alpha-value>)',
@@ -87,6 +84,7 @@ export const theme = {
     },
     boxShadow: {
         ...defaultTheme.boxShadow,
+        sidebar: 'var(--shadow-sidebar)',
         DEFAULT:
             '0px 4px 8px -4px rgba(0, 0, 0, 0.02), 0px -1px 1px 0px rgba(0, 0, 0, 0.04) inset',
     },
@@ -118,37 +116,8 @@ export const theme = {
     },
 } satisfies Config['theme'];
 
-export const plugins = [
+const plugins = [
     animate,
-    // todo: theme swapper is only used in legacy components and can be removed
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    themeSwapper({
-        themes: [
-            {
-                name: 'base',
-                selectors: ['[data-theme="ph-light"]'],
-                theme: {
-                    colors: {
-                        neutral: {
-                            1: '#FCFCFC',
-                            3: '#EFEFEF',
-                            4: '#6C7275',
-                        },
-                        bg: '#F4F4F4',
-                    },
-                },
-            },
-            {
-                name: 'dark',
-                selectors: ['[data-theme="ph-dark"]'],
-                theme: {
-                    colors: {
-                        bg: '#141718',
-                    },
-                },
-            },
-        ],
-    }),
     plugin(function ({ addVariant }) {
         addVariant('collapsed', ':merge(.group).collapsed &');
         addVariant('collapsing', ':merge(.group).collapsing &');
@@ -156,3 +125,8 @@ export const plugins = [
         addVariant('expanding', ':merge(.group).expanding &');
     }),
 ] satisfies Config['plugins'];
+
+export const designSystemPreset = {
+    theme,
+    plugins,
+};
