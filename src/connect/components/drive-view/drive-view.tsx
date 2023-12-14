@@ -107,7 +107,7 @@ export function DriveView(props: DriveViewProps) {
                     </button>
                 </div>
             </div>
-            <div className="p-2">
+            <div className="p-2 text-gray-800">
                 <ConnectTreeView
                     allowedPaths={allowedDrives}
                     disableHighlightStyles={disableHighlightStyles}
