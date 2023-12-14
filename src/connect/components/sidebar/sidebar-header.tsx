@@ -21,7 +21,7 @@ export const ConnectSidebarHeader: React.FC<ConnectSidebarHeaderProps> = ({
         >
             <input
                 placeholder="Create new document"
-                className="flex-1 rounded-md border border-gray-100 px-5 py-3 leading-none placeholder-shown:bg-transparent collapsed:hidden expanding:hidden"
+                className="flex-1 rounded-md border border-gray-100 px-5 py-3 leading-none text-gray-600 placeholder-shown:bg-transparent collapsed:hidden expanding:hidden"
             />
             <Button
                 className={`rounded-md border border-gray-100 p-3 outline-none hover:bg-slate-50
@@ -30,7 +30,7 @@ export const ConnectSidebarHeader: React.FC<ConnectSidebarHeaderProps> = ({
                 expanding:hidden`}
                 onPress={() => onToggle()}
             >
-                <Icon name="arrow-left" size={16} color="#7C878E" />
+                <Icon name="arrow-left" size={16} className="text-gray-600" />
             </Button>
         </SidebarHeader>
     );
