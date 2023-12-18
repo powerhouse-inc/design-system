@@ -11,7 +11,7 @@ import { FilterItem, FilterItemType } from './filter-item';
 export interface ConnectSearchBarProps extends TextInputProps {
     placeholder?: string;
     filterLabel?: string;
-    filterItems?: Array<FilterItemType>;
+    filterItems?: readonly FilterItemType[];
     selectedFilter?: string;
     onFilterSelect?: (filterId: string) => void;
 }

@@ -1,34 +1,6 @@
-import { Icon } from '@/powerhouse';
+import { defaultFilterItems } from '@/connect';
 import type { Meta, StoryObj } from '@storybook/react';
-import { ConnectSearchBar, ConnectSearchBarProps } from './search-bar';
-
-const filterItems: ConnectSearchBarProps['filterItems'] = [
-    {
-        id: 'project',
-        label: '.project',
-        icon: <Icon name="project" className="text-red-700" size={16} />,
-    },
-    {
-        id: 'budget',
-        label: '.budget',
-        icon: <Icon name="bar-chart" className="text-purple-900" size={16} />,
-    },
-    {
-        id: 'profile',
-        label: '.profile',
-        icon: <Icon name="person" className="text-blue-900" size={16} />,
-    },
-    {
-        id: 'legal',
-        label: '.legal',
-        icon: <Icon name="briefcase" className="text-green-900" size={16} />,
-    },
-    {
-        id: 'atlas',
-        label: '.Atlas',
-        icon: <Icon name="globe" className="text-orange-900" size={16} />,
-    },
-];
+import { ConnectSearchBar } from './search-bar';
 
 const meta: Meta<typeof ConnectSearchBar> = {
     title: 'Connect/Components/SearchBar',
@@ -42,7 +14,7 @@ const meta: Meta<typeof ConnectSearchBar> = {
         onFilterSelect: { control: { type: 'action' } },
         selectedFilter: {
             control: { type: 'select' },
-            options: [undefined, ...filterItems.map(item => item.id)],
+            options: [undefined, ...defaultFilterItems.map(item => item.id)],
         },
     },
 };
@@ -54,6 +26,6 @@ export const Primary: Story = {
     args: {
         placeholder: 'Search Files',
         filterLabel: 'File type',
-        filterItems,
+        filterItems: defaultFilterItems,
     },
 };
