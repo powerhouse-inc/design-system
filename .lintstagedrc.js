@@ -1,7 +1,3 @@
 export default {
-    './**/*.{js,jsx,ts,tsx,json}': [
-        'eslint --fix',
-        'vitest related --run',
-        'prettier --write',
-    ],
+    './**/*.{js,jsx,ts,tsx,json}': ['eslint --fix', 'vitest related --run'],
 };
