@@ -17,7 +17,7 @@
         "build": "yarn create-icon-name-type && vite build",
         "storybook": "yarn create-icon-name-type && storybook dev -p 6006",
         "build-storybook": "yarn create-icon-name-type && storybook build",
-        "check-types": "tsc --noEmit",
+        "check-types": "tsc",
         "lint": "eslint . && yarn check-types",
         "lint:fix": "eslint --fix . && yarn check-types",
         "test": "vitest run",
