@@ -23,7 +23,7 @@ export const Default: Story = {
         const [, setArgs] = useArgs<typeof args>();
 
         return (
-            <div className="h-screen w-screen bg-white">
+            <div className="size-screen bg-white">
                 <Modal
                     {...args}
                     open={args.open}
