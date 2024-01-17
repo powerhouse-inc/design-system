@@ -17,8 +17,9 @@
         "build": "yarn create-icon-name-type && vite build",
         "storybook": "yarn create-icon-name-type && storybook dev -p 6006",
         "build-storybook": "yarn create-icon-name-type && storybook build",
-        "lint": "eslint . && tsc",
-        "lint:fix": "eslint --fix . && tsc",
+        "check-types": "tsc --noEmit",
+        "lint": "eslint . && check-types",
+        "lint:fix": "eslint --fix . && check-types",
         "test": "vitest run",
         "test:watch": "vitest watch",
         "release": "semantic-release",
@@ -34,9 +35,6 @@
         "url": "https://github.com/powerhouse-inc/design-system/issues"
     },
     "homepage": "https://github.com/powerhouse-inc/design-system#readme",
-    "engines": {
-        "node": ">=18.17.0"
-    },
     "devDependencies": {
         "@commitlint/cli": "^18.4.4",
         "@commitlint/config-conventional": "^18.4.4",
