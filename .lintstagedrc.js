@@ -1,7 +1,7 @@
 export default {
     './**/*.{js,jsx,ts,tsx,json}': [
-        'yarn lint',
+        'eslint --fix',
         'vitest related --run',
-        'yarn format',
+        'prettier --write',
     ],
 };
