@@ -6,6 +6,14 @@ import { Row, SortDescriptor } from 'react-aria-components';
 import { twMerge } from 'tailwind-merge';
 import { RWATable, RWATableCell, RWATableProps } from '.';
 
+const unwantedFields: (keyof FixedIncome)[] = [
+    'marketValue',
+    'annualizedYield',
+    'totalSurplus',
+    'ISIN',
+    'CUSIP',
+];
+
 export type FixedIncome = {
     id: string;
     fixedIncomeTypeId: string;
@@ -28,16 +36,19 @@ export type FixedIncome = {
 };
 
 export type FixedIncomeAssetsTableProps = Omit<
-    RWATableProps<FixedIncome>,
+    RWATableProps<Partial<FixedIncome>>,
     'header' | 'renderRow'
 > & {
-    onClickDetails: (item: FixedIncome) => void;
+    onClickDetails: (item: Partial<FixedIncome>) => void;
 };
 
 export function FixedIncomeAssetsTable(props: FixedIncomeAssetsTableProps) {
     const headerLabels = makeHeaderLabels(props.items);
 
-    const { items, ...restProps } = props;
+    const { items: initialItems, ...restProps } = props;
+    const items = initialItems.map(item =>
+        removeUnwantedFieldsFromItem(item, unwantedFields),
+    );
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
         column: 'index',
         direction: 'ascending',
@@ -56,7 +67,7 @@ export function FixedIncomeAssetsTable(props: FixedIncomeAssetsTableProps) {
         );
     }, [sortDescriptor, items]);
 
-    function renderRow(item: FixedIncome, index: number) {
+    function renderRow(item: Partial<FixedIncome>, index: number) {
         return (
             <Row
                 key={item.id}
@@ -89,19 +100,37 @@ export function FixedIncomeAssetsTable(props: FixedIncomeAssetsTableProps) {
     );
 }
 
-export function makeHeaderLabels(items: FixedIncome[]) {
+export function makeHeaderLabels(items: Partial<FixedIncome>[]) {
     const index = { id: 'index', label: '#' };
     const moreDetails = { id: 'moreDetails', props: { allowsSorting: false } };
-    const headerLabelsFromItems = Object.keys(items[0])
+    const headerLabelsFromItems = Object.keys(
+        removeUnwantedFieldsFromItem(items[0], unwantedFields),
+    )
         .map(key => capitalCase(key))
         .map(key => key.replace('Id', 'ID'))
         .map(key =>
             key === 'Cusip' || key === 'Isin' ? key.toUpperCase() : key,
         )
+        .map(key => (key === 'ID' ? 'Asset ID' : key))
         .map(key => ({
             id: key,
             label: key,
         }));
 
     return [index, ...headerLabelsFromItems, moreDetails];
+}
+
+function removeUnwantedFieldsFromItem(
+    item: Partial<FixedIncome>,
+    unwantedFields: (keyof FixedIncome)[],
+) {
+    return Object.entries(item).reduce<Partial<FixedIncome>>(
+        (acc, [key, value]) => {
+            if (!unwantedFields.includes(key as keyof FixedIncome)) {
+                return { ...acc, [key]: value };
+            }
+            return acc;
+        },
+        {},
+    );
 }

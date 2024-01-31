@@ -47,11 +47,15 @@ export function RWATable<T extends object>(props: RWATableProps<T>) {
                 'relative inline-block max-h-[280px] overflow-auto rounded-lg border border-gray-300',
             )}
         >
-            <Table onSortChange={d => console.log(d)} {...tableProps}>
+            <Table
+                onSortChange={d => console.log(d)}
+                {...tableProps}
+                {...mergeClassNameProps(tableProps, 'table-fixed')}
+            >
                 <TableHeader
                     {...mergeClassNameProps(
                         tableHeaderProps,
-                        'sticky top-0 z-10 border-b border-gray-300 bg-gray-100 [&>tr>th:last-child]:border-l [&>tr>th:last-child]:border-gray-300',
+                        'sticky top-0 z-10 border-b border-gray-300 bg-gray-100 [&>tr>th:last-child]:border-l [&>tr>th:last-child]:border-gray-300 text-nowrap',
                     )}
                 >
                     {header.map(
