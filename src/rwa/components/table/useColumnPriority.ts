@@ -7,6 +7,13 @@ type Props<TItem extends Record<string, ReactNode>> = {
     fieldsPriority: (keyof TItem)[];
 };
 
+/**
+ * Allows a table to have a variable number of columns depending on the width of the parent element.
+ * @param columnCountByTableWidth - A map of table widths to the number of columns to display at that width.
+ * @param tableContainerRef - A ref to the table container element.
+ * @param fieldsPriority - The fields to display in the table, in order of priority.
+ * @returns An object containing the fields to display in the table and the header labels for those fields.
+ */
 export function useColumnPriority<TItem extends Record<string, ReactNode>>(
     props: Props<TItem>,
 ) {
