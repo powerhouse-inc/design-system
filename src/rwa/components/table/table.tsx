@@ -28,7 +28,21 @@ export interface RWATableProps<T extends object> extends DivProps {
     columnProps?: ColumnProps;
 }
 
-export function RWATable<T extends object>(props: RWATableProps<T>) {
+/** Allows using forward ref with generics.
+ * @see: https://www.totaltypescript.com/forwardref-with-generic-components
+ */
+// eslint-disable-next-line @typescript-eslint/ban-types
+function fixedForwardRef<T, P = {}>(
+    render: (props: P, ref: React.Ref<T>) => React.ReactNode,
+): (props: P & React.RefAttributes<T>) => React.ReactNode {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
+    return React.forwardRef(render) as any;
+}
+
+export const RWATable = fixedForwardRef(function RWATable<T extends object>(
+    props: RWATableProps<T>,
+    ref: React.ForwardedRef<HTMLDivElement>,
+) {
     const {
         header,
         items,
@@ -46,6 +60,7 @@ export function RWATable<T extends object>(props: RWATableProps<T>) {
                 containerProps,
                 'relative inline-block max-h-[280px] overflow-auto rounded-lg border border-gray-300',
             )}
+            ref={ref}
         >
             <Table
                 onSortChange={d => console.log(d)}
@@ -93,4 +108,4 @@ export function RWATable<T extends object>(props: RWATableProps<T>) {
             </Table>
         </div>
     );
-}
+});
