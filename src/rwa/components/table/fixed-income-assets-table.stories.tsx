@@ -3,8 +3,8 @@ import { mockFixedIncomeAssetsTableData } from './fixed-income-assets-mock-table
 import {
     FixedIncomeAssetsTable,
     columnCountByTableWidth,
-    getColumnCount,
 } from './fixed-income-assets-table';
+import { getColumnCount } from './useColumnPriority';
 
 const meta: Meta<typeof FixedIncomeAssetsTable> = {
     title: 'RWA/Components/FixedIncomeAssetsTable',
@@ -29,7 +29,10 @@ export const Primary: Story = {
                 .map(width => (
                     <div key={width} style={{ width: `${width}px` }}>
                         <p>parent element width: {width}px</p>
-                        <p>column count: {getColumnCount(width)}</p>
+                        <p>
+                            column count:{' '}
+                            {getColumnCount(width, columnCountByTableWidth)}
+                        </p>
                         <FixedIncomeAssetsTable {...args} />
                     </div>
                 ))}
