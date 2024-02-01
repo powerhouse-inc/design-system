@@ -1,10 +1,10 @@
 import { Icon } from '@/powerhouse';
-import { orderBy } from 'natural-orderby';
-import { useMemo, useRef, useState } from 'react';
-import { Row, SortDescriptor } from 'react-aria-components';
+import { useRef } from 'react';
+import { Row } from 'react-aria-components';
 import { twMerge } from 'tailwind-merge';
 import { RWATable, RWATableCell, RWATableProps } from '.';
 import { useColumnPriority } from './useColumnPriority';
+import { useSortTableItems } from './useSortTableItems';
 
 const fieldsPriority: (keyof FixedIncome)[] = [
     'id',
@@ -68,23 +68,8 @@ export function FixedIncomeAssetsTable(props: FixedIncomeAssetsTableProps) {
         tableContainerRef,
     });
 
-    const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-        column: 'index',
-        direction: 'ascending',
-    });
-
-    const onSortChange = (sortDescriptor: SortDescriptor) => {
-        setSortDescriptor(sortDescriptor);
-    };
-
-    const sortedItems = useMemo(() => {
-        const order = sortDescriptor.direction === 'ascending' ? 'asc' : 'desc';
-        return orderBy(
-            items,
-            [sortDescriptor.column as keyof FixedIncome],
-            [order],
-        );
-    }, [sortDescriptor, items]);
+    const { sortDescriptor, onSortChange, sortedItems } =
+        useSortTableItems(items);
 
     function renderRow(item: Partial<FixedIncome>, index: number) {
         return (
