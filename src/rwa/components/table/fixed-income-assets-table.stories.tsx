@@ -1,6 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { mockFixedIncomeAssetsTableData } from './fixed-income-assets-mock-table-data';
-import { FixedIncomeAssetsTable } from './fixed-income-assets-table';
+import {
+    FixedIncomeAssetsTable,
+    columnCountByTableWidth,
+    getColumnCount,
+} from './fixed-income-assets-table';
 
 const meta: Meta<typeof FixedIncomeAssetsTable> = {
     title: 'RWA/Components/FixedIncomeAssetsTable',
@@ -17,5 +21,18 @@ export const Primary: Story = {
     args: {
         items: mockFixedIncomeAssetsTableData,
     },
-    render: args => <FixedIncomeAssetsTable {...args} />,
+    render: args => (
+        <div className="flex flex-col gap-4">
+            {Object.keys(columnCountByTableWidth)
+                .map(Number)
+                .map(width => width + 50)
+                .map(width => (
+                    <div key={width} style={{ width: `${width}px` }}>
+                        <p>parent element width: {width}px</p>
+                        <p>column count: {getColumnCount(width)}</p>
+                        <FixedIncomeAssetsTable {...args} />
+                    </div>
+                ))}
+        </div>
+    ),
 };

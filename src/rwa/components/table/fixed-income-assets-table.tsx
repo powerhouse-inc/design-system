@@ -1,18 +1,54 @@
 import { Icon } from '@/powerhouse';
 import { capitalCase } from 'change-case';
 import { orderBy } from 'natural-orderby';
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Row, SortDescriptor } from 'react-aria-components';
 import { twMerge } from 'tailwind-merge';
 import { RWATable, RWATableCell, RWATableProps } from '.';
 
-const unwantedFields: (keyof FixedIncome)[] = [
+const fieldsPriority: (keyof FixedIncome)[] = [
+    'id',
+    'name',
+    'maturity',
+    'notional',
+    'coupon',
+    'purchasePrice',
+    'realizedSurplus',
+    'purchaseDate',
+    'totalDiscount',
+    'purchaseProceeds',
+    'currentValue',
     'marketValue',
-    'annualizedYield',
-    'totalSurplus',
-    'ISIN',
-    'CUSIP',
 ];
+
+export const columnCountByTableWidth = {
+    '1520': 12,
+    '1394': 11,
+    '1239': 10,
+    '1112': 9,
+    '984': 8,
+};
+
+type TableWidth = keyof typeof columnCountByTableWidth;
+
+export function getColumnCount(parentElementWidth: number) {
+    let closestKey: TableWidth = '1520';
+    let smallestDifference = Infinity;
+
+    Object.keys(columnCountByTableWidth).forEach(columnWidthKey => {
+        const columnWidth = parseInt(columnWidthKey, 10);
+        const difference = Math.abs(parentElementWidth - columnWidth);
+
+        if (difference < smallestDifference) {
+            smallestDifference = difference;
+            closestKey = columnWidthKey as TableWidth;
+        }
+    });
+
+    const columnCount = columnCountByTableWidth[closestKey];
+
+    return columnCount;
+}
 
 export type FixedIncome = {
     id: string;
@@ -43,12 +79,35 @@ export type FixedIncomeAssetsTableProps = Omit<
 };
 
 export function FixedIncomeAssetsTable(props: FixedIncomeAssetsTableProps) {
-    const headerLabels = makeHeaderLabels(props.items);
+    const [parentWidth, setParentWidth] = useState(0);
+    const [fields, setFields] = useState(fieldsPriority);
+    const headerLabels = makeHeaderLabels(fields);
 
-    const { items: initialItems, ...restProps } = props;
-    const items = initialItems.map(item =>
-        removeUnwantedFieldsFromItem(item, unwantedFields),
-    );
+    const { items, ...restProps } = props;
+
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    function handleResize() {
+        if (containerRef.current?.parentElement) {
+            setParentWidth(containerRef.current.parentElement.offsetWidth);
+        }
+    }
+
+    const handleDropFields = useCallback(() => {
+        const columnCount = getColumnCount(parentWidth);
+        setFields(fieldsPriority.slice(0, columnCount));
+    }, [parentWidth]);
+
+    useEffect(() => {
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    useEffect(() => {
+        handleDropFields();
+    }, [handleDropFields, parentWidth]);
+
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
         column: 'index',
         direction: 'ascending',
@@ -77,8 +136,10 @@ export function FixedIncomeAssetsTable(props: FixedIncomeAssetsTableProps) {
                 )}
             >
                 <RWATableCell>{index + 1}</RWATableCell>
-                {Object.entries(item).map(([key, value]) => (
-                    <RWATableCell key={key}>{value}</RWATableCell>
+                {fields.map(field => (
+                    <RWATableCell key={field}>
+                        {item[field] ?? '-'}
+                    </RWATableCell>
                 ))}
                 <RWATableCell>
                     <button onClick={() => props.onClickDetails(item)}>
@@ -92,6 +153,7 @@ export function FixedIncomeAssetsTable(props: FixedIncomeAssetsTableProps) {
     return (
         <RWATable
             {...restProps}
+            ref={containerRef}
             items={sortedItems}
             header={headerLabels}
             renderRow={renderRow}
@@ -100,37 +162,18 @@ export function FixedIncomeAssetsTable(props: FixedIncomeAssetsTableProps) {
     );
 }
 
-export function makeHeaderLabels(items: Partial<FixedIncome>[]) {
+export function makeHeaderLabels(fields: (keyof FixedIncome)[]) {
     const index = { id: 'index', label: '#' };
     const moreDetails = { id: 'moreDetails', props: { allowsSorting: false } };
-    const headerLabelsFromItems = Object.keys(
-        removeUnwantedFieldsFromItem(items[0], unwantedFields),
-    )
-        .map(key => capitalCase(key))
-        .map(key => key.replace('Id', 'ID'))
-        .map(key =>
-            key === 'Cusip' || key === 'Isin' ? key.toUpperCase() : key,
-        )
-        .map(key => (key === 'ID' ? 'Asset ID' : key))
-        .map(key => ({
-            id: key,
-            label: key,
+    const headerLabelsFromItems = fields
+        .map(field => ({
+            id: field,
+            label: field,
+        }))
+        .map(field => ({
+            ...field,
+            label: capitalCase(field.label).replace('Id', 'ID'),
         }));
 
     return [index, ...headerLabelsFromItems, moreDetails];
-}
-
-function removeUnwantedFieldsFromItem(
-    item: Partial<FixedIncome>,
-    unwantedFields: (keyof FixedIncome)[],
-) {
-    return Object.entries(item).reduce<Partial<FixedIncome>>(
-        (acc, [key, value]) => {
-            if (!unwantedFields.includes(key as keyof FixedIncome)) {
-                return { ...acc, [key]: value };
-            }
-            return acc;
-        },
-        {},
-    );
 }
