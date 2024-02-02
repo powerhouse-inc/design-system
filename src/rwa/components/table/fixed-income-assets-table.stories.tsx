@@ -23,6 +23,10 @@ export const Primary: Story = {
     },
     render: args => (
         <div className="flex flex-col gap-4">
+            <div className="w-screen">
+                <p>parent element width: 100%</p>
+                <FixedIncomeAssetsTable {...args} />
+            </div>
             {Object.keys(columnCountByTableWidth)
                 .map(Number)
                 .map(width => width + 50)
