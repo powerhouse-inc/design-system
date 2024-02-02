@@ -5,6 +5,8 @@ type Props<TItem extends Record<string, ReactNode>> = {
     columnCountByTableWidth: Record<string, number>;
     tableContainerRef: React.RefObject<HTMLDivElement>;
     fieldsPriority: (keyof TItem)[];
+    hasIndexColumn?: boolean;
+    hasMoreDetailsColumn?: boolean;
 };
 
 /**
@@ -17,8 +19,14 @@ type Props<TItem extends Record<string, ReactNode>> = {
 export function useColumnPriority<TItem extends Record<string, ReactNode>>(
     props: Props<TItem>,
 ) {
-    const { columnCountByTableWidth, tableContainerRef, fieldsPriority } =
-        props;
+    const {
+        columnCountByTableWidth,
+        tableContainerRef,
+        fieldsPriority,
+        hasIndexColumn = true,
+        hasMoreDetailsColumn = true,
+    } = props;
+
     const [parentWidth, setParentWidth] = useState(0);
     const [fields, setFields] = useState(fieldsPriority);
     const headerLabels = makeHeaderLabels(fields);
@@ -44,11 +52,13 @@ export function useColumnPriority<TItem extends Record<string, ReactNode>>(
     }, [handleResize]);
 
     function makeHeaderLabels(fields: (keyof TItem)[]) {
-        const index = { id: 'index', label: '#' };
-        const moreDetails = {
-            id: 'moreDetails',
-            props: { allowsSorting: false },
-        };
+        const index = hasIndexColumn ? { id: 'index', label: '#' } : undefined;
+        const moreDetails = hasMoreDetailsColumn
+            ? {
+                  id: 'moreDetails',
+                  props: { allowsSorting: false },
+              }
+            : undefined;
         const headerLabelsFromItems = fields
             .map(field => ({
                 id: field,
@@ -59,7 +69,7 @@ export function useColumnPriority<TItem extends Record<string, ReactNode>>(
                 label: capitalCase(field.label.toString()).replace('Id', 'ID'),
             }));
 
-        return [index, ...headerLabelsFromItems, moreDetails];
+        return [index, ...headerLabelsFromItems, moreDetails].filter(Boolean);
     }
 
     useEffect(() => {
@@ -74,20 +84,18 @@ export function useColumnPriority<TItem extends Record<string, ReactNode>>(
 
 export function getColumnCount(
     parentElementWidth: number,
-    columnCountByTableWidth: Record<string, number>,
+    columnCountByTableWidth: Record<number, number>,
 ) {
-    type TableWidth = keyof typeof columnCountByTableWidth;
-
-    let closestKey: TableWidth = '1520';
+    let closestKey = 1520;
     let smallestDifference = Infinity;
 
     Object.keys(columnCountByTableWidth).forEach(columnWidthKey => {
-        const columnWidth = parseInt(columnWidthKey, 10);
+        const columnWidth = parseInt(columnWidthKey);
         const difference = Math.abs(parentElementWidth - columnWidth);
 
         if (difference < smallestDifference) {
             smallestDifference = difference;
-            closestKey = columnWidthKey;
+            closestKey = parseInt(columnWidthKey);
         }
     });
 

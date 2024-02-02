@@ -22,11 +22,11 @@ const fieldsPriority: (keyof FixedIncome)[] = [
 ] as const;
 
 export const columnCountByTableWidth = {
-    '1520': 12,
-    '1394': 11,
-    '1239': 10,
-    '1112': 9,
-    '984': 8,
+    1520: 12,
+    1394: 11,
+    1239: 10,
+    1112: 9,
+    984: 8,
 } as const;
 
 export type FixedIncome = {
