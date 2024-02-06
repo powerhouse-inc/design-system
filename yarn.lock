@@ -6522,9 +6522,9 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
-document-drive@powerhouse-inc/document-drive#12d3656:
+document-drive@powerhouse-inc/document-drive#3f8c295:
   version "0.0.23"
-  resolved "https://codeload.github.com/powerhouse-inc/document-drive/tar.gz/12d36568a3d6a14c2747a65280357c5a64ac5df4"
+  resolved "https://codeload.github.com/powerhouse-inc/document-drive/tar.gz/3f8c29573cbd08f071492b56f4b31f688af7c9db"
   dependencies:
     graphql "^16.8.1"
     graphql-request "^6.1.0"
