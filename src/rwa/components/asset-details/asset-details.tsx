@@ -2,7 +2,12 @@ import { DivProps, Icon, mergeClassNameProps } from '@/powerhouse';
 import { parseDate } from '@internationalized/date';
 import React from 'react';
 import { UseFormReset, useForm } from 'react-hook-form';
-import { FixedIncomeAsset, RWAComponentMode } from '../../types';
+import {
+    FixedIncomeAsset,
+    FixedIncomeType,
+    RWAComponentMode,
+    SPV,
+} from '../../types';
 import { RWAButton } from '../button';
 import {
     RWAFormRow,
@@ -37,8 +42,8 @@ export interface RWAAssetDetailsProps extends DivProps {
     asset: FixedIncomeAsset;
     operation?: 'create' | 'edit';
     mode?: RWAComponentMode;
-    fixedIncomeTypes: { id: string; name: string }[];
-    spvs: { id: string; name: string }[];
+    fixedIncomeTypes: FixedIncomeType[];
+    spvs: SPV[];
     onClose?: () => void;
     onCancel: (reset: UseFormReset<RWAAssetDetailInputs>) => void;
     onEdit: () => void;
