@@ -8,7 +8,7 @@ import { twMerge } from 'tailwind-merge';
 import { RWAAssetDetails } from '../asset-details';
 import { RWATableRow } from './expandable-row';
 import {
-    mockFixedIncomeAssetsTableData,
+    mockFixedIncomeAssets,
     mockFixedIncomeTypes,
     mockSpvs,
 } from './fixed-income-assets-mock-table-data';
@@ -42,7 +42,7 @@ export const Primary: Story = {
             { id: 'notional', label: 'Notional', allowSorting: true },
             { id: 'moreDetails' },
         ],
-        items: mockFixedIncomeAssetsTableData,
+        items: mockFixedIncomeAssets,
         renderRow: (item, index) => (
             <tr
                 key={item.id}

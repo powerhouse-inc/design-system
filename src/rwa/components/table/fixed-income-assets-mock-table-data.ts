@@ -12,7 +12,7 @@ export const mockSpvs = [
     { id: '3', name: 'SPV 3' },
 ];
 
-export const mockFixedIncomeAssetsTableData: FixedIncomeAsset[] = [
+export const mockFixedIncomeAssets: FixedIncomeAsset[] = [
     {
         id: '137418',
         fixedIncomeTypeId: '1',

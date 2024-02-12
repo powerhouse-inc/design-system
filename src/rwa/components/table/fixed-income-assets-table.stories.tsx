@@ -4,7 +4,7 @@ import { utils } from 'document-model/document';
 import { useCallback, useState } from 'react';
 import { RWAAssetDetailInputs } from '../asset-details/form';
 import {
-    mockFixedIncomeAssetsTableData,
+    mockFixedIncomeAssets,
     mockFixedIncomeTypes,
     mockSpvs,
 } from './fixed-income-assets-mock-table-data';
@@ -62,7 +62,7 @@ function createAssetFromFormInputs(data: RWAAssetDetailInputs) {
 
 export const Primary: Story = {
     args: {
-        items: mockFixedIncomeAssetsTableData,
+        items: mockFixedIncomeAssets,
         fixedIncomeTypes: mockFixedIncomeTypes,
         spvs: mockSpvs,
         fieldsPriority,

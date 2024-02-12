@@ -1,23 +1,43 @@
 import { Icon } from '@/powerhouse';
-import { CalendarDate } from '@internationalized/date';
+import { FixedIncomeAsset } from '@/rwa';
+import { CalendarDate, parseDate } from '@internationalized/date';
 import React from 'react';
-import { Control, useForm } from 'react-hook-form';
-import { RWAComponentMode } from '../../types';
+import { SubmitHandler, UseFormReset, useForm } from 'react-hook-form';
 import { RWAButton } from '../button';
-import { RWAFeeInputs, RWAFeesTable, RWAFeesTableProps } from '../fees-table';
 import {
     RWAFormRow,
     RWATableDatePicker,
     RWATableSelect,
-    RWATableSelectProps,
     RWATableTextInput,
 } from '../table-inputs';
-import { RWATxDetailInputs } from './form';
+
+export const groupTransactionTypes = [
+    'AssetPurchaseGroupTransaction',
+    'AssetSaleGroupTransaction',
+] as const;
+
+export type GroupTransactionType = (typeof groupTransactionTypes)[number];
+
+export type AssetGroupTransaction = {
+    id: string;
+    type: GroupTransactionType;
+    cashTransaction: BaseTransaction;
+    fixedIncomeTransaction: BaseTransaction;
+};
+
+export type CashAsset = {
+    id: string;
+    spvId: string;
+    currency: string;
+};
+
+export type Asset = CashAsset | FixedIncomeAsset;
 
 const defaultLabels = {
     transaction: 'Transaction',
     editTransaction: 'Edit Transaction',
     saveEdits: 'Save Edits',
+    saveNewTransaction: 'Save New Transaction',
     cancelEdits: 'Cancel',
     assetType: 'Asset Type',
     timestamp: 'Timestamp',
@@ -43,74 +63,105 @@ export type RWATransactionFee = {
     fee: number;
 };
 
-export type RWATransaction = {
-    id: string | number;
-    assetTypeId: string;
-    timestamp: CalendarDate;
-    cusipIsinAssetNameId: string;
-    transactionType: string;
-    assetProceedsUSD: string;
-    unitPrice: string;
-    fees: RWATransactionFee[];
-    cashBalanceChange: string;
+export type BaseTransaction = {
+    id: string;
+    assetId: string;
+    amount: number;
+    entryTime: string;
+    tradeTime?: string;
+    settlementTime?: string;
+    txRef?: string;
+    accountId?: string;
+    counterPartyAccountId?: string;
 };
-export interface RWATXDetailProps {
-    mode?: RWAComponentMode;
-    onEdit?: () => void;
-    onSubmit: (data: RWATxDetailInputs) => void;
-    onCancel: () => void;
-    tx: RWATransaction;
-    cusipIsinAssetNameOptions: RWATableSelectProps<RWATxDetailInputs>['options'];
-    assetTypeOptions: RWATableSelectProps<RWATxDetailInputs>['options'];
-    labels?: {
-        transaction?: string;
-        editTransaction?: string;
-        saveEdits?: string;
-        cancelEdits?: string;
-        assetType?: string;
-        timestamp?: string;
-        cusipIsinAssetName?: string;
-        transactionType?: string;
-        assetProceedsUSD?: string;
-        unitPrice?: string;
-        fees?: string;
-        feesTable?: RWAFeesTableProps['labels'];
-        cashBalanceChange?: string;
-    };
-}
 
+export type TransactionDetailInputs = {
+    cashAssetId: string;
+    cashAmount: number;
+    cashEntryTime: CalendarDate;
+    cashCounterPartyAccountId: string;
+    fixedIncomeAssetId: string;
+    fixedIncomeAssetAmount: number;
+    fixedIncomeAssetEntryTime: CalendarDate;
+};
+
+export interface RWATXDetailProps {
+    transaction: Partial<AssetGroupTransaction>;
+    operation: 'view' | 'create' | 'edit';
+    cashAssets: CashAsset[];
+    fixedIncomeAssets: FixedIncomeAsset[];
+    onCancel: (reset: UseFormReset<TransactionDetailInputs>) => void;
+    selectItemToEdit?: () => void;
+    onSubmitForm: (data: TransactionDetailInputs) => void;
+    labels?: typeof defaultLabels;
+    hideNonEditableFields?: boolean;
+}
 export const RWATXDetail: React.FC<RWATXDetailProps> = props => {
     const {
-        tx,
-        onEdit,
+        transaction,
+        operation = 'view',
+        cashAssets,
+        fixedIncomeAssets,
         onCancel,
-        onSubmit,
-        mode = 'view',
-        assetTypeOptions,
+        selectItemToEdit,
+        onSubmitForm,
         labels = defaultLabels,
-        cusipIsinAssetNameOptions,
+        // hideNonEditableFields,
     } = props;
 
-    const { control, handleSubmit } = useForm<RWATxDetailInputs>({
+    const cashAssetOptions = cashAssets.map(({ id, currency }) => ({
+        label: currency,
+        id,
+    }));
+    const fixedIncomeAssetOptions = fixedIncomeAssets.map(({ id, name }) => ({
+        label: name,
+        id,
+    }));
+    const cashAsset = cashAssets.find(
+        ({ id }) => id === transaction.cashTransaction?.id,
+    );
+    const fixedIncomeAsset = fixedIncomeAssets.find(
+        ({ id }) => id === transaction.fixedIncomeTransaction?.id,
+    );
+
+    const { control, handleSubmit, reset } = useForm<TransactionDetailInputs>({
         defaultValues: {
-            assetTypeId: tx.assetTypeId,
-            timestamp: tx.timestamp,
-            cusipIsinAssetNameId: tx.cusipIsinAssetNameId,
-            transactionType: tx.transactionType,
-            assetProceedsUSD: tx.assetProceedsUSD,
-            feesTable: tx.fees,
+            cashAssetId: cashAsset?.id ?? cashAssets[0].id,
+            cashAmount: transaction.cashTransaction?.amount ?? 0,
+            cashEntryTime: parseDate(
+                transaction.cashTransaction?.entryTime.split('T')[0] ??
+                    new Date().toISOString().split('T')[0],
+            ),
+            cashCounterPartyAccountId:
+                transaction.cashTransaction?.counterPartyAccountId ?? '',
+            fixedIncomeAssetId: fixedIncomeAsset?.id ?? fixedIncomeAssets[0].id,
+            fixedIncomeAssetAmount:
+                transaction.fixedIncomeTransaction?.amount ?? 0,
+            fixedIncomeAssetEntryTime: parseDate(
+                transaction.fixedIncomeTransaction?.entryTime.split('T')[0] ??
+                    new Date().toISOString().split('T')[0],
+            ),
         },
     });
 
-    const isEditMode = mode === 'edit';
+    const onSubmit: SubmitHandler<TransactionDetailInputs> = data => {
+        onSubmitForm(data);
+    };
+
+    const isEditOperation = operation === 'edit';
+    const isCreateOperation = operation === 'create';
+    const isViewOnly = !isCreateOperation && !isEditOperation;
 
     return (
         <div className="flex flex-col overflow-hidden rounded-md border border-gray-300">
             <div className="flex justify-between border-b border-gray-300 bg-gray-100 p-3 font-semibold text-gray-800">
-                <div className="flex items-center">{`${labels.transaction} #${tx.id}`}</div>
-                {isEditMode ? (
+                <div className="flex items-center">{`${labels.transaction} #${transaction.id}`}</div>
+                {isEditOperation || isCreateOperation ? (
                     <div className="flex gap-x-2">
-                        <RWAButton onClick={onCancel} className="text-gray-600">
+                        <RWAButton
+                            onClick={() => onCancel(reset)}
+                            className="text-gray-600"
+                        >
                             {labels.cancelEdits}
                         </RWAButton>
                         <RWAButton
@@ -118,12 +169,14 @@ export const RWATXDetail: React.FC<RWATXDetailProps> = props => {
                             iconPosition="right"
                             icon={<Icon name="save" size={16} />}
                         >
-                            {labels.saveEdits}
+                            {isCreateOperation
+                                ? labels.saveNewTransaction
+                                : labels.saveEdits}
                         </RWAButton>
                     </div>
                 ) : (
                     <RWAButton
-                        onClick={onEdit}
+                        onClick={selectItemToEdit}
                         iconPosition="right"
                         icon={<Icon name="pencil" size={16} />}
                     >
@@ -132,97 +185,77 @@ export const RWATXDetail: React.FC<RWATXDetailProps> = props => {
                 )}
             </div>
             <div>
+                <h2 className="m-4">Cash transaction</h2>
                 <RWAFormRow
-                    label={labels.assetType}
-                    hideLine={isEditMode}
+                    label="Asset"
+                    hideLine={!isViewOnly}
                     value={
                         <RWATableSelect
                             control={control}
-                            name="assetTypeId"
-                            disabled={!isEditMode}
-                            options={assetTypeOptions}
+                            name="cashAssetId"
+                            disabled={isViewOnly}
+                            options={cashAssetOptions}
                         />
                     }
                 />
                 <RWAFormRow
-                    label={labels.timestamp}
-                    hideLine={isEditMode}
-                    value={
-                        <RWATableDatePicker
-                            control={control}
-                            name="timestamp"
-                            disabled={!isEditMode}
-                        />
-                    }
-                />
-                <RWAFormRow
-                    label={labels.cusipIsinAssetName}
-                    hideLine={isEditMode}
-                    value={
-                        <RWATableSelect
-                            control={control}
-                            disabled={!isEditMode}
-                            name="cusipIsinAssetNameId"
-                            options={cusipIsinAssetNameOptions}
-                        />
-                    }
-                />
-                <RWAFormRow
-                    label={labels.transactionType}
-                    hideLine={isEditMode}
+                    label="Amount"
+                    hideLine={!isViewOnly}
                     value={
                         <RWATableTextInput
                             control={control}
-                            name="transactionType"
+                            name="cashAmount"
                             type="currency"
-                            disabled={!isEditMode}
+                            disabled={isViewOnly}
                         />
                     }
                 />
                 <RWAFormRow
-                    label={labels.assetProceedsUSD}
-                    hideLine={isEditMode}
+                    label="Entry Time"
+                    hideLine={!isViewOnly}
                     value={
-                        <div className="flex flex-col items-end">
-                            <div>
-                                <RWATableTextInput
-                                    control={control}
-                                    name="assetProceedsUSD"
-                                    type="currency"
-                                    disabled={!isEditMode}
-                                />
-                            </div>
-                            <div className="mt-[10px] flex">
-                                <div className="mr-8 text-gray-600">
-                                    {labels.unitPrice}
-                                </div>
-                                <div>{tx.unitPrice}</div>
-                            </div>
-                        </div>
+                        <RWATableDatePicker
+                            control={control}
+                            name="cashEntryTime"
+                            disabled={isViewOnly}
+                        />
                     }
                 />
-                <div className="bg-gray-50">
-                    <RWAFormRow
-                        hideLine
-                        className="gap-x-16 [&>div:nth-child(1)]:min-w-0 [&>div:nth-child(2)]:min-w-0 [&>div:nth-child(2)]:flex-1"
-                        label={labels.fees}
-                        value={
-                            <RWAFeesTable
-                                control={
-                                    control as unknown as Control<RWAFeeInputs>
-                                }
-                                mode={mode}
-                                labels={labels.feesTable}
-                            />
-                        }
-                    />
-                </div>
-            </div>
-            <div className="border-t border-gray-300 bg-gray-100">
+                <h2 className="m-4">Fixed income transaction</h2>
                 <RWAFormRow
-                    label={labels.cashBalanceChange}
-                    value={tx.cashBalanceChange}
-                    className="text-sm font-semibold"
+                    label="Asset"
+                    hideLine={!isViewOnly}
+                    value={
+                        <RWATableSelect
+                            control={control}
+                            name="fixedIncomeAssetId"
+                            disabled={isViewOnly}
+                            options={fixedIncomeAssetOptions}
+                        />
+                    }
+                />
+                <RWAFormRow
+                    label="Amount"
+                    hideLine={!isViewOnly}
+                    value={
+                        <RWATableTextInput
+                            control={control}
+                            name="fixedIncomeAssetAmount"
+                            type="currency"
+                            disabled={isViewOnly}
+                        />
+                    }
+                />
+                <RWAFormRow
+                    label="Entry Time"
+                    hideLine={!isViewOnly}
+                    value={
+                        <RWATableDatePicker
+                            control={control}
+                            name="fixedIncomeAssetEntryTime"
+                            disabled={isViewOnly}
+                        />
+                    }
                 />
             </div>
         </div>
