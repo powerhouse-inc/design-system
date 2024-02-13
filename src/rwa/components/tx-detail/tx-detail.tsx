@@ -211,7 +211,6 @@ export const GroupTransactionDetails: React.FC<
                             control={control}
                             required
                             name="cashAmount"
-                            type="currency"
                             disabled={isViewOnly}
                         />
                     }
@@ -250,7 +249,6 @@ export const GroupTransactionDetails: React.FC<
                             control={control}
                             required
                             name="fixedIncomeAssetAmount"
-                            type="currency"
                             disabled={isViewOnly}
                         />
                     }
