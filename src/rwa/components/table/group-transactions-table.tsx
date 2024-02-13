@@ -1,6 +1,5 @@
 import { Icon } from '@/powerhouse';
 import {
-    AssetGroupTransaction,
     CashAsset,
     FixedIncomeAsset,
     FixedIncomeType,
@@ -20,12 +19,12 @@ import { useColumnPriority } from './useColumnPriority';
 export type Fields = {
     id: string;
     'Transaction type': GroupTransactionTypeLabel;
-    'Cash currency': string;
-    'Cash amount': number;
-    'Cash entry time': string;
-    'Fixed name': string;
-    'Fixed amount': number;
-    'Fixed entry time': string;
+    'Cash currency': string | undefined;
+    'Cash amount': number | undefined;
+    'Cash entry time': string | undefined;
+    'Fixed name': string | undefined;
+    'Fixed amount': number | undefined;
+    'Fixed entry time': string | undefined;
 };
 
 export function mapGroupTransactionsToTableFields(
@@ -45,27 +44,27 @@ export function mapGroupTransactionsToTableFields(
 }
 
 export function mapGroupTransactionToTableFields(
-    transaction: AssetGroupTransaction | undefined,
+    transaction: GroupTransaction | undefined,
     cashAssets: CashAsset[],
     fixedIncomeAssets: FixedIncomeAsset[],
 ): Fields | undefined {
     if (!transaction) return;
     const cashAsset = cashAssets.find(
-        asset => asset.id === transaction.cashTransaction.assetId,
+        asset => asset.id === transaction.cashTransaction?.assetId,
     );
     const fixedIncomeAsset = fixedIncomeAssets.find(
-        asset => asset.id === transaction.fixedIncomeTransaction.assetId,
+        asset => asset.id === transaction.fixedIncomeTransaction?.assetId,
     );
     return {
         id: transaction.id,
         'Transaction type': groupTransactionTypeLabels[transaction.type],
-        'Cash currency': cashAsset?.currency ?? '-',
-        'Cash amount': transaction.cashTransaction.amount,
-        'Cash entry time': transaction.cashTransaction.entryTime.split('T')[0],
-        'Fixed name': fixedIncomeAsset?.name ?? '-',
-        'Fixed amount': transaction.fixedIncomeTransaction.amount,
+        'Cash currency': cashAsset?.currency,
+        'Cash amount': transaction.cashTransaction?.amount,
+        'Cash entry time': transaction.cashTransaction?.entryTime.split('T')[0],
+        'Fixed name': fixedIncomeAsset?.name,
+        'Fixed amount': transaction.fixedIncomeTransaction?.amount,
         'Fixed entry time':
-            transaction.fixedIncomeTransaction.entryTime.split('T')[0],
+            transaction.fixedIncomeTransaction?.entryTime.split('T')[0],
     };
 }
 export function getTransactionsForFieldsById(

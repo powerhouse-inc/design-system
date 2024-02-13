@@ -89,10 +89,18 @@ export const GroupTransactionDetails: React.FC<
         // hideNonEditableFields,
         ...restProps
     } = props;
-    const transactionTypeOptions = groupTransactionTypes.map(type => ({
-        label: groupTransactionTypeLabels[type],
-        id: type,
-    }));
+
+    const currentlySupportedGroupTransactionTypes = [
+        'AssetPurchase',
+        'AssetSale',
+    ];
+
+    const transactionTypeOptions = groupTransactionTypes
+        .filter(type => currentlySupportedGroupTransactionTypes.includes(type))
+        .map(type => ({
+            label: groupTransactionTypeLabels[type],
+            id: type,
+        }));
     const cashAssetOptions = cashAssets.map(({ id, currency }) => ({
         label: currency,
         id,

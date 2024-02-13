@@ -21,6 +21,7 @@ export const mockGroupTransaction = {
     type: groupTransactionTypes[0],
     cashTransaction: mockCashTransaction,
     fixedIncomeTransaction: mockFixedIncomeTransaction,
+    feeTransactions: [],
 };
 
 export const mockGroupTransactions = Array.from({ length: 10 }, (_, i) => ({

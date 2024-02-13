@@ -38,13 +38,24 @@ export type GroupTransactionType = (typeof groupTransactionTypes)[number];
 
 export type GroupTransactionTypeLabel =
     (typeof groupTransactionTypeLabels)[keyof typeof groupTransactionTypeLabels];
-export type GroupTransaction = AssetGroupTransaction;
+export type GroupTransaction =
+    | AssetPurchaseGroupTransaction
+    | AssetSaleGroupTransaction;
 
-export type AssetGroupTransaction = {
+export type AssetPurchaseGroupTransaction = {
     id: string;
     type: GroupTransactionType;
-    cashTransaction: BaseTransaction;
-    fixedIncomeTransaction: BaseTransaction;
+    cashTransaction: BaseTransaction | null;
+    fixedIncomeTransaction: BaseTransaction | null;
+    feeTransactions: BaseTransaction[] | null;
+};
+
+export type AssetSaleGroupTransaction = {
+    id: string;
+    type: GroupTransactionType;
+    cashTransaction: BaseTransaction | null;
+    fixedIncomeTransaction: BaseTransaction | null;
+    feeTransactions: BaseTransaction[] | null;
 };
 
 export type CashAsset = {
