@@ -7,7 +7,6 @@ import { groupTransactionTypes } from '@/rwa/constants';
 import {
     mockCashAssets,
     mockFixedIncomeAssets,
-    mockFixedIncomeTypes,
     mockPrincipalLenderId,
 } from '@/rwa/mocks';
 import { mockGroupTransactions } from '@/rwa/mocks/transactions';
@@ -108,15 +107,15 @@ export const Primary: Story = {
                                     type: groupTransactionTypes[0],
                                     cashTransaction: {
                                         id: utils.hashKey(),
-                                        assetId: 'cash-asset-1',
+                                        assetId: mockCashAssets[0].id,
                                         amount: 1000,
-                                        entryTime: '2021-10-01',
+                                        entryTime: '2024-01-01',
                                         counterPartyAccountId:
                                             mockPrincipalLenderId,
                                     },
                                     fixedIncomeTransaction: {
                                         id: utils.hashKey(),
-                                        assetId: mockFixedIncomeTypes[0].id,
+                                        assetId: mockFixedIncomeAssets[0].id,
                                         amount: 1000,
                                         entryTime: '2024-01-01',
                                     },
