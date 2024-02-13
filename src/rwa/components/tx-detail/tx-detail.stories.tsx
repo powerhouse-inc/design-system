@@ -3,11 +3,11 @@ import {
     mockFixedIncomeAssets,
     mockSpvs,
 } from '../table/fixed-income-assets-mock-table-data';
-import { RWATXDetail, groupTransactionTypes } from './tx-detail';
+import { GroupTransactionDetails, groupTransactionTypes } from './tx-detail';
 
-const meta: Meta<typeof RWATXDetail> = {
+const meta: Meta<typeof GroupTransactionDetails> = {
     title: 'RWA/Components/RWATXDetail',
-    component: RWATXDetail,
+    component: GroupTransactionDetails,
 };
 
 export default meta;
@@ -38,7 +38,7 @@ const mockCashTransaction = {
     counterPartyAccountId: principalLenderId,
 };
 
-const mockAssetGroupTransaction = {
+const mockGroupTransaction = {
     id: '1',
     type: groupTransactionTypes[0],
     cashTransaction: mockCashTransaction,
@@ -47,7 +47,7 @@ const mockAssetGroupTransaction = {
 
 export const Primary: Story = {
     args: {
-        transaction: mockAssetGroupTransaction,
+        transaction: mockGroupTransaction,
         operation: 'view',
         cashAssets: mockCashAssets,
         fixedIncomeAssets: mockFixedIncomeAssets,

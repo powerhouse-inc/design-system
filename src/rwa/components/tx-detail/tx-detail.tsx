@@ -1,4 +1,4 @@
-import { Icon } from '@/powerhouse';
+import { DivProps, Icon, mergeClassNameProps } from '@/powerhouse';
 import { FixedIncomeAsset } from '@/rwa';
 import { CalendarDate, parseDate } from '@internationalized/date';
 import React from 'react';
@@ -17,6 +17,8 @@ export const groupTransactionTypes = [
 ] as const;
 
 export type GroupTransactionType = (typeof groupTransactionTypes)[number];
+
+export type GroupTransaction = AssetGroupTransaction;
 
 export type AssetGroupTransaction = {
     id: string;
@@ -75,7 +77,7 @@ export type BaseTransaction = {
     counterPartyAccountId?: string;
 };
 
-export type TransactionDetailInputs = {
+export type GroupTransactionDetailInputs = {
     cashAssetId: string;
     cashAmount: number;
     cashEntryTime: CalendarDate;
@@ -85,18 +87,20 @@ export type TransactionDetailInputs = {
     fixedIncomeAssetEntryTime: CalendarDate;
 };
 
-export interface RWATXDetailProps {
-    transaction: Partial<AssetGroupTransaction>;
+export interface GroupTransactionsDetailsProps extends DivProps {
+    transaction: Partial<GroupTransaction>;
     operation: 'view' | 'create' | 'edit';
     cashAssets: CashAsset[];
     fixedIncomeAssets: FixedIncomeAsset[];
-    onCancel: (reset: UseFormReset<TransactionDetailInputs>) => void;
+    onCancel: (reset: UseFormReset<GroupTransactionDetailInputs>) => void;
     selectItemToEdit?: () => void;
-    onSubmitForm: (data: TransactionDetailInputs) => void;
+    onSubmitForm: (data: GroupTransactionDetailInputs) => void;
     labels?: typeof defaultLabels;
     hideNonEditableFields?: boolean;
 }
-export const RWATXDetail: React.FC<RWATXDetailProps> = props => {
+export const GroupTransactionDetails: React.FC<
+    GroupTransactionsDetailsProps
+> = props => {
     const {
         transaction,
         operation = 'view',
@@ -107,6 +111,7 @@ export const RWATXDetail: React.FC<RWATXDetailProps> = props => {
         onSubmitForm,
         labels = defaultLabels,
         // hideNonEditableFields,
+        ...restProps
     } = props;
 
     const cashAssetOptions = cashAssets.map(({ id, currency }) => ({
@@ -124,27 +129,30 @@ export const RWATXDetail: React.FC<RWATXDetailProps> = props => {
         ({ id }) => id === transaction.fixedIncomeTransaction?.id,
     );
 
-    const { control, handleSubmit, reset } = useForm<TransactionDetailInputs>({
-        defaultValues: {
-            cashAssetId: cashAsset?.id ?? cashAssets[0].id,
-            cashAmount: transaction.cashTransaction?.amount ?? 0,
-            cashEntryTime: parseDate(
-                transaction.cashTransaction?.entryTime.split('T')[0] ??
-                    new Date().toISOString().split('T')[0],
-            ),
-            cashCounterPartyAccountId:
-                transaction.cashTransaction?.counterPartyAccountId ?? '',
-            fixedIncomeAssetId: fixedIncomeAsset?.id ?? fixedIncomeAssets[0].id,
-            fixedIncomeAssetAmount:
-                transaction.fixedIncomeTransaction?.amount ?? 0,
-            fixedIncomeAssetEntryTime: parseDate(
-                transaction.fixedIncomeTransaction?.entryTime.split('T')[0] ??
-                    new Date().toISOString().split('T')[0],
-            ),
-        },
-    });
+    const { control, handleSubmit, reset } =
+        useForm<GroupTransactionDetailInputs>({
+            defaultValues: {
+                cashAssetId: cashAsset?.id ?? cashAssets[0].id,
+                cashAmount: transaction.cashTransaction?.amount ?? 0,
+                cashEntryTime: parseDate(
+                    transaction.cashTransaction?.entryTime.split('T')[0] ??
+                        new Date().toISOString().split('T')[0],
+                ),
+                cashCounterPartyAccountId:
+                    transaction.cashTransaction?.counterPartyAccountId ?? '',
+                fixedIncomeAssetId:
+                    fixedIncomeAsset?.id ?? fixedIncomeAssets[0].id,
+                fixedIncomeAssetAmount:
+                    transaction.fixedIncomeTransaction?.amount ?? 0,
+                fixedIncomeAssetEntryTime: parseDate(
+                    transaction.fixedIncomeTransaction?.entryTime.split(
+                        'T',
+                    )[0] ?? new Date().toISOString().split('T')[0],
+                ),
+            },
+        });
 
-    const onSubmit: SubmitHandler<TransactionDetailInputs> = data => {
+    const onSubmit: SubmitHandler<GroupTransactionDetailInputs> = data => {
         onSubmitForm(data);
     };
 
@@ -153,7 +161,12 @@ export const RWATXDetail: React.FC<RWATXDetailProps> = props => {
     const isViewOnly = !isCreateOperation && !isEditOperation;
 
     return (
-        <div className="flex flex-col overflow-hidden rounded-md border border-gray-300">
+        <div
+            {...mergeClassNameProps(
+                restProps,
+                'flex flex-col overflow-hidden rounded-md border border-gray-300',
+            )}
+        >
             <div className="flex justify-between border-b border-gray-300 bg-gray-100 p-3 font-semibold text-gray-800">
                 <div className="flex items-center">{`${labels.transaction} #${transaction.id}`}</div>
                 {isEditOperation || isCreateOperation ? (
