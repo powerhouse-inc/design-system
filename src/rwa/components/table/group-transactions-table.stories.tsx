@@ -48,6 +48,7 @@ export const Primary: Story = {
         items: mockGroupTransactions,
         fixedIncomeAssets: mockFixedIncomeAssets,
         cashAssets: mockCashAssets,
+        principalLenderId: mockPrincipalLenderId,
         fieldsPriority,
         columnCountByTableWidth,
     },
@@ -60,24 +61,12 @@ export const Primary: Story = {
         const [showNewGroupTransactionForm, setShowNewGroupTransactionForm] =
             useState(false);
 
-        const toggleExpandedRow = useCallback(
-            (id: string) => {
-                setExpandedRowId(id === expandedRowId ? undefined : id);
-            },
-            [expandedRowId],
-        );
+        const toggleExpandedRow = useCallback((id: string) => {
+            setExpandedRowId(curr => (id === curr ? undefined : id));
+        }, []);
 
         const onClickDetails: GroupTransactionsTableProps['onClickDetails'] =
-            useCallback(
-                item => {
-                    setExpandedRowId(
-                        item?.id === expandedRowId
-                            ? undefined
-                            : item?.id || undefined,
-                    );
-                },
-                [expandedRowId],
-            );
+            useCallback(() => {}, []);
 
         const onCancelEdit: GroupTransactionsTableProps['onCancelEdit'] =
             useCallback(() => {
@@ -86,27 +75,25 @@ export const Primary: Story = {
 
         const onSubmitEdit: GroupTransactionsTableProps['onSubmitForm'] =
             useCallback(data => {
-                console.log({ data });
+                console.log('edit', { data });
                 setSelectedGroupTransactionToEdit(undefined);
             }, []);
 
         const onSubmitCreate: GroupTransactionsTableProps['onSubmitForm'] =
             useCallback(data => {
-                console.log({ data });
+                console.log('create', { data });
                 setShowNewGroupTransactionForm(false);
             }, []);
 
         const argsWithHandlers = {
             ...args,
             expandedRowId,
-            selectedAssetToEdit: selectedGroupTransactionToEdit,
+            selectedGroupTransactionToEdit,
             toggleExpandedRow,
             onClickDetails,
-            setSelectedAssetToEdit: setSelectedGroupTransactionToEdit,
+            setSelectedGroupTransactionToEdit,
             onCancelEdit,
-            onSubmitForm: selectedGroupTransactionToEdit
-                ? onSubmitEdit
-                : onSubmitCreate,
+            onSubmitForm: onSubmitEdit,
         };
         return (
             <div className="flex flex-col gap-4">
@@ -136,6 +123,7 @@ export const Primary: Story = {
                                 }}
                                 fixedIncomeAssets={mockFixedIncomeAssets}
                                 cashAssets={mockCashAssets}
+                                principalLenderId={mockPrincipalLenderId}
                                 operation="create"
                                 onCancel={() =>
                                     setShowNewGroupTransactionForm(false)

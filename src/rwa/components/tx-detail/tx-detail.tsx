@@ -42,6 +42,7 @@ export type RWATransactionFee = {
 };
 
 export type GroupTransactionDetailInputs = {
+    id: string;
     cashAssetId: string;
     cashAmount: number;
     cashEntryTime: CalendarDate;
@@ -56,6 +57,7 @@ export interface GroupTransactionsDetailsProps extends DivProps {
     operation: 'view' | 'create' | 'edit';
     cashAssets: CashAsset[];
     fixedIncomeAssets: FixedIncomeAsset[];
+    principalLenderId: string;
     onCancel: (reset: UseFormReset<GroupTransactionDetailInputs>) => void;
     selectItemToEdit?: () => void;
     onSubmitForm: (data: GroupTransactionDetailInputs) => void;
@@ -70,6 +72,7 @@ export const GroupTransactionDetails: React.FC<
         operation = 'view',
         cashAssets,
         fixedIncomeAssets,
+        principalLenderId,
         onCancel,
         selectItemToEdit,
         onSubmitForm,
@@ -96,14 +99,14 @@ export const GroupTransactionDetails: React.FC<
     const { control, handleSubmit, reset } =
         useForm<GroupTransactionDetailInputs>({
             defaultValues: {
+                id: transaction.id ?? '',
                 cashAssetId: cashAsset?.id ?? cashAssets[0].id,
                 cashAmount: transaction.cashTransaction?.amount ?? 0,
                 cashEntryTime: parseDate(
                     transaction.cashTransaction?.entryTime.split('T')[0] ??
                         new Date().toISOString().split('T')[0],
                 ),
-                cashCounterPartyAccountId:
-                    transaction.cashTransaction?.counterPartyAccountId ?? '',
+                cashCounterPartyAccountId: principalLenderId,
                 fixedIncomeAssetId:
                     fixedIncomeAsset?.id ?? fixedIncomeAssets[0].id,
                 fixedIncomeAssetAmount:

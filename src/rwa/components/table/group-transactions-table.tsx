@@ -11,7 +11,7 @@ import {
     SPV,
 } from '@/rwa';
 import { groupTransactionTypeLabels } from '@/rwa/constants';
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { RWATable, RWATableCell, RWATableProps, useSortTableItems } from '.';
 import { RWATableRow } from './expandable-row';
@@ -82,6 +82,7 @@ export type GroupTransactionsTableProps = Omit<
     spvs: SPV[];
     cashAssets: CashAsset[];
     fixedIncomeAssets: FixedIncomeAsset[];
+    principalLenderId: string;
     columnCountByTableWidth: Record<string, number>;
     fieldsPriority: (keyof Fields)[];
     expandedRowId: string | undefined;
@@ -100,13 +101,14 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
         items,
         fixedIncomeAssets,
         cashAssets,
+        principalLenderId,
         fieldsPriority,
         columnCountByTableWidth,
         expandedRowId,
         selectedGroupTransactionToEdit,
         toggleExpandedRow,
         onClickDetails,
-        setSelectedGroupTransactionToEdit: setSelectedTransactionToEdit,
+        setSelectedGroupTransactionToEdit,
         onCancelEdit,
         onSubmitForm,
         ...restProps
@@ -120,9 +122,17 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
         tableContainerRef,
     });
 
-    const { sortedItems, sortHandler } = useSortTableItems(
-        mapGroupTransactionsToTableFields(items, cashAssets, fixedIncomeAssets),
+    const mappedFields = useMemo(
+        () =>
+            mapGroupTransactionsToTableFields(
+                items,
+                cashAssets,
+                fixedIncomeAssets,
+            ),
+        [items, cashAssets, fixedIncomeAssets],
     );
+
+    const { sortedItems, sortHandler } = useSortTableItems(mappedFields);
 
     const renderRow = (item: Fields, index: number) => {
         return (
@@ -137,13 +147,14 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                             className="border-y border-gray-300"
                             cashAssets={cashAssets}
                             fixedIncomeAssets={fixedIncomeAssets}
+                            principalLenderId={principalLenderId}
                             operation={
                                 selectedGroupTransactionToEdit?.id === item.id
                                     ? 'edit'
                                     : 'view'
                             }
                             selectItemToEdit={() => {
-                                setSelectedTransactionToEdit(
+                                setSelectedGroupTransactionToEdit(
                                     getTransactionsForFieldsById(
                                         item.id,
                                         items,
