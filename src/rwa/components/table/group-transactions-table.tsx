@@ -7,22 +7,25 @@ import {
     GroupTransaction,
     GroupTransactionDetailInputs,
     GroupTransactionDetails,
-    GroupTransactionType,
+    GroupTransactionTypeLabel,
     SPV,
 } from '@/rwa';
+import { groupTransactionTypeLabels } from '@/rwa/constants';
 import { useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { RWATable, RWATableCell, RWATableProps, useSortTableItems } from '.';
 import { RWATableRow } from './expandable-row';
 import { useColumnPriority } from './useColumnPriority';
 
-type Fields = {
+export type Fields = {
     id: string;
-    type: GroupTransactionType;
-    cashAssetCurrency: string;
-    cashAmount: number;
-    fixedIncomeAssetName: string;
-    fixedIncomeAmount: number;
+    'Transaction type': GroupTransactionTypeLabel;
+    'Cash currency': string;
+    'Cash amount': number;
+    'Cash entry time': string;
+    'Fixed name': string;
+    'Fixed amount': number;
+    'Fixed entry time': string;
 };
 
 export function mapGroupTransactionsToTableFields(
@@ -55,11 +58,13 @@ export function mapGroupTransactionToTableFields(
     );
     return {
         id: transaction.id,
-        type: transaction.type,
-        cashAssetCurrency: cashAsset?.currency ?? '-',
-        cashAmount: transaction.cashTransaction.amount,
-        fixedIncomeAssetName: fixedIncomeAsset?.name ?? '-',
-        fixedIncomeAmount: transaction.fixedIncomeTransaction.amount,
+        'Transaction type': groupTransactionTypeLabels[transaction.type],
+        'Cash currency': cashAsset?.currency ?? '-',
+        'Cash amount': transaction.cashTransaction.amount,
+        'Cash entry time': transaction.cashTransaction.entryTime,
+        'Fixed name': fixedIncomeAsset?.name ?? '-',
+        'Fixed amount': transaction.fixedIncomeTransaction.amount,
+        'Fixed entry time': transaction.fixedIncomeTransaction.entryTime,
     };
 }
 export function getTransactionsForFieldsById(
@@ -83,7 +88,9 @@ export type GroupTransactionsTableProps = Omit<
     selectedGroupTransactionToEdit?: GroupTransaction;
     toggleExpandedRow: (id: string) => void;
     onClickDetails: (item: GroupTransaction | undefined) => void;
-    setSelectedAssetToEdit: (item: GroupTransaction | undefined) => void;
+    setSelectedGroupTransactionToEdit: (
+        item: GroupTransaction | undefined,
+    ) => void;
     onCancelEdit: () => void;
     onSubmitForm: (data: GroupTransactionDetailInputs) => void;
 };
@@ -99,7 +106,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
         selectedGroupTransactionToEdit,
         toggleExpandedRow,
         onClickDetails,
-        setSelectedAssetToEdit,
+        setSelectedGroupTransactionToEdit: setSelectedTransactionToEdit,
         onCancelEdit,
         onSubmitForm,
         ...restProps
@@ -136,7 +143,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                                     : 'view'
                             }
                             selectItemToEdit={() => {
-                                setSelectedAssetToEdit(
+                                setSelectedTransactionToEdit(
                                     getTransactionsForFieldsById(
                                         item.id,
                                         items,

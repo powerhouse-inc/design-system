@@ -1,5 +1,10 @@
 import { Icon } from '@/powerhouse';
 import { FixedIncomeAsset } from '@/rwa';
+import {
+    mockFixedIncomeAssets,
+    mockFixedIncomeTypes,
+    mockSpvs,
+} from '@/rwa/mocks';
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 import { orderBy } from 'natural-orderby';
@@ -7,11 +12,6 @@ import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { RWAAssetDetails } from '../asset-details';
 import { RWATableRow } from './expandable-row';
-import {
-    mockFixedIncomeAssets,
-    mockFixedIncomeTypes,
-    mockSpvs,
-} from './fixed-income-assets-mock-table-data';
 import { RWATable, RWATableProps } from './table';
 import { RWATableCell } from './table-cell';
 

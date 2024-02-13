@@ -1,78 +1,64 @@
-import { FixedIncomeAsset, RWAAssetDetails } from '@/rwa';
+import {
+    GroupTransaction,
+    GroupTransactionDetails,
+    GroupTransactionsTableProps,
+} from '@/rwa';
+import { groupTransactionTypes } from '@/rwa/constants';
+import {
+    mockCashAssets,
+    mockFixedIncomeAssets,
+    mockFixedIncomeTypes,
+    mockPrincipalLenderId,
+} from '@/rwa/mocks';
+import { mockGroupTransactions } from '@/rwa/mocks/transactions';
 import type { Meta, StoryObj } from '@storybook/react';
 import { utils } from 'document-model/document';
 import { useCallback, useState } from 'react';
-import { RWAAssetDetailInputs } from '../asset-details/form';
-import {
-    mockFixedIncomeAssets,
-    mockFixedIncomeTypes,
-    mockSpvs,
-} from './fixed-income-assets-mock-table-data';
-import {
-    FixedIncomeAssetsTableProps,
-    RWAFixedIncomeAssetsTable,
-} from './fixed-income-assets-table';
+import { Fields, GroupTransactionsTable } from './group-transactions-table';
 import { getColumnCount } from './useColumnPriority';
 
-const meta: Meta<typeof RWAFixedIncomeAssetsTable> = {
-    title: 'RWA/Components/RWAFixedIncomeAssetsTable',
-    component: RWAFixedIncomeAssetsTable,
-    argTypes: {
-        items: { control: 'object' },
-        onCancelEdit: { action: 'onCancelEdit' },
-        onClickDetails: { action: 'onClickDetails' },
-        setSelectedAssetToEdit: { action: 'setSelectedAssetToEdit' },
-        onSubmitForm: { action: 'onSubmitForm' },
-    },
+const meta: Meta<typeof GroupTransactionsTable> = {
+    title: 'RWA/Components/GroupTransactionsTable',
+    component: GroupTransactionsTable,
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 const columnCountByTableWidth = {
-    1520: 8,
-    1394: 8,
-    1239: 8,
-    1112: 8,
+    1520: 12,
+    1394: 11,
+    1239: 10,
+    1112: 9,
     984: 8,
 };
 
-const fieldsPriority: (keyof FixedIncomeAsset)[] = [
-    'id',
-    'name',
-    'maturity',
-    'notional',
-    'coupon',
-    'purchasePrice',
-    'purchaseDate',
-    'totalDiscount',
-    'purchaseProceeds',
+const fieldsPriority: (keyof Fields)[] = [
+    'Transaction type',
+    'Cash currency',
+    'Cash amount',
+    'Cash entry time',
+    'Fixed name',
+    'Fixed amount',
+    'Fixed entry time',
 ];
-
-function createAssetFromFormInputs(data: RWAAssetDetailInputs) {
-    const id = utils.hashKey();
-    const maturity = data.maturity.toString();
-
-    return {
-        ...data,
-        id,
-        maturity,
-    };
-}
 
 export const Primary: Story = {
     args: {
-        items: mockFixedIncomeAssets,
-        fixedIncomeTypes: mockFixedIncomeTypes,
-        spvs: mockSpvs,
+        items: mockGroupTransactions,
+        fixedIncomeAssets: mockFixedIncomeAssets,
+        cashAssets: mockCashAssets,
         fieldsPriority,
         columnCountByTableWidth,
     },
     render: function Wrapper(args) {
         const [expandedRowId, setExpandedRowId] = useState<string>();
-        const [selectedAssetToEdit, setSelectedAssetToEdit] =
-            useState<FixedIncomeAsset>();
-        const [showNewAssetForm, setShowNewAssetForm] = useState(false);
+        const [
+            selectedGroupTransactionToEdit,
+            setSelectedGroupTransactionToEdit,
+        ] = useState<GroupTransaction>();
+        const [showNewGroupTransactionForm, setShowNewGroupTransactionForm] =
+            useState(false);
 
         const toggleExpandedRow = useCallback(
             (id: string) => {
@@ -81,78 +67,79 @@ export const Primary: Story = {
             [expandedRowId],
         );
 
-        const onClickDetails: FixedIncomeAssetsTableProps['onClickDetails'] =
+        const onClickDetails: GroupTransactionsTableProps['onClickDetails'] =
             useCallback(
                 item => {
                     setExpandedRowId(
-                        item.id === expandedRowId
+                        item?.id === expandedRowId
                             ? undefined
-                            : item.id || undefined,
+                            : item?.id || undefined,
                     );
                 },
                 [expandedRowId],
             );
 
-        const onCancelEdit: FixedIncomeAssetsTableProps['onCancelEdit'] =
+        const onCancelEdit: GroupTransactionsTableProps['onCancelEdit'] =
             useCallback(() => {
-                setSelectedAssetToEdit(undefined);
+                setSelectedGroupTransactionToEdit(undefined);
             }, []);
 
-        const onSubmitEdit: FixedIncomeAssetsTableProps['onSubmitForm'] =
+        const onSubmitEdit: GroupTransactionsTableProps['onSubmitForm'] =
             useCallback(data => {
-                const asset = createAssetFromFormInputs(data);
-                console.log({ asset, data });
-                setSelectedAssetToEdit(undefined);
+                console.log({ data });
+                setSelectedGroupTransactionToEdit(undefined);
             }, []);
 
-        const onSubmitCreate: FixedIncomeAssetsTableProps['onSubmitForm'] =
+        const onSubmitCreate: GroupTransactionsTableProps['onSubmitForm'] =
             useCallback(data => {
-                const asset = createAssetFromFormInputs(data);
-                console.log({ asset, data });
-                setShowNewAssetForm(false);
+                console.log({ data });
+                setShowNewGroupTransactionForm(false);
             }, []);
 
         const argsWithHandlers = {
             ...args,
             expandedRowId,
-            selectedAssetToEdit,
+            selectedAssetToEdit: selectedGroupTransactionToEdit,
             toggleExpandedRow,
             onClickDetails,
-            setSelectedAssetToEdit,
+            setSelectedAssetToEdit: setSelectedGroupTransactionToEdit,
             onCancelEdit,
-            onSubmitForm: selectedAssetToEdit ? onSubmitEdit : onSubmitCreate,
+            onSubmitForm: selectedGroupTransactionToEdit
+                ? onSubmitEdit
+                : onSubmitCreate,
         };
         return (
             <div className="flex flex-col gap-4">
                 <div className="w-screen">
                     <p>parent element width: 100%</p>
-                    <RWAFixedIncomeAssetsTable {...argsWithHandlers} />
-                    {showNewAssetForm && (
+                    <GroupTransactionsTable {...argsWithHandlers} />
+                    {showNewGroupTransactionForm && (
                         <div className="mt-4 rounded-md border border-gray-300 bg-white">
-                            <RWAAssetDetails
-                                asset={{
-                                    id: '',
-                                    name: '',
-                                    fixedIncomeTypeId:
-                                        mockFixedIncomeTypes[0].id,
-                                    spvId: mockSpvs[0].id,
-                                    maturity: new Date()
-                                        .toISOString()
-                                        .split('T')[0],
-                                    notional: 0,
-                                    coupon: 0,
-                                    purchasePrice: 0,
-                                    purchaseDate: '',
-                                    totalDiscount: 0,
-                                    purchaseProceeds: 0,
-                                    annualizedYield: 0,
+                            <GroupTransactionDetails
+                                transaction={{
+                                    id: utils.hashKey(),
+                                    type: groupTransactionTypes[0],
+                                    cashTransaction: {
+                                        id: utils.hashKey(),
+                                        assetId: 'cash-asset-1',
+                                        amount: 1000,
+                                        entryTime: '2021-10-01',
+                                        counterPartyAccountId:
+                                            mockPrincipalLenderId,
+                                    },
+                                    fixedIncomeTransaction: {
+                                        id: utils.hashKey(),
+                                        assetId: mockFixedIncomeTypes[0].id,
+                                        amount: 1000,
+                                        entryTime: '2024-01-01',
+                                    },
                                 }}
-                                mode="edit"
+                                fixedIncomeAssets={mockFixedIncomeAssets}
+                                cashAssets={mockCashAssets}
                                 operation="create"
-                                fixedIncomeTypes={mockFixedIncomeTypes}
-                                spvs={mockSpvs}
-                                onClose={() => setShowNewAssetForm(false)}
-                                onCancel={() => setShowNewAssetForm(false)}
+                                onCancel={() =>
+                                    setShowNewGroupTransactionForm(false)
+                                }
                                 onSubmitForm={onSubmitCreate}
                                 hideNonEditableFields
                             />
@@ -169,7 +156,7 @@ export const Primary: Story = {
                                 column count:{' '}
                                 {getColumnCount(width, columnCountByTableWidth)}
                             </p>
-                            <RWAFixedIncomeAssetsTable {...argsWithHandlers} />
+                            <GroupTransactionsTable {...argsWithHandlers} />
                         </div>
                     ))}
             </div>

@@ -3,11 +3,12 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { utils } from 'document-model/document';
 import { useCallback, useState } from 'react';
 import { RWAAssetDetailInputs } from '../asset-details/form';
+
 import {
     mockFixedIncomeAssets,
     mockFixedIncomeTypes,
     mockSpvs,
-} from './fixed-income-assets-mock-table-data';
+} from '@/rwa/mocks';
 import {
     FixedIncomeAssetsTableProps,
     RWAFixedIncomeAssetsTable,

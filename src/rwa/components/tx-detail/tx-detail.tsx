@@ -1,5 +1,5 @@
 import { DivProps, Icon, mergeClassNameProps } from '@/powerhouse';
-import { FixedIncomeAsset } from '@/rwa';
+import { CashAsset, FixedIncomeAsset, GroupTransaction } from '@/rwa';
 import { CalendarDate, parseDate } from '@internationalized/date';
 import React from 'react';
 import { SubmitHandler, UseFormReset, useForm } from 'react-hook-form';
@@ -10,30 +10,6 @@ import {
     RWATableSelect,
     RWATableTextInput,
 } from '../table-inputs';
-
-export const groupTransactionTypes = [
-    'AssetPurchaseGroupTransaction',
-    'AssetSaleGroupTransaction',
-] as const;
-
-export type GroupTransactionType = (typeof groupTransactionTypes)[number];
-
-export type GroupTransaction = AssetGroupTransaction;
-
-export type AssetGroupTransaction = {
-    id: string;
-    type: GroupTransactionType;
-    cashTransaction: BaseTransaction;
-    fixedIncomeTransaction: BaseTransaction;
-};
-
-export type CashAsset = {
-    id: string;
-    spvId: string;
-    currency: string;
-};
-
-export type Asset = CashAsset | FixedIncomeAsset;
 
 const defaultLabels = {
     transaction: 'Transaction',
@@ -63,18 +39,6 @@ export type RWATransactionFee = {
     feeType: string;
     accountID: string;
     fee: number;
-};
-
-export type BaseTransaction = {
-    id: string;
-    assetId: string;
-    amount: number;
-    entryTime: string;
-    tradeTime?: string;
-    settlementTime?: string;
-    txRef?: string;
-    accountId?: string;
-    counterPartyAccountId?: string;
 };
 
 export type GroupTransactionDetailInputs = {

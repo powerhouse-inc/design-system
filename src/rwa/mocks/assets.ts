@@ -1,5 +1,7 @@
 import { FixedIncomeAsset } from '@/rwa';
 
+export const mockPrincipalLenderId = 'principal-lender-id';
+
 export const mockFixedIncomeTypes = [
     { id: '1', name: 'T-Bill 91279GF8' },
     { id: '2', name: 'T-Bill 91279GF9' },
@@ -174,3 +176,11 @@ export const mockFixedIncomeAssets: FixedIncomeAsset[] = [
         annualizedYield: 75182.14,
     },
 ];
+
+export const mockCashAsset = {
+    id: 'cash-asset-1',
+    spvId: mockSpvs[0].id,
+    currency: 'USD',
+};
+
+export const mockCashAssets = [mockCashAsset];
