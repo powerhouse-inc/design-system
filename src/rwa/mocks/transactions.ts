@@ -1,5 +1,5 @@
 import { mockFixedIncomeAssets, mockPrincipalLenderId } from '.';
-import { groupTransactionTypes } from '../constants';
+import { groupTransactionTypes } from '../constants/transactions';
 
 export const mockFixedIncomeTransaction = {
     id: 'fixed-income-transaction-1',

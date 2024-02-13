@@ -1,5 +1,14 @@
 import { DivProps, Icon, mergeClassNameProps } from '@/powerhouse';
-import { CashAsset, FixedIncomeAsset, GroupTransaction } from '@/rwa';
+import {
+    CashAsset,
+    FixedIncomeAsset,
+    GroupTransaction,
+    GroupTransactionType,
+} from '@/rwa';
+import {
+    groupTransactionTypeLabels,
+    groupTransactionTypes,
+} from '@/rwa/constants/transactions';
 import { CalendarDate, parseDate } from '@internationalized/date';
 import React from 'react';
 import { SubmitHandler, UseFormReset, useForm } from 'react-hook-form';
@@ -42,18 +51,18 @@ export type RWATransactionFee = {
 };
 
 export type GroupTransactionDetailInputs = {
-    id: string;
-    cashAssetId: string;
-    cashAmount: number;
+    type: GroupTransactionType | undefined;
+    cashAssetId: string | undefined;
+    cashAmount: number | undefined;
     cashEntryTime: CalendarDate;
-    cashCounterPartyAccountId: string;
-    fixedIncomeAssetId: string;
-    fixedIncomeAssetAmount: number;
+    cashCounterPartyAccountId: string | undefined;
+    fixedIncomeAssetId: string | undefined;
+    fixedIncomeAssetAmount: number | undefined;
     fixedIncomeAssetEntryTime: CalendarDate;
 };
 
 export interface GroupTransactionsDetailsProps extends DivProps {
-    transaction: Partial<GroupTransaction>;
+    transaction: Partial<GroupTransaction> | undefined;
     operation: 'view' | 'create' | 'edit';
     cashAssets: CashAsset[];
     fixedIncomeAssets: FixedIncomeAsset[];
@@ -80,7 +89,10 @@ export const GroupTransactionDetails: React.FC<
         // hideNonEditableFields,
         ...restProps
     } = props;
-
+    const transactionTypeOptions = groupTransactionTypes.map(type => ({
+        label: groupTransactionTypeLabels[type],
+        id: type,
+    }));
     const cashAssetOptions = cashAssets.map(({ id, currency }) => ({
         label: currency,
         id,
@@ -90,29 +102,28 @@ export const GroupTransactionDetails: React.FC<
         id,
     }));
     const cashAsset = cashAssets.find(
-        ({ id }) => id === transaction.cashTransaction?.id,
+        ({ id }) => id === transaction?.cashTransaction?.assetId,
     );
     const fixedIncomeAsset = fixedIncomeAssets.find(
-        ({ id }) => id === transaction.fixedIncomeTransaction?.id,
+        ({ id }) => id === transaction?.fixedIncomeTransaction?.assetId,
     );
 
     const { control, handleSubmit, reset } =
         useForm<GroupTransactionDetailInputs>({
             defaultValues: {
-                id: transaction.id ?? '',
-                cashAssetId: cashAsset?.id ?? cashAssets[0].id,
-                cashAmount: transaction.cashTransaction?.amount ?? 0,
+                type: transaction?.type,
+                cashAssetId: cashAsset?.id,
+                cashAmount: transaction?.cashTransaction?.amount ?? 0,
                 cashEntryTime: parseDate(
-                    transaction.cashTransaction?.entryTime.split('T')[0] ??
+                    transaction?.cashTransaction?.entryTime.split('T')[0] ??
                         new Date().toISOString().split('T')[0],
                 ),
                 cashCounterPartyAccountId: principalLenderId,
-                fixedIncomeAssetId:
-                    fixedIncomeAsset?.id ?? fixedIncomeAssets[0].id,
+                fixedIncomeAssetId: fixedIncomeAsset?.id,
                 fixedIncomeAssetAmount:
-                    transaction.fixedIncomeTransaction?.amount ?? 0,
+                    transaction?.fixedIncomeTransaction?.amount ?? 0,
                 fixedIncomeAssetEntryTime: parseDate(
-                    transaction.fixedIncomeTransaction?.entryTime.split(
+                    transaction?.fixedIncomeTransaction?.entryTime.split(
                         'T',
                     )[0] ?? new Date().toISOString().split('T')[0],
                 ),
@@ -135,7 +146,7 @@ export const GroupTransactionDetails: React.FC<
             )}
         >
             <div className="flex justify-between border-b border-gray-300 bg-gray-100 p-3 font-semibold text-gray-800">
-                <div className="flex items-center">{`${labels.transaction} #${transaction.id}`}</div>
+                <div className="flex items-center">{`${labels.transaction} #${transaction?.id}`}</div>
                 {isEditOperation || isCreateOperation ? (
                     <div className="flex gap-x-2">
                         <RWAButton
@@ -165,12 +176,26 @@ export const GroupTransactionDetails: React.FC<
                 )}
             </div>
             <div>
+                <RWAFormRow
+                    label="Transaction Type"
+                    hideLine={!isViewOnly}
+                    value={
+                        <RWATableSelect
+                            required
+                            control={control}
+                            name="type"
+                            disabled={isViewOnly}
+                            options={transactionTypeOptions}
+                        />
+                    }
+                />
                 <h2 className="m-4">Cash transaction</h2>
                 <RWAFormRow
                     label="Asset"
                     hideLine={!isViewOnly}
                     value={
                         <RWATableSelect
+                            required
                             control={control}
                             name="cashAssetId"
                             disabled={isViewOnly}
@@ -184,6 +209,7 @@ export const GroupTransactionDetails: React.FC<
                     value={
                         <RWATableTextInput
                             control={control}
+                            required
                             name="cashAmount"
                             type="currency"
                             disabled={isViewOnly}
@@ -195,6 +221,7 @@ export const GroupTransactionDetails: React.FC<
                     hideLine={!isViewOnly}
                     value={
                         <RWATableDatePicker
+                            required
                             control={control}
                             name="cashEntryTime"
                             disabled={isViewOnly}
@@ -208,6 +235,7 @@ export const GroupTransactionDetails: React.FC<
                     value={
                         <RWATableSelect
                             control={control}
+                            required
                             name="fixedIncomeAssetId"
                             disabled={isViewOnly}
                             options={fixedIncomeAssetOptions}
@@ -220,6 +248,7 @@ export const GroupTransactionDetails: React.FC<
                     value={
                         <RWATableTextInput
                             control={control}
+                            required
                             name="fixedIncomeAssetAmount"
                             type="currency"
                             disabled={isViewOnly}
@@ -232,6 +261,7 @@ export const GroupTransactionDetails: React.FC<
                     value={
                         <RWATableDatePicker
                             control={control}
+                            required
                             name="fixedIncomeAssetEntryTime"
                             disabled={isViewOnly}
                         />

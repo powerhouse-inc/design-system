@@ -3,7 +3,7 @@ import {
     GroupTransactionDetails,
     GroupTransactionsTableProps,
 } from '@/rwa';
-import { groupTransactionTypes } from '@/rwa/constants';
+import { groupTransactionTypes } from '@/rwa/constants/transactions';
 import {
     mockCashAssets,
     mockFixedIncomeAssets,
@@ -11,7 +11,6 @@ import {
 } from '@/rwa/mocks';
 import { mockGroupTransactions } from '@/rwa/mocks/transactions';
 import type { Meta, StoryObj } from '@storybook/react';
-import { utils } from 'document-model/document';
 import { useCallback, useState } from 'react';
 import { Fields, GroupTransactionsTable } from './group-transactions-table';
 import { getColumnCount } from './useColumnPriority';
@@ -103,10 +102,10 @@ export const Primary: Story = {
                         <div className="mt-4 rounded-md border border-gray-300 bg-white">
                             <GroupTransactionDetails
                                 transaction={{
-                                    id: utils.hashKey(),
+                                    id: '',
                                     type: groupTransactionTypes[0],
                                     cashTransaction: {
-                                        id: utils.hashKey(),
+                                        id: '',
                                         assetId: mockCashAssets[0].id,
                                         amount: 1000,
                                         entryTime: '2024-01-01',
@@ -114,7 +113,7 @@ export const Primary: Story = {
                                             mockPrincipalLenderId,
                                     },
                                     fixedIncomeTransaction: {
-                                        id: utils.hashKey(),
+                                        id: '',
                                         assetId: mockFixedIncomeAssets[0].id,
                                         amount: 1000,
                                         entryTime: '2024-01-01',

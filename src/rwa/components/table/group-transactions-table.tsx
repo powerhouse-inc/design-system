@@ -10,7 +10,7 @@ import {
     GroupTransactionTypeLabel,
     SPV,
 } from '@/rwa';
-import { groupTransactionTypeLabels } from '@/rwa/constants';
+import { groupTransactionTypeLabels } from '@/rwa/constants/transactions';
 import { useMemo, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { RWATable, RWATableCell, RWATableProps, useSortTableItems } from '.';
@@ -61,10 +61,11 @@ export function mapGroupTransactionToTableFields(
         'Transaction type': groupTransactionTypeLabels[transaction.type],
         'Cash currency': cashAsset?.currency ?? '-',
         'Cash amount': transaction.cashTransaction.amount,
-        'Cash entry time': transaction.cashTransaction.entryTime,
+        'Cash entry time': transaction.cashTransaction.entryTime.split('T')[0],
         'Fixed name': fixedIncomeAsset?.name ?? '-',
         'Fixed amount': transaction.fixedIncomeTransaction.amount,
-        'Fixed entry time': transaction.fixedIncomeTransaction.entryTime,
+        'Fixed entry time':
+            transaction.fixedIncomeTransaction.entryTime.split('T')[0],
     };
 }
 export function getTransactionsForFieldsById(
@@ -143,7 +144,9 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                 accordionContent={
                     expandedRowId === item.id && (
                         <GroupTransactionDetails
-                            transaction={item}
+                            transaction={items?.find(
+                                ({ id }) => id === item.id,
+                            )}
                             className="border-y border-gray-300"
                             cashAssets={cashAssets}
                             fixedIncomeAssets={fixedIncomeAssets}

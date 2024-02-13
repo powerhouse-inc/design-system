@@ -1,9 +1,6 @@
-export const groupTransactionTypes = [
-    'AssetPurchaseGroupTransaction',
-    'AssetSaleGroupTransaction',
-] as const;
+export const groupTransactionTypes = ['AssetPurchase', 'AssetSale'] as const;
 
 export const groupTransactionTypeLabels = {
-    AssetPurchaseGroupTransaction: 'Asset purchase',
-    AssetSaleGroupTransaction: 'Asset sale',
+    AssetPurchase: 'Asset purchase',
+    AssetSale: 'Asset sale',
 } as const;

@@ -1,7 +1,7 @@
 import {
     groupTransactionTypeLabels,
     groupTransactionTypes,
-} from '../constants';
+} from '../constants/transactions';
 
 export type RWAComponentMode = 'view' | 'edit';
 
