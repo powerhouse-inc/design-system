@@ -25,6 +25,15 @@ export type FixedIncomeAssetsTableProps = Omit<
     onSubmitForm: (data: RWAAssetDetailInputs) => void;
 };
 
+function maybeStripTime(maybeDate: string | number | null | undefined) {
+    if (!maybeDate || typeof maybeDate === 'number') return maybeDate;
+    const isDate = !isNaN(new Date(maybeDate).getTime());
+    if (isDate) {
+        return maybeDate.split('T')[0];
+    }
+    return maybeDate;
+}
+
 export function RWAFixedIncomeAssetsTable(props: FixedIncomeAssetsTableProps) {
     const {
         items,
@@ -93,7 +102,7 @@ export function RWAFixedIncomeAssetsTable(props: FixedIncomeAssetsTableProps) {
                     <RWATableCell>{index + 1}</RWATableCell>
                     {fields.map(field => (
                         <RWATableCell key={field}>
-                            {item[field] ?? '-'}
+                            {maybeStripTime(item[field]) ?? '-'}
                         </RWATableCell>
                     ))}
                     <RWATableCell>
