@@ -7,6 +7,7 @@ import { RWAAssetDetails } from '../asset-details';
 import { RWAAssetDetailInputs } from '../asset-details/form';
 import { RWATableRow } from './expandable-row';
 import { useColumnPriority } from './useColumnPriority';
+import { maybeStripTime } from './utils';
 
 export type FixedIncomeAssetsTableProps = Omit<
     RWATableProps<FixedIncomeAsset>,
@@ -24,15 +25,6 @@ export type FixedIncomeAssetsTableProps = Omit<
     onCancelEdit: () => void;
     onSubmitForm: (data: RWAAssetDetailInputs) => void;
 };
-
-function maybeStripTime(maybeDate: string | number | null | undefined) {
-    if (!maybeDate || typeof maybeDate === 'number') return maybeDate;
-    const isDate = !isNaN(new Date(maybeDate).getTime());
-    if (isDate) {
-        return maybeDate.split('T')[0];
-    }
-    return maybeDate;
-}
 
 export function RWAFixedIncomeAssetsTable(props: FixedIncomeAssetsTableProps) {
     const {
