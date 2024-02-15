@@ -105,10 +105,10 @@ devDependencies:
     version: 7.0.3
   document-drive:
     specifier: powerhouse-inc/document-drive#12d3656
-    version: github.com/powerhouse-inc/document-drive/12d3656(@prisma/client@5.7.1)(document-model-libs@1.1.47)(document-model@1.0.28)(localforage@1.10.0)
+    version: github.com/powerhouse-inc/document-drive/12d3656(@prisma/client@5.7.1)(document-model-libs@1.1.47)(document-model@1.0.30)(localforage@1.10.0)
   document-model:
-    specifier: ^1.0.28
-    version: 1.0.28
+    specifier: ^1.0.30
+    version: 1.0.30
   eslint:
     specifier: ^8.56.0
     version: 8.56.0
@@ -8219,16 +8219,6 @@ packages:
       - supports-color
     dev: true
 
-  /document-model@1.0.28:
-    resolution: {integrity: sha512-bigF2MbWB594IJALqHYn5l7lx5WJntinHYPAMnN5UoVP1/BmEnmixGpLnTe9V5679IsFv4QPP402KXE7BiRm8g==}
-    dependencies:
-      immer: 10.0.3
-      json-stringify-deterministic: 1.0.10
-      jszip: 3.10.1
-      mime: 4.0.1
-      zod: 3.22.4
-    dev: true
-
   /document-model@1.0.30:
     resolution: {integrity: sha512-9J2pRg/TDotIEBJvMrJ55t/IIAfSyCb5U6x9l8XZaQ7wq+hTNNO6G4fH6cJsleQGFO2HZqf8tFZ9ySJWkA+MAA==}
     dependencies:
@@ -10606,11 +10596,6 @@ packages:
 
   /json-stable-stringify-without-jsonify@1.0.1:
     resolution: {integrity: sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==}
-    dev: true
-
-  /json-stringify-deterministic@1.0.10:
-    resolution: {integrity: sha512-hBLYMyCnoYh0rQ2ZyEegbLaFAS5KqOZ6HZ5fgq6lGWhtNRKw2JUp/hkfjQS1bjYZlHW9AjvXBWCJe9OwcugRNw==}
-    engines: {node: '>= 4'}
     dev: true
 
   /json-stringify-deterministic@1.0.12:
@@ -14819,7 +14804,7 @@ packages:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
     dev: true
 
-  github.com/powerhouse-inc/document-drive/12d3656(@prisma/client@5.7.1)(document-model-libs@1.1.47)(document-model@1.0.28)(localforage@1.10.0):
+  github.com/powerhouse-inc/document-drive/12d3656(@prisma/client@5.7.1)(document-model-libs@1.1.47)(document-model@1.0.30)(localforage@1.10.0):
     resolution: {tarball: https://codeload.github.com/powerhouse-inc/document-drive/tar.gz/12d3656}
     id: github.com/powerhouse-inc/document-drive/12d3656
     name: document-drive
@@ -14831,7 +14816,7 @@ packages:
       localforage: ^1.10.0
     dependencies:
       '@prisma/client': 5.7.1
-      document-model: 1.0.28
+      document-model: 1.0.30
       document-model-libs: 1.1.47(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
       graphql: 16.8.1
       graphql-request: 6.1.0(graphql@16.8.1)
