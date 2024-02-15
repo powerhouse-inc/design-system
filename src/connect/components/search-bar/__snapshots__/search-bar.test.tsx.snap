@@ -29,9 +29,12 @@ exports[`ConnectSearchBar Component > should match snapshot 1`] = `
       />
     </div>
     <button
+      aria-expanded="false"
+      aria-haspopup="true"
       aria-label="menu"
       class="ml-3 flex h-full flex-row items-center outline-none"
       data-rac=""
+      id="react-aria-:r5:"
       type="button"
     >
       <div

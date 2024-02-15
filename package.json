@@ -50,8 +50,8 @@
         "@storybook/react-vite": "^7.6.8",
         "@storybook/testing-library": "^0.2.2",
         "@testing-library/dom": "^9.3.4",
-        "@testing-library/jest-dom": "^6.2.0",
-        "@testing-library/react": "^14.1.2",
+        "@testing-library/jest-dom": "^6.4.2",
+        "@testing-library/react": "^14.2.1",
         "@total-typescript/ts-reset": "^0.5.1",
         "@types/jest": "^29.5.11",
         "@types/react": "^18.2.48",
@@ -102,7 +102,6 @@
     },
     "peerDependencies": {
         "react": "^18.2.0",
-        "react-aria-components": "1.0.1",
         "react-dom": "^18.2.0"
     },
     "resolutions": {
@@ -116,6 +115,8 @@
         "currency.js": "^2.0.4",
         "date-fns": "^3.3.1",
         "react-aria": "^3.32.0",
+        "react-aria-components": "1.1.0",
+
         "react-hook-form": "^7.49.3"
     }
 }
