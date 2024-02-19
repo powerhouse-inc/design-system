@@ -95,8 +95,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
     }, []);
 
     const isHighlighted = getIsHighlighted();
-    const showDropdownMenuButton =
-        props.mode === 'read' && (mouseIsWithinItemContainer || isHighlighted);
+    const showDropdownMenuButton = mouseIsWithinItemContainer;
     const isDrive =
         item.type === 'LOCAL_DRIVE' ||
         item.type === 'CLOUD_DRIVE' ||
@@ -115,7 +114,10 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         : itemOptions;
 
     const dropdownMenuButton = (
-        <button onClick={() => setIsDropdownMenuOpen(true)}>
+        <button
+            onClick={() => setIsDropdownMenuOpen(true)}
+            className="absolute right-1 top-3"
+        >
             <Icon name="vertical-dots" className="text-gray-600" />
         </button>
     );
@@ -261,13 +263,16 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
             >
                 {children}
             </TreeViewItem>
-            <div className="absolute right-1 top-3">
+            <>
                 {showDropdownMenuButton ? (
                     dropdownMenuButton
                 ) : (
-                    <SyncStatusIcon syncStatus={item.syncStatus} />
+                    <SyncStatusIcon
+                        syncStatus={item.syncStatus}
+                        className="absolute right-2 top-4"
+                    />
                 )}
-            </div>
+            </>
             <ConnectDropdownMenu
                 isOpen={isDropdownMenuOpen}
                 onOpenChange={onDropdownMenuOpenChange}
