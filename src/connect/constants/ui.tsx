@@ -60,3 +60,17 @@ export const locationInfoByLocation = {
         icon: <Icon name="drive" />,
     },
 } as const;
+
+export const SYNCING = 'SYNCING';
+export const SUCCESS = 'SUCCESS';
+export const CONFLICT = 'CONFLICT';
+export const MISSING = 'MISSING';
+export const ERROR = 'ERROR';
+
+export const driveStatuses = [
+    SYNCING,
+    SUCCESS,
+    CONFLICT,
+    MISSING,
+    ERROR,
+] as const;

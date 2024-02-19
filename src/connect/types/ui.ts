@@ -1,4 +1,8 @@
-import { ConnectDropdownMenuItem, defaultDropdownMenuOptions } from '@/connect';
+import {
+    ConnectDropdownMenuItem,
+    defaultDropdownMenuOptions,
+    driveStatuses,
+} from '@/connect';
 
 export type DriveType = 'PUBLIC_DRIVE' | 'LOCAL_DRIVE' | 'CLOUD_DRIVE';
 
@@ -49,3 +53,7 @@ export type DriveTreeItem = TreeItem & {
 };
 
 export type DefaultOptionId = (typeof defaultDropdownMenuOptions)[number]['id'];
+
+export type DriveStatuses = typeof driveStatuses;
+
+export type DriveStatus = DriveStatuses[number];
