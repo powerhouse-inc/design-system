@@ -1,23 +1,23 @@
 import {
     CONFLICT,
-    DriveStatus,
     ERROR,
     MISSING,
     SUCCESS,
     SYNCING,
+    SyncStatus,
 } from '@/connect';
 import { Icon } from '@/powerhouse';
 import { ComponentPropsWithoutRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-export type SyncIconProps = Omit<
+export type SyncStatusIconProps = Omit<
     ComponentPropsWithoutRef<typeof Icon>,
     'name'
 > & {
-    driveStatus: DriveStatus;
+    syncStatus: SyncStatus;
 };
-export function SyncIcon(props: SyncIconProps) {
-    const driveStatusIcons = {
+export function SyncStatusIcon(props: SyncStatusIconProps) {
+    const syncStatusIcons = {
         [SYNCING]: (
             <Icon
                 size={12}
@@ -60,5 +60,5 @@ export function SyncIcon(props: SyncIconProps) {
         ),
     } as const;
 
-    return driveStatusIcons[props.driveStatus];
+    return syncStatusIcons[props.syncStatus];
 }

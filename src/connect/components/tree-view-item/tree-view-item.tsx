@@ -3,7 +3,6 @@ import {
     ConnectDropdownMenuItem,
     DriveSettingsFormSubmitHandler,
     DriveSettingsModal,
-    StatusIndicator,
     TreeItem,
     defaultDropdownMenuOptions,
     getIsMouseInsideContainer,
@@ -17,6 +16,7 @@ import {
 } from '@/powerhouse';
 import { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
+import { SyncStatusIcon } from '../status-icon';
 
 const submitIcon = <Icon name="check" className="text-gray-600" />;
 const cancelIcon = <Icon name="xmark" className="text-gray-600" />;
@@ -97,7 +97,6 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
     const isHighlighted = getIsHighlighted();
     const showDropdownMenuButton =
         props.mode === 'read' && (mouseIsWithinItemContainer || isHighlighted);
-    const statusIcon = getStatusIcon();
     const isDrive =
         item.type === 'LOCAL_DRIVE' ||
         item.type === 'CLOUD_DRIVE' ||
@@ -177,9 +176,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
             onOptionsClick?.(
                 {
                     ...item,
-                    status: data.availableOffline
-                        ? 'AVAILABLE_OFFLINE'
-                        : 'AVAILABLE',
+                    availableOffline: data.availableOffline,
                 },
                 'change-availability',
             );
@@ -245,49 +242,6 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         };
     }
 
-    function getStatusIcon() {
-        const iconProps = {
-            className: 'm-1.5',
-        };
-        if (item.type === 'LOCAL_DRIVE') {
-            return (
-                <StatusIndicator
-                    type="LOCAL_DRIVE"
-                    error={item.error}
-                    iconProps={iconProps}
-                />
-            );
-        }
-
-        if (item.type === 'CLOUD_DRIVE' || item.type === 'PUBLIC_DRIVE') {
-            const sharedProps = {
-                type: item.type,
-                error: item.error,
-                isConnected: item.isConnected ?? false,
-                iconProps,
-            };
-
-            if (item.status === 'AVAILABLE_OFFLINE') {
-                return (
-                    <StatusIndicator
-                        {...sharedProps}
-                        availability="AVAILABLE_OFFLINE"
-                        syncStatus={item.syncStatus ?? 'NOT_SYNCED_YET'}
-                    />
-                );
-            }
-
-            if (item.status === 'AVAILABLE') {
-                return (
-                    <StatusIndicator
-                        {...sharedProps}
-                        availability="cloud-only"
-                    />
-                );
-            }
-        }
-    }
-
     return (
         <article className="relative">
             <TreeViewItem
@@ -308,7 +262,11 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                 {children}
             </TreeViewItem>
             <div className="absolute right-1 top-3">
-                {showDropdownMenuButton ? dropdownMenuButton : statusIcon}
+                {showDropdownMenuButton ? (
+                    dropdownMenuButton
+                ) : (
+                    <SyncStatusIcon syncStatus={item.syncStatus} />
+                )}
             </div>
             <ConnectDropdownMenu
                 isOpen={isDropdownMenuOpen}
@@ -329,7 +287,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                         driveName: item.label,
                         // todo: make this required for drives
                         sharingType: item.sharingType ?? 'PUBLIC',
-                        availableOffline: item.status === 'AVAILABLE_OFFLINE',
+                        availableOffline: item.availableOffline,
                         location:
                             item.type === 'LOCAL_DRIVE' ? 'LOCAL' : 'CLOUD',
                         onCancel() {

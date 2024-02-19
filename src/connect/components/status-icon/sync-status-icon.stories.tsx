@@ -1,12 +1,12 @@
-import { driveStatuses } from '@/connect';
+import { syncStatuses } from '@/connect';
 import { Meta, StoryObj } from '@storybook/react';
 import { capitalCase } from 'change-case';
-import { SyncIcon } from '.';
+import { SyncStatusIcon } from '.';
 
 const meta = {
-    title: 'Connect/Components/SyncIcon',
-    component: SyncIcon,
-} satisfies Meta<typeof SyncIcon>;
+    title: 'Connect/Components/SyncStatusIcon',
+    component: SyncStatusIcon,
+} satisfies Meta<typeof SyncStatusIcon>;
 
 export default meta;
 
@@ -14,14 +14,15 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
     args: {
-        driveStatus: 'SYNCING',
+        syncStatus: 'SYNCING',
     },
     render: function Wrapper() {
         return (
             <div className="flex flex-col flex-wrap gap-4">
-                {driveStatuses.map(status => (
+                {syncStatuses.map(status => (
                     <p key={status} className="flex items-center gap-2">
-                        {capitalCase(status)} <SyncIcon driveStatus={status} />
+                        {capitalCase(status)}{' '}
+                        <SyncStatusIcon syncStatus={status} />
                     </p>
                 ))}
             </div>
@@ -31,16 +32,16 @@ export const Default: Story = {
 
 export const WithDifferentSizes: Story = {
     args: {
-        driveStatus: 'SYNCING',
+        syncStatus: 'SYNCING',
     },
     render: function Wrapper() {
         return (
             <div className="flex flex-col flex-wrap gap-4">
-                {driveStatuses.map((status, index) => (
+                {syncStatuses.map((status, index) => (
                     <p key={status} className="flex items-center gap-2">
                         {capitalCase(status)}{' '}
-                        <SyncIcon
-                            driveStatus={status}
+                        <SyncStatusIcon
+                            syncStatus={status}
                             size={(index + 1) * 24}
                         />
                     </p>
@@ -52,16 +53,16 @@ export const WithDifferentSizes: Story = {
 
 export const WithDifferentColors: Story = {
     args: {
-        driveStatus: 'SYNCING',
+        syncStatus: 'SYNCING',
     },
     render: function Wrapper() {
         return (
             <div className="flex flex-col flex-wrap gap-4">
-                {driveStatuses.map(status => (
+                {syncStatuses.map(status => (
                     <p key={status} className="flex items-center gap-2">
                         {capitalCase(status)}{' '}
-                        <SyncIcon
-                            driveStatus={status}
+                        <SyncStatusIcon
+                            syncStatus={status}
                             className="text-gray-900"
                         />
                     </p>
