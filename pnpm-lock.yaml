@@ -57,7 +57,7 @@ devDependencies:
     version: 7.6.15(react@18.2.0)
   '@storybook/addon-themes':
     specifier: ^7.6.15
-    version: 7.6.15
+    version: 7.6.17
   '@storybook/blocks':
     specifier: ^7.6.15
     version: 7.6.15(@types/react-dom@18.2.19)(@types/react@18.2.55)(react-dom@18.2.0)(react@18.2.0)
@@ -5304,8 +5304,8 @@ packages:
       ts-dedent: 2.2.0
     dev: true
 
-  /@storybook/addon-themes@7.6.15:
-    resolution: {integrity: sha512-wslDMMCRuIxTKkws0tux+8rs329HhQjlra1eCGQjNveYjhW7RHVxRKKnwV1KBAmnQN6R5Lxx3RRlGOB/Q94Uqg==}
+  /@storybook/addon-themes@7.6.17:
+    resolution: {integrity: sha512-i/dI3GKlJmQv0Di9HM3fKJvFIab55kvva0vXCGBkqSw3wYoZuq++npkWeDnjjZUvggV12H2RTdGqYwMCXB/GHg==}
     dependencies:
       ts-dedent: 2.2.0
     dev: true
@@ -13838,9 +13838,6 @@ packages:
   /sqlite3@5.1.7:
     resolution: {integrity: sha512-GGIyOiFaG+TUra3JIfkI/zGP8yZYLPQ0pl1bH+ODjiX57sPhrLU5sQJn1y9bDKZUFYkX1crlrPfSYt0BKKdkog==}
     requiresBuild: true
-    peerDependenciesMeta:
-      node-gyp:
-        optional: true
     dependencies:
       bindings: 1.5.0
       node-addon-api: 7.1.0
