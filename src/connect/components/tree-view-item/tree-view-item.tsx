@@ -10,7 +10,6 @@ import {
     PUBLIC_DRIVE,
     TreeItem,
     defaultDropdownMenuOptions,
-    driveTypes,
     getIsMouseInsideContainer,
 } from '@/connect';
 import {
@@ -22,6 +21,7 @@ import {
 } from '@/powerhouse';
 import { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
+import { getIsDrive, getIsLocalDrive } from '../drive-view/utils';
 import { SyncStatusIcon } from '../status-icon';
 
 const submitIcon = <Icon name="check" className="text-gray-600" />;
@@ -102,8 +102,8 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
 
     const isHighlighted = getIsHighlighted();
     const showDropdownMenuButton = mouseIsWithinItemContainer;
-    const isDrive = driveTypes.includes(item.type);
-    const isLocalDrive = item.type === LOCAL_DRIVE;
+    const isDrive = getIsDrive(item.type);
+    const isLocalDrive = getIsLocalDrive(item.type);
     const isCloudOrPublicDrive = isDrive && !isLocalDrive;
     const itemOptions =
         item.options ?? (defaultOptions as ConnectDropdownMenuItem[]);
