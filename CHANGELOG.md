@@ -1,3 +1,29 @@
+# [1.0.0-alpha.64](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.63...v1.0.0-alpha.64) (2024-02-20)
+
+
+### Features
+
+* added rename modal + support for write mode file-item ([5e101eb](https://github.com/powerhouse-inc/design-system/commit/5e101eb68c151f14b2cb6731151787900d9ecc3d))
+
+# [1.0.0-alpha.63](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.62...v1.0.0-alpha.63) (2024-02-20)
+
+
+### Bug Fixes
+
+* deal with Date objects on maybeStripTime util ([ff6d6f6](https://github.com/powerhouse-inc/design-system/commit/ff6d6f64cf1c151d38f97e2b67a51339437078ed))
+
+
+### Features
+
+* strict check for ISO date ([cded40d](https://github.com/powerhouse-inc/design-system/commit/cded40d13267605642f239bdc7f52f52bc16ba6e))
+
+# [1.0.0-alpha.62](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.61...v1.0.0-alpha.62) (2024-02-20)
+
+
+### Features
+
+* update sync icons for new sync algorithm ([#212](https://github.com/powerhouse-inc/design-system/issues/212)) ([d050cef](https://github.com/powerhouse-inc/design-system/commit/d050ceff3a696e8f7a71e6a130a99dcbb613bf48))
+
 # [1.0.0-alpha.61](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.60...v1.0.0-alpha.61) (2024-02-16)
 
 
