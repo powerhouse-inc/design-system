@@ -30,8 +30,8 @@ export type BaseTreeItem = {
     path: string;
     label: string;
     type: TreeItemType;
-    syncStatus: SyncStatus;
     availableOffline: boolean;
+    syncStatus?: SyncStatus;
     error?: Error;
     options?: ConnectDropdownMenuItem[];
     sharingType?: SharingType;

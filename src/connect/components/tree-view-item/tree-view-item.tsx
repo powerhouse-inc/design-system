@@ -1,10 +1,16 @@
 import {
+    CLOUD_DRIVE,
     ConnectDropdownMenu,
     ConnectDropdownMenuItem,
     DriveSettingsFormSubmitHandler,
     DriveSettingsModal,
+    FILE,
+    FOLDER,
+    LOCAL_DRIVE,
+    PUBLIC_DRIVE,
     TreeItem,
     defaultDropdownMenuOptions,
+    driveTypes,
     getIsMouseInsideContainer,
 } from '@/connect';
 import {
@@ -96,10 +102,9 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
 
     const isHighlighted = getIsHighlighted();
     const showDropdownMenuButton = mouseIsWithinItemContainer;
-    const isDrive =
-        item.type === 'LOCAL_DRIVE' ||
-        item.type === 'CLOUD_DRIVE' ||
-        item.type === 'PUBLIC_DRIVE';
+    const isDrive = driveTypes.includes(item.type);
+    const isLocalDrive = item.type === LOCAL_DRIVE;
+    const isCloudOrPublicDrive = isDrive && !isLocalDrive;
     const itemOptions =
         item.options ?? (defaultOptions as ConnectDropdownMenuItem[]);
     const dropdownMenuItems = isDrive
@@ -198,14 +203,13 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         if (disableHighlightStyles) return false;
         if (isDragging) return false;
         if (props.mode === 'write') return true;
-        if (item.isSelected) return true;
         if (isDropdownMenuOpen) return true;
         return false;
     }
 
     function getItemIcon() {
         switch (item.type) {
-            case 'FOLDER':
+            case FOLDER:
                 return {
                     icon: (
                         <Icon name="folder-close" className="text-gray-600" />
@@ -214,13 +218,13 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                         <Icon name="folder-open" className="text-gray-600" />
                     ),
                 };
-            case 'FILE':
+            case FILE:
                 return {};
-            case 'LOCAL_DRIVE':
+            case LOCAL_DRIVE:
                 return { icon: <Icon name="hdd" /> };
-            case 'CLOUD_DRIVE':
+            case CLOUD_DRIVE:
                 return { icon: <Icon name="server" /> };
-            case 'PUBLIC_DRIVE':
+            case PUBLIC_DRIVE:
                 return { icon: <Icon name="m" /> };
         }
     }
@@ -243,6 +247,17 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
             ...restItemContainerProps,
         };
     }
+    function statusIconOrDropdownMenuButton() {
+        if (showDropdownMenuButton) return dropdownMenuButton;
+        if (item.syncStatus && isCloudOrPublicDrive) {
+            return (
+                <SyncStatusIcon
+                    syncStatus={item.syncStatus}
+                    className="absolute right-2 top-4"
+                />
+            );
+        }
+    }
 
     return (
         <article className="relative">
@@ -263,16 +278,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
             >
                 {children}
             </TreeViewItem>
-            <>
-                {showDropdownMenuButton ? (
-                    dropdownMenuButton
-                ) : (
-                    <SyncStatusIcon
-                        syncStatus={item.syncStatus}
-                        className="absolute right-2 top-4"
-                    />
-                )}
-            </>
+            {statusIconOrDropdownMenuButton()}
             <ConnectDropdownMenu
                 isOpen={isDropdownMenuOpen}
                 onOpenChange={onDropdownMenuOpenChange}
