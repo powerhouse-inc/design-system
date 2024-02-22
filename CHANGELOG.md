@@ -1,3 +1,85 @@
+# [1.0.0-alpha.67](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.66...v1.0.0-alpha.67) (2024-02-21)
+
+
+### Features
+
+* hide dropdown icon when is write ([#219](https://github.com/powerhouse-inc/design-system/issues/219)) ([f98b3bc](https://github.com/powerhouse-inc/design-system/commit/f98b3bcbf6be4b4e21a243e7b3d02b7fd8b8e276))
+
+# [1.0.0-alpha.66](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.65...v1.0.0-alpha.66) (2024-02-21)
+
+
+### Features
+
+* added switchboard link button to RWATabs ([e78bca0](https://github.com/powerhouse-inc/design-system/commit/e78bca055e33ab338ac3e1a83bf58fa489c5533e))
+
+# [1.0.0-alpha.65](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.64...v1.0.0-alpha.65) (2024-02-20)
+
+
+### Features
+
+* add chromatic ([#211](https://github.com/powerhouse-inc/design-system/issues/211)) ([99eee4f](https://github.com/powerhouse-inc/design-system/commit/99eee4f9097d149b0bc94fe3c21a7bfe88169d88))
+
+# [1.0.0-alpha.64](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.63...v1.0.0-alpha.64) (2024-02-20)
+
+
+### Features
+
+* added rename modal + support for write mode file-item ([5e101eb](https://github.com/powerhouse-inc/design-system/commit/5e101eb68c151f14b2cb6731151787900d9ecc3d))
+
+# [1.0.0-alpha.63](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.62...v1.0.0-alpha.63) (2024-02-20)
+
+
+### Bug Fixes
+
+* deal with Date objects on maybeStripTime util ([ff6d6f6](https://github.com/powerhouse-inc/design-system/commit/ff6d6f64cf1c151d38f97e2b67a51339437078ed))
+
+
+### Features
+
+* strict check for ISO date ([cded40d](https://github.com/powerhouse-inc/design-system/commit/cded40d13267605642f239bdc7f52f52bc16ba6e))
+
+# [1.0.0-alpha.62](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.61...v1.0.0-alpha.62) (2024-02-20)
+
+
+### Features
+
+* update sync icons for new sync algorithm ([#212](https://github.com/powerhouse-inc/design-system/issues/212)) ([d050cef](https://github.com/powerhouse-inc/design-system/commit/d050ceff3a696e8f7a71e6a130a99dcbb613bf48))
+
+# [1.0.0-alpha.61](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.60...v1.0.0-alpha.61) (2024-02-16)
+
+
+### Features
+
+* added rwa editor controls for undo/redo export and close ([7a4f4d2](https://github.com/powerhouse-inc/design-system/commit/7a4f4d222a88ff4ec3d46f2f6bd67d337f71be0c))
+
+# [1.0.0-alpha.60](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.59...v1.0.0-alpha.60) (2024-02-16)
+
+
+### Features
+
+* update add asset icon ([#205](https://github.com/powerhouse-inc/design-system/issues/205)) ([a09ade2](https://github.com/powerhouse-inc/design-system/commit/a09ade20bcbc96fd77b8c4e665ce7da157500e9d))
+
+# [1.0.0-alpha.59](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.58...v1.0.0-alpha.59) (2024-02-15)
+
+
+### Features
+
+* use public drive form for adding cloud drives ([a6e4191](https://github.com/powerhouse-inc/design-system/commit/a6e4191ec6810e2c63185abeb618950ca9bd8593))
+
+# [1.0.0-alpha.58](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.57...v1.0.0-alpha.58) (2024-02-15)
+
+
+### Features
+
+* bump all to latest ([#197](https://github.com/powerhouse-inc/design-system/issues/197)) ([9e40519](https://github.com/powerhouse-inc/design-system/commit/9e405192943b3c9b146ef8fc4864b5b7ec748694))
+
+# [1.0.0-alpha.57](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.56...v1.0.0-alpha.57) (2024-02-13)
+
+
+### Features
+
+* remove id field from tables ([#189](https://github.com/powerhouse-inc/design-system/issues/189)) ([47312f8](https://github.com/powerhouse-inc/design-system/commit/47312f8b15ed7590951971eea8cd266d403b5862))
+
 # [1.0.0-alpha.56](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.55...v1.0.0-alpha.56) (2024-02-09)
 
 

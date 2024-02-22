@@ -18,7 +18,6 @@ export interface RWATableProps<T extends object> extends DivProps {
     children?: React.ReactNode;
     onClickSort?: (key: string, direction: SortDirection) => void;
     footer?: React.ReactNode;
-    createNewButton?: React.ReactNode;
 }
 
 /** Allows using forward ref with generics.
@@ -40,7 +39,6 @@ export const RWATable = fixedForwardRef(function RWATable<T extends object>(
         children,
         header,
         items,
-        createNewButton,
         footer,
         renderRow,
         onClickSort,
@@ -115,14 +113,9 @@ export const RWATable = fixedForwardRef(function RWATable<T extends object>(
                             renderRow &&
                             items.map((item, index) => renderRow(item, index))}
                     </tbody>
-                    {footer && (
-                        <tfoot>
-                            <td colSpan={99999}>{footer}</td>
-                        </tfoot>
-                    )}
                 </table>
             </div>
-            {createNewButton}
+            {footer}
         </>
     );
 });
