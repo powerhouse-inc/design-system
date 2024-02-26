@@ -1,3 +1,4 @@
+import { DateTimeLocalInput } from '@/connect/components/date-time-input';
 import { DivProps, Icon, mergeClassNameProps } from '@/powerhouse';
 import {
     CashAsset,
@@ -9,16 +10,10 @@ import {
     groupTransactionTypeLabels,
     groupTransactionTypes,
 } from '@/rwa/constants/transactions';
-import { CalendarDate, parseDate } from '@internationalized/date';
 import React from 'react';
 import { SubmitHandler, UseFormReset, useForm } from 'react-hook-form';
 import { RWAButton } from '../button';
-import {
-    RWAFormRow,
-    RWATableDatePicker,
-    RWATableSelect,
-    RWATableTextInput,
-} from '../table-inputs';
+import { RWAFormRow, RWATableSelect, RWATableTextInput } from '../table-inputs';
 
 const defaultLabels = {
     transaction: 'Transaction',
@@ -52,13 +47,12 @@ export type RWATransactionFee = {
 
 export type GroupTransactionDetailInputs = {
     type: GroupTransactionType | undefined;
+    entryTime: string | undefined;
     cashAssetId: string | undefined;
     cashAmount: number | undefined;
-    cashEntryTime: CalendarDate;
     cashCounterPartyAccountId: string | undefined;
     fixedIncomeAssetId: string | undefined;
     fixedIncomeAssetAmount: number | undefined;
-    fixedIncomeAssetEntryTime: CalendarDate;
 };
 
 export interface GroupTransactionsDetailsProps extends DivProps {
@@ -116,25 +110,20 @@ export const GroupTransactionDetails: React.FC<
         ({ id }) => id === transaction?.fixedIncomeTransaction?.assetId,
     );
 
-    const { control, handleSubmit, reset } =
+    const { control, handleSubmit, reset, register } =
         useForm<GroupTransactionDetailInputs>({
             defaultValues: {
                 type: transaction?.type,
+                entryTime:
+                    transaction?.cashTransaction?.entryTime ??
+                    transaction?.fixedIncomeTransaction?.entryTime ??
+                    new Date().toISOString(),
                 cashAssetId: cashAsset?.id,
                 cashAmount: transaction?.cashTransaction?.amount ?? 0,
-                cashEntryTime: parseDate(
-                    transaction?.cashTransaction?.entryTime.split('T')[0] ??
-                        new Date().toISOString().split('T')[0],
-                ),
                 cashCounterPartyAccountId: principalLenderId,
                 fixedIncomeAssetId: fixedIncomeAsset?.id,
                 fixedIncomeAssetAmount:
                     transaction?.fixedIncomeTransaction?.amount ?? 0,
-                fixedIncomeAssetEntryTime: parseDate(
-                    transaction?.fixedIncomeTransaction?.entryTime.split(
-                        'T',
-                    )[0] ?? new Date().toISOString().split('T')[0],
-                ),
             },
         });
 
@@ -197,6 +186,16 @@ export const GroupTransactionDetails: React.FC<
                         />
                     }
                 />
+                <RWAFormRow
+                    label="Entry Time"
+                    hideLine={!isViewOnly}
+                    value={
+                        <DateTimeLocalInput
+                            {...register('entryTime', { required: true })}
+                            name="entryTime"
+                        />
+                    }
+                />
                 <h2 className="m-4">Cash transaction</h2>
                 <RWAFormRow
                     label="Asset"
@@ -223,18 +222,6 @@ export const GroupTransactionDetails: React.FC<
                         />
                     }
                 />
-                <RWAFormRow
-                    label="Entry Time"
-                    hideLine={!isViewOnly}
-                    value={
-                        <RWATableDatePicker
-                            required
-                            control={control}
-                            name="cashEntryTime"
-                            disabled={isViewOnly}
-                        />
-                    }
-                />
                 <h2 className="m-4">Fixed income transaction</h2>
                 <RWAFormRow
                     label="Asset"
@@ -257,18 +244,6 @@ export const GroupTransactionDetails: React.FC<
                             control={control}
                             required
                             name="fixedIncomeAssetAmount"
-                            disabled={isViewOnly}
-                        />
-                    }
-                />
-                <RWAFormRow
-                    label="Entry Time"
-                    hideLine={!isViewOnly}
-                    value={
-                        <RWATableDatePicker
-                            control={control}
-                            required
-                            name="fixedIncomeAssetEntryTime"
                             disabled={isViewOnly}
                         />
                     }

@@ -46,7 +46,7 @@ export const Primary: Story = {
         items: mockGroupTransactions,
         fixedIncomeAssets: mockFixedIncomeAssets,
         cashAssets: mockCashAssets,
-        principalLenderId: mockPrincipalLenderId,
+        principalLenderAccountId: mockPrincipalLenderId,
         fieldsPriority,
         columnCountByTableWidth,
     },
@@ -71,13 +71,13 @@ export const Primary: Story = {
                 setSelectedGroupTransactionToEdit(undefined);
             }, []);
 
-        const onSubmitEdit: GroupTransactionsTableProps['onSubmitForm'] =
+        const onSubmitEdit: GroupTransactionsTableProps['onSubmitEdit'] =
             useCallback(data => {
                 console.log('edit', { data });
                 setSelectedGroupTransactionToEdit(undefined);
             }, []);
 
-        const onSubmitCreate: GroupTransactionsTableProps['onSubmitForm'] =
+        const onSubmitCreate: GroupTransactionsTableProps['onSubmitCreate'] =
             useCallback(data => {
                 console.log('create', { data });
                 setShowNewGroupTransactionForm(false);

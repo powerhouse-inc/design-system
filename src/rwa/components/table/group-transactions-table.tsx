@@ -82,18 +82,21 @@ export type GroupTransactionsTableProps = Omit<
     spvs: SPV[];
     cashAssets: CashAsset[];
     fixedIncomeAssets: FixedIncomeAsset[];
-    principalLenderId: string;
+    principalLenderAccountId: string;
     columnCountByTableWidth: Record<string, number>;
     fieldsPriority: (keyof Fields)[];
     expandedRowId: string | undefined;
     selectedGroupTransactionToEdit?: GroupTransaction;
+    showNewGroupTransactionForm: boolean;
+    setShowNewGroupTransactionForm: (show: boolean) => void;
     toggleExpandedRow: (id: string) => void;
     onClickDetails: (item: GroupTransaction | undefined) => void;
     setSelectedGroupTransactionToEdit: (
         item: GroupTransaction | undefined,
     ) => void;
     onCancelEdit: () => void;
-    onSubmitForm: (data: GroupTransactionDetailInputs) => void;
+    onSubmitEdit: (data: GroupTransactionDetailInputs) => void;
+    onSubmitCreate: (data: GroupTransactionDetailInputs) => void;
 };
 
 export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
@@ -101,16 +104,19 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
         items,
         fixedIncomeAssets,
         cashAssets,
-        principalLenderId,
+        principalLenderAccountId,
         fieldsPriority,
         columnCountByTableWidth,
         expandedRowId,
         selectedGroupTransactionToEdit,
+        showNewGroupTransactionForm,
+        setShowNewGroupTransactionForm,
         toggleExpandedRow,
         onClickDetails,
         setSelectedGroupTransactionToEdit,
         onCancelEdit,
-        onSubmitForm,
+        onSubmitEdit,
+        onSubmitCreate,
         ...restProps
     } = props;
 
@@ -149,7 +155,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                             className="border-y border-gray-300"
                             cashAssets={cashAssets}
                             fixedIncomeAssets={fixedIncomeAssets}
-                            principalLenderId={principalLenderId}
+                            principalLenderId={principalLenderAccountId}
                             operation={
                                 selectedGroupTransactionToEdit?.id === item.id
                                     ? 'edit'
@@ -167,7 +173,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                                 onCancelEdit();
                             }}
                             onSubmitForm={data => {
-                                onSubmitForm(data);
+                                onSubmitEdit(data);
                             }}
                         />
                     )
@@ -213,14 +219,53 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
     };
 
     return (
-        <RWATable
-            {...restProps}
-            className={twMerge(expandedRowId && 'max-h-max')}
-            onClickSort={sortHandler}
-            ref={tableContainerRef}
-            items={sortedItems}
-            header={headerLabels}
-            renderRow={renderRow}
-        />
+        <>
+            <RWATable
+                {...restProps}
+                className={twMerge(expandedRowId && 'max-h-max')}
+                onClickSort={sortHandler}
+                ref={tableContainerRef}
+                items={sortedItems}
+                header={headerLabels}
+                renderRow={renderRow}
+            />
+            <button
+                onClick={() => setShowNewGroupTransactionForm(true)}
+                className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-white p-2 text-sm font-semibold text-gray-900"
+            >
+                <span>Create Group Transaction</span>
+                <Icon name="plus" size={14} />
+            </button>
+            {showNewGroupTransactionForm && (
+                <div className="mt-4 rounded-md border border-gray-300 bg-white">
+                    <GroupTransactionDetails
+                        transaction={{
+                            id: '',
+                            type: 'AssetPurchase',
+                            cashTransaction: {
+                                id: '',
+                                assetId: cashAssets[0].id,
+                                amount: 1000,
+                                entryTime: '2024-01-01',
+                                counterPartyAccountId: principalLenderAccountId,
+                            },
+                            fixedIncomeTransaction: {
+                                id: '',
+                                assetId: fixedIncomeAssets[0].id,
+                                amount: 1000,
+                                entryTime: '2024-01-01',
+                            },
+                        }}
+                        fixedIncomeAssets={fixedIncomeAssets}
+                        cashAssets={cashAssets}
+                        principalLenderId={principalLenderAccountId}
+                        operation="create"
+                        onCancel={() => setShowNewGroupTransactionForm(false)}
+                        onSubmitForm={onSubmitCreate}
+                        hideNonEditableFields
+                    />
+                </div>
+            )}
+        </>
     );
 }
