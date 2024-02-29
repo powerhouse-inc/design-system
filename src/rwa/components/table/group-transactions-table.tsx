@@ -2,29 +2,24 @@ import { Icon } from '@/powerhouse';
 import {
     CashAsset,
     FixedIncomeAsset,
-    FixedIncomeType,
     GroupTransaction,
     GroupTransactionDetailInputs,
     GroupTransactionDetails,
-    GroupTransactionTypeLabel,
-    SPV,
 } from '@/rwa';
-import { groupTransactionTypeLabels } from '@/rwa/constants/transactions';
 import { useMemo, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { RWATable, RWATableCell, RWATableProps, useSortTableItems } from '.';
 import { RWATableRow } from './expandable-row';
 import { useColumnPriority } from './useColumnPriority';
+import { handleDateInTable } from './utils';
 
 export type Fields = {
     id: string;
-    'Transaction type': GroupTransactionTypeLabel;
-    'Cash currency': string | undefined;
-    'Cash amount': number | undefined;
-    'Cash entry time': string | undefined;
-    'Fixed name': string | undefined;
-    'Fixed amount': number | undefined;
-    'Fixed entry time': string | undefined;
+    'Entry time': string | undefined;
+    Asset: string | undefined;
+    Quantity: number | undefined;
+    'USD Amount': number | undefined;
+    'Cash Balance Change': number | undefined;
 };
 
 export function mapGroupTransactionsToTableFields(
@@ -49,22 +44,16 @@ export function mapGroupTransactionToTableFields(
     fixedIncomeAssets: FixedIncomeAsset[],
 ): Fields | undefined {
     if (!transaction) return;
-    const cashAsset = cashAssets.find(
-        asset => asset.id === transaction.cashTransaction?.assetId,
-    );
     const fixedIncomeAsset = fixedIncomeAssets.find(
         asset => asset.id === transaction.fixedIncomeTransaction?.assetId,
     );
     return {
         id: transaction.id,
-        'Transaction type': groupTransactionTypeLabels[transaction.type],
-        'Cash currency': cashAsset?.currency,
-        'Cash amount': transaction.cashTransaction?.amount,
-        'Cash entry time': transaction.cashTransaction?.entryTime.split('T')[0],
-        'Fixed name': fixedIncomeAsset?.name,
-        'Fixed amount': transaction.fixedIncomeTransaction?.amount,
-        'Fixed entry time':
-            transaction.fixedIncomeTransaction?.entryTime.split('T')[0],
+        'Entry time': transaction.entryTime,
+        Asset: fixedIncomeAsset?.name,
+        Quantity: transaction.fixedIncomeTransaction?.amount,
+        'USD Amount': transaction.fixedIncomeTransaction?.amount,
+        'Cash Balance Change': transaction.cashBalanceChange,
     };
 }
 export function getTransactionsForFieldsById(
@@ -78,16 +67,15 @@ export type GroupTransactionsTableProps = Omit<
     RWATableProps<GroupTransaction>,
     'header' | 'renderRow'
 > & {
-    fixedIncomeTypes: FixedIncomeType[];
-    spvs: SPV[];
     cashAssets: CashAsset[];
     fixedIncomeAssets: FixedIncomeAsset[];
     principalLenderAccountId: string;
     columnCountByTableWidth: Record<string, number>;
     fieldsPriority: (keyof Fields)[];
     expandedRowId: string | undefined;
-    selectedGroupTransactionToEdit?: GroupTransaction;
+    selectedGroupTransactionToEdit?: GroupTransaction | null | undefined;
     showNewGroupTransactionForm: boolean;
+    transactionNumber: number;
     setShowNewGroupTransactionForm: (show: boolean) => void;
     toggleExpandedRow: (id: string) => void;
     onClickDetails: (item: GroupTransaction | undefined) => void;
@@ -156,6 +144,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                             cashAssets={cashAssets}
                             fixedIncomeAssets={fixedIncomeAssets}
                             principalLenderId={principalLenderAccountId}
+                            transactionNumber={index + 1}
                             operation={
                                 selectedGroupTransactionToEdit?.id === item.id
                                     ? 'edit'
@@ -188,7 +177,9 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                 >
                     <RWATableCell>{index + 1}</RWATableCell>
                     {fields.map(field => (
-                        <RWATableCell key={field}>{item[field]}</RWATableCell>
+                        <RWATableCell key={field}>
+                            {handleDateInTable(item[field] ?? '--')}
+                        </RWATableCell>
                     ))}
                     <RWATableCell>
                         <button
@@ -246,20 +237,19 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                                 id: '',
                                 assetId: cashAssets[0].id,
                                 amount: 1000,
-                                entryTime: '2024-01-01',
                                 counterPartyAccountId: principalLenderAccountId,
                             },
                             fixedIncomeTransaction: {
                                 id: '',
                                 assetId: fixedIncomeAssets[0].id,
                                 amount: 1000,
-                                entryTime: '2024-01-01',
                             },
                         }}
                         fixedIncomeAssets={fixedIncomeAssets}
                         cashAssets={cashAssets}
                         principalLenderId={principalLenderAccountId}
                         operation="create"
+                        transactionNumber={(items?.length ?? 0) + 1}
                         onCancel={() => setShowNewGroupTransactionForm(false)}
                         onSubmitForm={onSubmitCreate}
                         hideNonEditableFields

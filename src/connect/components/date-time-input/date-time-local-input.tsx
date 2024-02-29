@@ -9,5 +9,12 @@ export const DateTimeLocalInput = forwardRef(function DateTimeLocalInput(
     props: DateTimeLocalInputProps,
     ref: Ref<HTMLInputElement>,
 ) {
-    return <input type="datetime-local" ref={ref} {...props} />;
+    return (
+        <input
+            {...props}
+            type="datetime-local"
+            ref={ref}
+            step={props.step ?? '1'}
+        />
+    );
 });

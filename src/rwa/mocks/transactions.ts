@@ -19,12 +19,15 @@ export const mockCashTransaction = {
 export const mockGroupTransaction = {
     id: 'group-transaction-0',
     type: groupTransactionTypes[0],
+    entryTime: '2021-10-01 00:00:00',
     cashTransaction: mockCashTransaction,
     fixedIncomeTransaction: mockFixedIncomeTransaction,
     feeTransactions: [],
+    interestTransaction: null,
 };
 
 export const mockGroupTransactions = Array.from({ length: 10 }, (_, i) => ({
     ...mockGroupTransaction,
+    cashBalanceChange: i % 2 === 0 ? 1000 : -1000,
     id: `group-transaction-${i}`,
 }));

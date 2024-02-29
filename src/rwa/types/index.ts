@@ -1,3 +1,4 @@
+import { Maybe, Scalars } from 'document-model/document';
 import {
     groupTransactionTypeLabels,
     groupTransactionTypes,
@@ -38,24 +39,15 @@ export type GroupTransactionType = (typeof groupTransactionTypes)[number];
 
 export type GroupTransactionTypeLabel =
     (typeof groupTransactionTypeLabels)[keyof typeof groupTransactionTypeLabels];
-export type GroupTransaction =
-    | AssetPurchaseGroupTransaction
-    | AssetSaleGroupTransaction;
-
-export type AssetPurchaseGroupTransaction = {
-    id: string;
+export type GroupTransaction = {
+    cashBalanceChange: Scalars['Float']['output'];
+    cashTransaction: Maybe<BaseTransaction>;
+    entryTime: Scalars['DateTime']['output'];
+    feeTransactions: Maybe<Array<Maybe<BaseTransaction>>>;
+    fixedIncomeTransaction: Maybe<BaseTransaction>;
+    id: Scalars['ID']['output'];
+    interestTransaction: Maybe<BaseTransaction>;
     type: GroupTransactionType;
-    cashTransaction: BaseTransaction | null;
-    fixedIncomeTransaction: BaseTransaction | null;
-    feeTransactions: BaseTransaction[] | null;
-};
-
-export type AssetSaleGroupTransaction = {
-    id: string;
-    type: GroupTransactionType;
-    cashTransaction: BaseTransaction | null;
-    fixedIncomeTransaction: BaseTransaction | null;
-    feeTransactions: BaseTransaction[] | null;
 };
 
 export type CashAsset = {
@@ -70,10 +62,10 @@ export type BaseTransaction = {
     id: string;
     assetId: string;
     amount: number;
-    entryTime: string;
-    tradeTime?: string;
-    settlementTime?: string;
-    txRef?: string;
-    accountId?: string;
-    counterPartyAccountId?: string;
+    entryTime?: string | null;
+    tradeTime?: string | null;
+    settlementTime?: string | null;
+    txRef?: string | null;
+    accountId?: string | null;
+    counterPartyAccountId?: string | null;
 };

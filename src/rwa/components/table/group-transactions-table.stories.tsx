@@ -32,13 +32,11 @@ const columnCountByTableWidth = {
 };
 
 const fieldsPriority: (keyof Fields)[] = [
-    'Transaction type',
-    'Cash currency',
-    'Cash amount',
-    'Cash entry time',
-    'Fixed name',
-    'Fixed amount',
-    'Fixed entry time',
+    'Entry time',
+    'Asset',
+    'Quantity',
+    'USD Amount',
+    'Cash Balance Change',
 ];
 
 export const Primary: Story = {
@@ -90,8 +88,11 @@ export const Primary: Story = {
             toggleExpandedRow,
             onClickDetails,
             setSelectedGroupTransactionToEdit,
+            showNewGroupTransactionForm,
+            setShowNewGroupTransactionForm,
             onCancelEdit,
-            onSubmitForm: onSubmitEdit,
+            onSubmitEdit,
+            onSubmitCreate,
         };
         return (
             <div className="flex flex-col gap-4">
@@ -119,6 +120,9 @@ export const Primary: Story = {
                                         entryTime: '2024-01-01',
                                     },
                                 }}
+                                transactionNumber={
+                                    (args.items?.length ?? 0) + 1
+                                }
                                 fixedIncomeAssets={mockFixedIncomeAssets}
                                 cashAssets={mockCashAssets}
                                 principalLenderId={mockPrincipalLenderId}

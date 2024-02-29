@@ -1,58 +1,37 @@
 import { DateTimeLocalInput } from '@/connect/components/date-time-input';
 import { DivProps, Icon, mergeClassNameProps } from '@/powerhouse';
 import {
+    BaseTransaction,
     CashAsset,
     FixedIncomeAsset,
     GroupTransaction,
     GroupTransactionType,
+    convertToDateTimeLocalFormat,
 } from '@/rwa';
 import {
     groupTransactionTypeLabels,
     groupTransactionTypes,
 } from '@/rwa/constants/transactions';
+import { InputMaybe, Maybe } from 'document-model/document';
 import React from 'react';
 import { SubmitHandler, UseFormReset, useForm } from 'react-hook-form';
 import { RWAButton } from '../button';
 import { RWAFormRow, RWATableSelect, RWATableTextInput } from '../table-inputs';
 
-const defaultLabels = {
-    transaction: 'Transaction',
-    editTransaction: 'Edit Transaction',
-    saveEdits: 'Save Edits',
-    saveNewTransaction: 'Save New Transaction',
-    cancelEdits: 'Cancel',
-    assetType: 'Asset Type',
-    timestamp: 'Timestamp',
-    cusipIsinAssetName: 'CUSIP/Isin/Asset name',
-    transactionType: 'Transaction Type',
-    assetProceedsUSD: 'Asset Proceeds $USD',
-    unitPrice: 'Unit Price',
-    fees: 'Fees',
-    cashBalanceChange: 'Cash Balance Change $',
-    feesTable: {
-        serviceProvider: 'Service Provider',
-        feeType: 'Fee Type',
-        accountID: 'Account ID',
-        fee: 'Fee $ USD',
-    },
-};
-
-export type RWATransactionFee = {
-    id: string;
-    serviceProvider: string;
-    feeType: string;
-    accountID: string;
+export type FeeInput = {
+    // serviceProviderId: string;
+    // feeTypeId: string;
+    accountId: InputMaybe<string>;
     fee: number;
 };
 
 export type GroupTransactionDetailInputs = {
     type: GroupTransactionType | undefined;
     entryTime: string | undefined;
-    cashAssetId: string | undefined;
     cashAmount: number | undefined;
-    cashCounterPartyAccountId: string | undefined;
     fixedIncomeAssetId: string | undefined;
     fixedIncomeAssetAmount: number | undefined;
+    fees: FeeInput[] | undefined;
 };
 
 export interface GroupTransactionsDetailsProps extends DivProps {
@@ -61,10 +40,10 @@ export interface GroupTransactionsDetailsProps extends DivProps {
     cashAssets: CashAsset[];
     fixedIncomeAssets: FixedIncomeAsset[];
     principalLenderId: string;
+    transactionNumber: number;
     onCancel: (reset: UseFormReset<GroupTransactionDetailInputs>) => void;
     selectItemToEdit?: () => void;
     onSubmitForm: (data: GroupTransactionDetailInputs) => void;
-    labels?: typeof defaultLabels;
     hideNonEditableFields?: boolean;
 }
 export const GroupTransactionDetails: React.FC<
@@ -73,14 +52,10 @@ export const GroupTransactionDetails: React.FC<
     const {
         transaction,
         operation = 'view',
-        cashAssets,
         fixedIncomeAssets,
-        principalLenderId,
         onCancel,
         selectItemToEdit,
         onSubmitForm,
-        labels = defaultLabels,
-        // hideNonEditableFields,
         ...restProps
     } = props;
 
@@ -95,35 +70,53 @@ export const GroupTransactionDetails: React.FC<
             label: groupTransactionTypeLabels[type],
             id: type,
         }));
-    const cashAssetOptions = cashAssets.map(({ id, currency }) => ({
-        label: currency,
-        id,
-    }));
     const fixedIncomeAssetOptions = fixedIncomeAssets.map(({ id, name }) => ({
         label: name,
         id,
     }));
-    const cashAsset = cashAssets.find(
-        ({ id }) => id === transaction?.cashTransaction?.assetId,
-    );
     const fixedIncomeAsset = fixedIncomeAssets.find(
         ({ id }) => id === transaction?.fixedIncomeTransaction?.assetId,
     );
+
+    function makeFeeInputFromFeeTransaction(
+        feeTransaction: Maybe<BaseTransaction>,
+    ) {
+        if (!feeTransaction) {
+            return;
+        }
+        return {
+            // serviceProviderId: feeTransaction.serviceProviderId,
+            // feeTypeId: feeTransaction.feeTypeId,
+            accountId: feeTransaction.accountId,
+            fee: feeTransaction.amount,
+        };
+    }
+
+    function makeFeeInputsFromFeeTransactions(
+        feeTransactions: Maybe<Maybe<BaseTransaction>[]> | undefined,
+    ) {
+        if (!feeTransactions) {
+            return;
+        }
+        return feeTransactions
+            .map(makeFeeInputFromFeeTransaction)
+            .filter(Boolean);
+    }
 
     const { control, handleSubmit, reset, register } =
         useForm<GroupTransactionDetailInputs>({
             defaultValues: {
                 type: transaction?.type,
-                entryTime:
-                    transaction?.cashTransaction?.entryTime ??
-                    transaction?.fixedIncomeTransaction?.entryTime ??
-                    new Date().toISOString(),
-                cashAssetId: cashAsset?.id,
-                cashAmount: transaction?.cashTransaction?.amount ?? 0,
-                cashCounterPartyAccountId: principalLenderId,
+                entryTime: convertToDateTimeLocalFormat(
+                    transaction?.entryTime ?? new Date(),
+                ),
+                cashAmount: transaction?.cashTransaction?.amount,
                 fixedIncomeAssetId: fixedIncomeAsset?.id,
                 fixedIncomeAssetAmount:
-                    transaction?.fixedIncomeTransaction?.amount ?? 0,
+                    transaction?.fixedIncomeTransaction?.amount,
+                fees: makeFeeInputsFromFeeTransactions(
+                    transaction?.feeTransactions,
+                ),
             },
         });
 
@@ -143,14 +136,16 @@ export const GroupTransactionDetails: React.FC<
             )}
         >
             <div className="flex justify-between border-b border-gray-300 bg-gray-100 p-3 font-semibold text-gray-800">
-                <div className="flex items-center">{`${labels.transaction} #${transaction?.id}`}</div>
+                <div className="flex items-center">
+                    Transaction #{props.transactionNumber}
+                </div>
                 {isEditOperation || isCreateOperation ? (
                     <div className="flex gap-x-2">
                         <RWAButton
                             onClick={() => onCancel(reset)}
                             className="text-gray-600"
                         >
-                            {labels.cancelEdits}
+                            Cancel Edits
                         </RWAButton>
                         <RWAButton
                             onClick={handleSubmit(onSubmit)}
@@ -158,8 +153,8 @@ export const GroupTransactionDetails: React.FC<
                             icon={<Icon name="save" size={16} />}
                         >
                             {isCreateOperation
-                                ? labels.saveNewTransaction
-                                : labels.saveEdits}
+                                ? 'Save New Transaction'
+                                : 'Save Edits'}
                         </RWAButton>
                     </div>
                 ) : (
@@ -168,7 +163,7 @@ export const GroupTransactionDetails: React.FC<
                         iconPosition="right"
                         icon={<Icon name="pencil" size={16} />}
                     >
-                        {labels.editTransaction}
+                        Edit Transaction
                     </RWAButton>
                 )}
             </div>
@@ -191,40 +186,16 @@ export const GroupTransactionDetails: React.FC<
                     hideLine={!isViewOnly}
                     value={
                         <DateTimeLocalInput
-                            {...register('entryTime', { required: true })}
+                            {...register('entryTime', {
+                                required: true,
+                                disabled: isViewOnly,
+                            })}
                             name="entryTime"
                         />
                     }
                 />
-                <h2 className="m-4">Cash transaction</h2>
                 <RWAFormRow
-                    label="Asset"
-                    hideLine={!isViewOnly}
-                    value={
-                        <RWATableSelect
-                            required
-                            control={control}
-                            name="cashAssetId"
-                            disabled={isViewOnly}
-                            options={cashAssetOptions}
-                        />
-                    }
-                />
-                <RWAFormRow
-                    label="Amount"
-                    hideLine={!isViewOnly}
-                    value={
-                        <RWATableTextInput
-                            control={control}
-                            required
-                            name="cashAmount"
-                            disabled={isViewOnly}
-                        />
-                    }
-                />
-                <h2 className="m-4">Fixed income transaction</h2>
-                <RWAFormRow
-                    label="Asset"
+                    label="Asset name"
                     hideLine={!isViewOnly}
                     value={
                         <RWATableSelect
@@ -237,13 +208,25 @@ export const GroupTransactionDetails: React.FC<
                     }
                 />
                 <RWAFormRow
-                    label="Amount"
+                    label="Quantity"
                     hideLine={!isViewOnly}
                     value={
                         <RWATableTextInput
                             control={control}
                             required
                             name="fixedIncomeAssetAmount"
+                            disabled={isViewOnly}
+                        />
+                    }
+                />
+                <RWAFormRow
+                    label="Asset Proceeds $USD"
+                    hideLine={!isViewOnly}
+                    value={
+                        <RWATableTextInput
+                            control={control}
+                            required
+                            name="cashAmount"
                             disabled={isViewOnly}
                         />
                     }
