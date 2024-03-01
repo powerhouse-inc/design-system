@@ -39,15 +39,22 @@ export type GroupTransactionType = (typeof groupTransactionTypes)[number];
 
 export type GroupTransactionTypeLabel =
     (typeof groupTransactionTypeLabels)[keyof typeof groupTransactionTypeLabels];
+
 export type GroupTransaction = {
     cashBalanceChange: Scalars['Float']['output'];
     cashTransaction: Maybe<BaseTransaction>;
     entryTime: Scalars['DateTime']['output'];
-    feeTransactions: Maybe<Array<Maybe<BaseTransaction>>>;
+    feeTransactions: Maybe<Array<BaseTransaction>>;
+    fees: Maybe<Array<TransactionFee>>;
     fixedIncomeTransaction: Maybe<BaseTransaction>;
     id: Scalars['ID']['output'];
     interestTransaction: Maybe<BaseTransaction>;
     type: GroupTransactionType;
+};
+
+export type TransactionFee = {
+    amount: Scalars['Float']['output'];
+    serviceProviderId: Scalars['ID']['output'];
 };
 
 export type CashAsset = {
@@ -68,4 +75,11 @@ export type BaseTransaction = {
     txRef?: string | null;
     accountId?: string | null;
     counterPartyAccountId?: string | null;
+};
+
+export type ServiceProvider = {
+    accountId: Scalars['ID']['output'];
+    feeType: Scalars['String']['output'];
+    id: Scalars['ID']['output'];
+    name: Scalars['String']['output'];
 };

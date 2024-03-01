@@ -1,29 +1,29 @@
 import { DateTimeLocalInput } from '@/connect/components/date-time-input';
 import { DivProps, Icon, mergeClassNameProps } from '@/powerhouse';
 import {
-    BaseTransaction,
     CashAsset,
     FixedIncomeAsset,
     GroupTransaction,
     GroupTransactionType,
+    ServiceProvider,
+    TransactionFee,
     convertToDateTimeLocalFormat,
 } from '@/rwa';
 import {
     groupTransactionTypeLabels,
     groupTransactionTypes,
 } from '@/rwa/constants/transactions';
-import { InputMaybe, Maybe } from 'document-model/document';
+import { Maybe } from 'document-model/document';
 import React from 'react';
-import { SubmitHandler, UseFormReset, useForm } from 'react-hook-form';
+import {
+    SubmitHandler,
+    UseFormReset,
+    useFieldArray,
+    useForm,
+} from 'react-hook-form';
 import { RWAButton } from '../button';
 import { RWAFormRow, RWATableSelect, RWATableTextInput } from '../table-inputs';
-
-export type FeeInput = {
-    // serviceProviderId: string;
-    // feeTypeId: string;
-    accountId: InputMaybe<string>;
-    fee: number;
-};
+import { FeeTransactionsTable } from '../table/fee-transactions-table';
 
 export type GroupTransactionDetailInputs = {
     type: GroupTransactionType | undefined;
@@ -31,7 +31,7 @@ export type GroupTransactionDetailInputs = {
     cashAmount: number | undefined;
     fixedIncomeAssetId: string | undefined;
     fixedIncomeAssetAmount: number | undefined;
-    fees: FeeInput[] | undefined;
+    fees: Maybe<TransactionFee[]> | undefined;
 };
 
 export interface GroupTransactionsDetailsProps extends DivProps {
@@ -39,6 +39,7 @@ export interface GroupTransactionsDetailsProps extends DivProps {
     operation: 'view' | 'create' | 'edit';
     cashAssets: CashAsset[];
     fixedIncomeAssets: FixedIncomeAsset[];
+    feeTypes: ServiceProvider[];
     principalLenderId: string;
     transactionNumber: number;
     onCancel: (reset: UseFormReset<GroupTransactionDetailInputs>) => void;
@@ -78,32 +79,7 @@ export const GroupTransactionDetails: React.FC<
         ({ id }) => id === transaction?.fixedIncomeTransaction?.assetId,
     );
 
-    function makeFeeInputFromFeeTransaction(
-        feeTransaction: Maybe<BaseTransaction>,
-    ) {
-        if (!feeTransaction) {
-            return;
-        }
-        return {
-            // serviceProviderId: feeTransaction.serviceProviderId,
-            // feeTypeId: feeTransaction.feeTypeId,
-            accountId: feeTransaction.accountId,
-            fee: feeTransaction.amount,
-        };
-    }
-
-    function makeFeeInputsFromFeeTransactions(
-        feeTransactions: Maybe<Maybe<BaseTransaction>[]> | undefined,
-    ) {
-        if (!feeTransactions) {
-            return;
-        }
-        return feeTransactions
-            .map(makeFeeInputFromFeeTransaction)
-            .filter(Boolean);
-    }
-
-    const { control, handleSubmit, reset, register } =
+    const { control, handleSubmit, reset, register, watch } =
         useForm<GroupTransactionDetailInputs>({
             defaultValues: {
                 type: transaction?.type,
@@ -114,11 +90,14 @@ export const GroupTransactionDetails: React.FC<
                 fixedIncomeAssetId: fixedIncomeAsset?.id,
                 fixedIncomeAssetAmount:
                     transaction?.fixedIncomeTransaction?.amount,
-                fees: makeFeeInputsFromFeeTransactions(
-                    transaction?.feeTransactions,
-                ),
+                fees: transaction?.fees,
             },
         });
+
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: 'fees', // Name of the field array in your form
+    });
 
     const onSubmit: SubmitHandler<GroupTransactionDetailInputs> = data => {
         onSubmitForm(data);
@@ -232,6 +211,29 @@ export const GroupTransactionDetails: React.FC<
                     }
                 />
             </div>
+            {fields.length > 0 && (
+                <FeeTransactionsTable
+                    register={register}
+                    feeInputs={fields}
+                    feeTypes={props.feeTypes}
+                    control={control}
+                    watch={watch}
+                    remove={remove}
+                    isViewOnly={isViewOnly}
+                />
+            )}
+            <button
+                onClick={() =>
+                    append({
+                        amount: 0,
+                        serviceProviderId: props.feeTypes[0].id,
+                    })
+                }
+                className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-white p-2 text-sm font-semibold text-gray-900"
+            >
+                <span>Add Fee</span>
+                <Icon name="plus" size={14} />
+            </button>
         </div>
     );
 };

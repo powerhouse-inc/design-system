@@ -1,6 +1,6 @@
 import { FixedIncomeAsset } from '@/rwa';
 
-export const mockPrincipalLenderId = 'principal-lender-id';
+export const mockPrincipalLenderAccountId = 'principal-lender-id';
 
 export const mockFixedIncomeTypes = [
     { id: '1', name: 'T-Bill 91279GF8' },
@@ -184,3 +184,47 @@ export const mockCashAsset = {
 };
 
 export const mockCashAssets = [mockCashAsset];
+
+export const mockAccounts = [
+    {
+        id: mockPrincipalLenderAccountId,
+        label: 'Principal Lender',
+        reference: '0x123',
+    },
+    {
+        id: 'account-2',
+        label: 'Account 2',
+        reference: '0x456',
+    },
+    {
+        id: 'account-3',
+        label: 'Account 3',
+        reference: '0x789',
+    },
+    {
+        id: 'account-4',
+        label: 'Account 4',
+        reference: '0xabc',
+    },
+];
+
+export const mockFeeTypes = [
+    {
+        id: '1',
+        feeType: 'Fee 1',
+        name: 'Service Provider 1',
+        accountId: mockAccounts[1].id,
+    },
+    {
+        id: '2',
+        feeType: 'Fee 2',
+        name: 'Service Provider 2',
+        accountId: mockAccounts[2].id,
+    },
+    {
+        id: '3',
+        feeType: 'Fee 3',
+        name: 'Service Provider 2',
+        accountId: mockAccounts[3].id,
+    },
+];

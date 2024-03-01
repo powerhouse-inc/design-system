@@ -5,6 +5,7 @@ import {
     GroupTransaction,
     GroupTransactionDetailInputs,
     GroupTransactionDetails,
+    ServiceProvider,
 } from '@/rwa';
 import { useMemo, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -69,6 +70,7 @@ export type GroupTransactionsTableProps = Omit<
 > & {
     cashAssets: CashAsset[];
     fixedIncomeAssets: FixedIncomeAsset[];
+    feeTypes: ServiceProvider[];
     principalLenderAccountId: string;
     columnCountByTableWidth: Record<string, number>;
     fieldsPriority: (keyof Fields)[];
@@ -143,6 +145,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                             className="border-y border-gray-300"
                             cashAssets={cashAssets}
                             fixedIncomeAssets={fixedIncomeAssets}
+                            feeTypes={props.feeTypes}
                             principalLenderId={principalLenderAccountId}
                             transactionNumber={index + 1}
                             operation={
@@ -247,6 +250,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                         }}
                         fixedIncomeAssets={fixedIncomeAssets}
                         cashAssets={cashAssets}
+                        feeTypes={props.feeTypes}
                         principalLenderId={principalLenderAccountId}
                         operation="create"
                         transactionNumber={(items?.length ?? 0) + 1}

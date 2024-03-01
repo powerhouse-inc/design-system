@@ -1,13 +1,9 @@
-import {
-    GroupTransaction,
-    GroupTransactionDetails,
-    GroupTransactionsTableProps,
-} from '@/rwa';
-import { groupTransactionTypes } from '@/rwa/constants/transactions';
+import { GroupTransaction, GroupTransactionsTableProps } from '@/rwa';
 import {
     mockCashAssets,
+    mockFeeTypes,
     mockFixedIncomeAssets,
-    mockPrincipalLenderId,
+    mockPrincipalLenderAccountId,
 } from '@/rwa/mocks';
 import { mockGroupTransactions } from '@/rwa/mocks/transactions';
 import type { Meta, StoryObj } from '@storybook/react';
@@ -44,7 +40,8 @@ export const Primary: Story = {
         items: mockGroupTransactions,
         fixedIncomeAssets: mockFixedIncomeAssets,
         cashAssets: mockCashAssets,
-        principalLenderAccountId: mockPrincipalLenderId,
+        feeTypes: mockFeeTypes,
+        principalLenderAccountId: mockPrincipalLenderAccountId,
         fieldsPriority,
         columnCountByTableWidth,
     },
@@ -99,42 +96,6 @@ export const Primary: Story = {
                 <div className="w-screen">
                     <p>parent element width: 100%</p>
                     <GroupTransactionsTable {...argsWithHandlers} />
-                    {showNewGroupTransactionForm && (
-                        <div className="mt-4 rounded-md border border-gray-300 bg-white">
-                            <GroupTransactionDetails
-                                transaction={{
-                                    id: '',
-                                    type: groupTransactionTypes[0],
-                                    cashTransaction: {
-                                        id: '',
-                                        assetId: mockCashAssets[0].id,
-                                        amount: 1000,
-                                        entryTime: '2024-01-01',
-                                        counterPartyAccountId:
-                                            mockPrincipalLenderId,
-                                    },
-                                    fixedIncomeTransaction: {
-                                        id: '',
-                                        assetId: mockFixedIncomeAssets[0].id,
-                                        amount: 1000,
-                                        entryTime: '2024-01-01',
-                                    },
-                                }}
-                                transactionNumber={
-                                    (args.items?.length ?? 0) + 1
-                                }
-                                fixedIncomeAssets={mockFixedIncomeAssets}
-                                cashAssets={mockCashAssets}
-                                principalLenderId={mockPrincipalLenderId}
-                                operation="create"
-                                onCancel={() =>
-                                    setShowNewGroupTransactionForm(false)
-                                }
-                                onSubmitForm={onSubmitCreate}
-                                hideNonEditableFields
-                            />
-                        </div>
-                    )}
                 </div>
                 {Object.keys(columnCountByTableWidth)
                     .map(Number)
