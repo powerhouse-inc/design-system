@@ -71,11 +71,16 @@ export function FeeTransactionsTable<ControlInputs extends FieldValues>(
                             <td>
                                 <input
                                     type="number"
-                                    {...props.register(`fees.${index}.amount`)}
+                                    {...props.register(`fees.${index}.amount`, {
+                                        disabled: props.isViewOnly,
+                                    })}
                                 />
                             </td>
                             <td>
-                                <button onClick={() => props.remove(index)}>
+                                <button
+                                    onClick={() => props.remove(index)}
+                                    disabled={props.isViewOnly}
+                                >
                                     Remove
                                 </button>
                             </td>

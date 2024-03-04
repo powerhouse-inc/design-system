@@ -1,7 +1,6 @@
 import { DateTimeLocalInput } from '@/connect/components/date-time-input';
 import { DivProps, Icon, mergeClassNameProps } from '@/powerhouse';
 import {
-    CashAsset,
     FixedIncomeAsset,
     GroupTransaction,
     GroupTransactionType,
@@ -37,15 +36,12 @@ export type GroupTransactionDetailInputs = {
 export interface GroupTransactionsDetailsProps extends DivProps {
     transaction: Partial<GroupTransaction> | undefined;
     operation: 'view' | 'create' | 'edit';
-    cashAssets: CashAsset[];
     fixedIncomeAssets: FixedIncomeAsset[];
     feeTypes: ServiceProvider[];
-    principalLenderId: string;
     transactionNumber: number;
     onCancel: (reset: UseFormReset<GroupTransactionDetailInputs>) => void;
     selectItemToEdit?: () => void;
     onSubmitForm: (data: GroupTransactionDetailInputs) => void;
-    hideNonEditableFields?: boolean;
 }
 export const GroupTransactionDetails: React.FC<
     GroupTransactionsDetailsProps
@@ -57,6 +53,8 @@ export const GroupTransactionDetails: React.FC<
         onCancel,
         selectItemToEdit,
         onSubmitForm,
+        feeTypes,
+        transactionNumber,
         ...restProps
     } = props;
 
@@ -116,7 +114,7 @@ export const GroupTransactionDetails: React.FC<
         >
             <div className="flex justify-between border-b border-gray-300 bg-gray-100 p-3 font-semibold text-gray-800">
                 <div className="flex items-center">
-                    Transaction #{props.transactionNumber}
+                    Transaction #{transactionNumber}
                 </div>
                 {isEditOperation || isCreateOperation ? (
                     <div className="flex gap-x-2">
@@ -215,7 +213,7 @@ export const GroupTransactionDetails: React.FC<
                 <FeeTransactionsTable
                     register={register}
                     feeInputs={fields}
-                    feeTypes={props.feeTypes}
+                    feeTypes={feeTypes}
                     control={control}
                     watch={watch}
                     remove={remove}
@@ -226,7 +224,7 @@ export const GroupTransactionDetails: React.FC<
                 onClick={() =>
                     append({
                         amount: 0,
-                        serviceProviderId: props.feeTypes[0].id,
+                        serviceProviderId: feeTypes[0].id,
                     })
                 }
                 className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-white p-2 text-sm font-semibold text-gray-900"

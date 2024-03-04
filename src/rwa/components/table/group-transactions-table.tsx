@@ -77,7 +77,6 @@ export type GroupTransactionsTableProps = Omit<
     expandedRowId: string | undefined;
     selectedGroupTransactionToEdit?: GroupTransaction | null | undefined;
     showNewGroupTransactionForm: boolean;
-    transactionNumber: number;
     setShowNewGroupTransactionForm: (show: boolean) => void;
     toggleExpandedRow: (id: string) => void;
     onClickDetails: (item: GroupTransaction | undefined) => void;
@@ -94,6 +93,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
         items,
         fixedIncomeAssets,
         cashAssets,
+        feeTypes,
         principalLenderAccountId,
         fieldsPriority,
         columnCountByTableWidth,
@@ -143,10 +143,8 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                                 ({ id }) => id === item.id,
                             )}
                             className="border-y border-gray-300"
-                            cashAssets={cashAssets}
                             fixedIncomeAssets={fixedIncomeAssets}
-                            feeTypes={props.feeTypes}
-                            principalLenderId={principalLenderAccountId}
+                            feeTypes={feeTypes}
                             transactionNumber={index + 1}
                             operation={
                                 selectedGroupTransactionToEdit?.id === item.id
@@ -249,14 +247,11 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                             },
                         }}
                         fixedIncomeAssets={fixedIncomeAssets}
-                        cashAssets={cashAssets}
-                        feeTypes={props.feeTypes}
-                        principalLenderId={principalLenderAccountId}
+                        feeTypes={feeTypes}
                         operation="create"
                         transactionNumber={(items?.length ?? 0) + 1}
                         onCancel={() => setShowNewGroupTransactionForm(false)}
                         onSubmitForm={onSubmitCreate}
-                        hideNonEditableFields
                     />
                 </div>
             )}
