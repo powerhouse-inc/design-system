@@ -20,7 +20,23 @@ export const mockGroupTransaction = {
     id: 'group-transaction-0',
     type: groupTransactionTypes[0],
     entryTime: '2021-10-01 00:00:00',
-    fees: [],
+    fees: [
+        {
+            id: 'fee-transaction-1',
+            amount: 100,
+            serviceProviderId: '1',
+        },
+        {
+            id: 'fee-transaction-2',
+            amount: 200,
+            serviceProviderId: '2',
+        },
+        {
+            id: 'fee-transaction-3',
+            amount: 300,
+            serviceProviderId: '3',
+        },
+    ],
     cashTransaction: mockCashTransaction,
     fixedIncomeTransaction: mockFixedIncomeTransaction,
     feeTransactions: [],

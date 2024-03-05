@@ -217,14 +217,20 @@ export const mockFeeTypes = [
     },
     {
         id: '2',
+        feeType: 'Fee 1 other',
+        name: 'Service Provider 1',
+        accountId: mockAccounts[1].id,
+    },
+    {
+        id: '3',
         feeType: 'Fee 2',
         name: 'Service Provider 2',
         accountId: mockAccounts[2].id,
     },
     {
-        id: '3',
+        id: '4',
         feeType: 'Fee 3',
-        name: 'Service Provider 2',
+        name: 'Service Provider 3',
         accountId: mockAccounts[3].id,
     },
 ];

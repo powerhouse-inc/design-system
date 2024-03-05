@@ -122,7 +122,7 @@ export const GroupTransactionDetails: React.FC<
                             onClick={() => onCancel(reset)}
                             className="text-gray-600"
                         >
-                            Cancel Edits
+                            Cancel
                         </RWAButton>
                         <RWAButton
                             onClick={handleSubmit(onSubmit)}
