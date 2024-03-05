@@ -2,8 +2,8 @@ import { GroupTransaction, GroupTransactionsTableProps } from '@/rwa';
 import {
     mockCashAssets,
     mockFeeTypes,
-    mockFixedIncomeAssets,
     mockPrincipalLenderAccountId,
+    mockfixedIncomes,
 } from '@/rwa/mocks';
 import { mockGroupTransactions } from '@/rwa/mocks/transactions';
 import type { Meta, StoryObj } from '@storybook/react';
@@ -38,7 +38,7 @@ const fieldsPriority: (keyof Fields)[] = [
 export const Primary: Story = {
     args: {
         items: mockGroupTransactions,
-        fixedIncomeAssets: mockFixedIncomeAssets,
+        fixedIncomes: mockfixedIncomes,
         cashAssets: mockCashAssets,
         feeTypes: mockFeeTypes,
         principalLenderAccountId: mockPrincipalLenderAccountId,

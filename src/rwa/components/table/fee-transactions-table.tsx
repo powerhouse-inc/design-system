@@ -1,16 +1,14 @@
 import { ServiceProvider } from '@/rwa';
-import { useEffect, useState } from 'react';
 import {
     Control,
-    Controller,
     FieldArrayWithId,
     FieldValues,
-    Path,
     UseFieldArrayRemove,
     UseFormRegister,
     UseFormWatch,
 } from 'react-hook-form';
-import { GroupTransactionDetailInputs, RWASelect } from '..';
+import { GroupTransactionDetailInputs } from '..';
+import { ServiceProviderAndFeeTypeTableInputs } from './service-provider-and-fee-type-table-inputs';
 
 type Props<ControlInputs extends FieldValues> = {
     feeInputs: FieldArrayWithId<GroupTransactionDetailInputs, 'fees'>[];
@@ -158,101 +156,5 @@ export function FeeTransactionsTable<ControlInputs extends FieldValues>(
                 })}
             </tbody>
         </table>
-    );
-}
-
-function ServiceProviderAndFeeTypeTableInputs<
-    ControlInputs extends FieldValues,
->(props: {
-    selectedServiceProvider: ServiceProvider | undefined;
-    namesOfServiceProvidersWithMultipleFeeTypes: string[];
-    index: number;
-    isViewOnly: boolean;
-    serviceProviderOptions: { label: string; id: string }[];
-    control: Control<ControlInputs>;
-    feeTypeOptionsForServiceProviderWithMultipleFeeTypes: Record<
-        string,
-        { label: string; id: string }[]
-    >;
-}) {
-    const {
-        selectedServiceProvider,
-        namesOfServiceProvidersWithMultipleFeeTypes,
-        index,
-        isViewOnly,
-        serviceProviderOptions,
-        control,
-        feeTypeOptionsForServiceProviderWithMultipleFeeTypes,
-    } = props;
-    const serviceProviderHasMultipleFeeTypes =
-        namesOfServiceProvidersWithMultipleFeeTypes.includes(
-            selectedServiceProvider?.name ?? '',
-        );
-    const [optionsWithUniqueLabels, setOptionsWithUniqueLabels] = useState(
-        serviceProviderOptions,
-    );
-    const [selectedServiceProviderId, setSelectedServiceProviderId] = useState(
-        selectedServiceProvider?.id,
-    );
-    const [selectedFeeType, setSelectedFeeType] = useState(
-        selectedServiceProvider?.id,
-    );
-
-    useEffect(() => {
-        const newOptionsWithUniqueLabels = optionsWithUniqueLabels.filter(
-            (option, index, self) => {
-                return (
-                    option.id === selectedServiceProviderId ||
-                    option.id === selectedFeeType ||
-                    self.findIndex(o => o.label === option.label) === index
-                );
-            },
-        );
-
-        setOptionsWithUniqueLabels(newOptionsWithUniqueLabels);
-    }, [selectedServiceProviderId, selectedFeeType]);
-
-    return (
-        <Controller
-            name={`fees.${index}.serviceProviderId` as Path<ControlInputs>}
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur } }) => (
-                <>
-                    <td>
-                        <RWASelect
-                            isDisabled={isViewOnly}
-                            options={optionsWithUniqueLabels}
-                            onSelectionChange={k => {
-                                setSelectedServiceProviderId(k as string);
-                                onChange(k);
-                            }}
-                            onBlur={onBlur}
-                            selectedKey={selectedServiceProviderId}
-                        />
-                    </td>
-                    <td>
-                        {serviceProviderHasMultipleFeeTypes ? (
-                            <RWASelect
-                                isDisabled={props.isViewOnly}
-                                options={
-                                    feeTypeOptionsForServiceProviderWithMultipleFeeTypes[
-                                        selectedServiceProvider?.name ?? ''
-                                    ]
-                                }
-                                onSelectionChange={k => {
-                                    setSelectedFeeType(k as string);
-                                    onChange(k);
-                                }}
-                                onBlur={onBlur}
-                                selectedKey={selectedFeeType}
-                            />
-                        ) : (
-                            selectedServiceProvider?.feeType
-                        )}
-                    </td>
-                </>
-            )}
-        />
     );
 }

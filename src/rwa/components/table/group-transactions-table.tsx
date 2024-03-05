@@ -1,7 +1,7 @@
 import { Icon } from '@/powerhouse';
 import {
     CashAsset,
-    FixedIncomeAsset,
+    fixedIncome,
     GroupTransaction,
     GroupTransactionDetailInputs,
     GroupTransactionDetails,
@@ -26,14 +26,14 @@ export type Fields = {
 export function mapGroupTransactionsToTableFields(
     transactions: GroupTransaction[] | undefined,
     cashAssets: CashAsset[],
-    fixedIncomeAssets: FixedIncomeAsset[],
+    fixedIncomes: fixedIncome[],
 ): Fields[] {
     return (transactions ?? [])
         .map(transaction =>
             mapGroupTransactionToTableFields(
                 transaction,
                 cashAssets,
-                fixedIncomeAssets,
+                fixedIncomes,
             ),
         )
         .filter(Boolean);
@@ -42,16 +42,16 @@ export function mapGroupTransactionsToTableFields(
 export function mapGroupTransactionToTableFields(
     transaction: GroupTransaction | undefined,
     cashAssets: CashAsset[],
-    fixedIncomeAssets: FixedIncomeAsset[],
+    fixedIncomes: fixedIncome[],
 ): Fields | undefined {
     if (!transaction) return;
-    const fixedIncomeAsset = fixedIncomeAssets.find(
+    const fixedIncome = fixedIncomes.find(
         asset => asset.id === transaction.fixedIncomeTransaction?.assetId,
     );
     return {
         id: transaction.id,
         'Entry time': transaction.entryTime,
-        Asset: fixedIncomeAsset?.name,
+        Asset: fixedIncome?.name,
         Quantity: transaction.fixedIncomeTransaction?.amount,
         'USD Amount': transaction.fixedIncomeTransaction?.amount,
         'Cash Balance Change': transaction.cashBalanceChange,
@@ -69,7 +69,7 @@ export type GroupTransactionsTableProps = Omit<
     'header' | 'renderRow'
 > & {
     cashAssets: CashAsset[];
-    fixedIncomeAssets: FixedIncomeAsset[];
+    fixedIncomes: fixedIncome[];
     feeTypes: ServiceProvider[];
     principalLenderAccountId: string;
     columnCountByTableWidth: Record<string, number>;
@@ -91,7 +91,7 @@ export type GroupTransactionsTableProps = Omit<
 export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
     const {
         items,
-        fixedIncomeAssets,
+        fixedIncomes,
         cashAssets,
         feeTypes,
         principalLenderAccountId,
@@ -120,12 +120,8 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
 
     const mappedFields = useMemo(
         () =>
-            mapGroupTransactionsToTableFields(
-                items,
-                cashAssets,
-                fixedIncomeAssets,
-            ),
-        [items, cashAssets, fixedIncomeAssets],
+            mapGroupTransactionsToTableFields(items, cashAssets, fixedIncomes),
+        [items, cashAssets, fixedIncomes],
     );
 
     const { sortedItems, sortHandler } = useSortTableItems(mappedFields);
@@ -143,7 +139,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                                 ({ id }) => id === item.id,
                             )}
                             className="border-y border-gray-300"
-                            fixedIncomeAssets={fixedIncomeAssets}
+                            fixedIncomes={fixedIncomes}
                             feeTypes={feeTypes}
                             transactionNumber={index + 1}
                             operation={
@@ -242,11 +238,11 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                             },
                             fixedIncomeTransaction: {
                                 id: '',
-                                assetId: fixedIncomeAssets[0].id,
+                                assetId: fixedIncomes[0].id,
                                 amount: 1000,
                             },
                         }}
-                        fixedIncomeAssets={fixedIncomeAssets}
+                        fixedIncomes={fixedIncomes}
                         feeTypes={feeTypes}
                         operation="create"
                         transactionNumber={(items?.length ?? 0) + 1}

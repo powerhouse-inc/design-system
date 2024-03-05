@@ -1,23 +1,19 @@
-import { FixedIncomeAsset } from '@/rwa';
+import { fixedIncome } from '@/rwa';
 import type { Meta, StoryObj } from '@storybook/react';
 import { utils } from 'document-model/document';
 import { useCallback, useState } from 'react';
 import { RWAAssetDetailInputs } from '../asset-details/form';
 
+import { mockfixedIncomes, mockFixedIncomeTypes, mockSpvs } from '@/rwa/mocks';
 import {
-    mockFixedIncomeAssets,
-    mockFixedIncomeTypes,
-    mockSpvs,
-} from '@/rwa/mocks';
-import {
-    FixedIncomeAssetsTableProps,
-    RWAFixedIncomeAssetsTable,
+    fixedIncomesTableProps,
+    RWAfixedIncomesTable,
 } from './fixed-income-assets-table';
 import { getColumnCount } from './useColumnPriority';
 
-const meta: Meta<typeof RWAFixedIncomeAssetsTable> = {
-    title: 'RWA/Components/RWAFixedIncomeAssetsTable',
-    component: RWAFixedIncomeAssetsTable,
+const meta: Meta<typeof RWAfixedIncomesTable> = {
+    title: 'RWA/Components/RWAfixedIncomesTable',
+    component: RWAfixedIncomesTable,
 };
 
 export default meta;
@@ -31,7 +27,7 @@ const columnCountByTableWidth = {
     984: 8,
 };
 
-const fieldsPriority: (keyof FixedIncomeAsset)[] = [
+const fieldsPriority: (keyof fixedIncome)[] = [
     'name',
     'maturity',
     'notional',
@@ -55,7 +51,7 @@ function createAssetFromFormInputs(data: RWAAssetDetailInputs) {
 
 export const Primary: Story = {
     args: {
-        items: mockFixedIncomeAssets,
+        items: mockfixedIncomes,
         fixedIncomeTypes: mockFixedIncomeTypes,
         spvs: mockSpvs,
         fieldsPriority,
@@ -64,7 +60,7 @@ export const Primary: Story = {
     render: function Wrapper(args) {
         const [expandedRowId, setExpandedRowId] = useState<string>();
         const [selectedAssetToEdit, setSelectedAssetToEdit] =
-            useState<FixedIncomeAsset>();
+            useState<fixedIncome>();
         const [showNewAssetForm, setShowNewAssetForm] = useState(false);
 
         const toggleExpandedRow = useCallback(
@@ -74,7 +70,7 @@ export const Primary: Story = {
             [expandedRowId],
         );
 
-        const onClickDetails: FixedIncomeAssetsTableProps['onClickDetails'] =
+        const onClickDetails: fixedIncomesTableProps['onClickDetails'] =
             useCallback(
                 item => {
                     setExpandedRowId(
@@ -86,19 +82,19 @@ export const Primary: Story = {
                 [expandedRowId],
             );
 
-        const onCancelEdit: FixedIncomeAssetsTableProps['onCancelEdit'] =
+        const onCancelEdit: fixedIncomesTableProps['onCancelEdit'] =
             useCallback(() => {
                 setSelectedAssetToEdit(undefined);
             }, []);
 
-        const onSubmitEdit: FixedIncomeAssetsTableProps['onSubmitEdit'] =
+        const onSubmitEdit: fixedIncomesTableProps['onSubmitEdit'] =
             useCallback(data => {
                 const asset = createAssetFromFormInputs(data);
                 console.log({ asset, data });
                 setSelectedAssetToEdit(undefined);
             }, []);
 
-        const onSubmitCreate: FixedIncomeAssetsTableProps['onSubmitCreate'] =
+        const onSubmitCreate: fixedIncomesTableProps['onSubmitCreate'] =
             useCallback(data => {
                 const asset = createAssetFromFormInputs(data);
                 console.log({ asset, data });
@@ -122,7 +118,7 @@ export const Primary: Story = {
             <div className="flex flex-col gap-4">
                 <div className="w-screen">
                     <p>parent element width: 100%</p>
-                    <RWAFixedIncomeAssetsTable {...argsWithHandlers} />
+                    <RWAfixedIncomesTable {...argsWithHandlers} />
                 </div>
                 {Object.keys(columnCountByTableWidth)
                     .map(Number)
@@ -134,7 +130,7 @@ export const Primary: Story = {
                                 column count:{' '}
                                 {getColumnCount(width, columnCountByTableWidth)}
                             </p>
-                            <RWAFixedIncomeAssetsTable {...argsWithHandlers} />
+                            <RWAfixedIncomesTable {...argsWithHandlers} />
                         </div>
                     ))}
             </div>

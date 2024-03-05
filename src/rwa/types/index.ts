@@ -6,7 +6,7 @@ import {
 
 export type RWAComponentMode = 'view' | 'edit';
 
-export type FixedIncomeAsset = {
+export type fixedIncome = {
     // editable fields
     id: string;
     name: string;
@@ -63,7 +63,7 @@ export type CashAsset = {
     currency: string;
 };
 
-export type Asset = CashAsset | FixedIncomeAsset;
+export type Asset = CashAsset | fixedIncome;
 
 export type BaseTransaction = {
     id: string;

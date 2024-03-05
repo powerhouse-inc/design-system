@@ -1,12 +1,12 @@
 import { DateTimeLocalInput } from '@/connect/components/date-time-input';
 import { DivProps, Icon, mergeClassNameProps } from '@/powerhouse';
 import {
-    FixedIncomeAsset,
     GroupTransaction,
     GroupTransactionType,
     ServiceProvider,
     TransactionFee,
     convertToDateTimeLocalFormat,
+    fixedIncome,
 } from '@/rwa';
 import {
     groupTransactionTypeLabels,
@@ -28,15 +28,15 @@ export type GroupTransactionDetailInputs = {
     type: GroupTransactionType | undefined;
     entryTime: string | undefined;
     cashAmount: number | undefined;
-    fixedIncomeAssetId: string | undefined;
-    fixedIncomeAssetAmount: number | undefined;
+    fixedIncomeId: string | undefined;
+    fixedIncomeAmount: number | undefined;
     fees: Maybe<TransactionFee[]> | undefined;
 };
 
 export interface GroupTransactionsDetailsProps extends DivProps {
     transaction: Partial<GroupTransaction> | undefined;
     operation: 'view' | 'create' | 'edit';
-    fixedIncomeAssets: FixedIncomeAsset[];
+    fixedIncomes: fixedIncome[];
     feeTypes: ServiceProvider[];
     transactionNumber: number;
     onCancel: (reset: UseFormReset<GroupTransactionDetailInputs>) => void;
@@ -49,7 +49,7 @@ export const GroupTransactionDetails: React.FC<
     const {
         transaction,
         operation = 'view',
-        fixedIncomeAssets,
+        fixedIncomes,
         onCancel,
         selectItemToEdit,
         onSubmitForm,
@@ -69,11 +69,11 @@ export const GroupTransactionDetails: React.FC<
             label: groupTransactionTypeLabels[type],
             id: type,
         }));
-    const fixedIncomeAssetOptions = fixedIncomeAssets.map(({ id, name }) => ({
+    const fixedIncomeOptions = fixedIncomes.map(({ id, name }) => ({
         label: name,
         id,
     }));
-    const fixedIncomeAsset = fixedIncomeAssets.find(
+    const fixedIncome = fixedIncomes.find(
         ({ id }) => id === transaction?.fixedIncomeTransaction?.assetId,
     );
 
@@ -85,9 +85,8 @@ export const GroupTransactionDetails: React.FC<
                     transaction?.entryTime ?? new Date(),
                 ),
                 cashAmount: transaction?.cashTransaction?.amount,
-                fixedIncomeAssetId: fixedIncomeAsset?.id,
-                fixedIncomeAssetAmount:
-                    transaction?.fixedIncomeTransaction?.amount,
+                fixedIncomeId: fixedIncome?.id,
+                fixedIncomeAmount: transaction?.fixedIncomeTransaction?.amount,
                 fees: transaction?.fees,
             },
         });
@@ -178,9 +177,9 @@ export const GroupTransactionDetails: React.FC<
                         <RWATableSelect
                             control={control}
                             required
-                            name="fixedIncomeAssetId"
+                            name="fixedIncomeId"
                             disabled={isViewOnly}
-                            options={fixedIncomeAssetOptions}
+                            options={fixedIncomeOptions}
                         />
                     }
                 />
@@ -191,7 +190,7 @@ export const GroupTransactionDetails: React.FC<
                         <RWATableTextInput
                             control={control}
                             required
-                            name="fixedIncomeAssetAmount"
+                            name="fixedIncomeAmount"
                             disabled={isViewOnly}
                         />
                     }

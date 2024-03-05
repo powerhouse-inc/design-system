@@ -1,10 +1,6 @@
 import { Icon } from '@/powerhouse';
-import { FixedIncomeAsset } from '@/rwa';
-import {
-    mockFixedIncomeAssets,
-    mockFixedIncomeTypes,
-    mockSpvs,
-} from '@/rwa/mocks';
+import { fixedIncome } from '@/rwa';
+import { mockfixedIncomes, mockFixedIncomeTypes, mockSpvs } from '@/rwa/mocks';
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 import { orderBy } from 'natural-orderby';
@@ -15,7 +11,7 @@ import { RWATableRow } from './expandable-row';
 import { RWATable, RWATableProps } from './table';
 import { RWATableCell } from './table-cell';
 
-const meta: Meta<typeof RWATable<FixedIncomeAsset>> = {
+const meta: Meta<typeof RWATable<fixedIncome>> = {
     title: 'RWA/Components/RWATable',
     component: RWATable,
     argTypes: {
@@ -42,7 +38,7 @@ export const Primary: Story = {
             { id: 'notional', label: 'Notional', allowSorting: true },
             { id: 'moreDetails' },
         ],
-        items: mockFixedIncomeAssets,
+        items: mockfixedIncomes,
         renderRow: (item, index) => (
             <tr
                 key={item.id}
@@ -67,7 +63,7 @@ export const Primary: Story = {
     render: args => <TableDemo {...args} />,
 };
 
-const TableDemo = (props: RWATableProps<FixedIncomeAsset>) => {
+const TableDemo = (props: RWATableProps<fixedIncome>) => {
     const { items, ...restProps } = props;
 
     const [sortedItems, setSortedItems] = useState(items || []);
@@ -78,21 +74,17 @@ const TableDemo = (props: RWATableProps<FixedIncomeAsset>) => {
         setExpandedRow(id === expandedRow ? null : id);
     };
 
-    const onClickSort: RWATableProps<FixedIncomeAsset>['onClickSort'] = (
+    const onClickSort: RWATableProps<fixedIncome>['onClickSort'] = (
         column,
         direction,
     ) => {
         console.log('onClickSort', column, direction);
         setSortedItems(
-            orderBy(
-                sortedItems,
-                [column as keyof FixedIncomeAsset],
-                [direction],
-            ),
+            orderBy(sortedItems, [column as keyof fixedIncome], [direction]),
         );
     };
 
-    const renderRow: RWATableProps<FixedIncomeAsset>['renderRow'] = (
+    const renderRow: RWATableProps<fixedIncome>['renderRow'] = (
         item,
         index,
     ) => {
