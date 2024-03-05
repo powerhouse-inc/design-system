@@ -33,6 +33,14 @@ export type GroupTransactionDetailInputs = {
     fees: Maybe<TransactionFee[]> | undefined;
 };
 
+function calculateUnitPricePercent(
+    cashAmount: number | undefined,
+    fixedIncomeAmount: number | undefined,
+) {
+    if (!cashAmount || !fixedIncomeAmount) return '--';
+    return ((cashAmount / fixedIncomeAmount) * 100).toFixed(2);
+}
+
 export interface GroupTransactionsDetailsProps extends DivProps {
     transaction: Partial<GroupTransaction> | undefined;
     operation: 'view' | 'create' | 'edit';
@@ -103,6 +111,12 @@ export const GroupTransactionDetails: React.FC<
     const isEditOperation = operation === 'edit';
     const isCreateOperation = operation === 'create';
     const isViewOnly = !isCreateOperation && !isEditOperation;
+    const cashAmount = watch('cashAmount');
+    const fixedIncomeAmount = watch('fixedIncomeAmount');
+    const unitPricePercent = calculateUnitPricePercent(
+        cashAmount,
+        fixedIncomeAmount,
+    );
 
     return (
         <div
@@ -207,6 +221,7 @@ export const GroupTransactionDetails: React.FC<
                         />
                     }
                 />
+                <p>Unit price: {unitPricePercent}%</p>
             </div>
             {fields.length > 0 && (
                 <FeeTransactionsTable
