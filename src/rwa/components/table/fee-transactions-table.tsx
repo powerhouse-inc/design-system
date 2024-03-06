@@ -31,6 +31,7 @@ export function FeeTransactionsTable<ControlInputs extends FieldValues>(
             id: spft.id,
         }),
     );
+
     return (
         <table className="w-full table-fixed">
             <thead>

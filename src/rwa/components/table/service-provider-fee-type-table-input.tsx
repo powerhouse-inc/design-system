@@ -22,7 +22,9 @@ export function ServiceProviderAndFeeTypeTableInput<
 
     return (
         <Controller
-            name={`fees.${index}.serviceProviderId` as Path<ControlInputs>}
+            name={
+                `fees.${index}.serviceProviderFeeTypeId` as Path<ControlInputs>
+            }
             control={control}
             rules={{ required: true }}
             render={({ field: { onChange, onBlur } }) => (
