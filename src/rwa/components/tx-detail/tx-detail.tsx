@@ -1,12 +1,12 @@
 import { DateTimeLocalInput } from '@/connect/components/date-time-input';
 import { DivProps, Icon, mergeClassNameProps } from '@/powerhouse';
 import {
+    FixedIncome,
     GroupTransaction,
     GroupTransactionType,
-    ServiceProvider,
+    ServiceProviderFeeType,
     TransactionFee,
     convertToDateTimeLocalFormat,
-    fixedIncome,
 } from '@/rwa';
 import {
     groupTransactionTypeLabels,
@@ -41,11 +41,29 @@ function calculateUnitPricePercent(
     return ((cashAmount / fixedIncomeAmount) * 100).toFixed(2);
 }
 
+function calculateCashBalanceChange(
+    transactionType: GroupTransactionType | undefined,
+    cashAmount: number | undefined,
+    fees: Maybe<TransactionFee[]> | undefined,
+) {
+    if (!cashAmount || !transactionType) return '--';
+
+    const operation = transactionType === 'AssetPurchase' ? -1 : 1;
+
+    const totalFees = fees
+        ? fees.reduce((acc, fee) => acc + Number(fee.amount), 0)
+        : 0;
+
+    console.log({ fees, totalFees, cashAmount, operation });
+
+    return Number(cashAmount) * operation - totalFees;
+}
+
 export interface GroupTransactionsDetailsProps extends DivProps {
     transaction: Partial<GroupTransaction> | undefined;
     operation: 'view' | 'create' | 'edit';
-    fixedIncomes: fixedIncome[];
-    feeTypes: ServiceProvider[];
+    fixedIncomes: FixedIncome[];
+    serviceProviderFeeTypes: ServiceProviderFeeType[];
     transactionNumber: number;
     onCancel: (reset: UseFormReset<GroupTransactionDetailInputs>) => void;
     selectItemToEdit?: () => void;
@@ -61,7 +79,7 @@ export const GroupTransactionDetails: React.FC<
         onCancel,
         selectItemToEdit,
         onSubmitForm,
-        feeTypes,
+        serviceProviderFeeTypes,
         transactionNumber,
         ...restProps
     } = props;
@@ -113,9 +131,16 @@ export const GroupTransactionDetails: React.FC<
     const isViewOnly = !isCreateOperation && !isEditOperation;
     const cashAmount = watch('cashAmount');
     const fixedIncomeAmount = watch('fixedIncomeAmount');
+    const type = watch('type');
+    const fees = watch('fees');
     const unitPricePercent = calculateUnitPricePercent(
         cashAmount,
         fixedIncomeAmount,
+    );
+    const cashBalanceChange = calculateCashBalanceChange(
+        type,
+        cashAmount,
+        fees,
     );
 
     return (
@@ -227,7 +252,7 @@ export const GroupTransactionDetails: React.FC<
                 <FeeTransactionsTable
                     register={register}
                     feeInputs={fields}
-                    feeTypes={feeTypes}
+                    serviceProviderFeeTypes={serviceProviderFeeTypes}
                     control={control}
                     watch={watch}
                     remove={remove}
@@ -238,7 +263,7 @@ export const GroupTransactionDetails: React.FC<
                 onClick={() =>
                     append({
                         amount: 0,
-                        serviceProviderId: feeTypes[0].id,
+                        serviceProviderFeeTypeId: serviceProviderFeeTypes[0].id,
                     })
                 }
                 className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-white p-2 text-sm font-semibold text-gray-900"
@@ -246,6 +271,10 @@ export const GroupTransactionDetails: React.FC<
                 <span>Add Fee</span>
                 <Icon name="plus" size={14} />
             </button>
+            <div className="flex justify-between border-t border-gray-300 bg-gray-100 p-3 font-semibold text-gray-800">
+                <div>Cash Balance Change</div>
+                <div>{cashBalanceChange}</div>
+            </div>
         </div>
     );
 };

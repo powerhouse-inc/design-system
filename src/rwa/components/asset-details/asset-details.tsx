@@ -3,10 +3,10 @@ import { parseDate } from '@internationalized/date';
 import React from 'react';
 import { SubmitHandler, UseFormReset, useForm } from 'react-hook-form';
 import {
+    FixedIncome,
     FixedIncomeType,
     RWAComponentMode,
     SPV,
-    fixedIncome,
 } from '../../types';
 import { RWAButton } from '../button';
 import {
@@ -39,7 +39,7 @@ const defaultLabels = {
 };
 
 export interface RWAAssetDetailsProps extends DivProps {
-    asset: fixedIncome;
+    asset: FixedIncome;
     operation?: 'create' | 'edit';
     mode?: RWAComponentMode;
     fixedIncomeTypes: FixedIncomeType[];

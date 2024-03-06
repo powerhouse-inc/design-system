@@ -6,7 +6,7 @@ import {
 
 export type RWAComponentMode = 'view' | 'edit';
 
-export type fixedIncome = {
+export type FixedIncome = {
     // editable fields
     id: string;
     name: string;
@@ -54,7 +54,7 @@ export type GroupTransaction = {
 
 export type TransactionFee = {
     amount: Scalars['Float']['output'];
-    serviceProviderId: Scalars['ID']['output'];
+    serviceProviderFeeTypeId: Scalars['ID']['output'];
 };
 
 export type CashAsset = {
@@ -63,7 +63,7 @@ export type CashAsset = {
     currency: string;
 };
 
-export type Asset = CashAsset | fixedIncome;
+export type Asset = CashAsset | FixedIncome;
 
 export type BaseTransaction = {
     id: string;
@@ -77,7 +77,7 @@ export type BaseTransaction = {
     counterPartyAccountId?: string | null;
 };
 
-export type ServiceProvider = {
+export type ServiceProviderFeeType = {
     accountId: Scalars['ID']['output'];
     feeType: Scalars['String']['output'];
     id: Scalars['ID']['output'];

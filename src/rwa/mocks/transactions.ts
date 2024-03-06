@@ -1,9 +1,9 @@
-import { mockfixedIncomes, mockPrincipalLenderAccountId } from '.';
+import { mockFixedIncomes, mockPrincipalLenderAccountId } from '.';
 import { groupTransactionTypes } from '../constants/transactions';
 
 export const mockFixedIncomeTransaction = {
     id: 'fixed-income-transaction-1',
-    assetId: mockfixedIncomes[0].id,
+    assetId: mockFixedIncomes[0].id,
     amount: 1000,
     entryTime: '2021-10-01',
 };
@@ -24,17 +24,17 @@ export const mockGroupTransaction = {
         {
             id: 'fee-transaction-1',
             amount: 100,
-            serviceProviderId: '1',
+            serviceProviderFeeTypeId: '1',
         },
         {
             id: 'fee-transaction-2',
             amount: 200,
-            serviceProviderId: '2',
+            serviceProviderFeeTypeId: '2',
         },
         {
             id: 'fee-transaction-3',
             amount: 300,
-            serviceProviderId: '3',
+            serviceProviderFeeTypeId: '3',
         },
     ],
     cashTransaction: mockCashTransaction,

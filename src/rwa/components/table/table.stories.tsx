@@ -1,6 +1,6 @@
 import { Icon } from '@/powerhouse';
-import { fixedIncome } from '@/rwa';
-import { mockfixedIncomes, mockFixedIncomeTypes, mockSpvs } from '@/rwa/mocks';
+import { FixedIncome } from '@/rwa';
+import { mockFixedIncomes, mockFixedIncomeTypes, mockSpvs } from '@/rwa/mocks';
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 import { orderBy } from 'natural-orderby';
@@ -11,7 +11,7 @@ import { RWATableRow } from './expandable-row';
 import { RWATable, RWATableProps } from './table';
 import { RWATableCell } from './table-cell';
 
-const meta: Meta<typeof RWATable<fixedIncome>> = {
+const meta: Meta<typeof RWATable<FixedIncome>> = {
     title: 'RWA/Components/RWATable',
     component: RWATable,
     argTypes: {
@@ -38,7 +38,7 @@ export const Primary: Story = {
             { id: 'notional', label: 'Notional', allowSorting: true },
             { id: 'moreDetails' },
         ],
-        items: mockfixedIncomes,
+        items: mockFixedIncomes,
         renderRow: (item, index) => (
             <tr
                 key={item.id}
@@ -63,7 +63,7 @@ export const Primary: Story = {
     render: args => <TableDemo {...args} />,
 };
 
-const TableDemo = (props: RWATableProps<fixedIncome>) => {
+const TableDemo = (props: RWATableProps<FixedIncome>) => {
     const { items, ...restProps } = props;
 
     const [sortedItems, setSortedItems] = useState(items || []);
@@ -74,17 +74,17 @@ const TableDemo = (props: RWATableProps<fixedIncome>) => {
         setExpandedRow(id === expandedRow ? null : id);
     };
 
-    const onClickSort: RWATableProps<fixedIncome>['onClickSort'] = (
+    const onClickSort: RWATableProps<FixedIncome>['onClickSort'] = (
         column,
         direction,
     ) => {
         console.log('onClickSort', column, direction);
         setSortedItems(
-            orderBy(sortedItems, [column as keyof fixedIncome], [direction]),
+            orderBy(sortedItems, [column as keyof FixedIncome], [direction]),
         );
     };
 
-    const renderRow: RWATableProps<fixedIncome>['renderRow'] = (
+    const renderRow: RWATableProps<FixedIncome>['renderRow'] = (
         item,
         index,
     ) => {

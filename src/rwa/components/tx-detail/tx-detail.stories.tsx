@@ -1,4 +1,4 @@
-import { mockfixedIncomes } from '@/rwa/mocks';
+import { mockFixedIncomes } from '@/rwa/mocks';
 import { mockGroupTransaction } from '@/rwa/mocks/transactions';
 import type { Meta, StoryObj } from '@storybook/react';
 import { GroupTransactionDetails } from './tx-detail';
@@ -15,7 +15,7 @@ export const Primary: Story = {
     args: {
         transaction: mockGroupTransaction,
         operation: 'view',
-        fixedIncomes: mockfixedIncomes,
+        fixedIncomes: mockFixedIncomes,
         onSubmitForm: data => {
             console.log(data);
         },

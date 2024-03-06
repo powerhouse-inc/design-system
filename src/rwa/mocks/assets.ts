@@ -1,4 +1,4 @@
-import { fixedIncome } from '@/rwa';
+import { FixedIncome } from '@/rwa';
 
 export const mockPrincipalLenderAccountId = 'principal-lender-id';
 
@@ -14,7 +14,7 @@ export const mockSpvs = [
     { id: '3', name: 'SPV 3' },
 ];
 
-export const mockfixedIncomes: fixedIncome[] = [
+export const mockFixedIncomes: FixedIncome[] = [
     {
         id: '137418',
         fixedIncomeTypeId: '1',
@@ -208,7 +208,7 @@ export const mockAccounts = [
     },
 ];
 
-export const mockFeeTypes = [
+export const mockServiceProviderFeeTypes = [
     {
         id: '1',
         feeType: 'Fee 1',

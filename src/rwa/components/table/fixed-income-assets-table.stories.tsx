@@ -1,19 +1,19 @@
-import { fixedIncome } from '@/rwa';
+import { FixedIncome } from '@/rwa';
 import type { Meta, StoryObj } from '@storybook/react';
 import { utils } from 'document-model/document';
 import { useCallback, useState } from 'react';
 import { RWAAssetDetailInputs } from '../asset-details/form';
 
-import { mockfixedIncomes, mockFixedIncomeTypes, mockSpvs } from '@/rwa/mocks';
+import { mockFixedIncomes, mockFixedIncomeTypes, mockSpvs } from '@/rwa/mocks';
 import {
-    fixedIncomesTableProps,
-    RWAfixedIncomesTable,
+    FixedIncomesTableProps,
+    RWAFixedIncomesTable,
 } from './fixed-income-assets-table';
 import { getColumnCount } from './useColumnPriority';
 
-const meta: Meta<typeof RWAfixedIncomesTable> = {
-    title: 'RWA/Components/RWAfixedIncomesTable',
-    component: RWAfixedIncomesTable,
+const meta: Meta<typeof RWAFixedIncomesTable> = {
+    title: 'RWA/Components/RWAFixedIncomesTable',
+    component: RWAFixedIncomesTable,
 };
 
 export default meta;
@@ -27,7 +27,7 @@ const columnCountByTableWidth = {
     984: 8,
 };
 
-const fieldsPriority: (keyof fixedIncome)[] = [
+const fieldsPriority: (keyof FixedIncome)[] = [
     'name',
     'maturity',
     'notional',
@@ -51,7 +51,7 @@ function createAssetFromFormInputs(data: RWAAssetDetailInputs) {
 
 export const Primary: Story = {
     args: {
-        items: mockfixedIncomes,
+        items: mockFixedIncomes,
         fixedIncomeTypes: mockFixedIncomeTypes,
         spvs: mockSpvs,
         fieldsPriority,
@@ -60,7 +60,7 @@ export const Primary: Story = {
     render: function Wrapper(args) {
         const [expandedRowId, setExpandedRowId] = useState<string>();
         const [selectedAssetToEdit, setSelectedAssetToEdit] =
-            useState<fixedIncome>();
+            useState<FixedIncome>();
         const [showNewAssetForm, setShowNewAssetForm] = useState(false);
 
         const toggleExpandedRow = useCallback(
@@ -70,7 +70,7 @@ export const Primary: Story = {
             [expandedRowId],
         );
 
-        const onClickDetails: fixedIncomesTableProps['onClickDetails'] =
+        const onClickDetails: FixedIncomesTableProps['onClickDetails'] =
             useCallback(
                 item => {
                     setExpandedRowId(
@@ -82,19 +82,19 @@ export const Primary: Story = {
                 [expandedRowId],
             );
 
-        const onCancelEdit: fixedIncomesTableProps['onCancelEdit'] =
+        const onCancelEdit: FixedIncomesTableProps['onCancelEdit'] =
             useCallback(() => {
                 setSelectedAssetToEdit(undefined);
             }, []);
 
-        const onSubmitEdit: fixedIncomesTableProps['onSubmitEdit'] =
+        const onSubmitEdit: FixedIncomesTableProps['onSubmitEdit'] =
             useCallback(data => {
                 const asset = createAssetFromFormInputs(data);
                 console.log({ asset, data });
                 setSelectedAssetToEdit(undefined);
             }, []);
 
-        const onSubmitCreate: fixedIncomesTableProps['onSubmitCreate'] =
+        const onSubmitCreate: FixedIncomesTableProps['onSubmitCreate'] =
             useCallback(data => {
                 const asset = createAssetFromFormInputs(data);
                 console.log({ asset, data });
@@ -118,7 +118,7 @@ export const Primary: Story = {
             <div className="flex flex-col gap-4">
                 <div className="w-screen">
                     <p>parent element width: 100%</p>
-                    <RWAfixedIncomesTable {...argsWithHandlers} />
+                    <RWAFixedIncomesTable {...argsWithHandlers} />
                 </div>
                 {Object.keys(columnCountByTableWidth)
                     .map(Number)
@@ -130,7 +130,7 @@ export const Primary: Story = {
                                 column count:{' '}
                                 {getColumnCount(width, columnCountByTableWidth)}
                             </p>
-                            <RWAfixedIncomesTable {...argsWithHandlers} />
+                            <RWAFixedIncomesTable {...argsWithHandlers} />
                         </div>
                     ))}
             </div>

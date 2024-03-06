@@ -1,11 +1,11 @@
 import { Icon } from '@/powerhouse';
 import {
     CashAsset,
-    fixedIncome,
+    FixedIncome,
     GroupTransaction,
     GroupTransactionDetailInputs,
     GroupTransactionDetails,
-    ServiceProvider,
+    ServiceProviderFeeType,
 } from '@/rwa';
 import { useMemo, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -26,7 +26,7 @@ export type Fields = {
 export function mapGroupTransactionsToTableFields(
     transactions: GroupTransaction[] | undefined,
     cashAssets: CashAsset[],
-    fixedIncomes: fixedIncome[],
+    fixedIncomes: FixedIncome[],
 ): Fields[] {
     return (transactions ?? [])
         .map(transaction =>
@@ -42,7 +42,7 @@ export function mapGroupTransactionsToTableFields(
 export function mapGroupTransactionToTableFields(
     transaction: GroupTransaction | undefined,
     cashAssets: CashAsset[],
-    fixedIncomes: fixedIncome[],
+    fixedIncomes: FixedIncome[],
 ): Fields | undefined {
     if (!transaction) return;
     const fixedIncome = fixedIncomes.find(
@@ -69,8 +69,8 @@ export type GroupTransactionsTableProps = Omit<
     'header' | 'renderRow'
 > & {
     cashAssets: CashAsset[];
-    fixedIncomes: fixedIncome[];
-    feeTypes: ServiceProvider[];
+    fixedIncomes: FixedIncome[];
+    serviceProviderFeeTypes: ServiceProviderFeeType[];
     principalLenderAccountId: string;
     columnCountByTableWidth: Record<string, number>;
     fieldsPriority: (keyof Fields)[];
@@ -93,7 +93,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
         items,
         fixedIncomes,
         cashAssets,
-        feeTypes,
+        serviceProviderFeeTypes,
         principalLenderAccountId,
         fieldsPriority,
         columnCountByTableWidth,
@@ -140,7 +140,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                             )}
                             className="border-y border-gray-300"
                             fixedIncomes={fixedIncomes}
-                            feeTypes={feeTypes}
+                            serviceProviderFeeTypes={serviceProviderFeeTypes}
                             transactionNumber={index + 1}
                             operation={
                                 selectedGroupTransactionToEdit?.id === item.id
@@ -243,7 +243,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                             },
                         }}
                         fixedIncomes={fixedIncomes}
-                        feeTypes={feeTypes}
+                        serviceProviderFeeTypes={serviceProviderFeeTypes}
                         operation="create"
                         transactionNumber={(items?.length ?? 0) + 1}
                         onCancel={() => setShowNewGroupTransactionForm(false)}

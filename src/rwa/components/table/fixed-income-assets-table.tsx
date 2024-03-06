@@ -1,5 +1,5 @@
 import { Icon } from '@/powerhouse';
-import { fixedIncome, FixedIncomeType, SPV } from '@/rwa';
+import { FixedIncome, FixedIncomeType, SPV } from '@/rwa';
 import { addDays } from 'date-fns';
 import { useRef } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
@@ -10,27 +10,27 @@ import { RWATableRow } from './expandable-row';
 import { useColumnPriority } from './useColumnPriority';
 import { handleDateInTable } from './utils';
 
-export type fixedIncomesTableProps = Omit<
-    RWATableProps<fixedIncome>,
+export type FixedIncomesTableProps = Omit<
+    RWATableProps<FixedIncome>,
     'header' | 'renderRow'
 > & {
     fixedIncomeTypes: FixedIncomeType[];
     spvs: SPV[];
     columnCountByTableWidth: Record<string, number>;
-    fieldsPriority: (keyof fixedIncome)[];
+    fieldsPriority: (keyof FixedIncome)[];
     expandedRowId: string | undefined;
-    selectedAssetToEdit?: fixedIncome;
+    selectedAssetToEdit?: FixedIncome;
     showNewAssetForm: boolean;
     toggleExpandedRow: (id: string) => void;
-    onClickDetails: (item: fixedIncome) => void;
-    setSelectedAssetToEdit: (item: fixedIncome) => void;
+    onClickDetails: (item: FixedIncome) => void;
+    setSelectedAssetToEdit: (item: FixedIncome) => void;
     onCancelEdit: () => void;
     onSubmitCreate: (data: RWAAssetDetailInputs) => void;
     onSubmitEdit: (data: RWAAssetDetailInputs) => void;
     setShowNewAssetForm: (show: boolean) => void;
 };
 
-export function RWAfixedIncomesTable(props: fixedIncomesTableProps) {
+export function RWAFixedIncomesTable(props: FixedIncomesTableProps) {
     const {
         items,
         fixedIncomeTypes,
@@ -52,7 +52,7 @@ export function RWAfixedIncomesTable(props: fixedIncomesTableProps) {
 
     const tableContainerRef = useRef<HTMLDivElement>(null);
 
-    const { fields, headerLabels } = useColumnPriority<fixedIncome>({
+    const { fields, headerLabels } = useColumnPriority<FixedIncome>({
         columnCountByTableWidth,
         fieldsPriority,
         tableContainerRef,
@@ -60,7 +60,7 @@ export function RWAfixedIncomesTable(props: fixedIncomesTableProps) {
 
     const { sortedItems, sortHandler } = useSortTableItems(items || []);
 
-    const renderRow = (item: fixedIncome, index: number) => {
+    const renderRow = (item: FixedIncome, index: number) => {
         return (
             <RWATableRow
                 isExpanded={expandedRowId === item.id}

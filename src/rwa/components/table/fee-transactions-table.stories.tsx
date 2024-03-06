@@ -1,6 +1,9 @@
 import { Icon } from '@/powerhouse';
-import { GroupTransactionDetailInputs, ServiceProvider } from '@/rwa';
-import { mockFeeTypes, mockGroupTransactions } from '@/rwa/mocks';
+import { GroupTransactionDetailInputs, ServiceProviderFeeType } from '@/rwa';
+import {
+    mockGroupTransactions,
+    mockServiceProviderFeeTypes,
+} from '@/rwa/mocks';
 import { Meta, StoryObj } from '@storybook/react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { FeeTransactionsTable } from './fee-transactions-table';
@@ -13,13 +16,13 @@ const meta = {
 export default meta;
 
 type Story = StoryObj<{
-    feeTypes: ServiceProvider[];
+    serviceProviderFeeTypes: ServiceProviderFeeType[];
     isViewOnly: boolean;
 }>;
 
 export const Primary: Story = {
     args: {
-        feeTypes: mockFeeTypes,
+        serviceProviderFeeTypes: mockServiceProviderFeeTypes,
         isViewOnly: false,
     },
     render: function Wrapper(args) {
@@ -34,7 +37,7 @@ export const Primary: Story = {
 
         const { fields, append, remove } = useFieldArray({
             control,
-            name: 'fees', // Name of the field array in your form
+            name: 'fees',
         });
         return (
             <>
@@ -52,7 +55,8 @@ export const Primary: Story = {
                     onClick={() =>
                         append({
                             amount: 0,
-                            serviceProviderId: args.feeTypes[0].id,
+                            serviceProviderFeeTypeId:
+                                args.serviceProviderFeeTypes[0].id,
                         })
                     }
                     className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-white p-2 text-sm font-semibold text-gray-900"

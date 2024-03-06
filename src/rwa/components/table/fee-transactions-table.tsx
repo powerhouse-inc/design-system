@@ -1,4 +1,4 @@
-import { ServiceProvider } from '@/rwa';
+import { ServiceProviderFeeType } from '@/rwa';
 import {
     Control,
     FieldArrayWithId,
@@ -8,11 +8,11 @@ import {
     UseFormWatch,
 } from 'react-hook-form';
 import { GroupTransactionDetailInputs } from '..';
-import { ServiceProviderAndFeeTypeTableInputs } from './service-provider-and-fee-type-table-inputs';
+import { ServiceProviderAndFeeTypeTableInput } from './service-provider-fee-type-table-input';
 
 type Props<ControlInputs extends FieldValues> = {
     feeInputs: FieldArrayWithId<GroupTransactionDetailInputs, 'fees'>[];
-    feeTypes: ServiceProvider[];
+    serviceProviderFeeTypes: ServiceProviderFeeType[];
     register: UseFormRegister<GroupTransactionDetailInputs>;
     control: Control<ControlInputs>;
     watch: UseFormWatch<GroupTransactionDetailInputs>;
@@ -23,87 +23,14 @@ type Props<ControlInputs extends FieldValues> = {
 export function FeeTransactionsTable<ControlInputs extends FieldValues>(
     props: Props<ControlInputs>,
 ) {
-    function getFeeTypeByServiceProviderId(serviceProviderId: string) {
-        return props.feeTypes.find(feeType => feeType.id === serviceProviderId);
-    }
-    function makeServiceProviderOptions() {
-        return props.feeTypes.map(feeType => ({
-            label: feeType.name,
-            id: feeType.id,
-        }));
-    }
-
-    function makeFeeTypeOptions(feeTypes: ServiceProvider[]) {
-        return feeTypes.map(feeType => ({
-            label: feeType.feeType,
-            id: feeType.id,
-        }));
-    }
-
-    const serviceProvidersByName = makeServiceProvidersByName(props.feeTypes);
-    const serviceProvidersWithMultipleFeeTypes =
-        makeServiceProvidersWithMultipleFeeTypes(serviceProvidersByName);
-    const namesOfServiceProvidersWithMultipleFeeTypes = Object.keys(
-        serviceProvidersWithMultipleFeeTypes,
-    );
-    const feeTypeOptionsForServiceProviderWithMultipleFeeTypes =
-        makeFeeTypeOptionsForServiceProviderWithMultipleFeeTypes(
-            serviceProvidersWithMultipleFeeTypes,
-        );
-
-    function makeFeeTypeOptionsForServiceProviderWithMultipleFeeTypes(
-        serviceProvidersWithMultipleFeeTypes: Record<string, ServiceProvider[]>,
-    ) {
-        const feeTypeOptions: Record<string, { label: string; id: string }[]> =
-            {};
-
-        namesOfServiceProvidersWithMultipleFeeTypes.forEach(name => {
-            feeTypeOptions[name] = makeFeeTypeOptions(
-                serviceProvidersWithMultipleFeeTypes[name],
-            );
-        });
-
-        return feeTypeOptions;
-    }
-
-    function makeServiceProvidersWithMultipleFeeTypes(
-        serviceProvidersByName: Record<string, ServiceProvider[] | undefined>,
-    ) {
-        const serviceProvidersWithMultipleFeeTypes: Record<
-            string,
-            ServiceProvider[]
-        > = {};
-
-        Object.entries(serviceProvidersByName).forEach(
-            ([name, serviceProviders]) => {
-                if (serviceProviders && serviceProviders.length > 1) {
-                    serviceProvidersWithMultipleFeeTypes[name] =
-                        serviceProviders;
-                }
-            },
-        );
-
-        return serviceProvidersWithMultipleFeeTypes;
-    }
-
-    function makeServiceProvidersByName(feeTypes: ServiceProvider[]) {
-        const serviceProvidersByName: Record<
-            string,
-            ServiceProvider[] | undefined
-        > = {};
-
-        feeTypes.forEach(feeType => {
-            if (!serviceProvidersByName[feeType.name]) {
-                serviceProvidersByName[feeType.name] = [];
-            }
-            serviceProvidersByName[feeType.name]?.push(feeType);
-        });
-
-        return serviceProvidersByName;
-    }
-
     const headings = ['Service Provider', 'Fee Type', 'Account ID', 'Fee $USD'];
-    const serviceProviderOptions = makeServiceProviderOptions();
+
+    const serviceProviderFeeTypeOptions = props.serviceProviderFeeTypes.map(
+        spft => ({
+            label: `${spft.name} — ${spft.feeType} — ${spft.accountId}`,
+            id: spft.id,
+        }),
+    );
     return (
         <table className="w-full table-fixed">
             <thead>
@@ -117,32 +44,33 @@ export function FeeTransactionsTable<ControlInputs extends FieldValues>(
             </thead>
             <tbody>
                 {props.feeInputs.map((feeInput, index) => {
-                    const selectedServiceProviderId = props.watch(
-                        `fees.${index}.serviceProviderId`,
+                    const selectedServiceProviderFeeTypeId = props.watch(
+                        `fees.${index}.serviceProviderFeeTypeId`,
                     );
-                    const selectedServiceProvider =
-                        getFeeTypeByServiceProviderId(
-                            selectedServiceProviderId,
+
+                    const selectedServiceProviderFeeType =
+                        props.serviceProviderFeeTypes.find(
+                            spft =>
+                                spft.id === selectedServiceProviderFeeTypeId,
                         );
 
                     return (
                         <tr key={feeInput.id}>
-                            <ServiceProviderAndFeeTypeTableInputs
-                                selectedServiceProvider={
-                                    selectedServiceProvider
-                                }
-                                namesOfServiceProvidersWithMultipleFeeTypes={
-                                    namesOfServiceProvidersWithMultipleFeeTypes
-                                }
-                                index={index}
-                                isViewOnly={props.isViewOnly}
-                                serviceProviderOptions={serviceProviderOptions}
-                                control={props.control}
-                                feeTypeOptionsForServiceProviderWithMultipleFeeTypes={
-                                    feeTypeOptionsForServiceProviderWithMultipleFeeTypes
-                                }
-                            />
-                            <td>{selectedServiceProvider?.accountId}</td>
+                            <td>
+                                <ServiceProviderAndFeeTypeTableInput
+                                    selectedServiceProviderFeeType={
+                                        selectedServiceProviderFeeType
+                                    }
+                                    index={index}
+                                    isViewOnly={props.isViewOnly}
+                                    serviceProviderFeeTypeOptions={
+                                        serviceProviderFeeTypeOptions
+                                    }
+                                    control={props.control}
+                                />
+                            </td>
+                            <td>{selectedServiceProviderFeeType?.feeType}</td>
+                            <td>{selectedServiceProviderFeeType?.accountId}</td>
                             <td>
                                 <input
                                     type="number"
