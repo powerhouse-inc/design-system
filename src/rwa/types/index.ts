@@ -53,6 +53,7 @@ export type GroupTransaction = {
 };
 
 export type TransactionFee = {
+    id?: Scalars['ID']['output'];
     amount: Scalars['Float']['output'];
     serviceProviderFeeTypeId: Scalars['ID']['output'];
 };

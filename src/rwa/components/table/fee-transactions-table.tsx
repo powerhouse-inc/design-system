@@ -3,11 +3,13 @@ import {
     Control,
     FieldArrayWithId,
     FieldValues,
+    Path,
     UseFieldArrayRemove,
     UseFormRegister,
     UseFormWatch,
 } from 'react-hook-form';
 import { GroupTransactionDetailInputs } from '..';
+import { RWATableTextInput } from '../table-inputs';
 import { ServiceProviderAndFeeTypeTableInput } from './service-provider-fee-type-table-input';
 
 type Props<ControlInputs extends FieldValues> = {
@@ -73,11 +75,12 @@ export function FeeTransactionsTable<ControlInputs extends FieldValues>(
                             <td>{selectedServiceProviderFeeType?.feeType}</td>
                             <td>{selectedServiceProviderFeeType?.accountId}</td>
                             <td>
-                                <input
-                                    type="number"
-                                    {...props.register(`fees.${index}.amount`, {
-                                        disabled: props.isViewOnly,
-                                    })}
+                                <RWATableTextInput
+                                    name={
+                                        `fees.${index}.amount` as Path<ControlInputs>
+                                    }
+                                    control={props.control}
+                                    disabled={props.isViewOnly}
                                 />
                             </td>
                         </tr>

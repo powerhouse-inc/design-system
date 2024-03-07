@@ -54,8 +54,6 @@ function calculateCashBalanceChange(
         ? fees.reduce((acc, fee) => acc + Number(fee.amount), 0)
         : 0;
 
-    console.log({ fees, totalFees, cashAmount, operation });
-
     return Number(cashAmount) * operation - totalFees;
 }
 
@@ -262,7 +260,7 @@ export const GroupTransactionDetails: React.FC<
             <button
                 onClick={() =>
                     append({
-                        amount: 0,
+                        amount: 1000,
                         serviceProviderFeeTypeId: serviceProviderFeeTypes[0].id,
                     })
                 }
