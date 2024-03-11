@@ -143,7 +143,7 @@ export function RWAFixedIncomesTable(props: FixedIncomesTableProps) {
             />
             <button
                 onClick={() => setShowNewAssetForm(true)}
-                className="flex h-[42px] w-full items-center justify-center gap-x-2 rounded-b-lg border-x border-b border-gray-300 bg-white text-sm font-semibold text-gray-900"
+                className="flex h-11 w-full items-center justify-center gap-x-2 rounded-b-lg border-x border-b border-gray-300 bg-white text-sm font-semibold text-gray-900"
             >
                 <span>Create Asset</span>
                 <Icon name="plus" size={14} />

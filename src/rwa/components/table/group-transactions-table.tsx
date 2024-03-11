@@ -8,7 +8,7 @@ import {
     ServiceProviderFeeType,
 } from '@/rwa';
 import { useMemo, useRef } from 'react';
-import { twMerge } from 'tailwind-merge';
+import { twJoin, twMerge } from 'tailwind-merge';
 import { RWATable, RWATableCell, RWATableProps, useSortTableItems } from '.';
 import { RWATableRow } from './expandable-row';
 import { useColumnPriority } from './useColumnPriority';
@@ -210,7 +210,10 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
         <>
             <RWATable
                 {...restProps}
-                className={twMerge(expandedRowId && 'max-h-max')}
+                className={twJoin(
+                    'rounded-b-none',
+                    expandedRowId && 'max-h-max',
+                )}
                 onClickSort={sortHandler}
                 ref={tableContainerRef}
                 items={sortedItems}
@@ -219,13 +222,13 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
             />
             <button
                 onClick={() => setShowNewGroupTransactionForm(true)}
-                className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-white p-2 text-sm font-semibold text-gray-900"
+                className="flex h-11 w-full items-center justify-center gap-x-2 rounded-b-lg border-x border-b border-gray-300 bg-white text-sm font-semibold text-gray-900"
             >
                 <span>Create Group Transaction</span>
                 <Icon name="plus" size={14} />
             </button>
             {showNewGroupTransactionForm && (
-                <div className="mt-4 rounded-md border border-gray-300 bg-white">
+                <div className="mt-4 rounded-md bg-white">
                     <GroupTransactionDetails
                         transaction={{
                             id: '',

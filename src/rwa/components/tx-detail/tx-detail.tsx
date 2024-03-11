@@ -214,6 +214,7 @@ export const GroupTransactionDetails: React.FC<
                                 disabled: isViewOnly,
                             })}
                             name="entryTime"
+                            className="disabled:bg-transparent"
                         />
                     }
                 />
