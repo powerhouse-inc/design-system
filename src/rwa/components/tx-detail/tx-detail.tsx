@@ -255,7 +255,7 @@ export const GroupTransactionDetails: React.FC<
                         />
                     }
                 />
-                <div className="ml-auto mr-6 w-fit  text-xs">
+                <div className="mb-2 ml-auto mr-6 w-fit text-xs">
                     <span className="mr-2 inline-block text-gray-600">
                         Unit Price
                     </span>{' '}

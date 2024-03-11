@@ -89,6 +89,7 @@ export function FeeTransactionsTable<ControlInputs extends FieldValues>(
                                                 name={
                                                     `fees.${index}.amount` as Path<ControlInputs>
                                                 }
+                                                required
                                                 control={props.control}
                                                 disabled={props.isViewOnly}
                                             />
@@ -116,19 +117,21 @@ export function FeeTransactionsTable<ControlInputs extends FieldValues>(
                     </table>
                 </div>
             )}
-            <button
-                onClick={() =>
-                    props.append({
-                        amount: 0,
-                        serviceProviderFeeTypeId:
-                            props.serviceProviderFeeTypes[0].id,
-                    })
-                }
-                className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-white p-2 pb-6 text-sm font-semibold  text-gray-900"
-            >
-                <span>Add Fee</span>
-                <Icon name="plus" size={16} />
-            </button>
+            {!props.isViewOnly && (
+                <button
+                    onClick={() =>
+                        props.append({
+                            amount: 0,
+                            serviceProviderFeeTypeId:
+                                props.serviceProviderFeeTypes[0].id,
+                        })
+                    }
+                    className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-white pb-6 pt-0 text-sm font-semibold  text-gray-900"
+                >
+                    <span>Add Fee</span>
+                    <Icon name="plus" size={16} />
+                </button>
+            )}
         </>
     );
 }
