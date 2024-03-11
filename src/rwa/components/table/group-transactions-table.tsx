@@ -19,7 +19,7 @@ export type Fields = {
     'Entry time': string | undefined;
     Asset: string | undefined;
     Quantity: number | undefined;
-    'USD Amount': number | undefined;
+    'Cash Amount': number | undefined;
     'Cash Balance Change': number | undefined;
 };
 
@@ -53,7 +53,7 @@ export function mapGroupTransactionToTableFields(
         'Entry time': transaction.entryTime,
         Asset: fixedIncome?.name,
         Quantity: transaction.fixedIncomeTransaction?.amount,
-        'USD Amount': transaction.fixedIncomeTransaction?.amount,
+        'Cash Amount': transaction.fixedIncomeTransaction?.amount,
         'Cash Balance Change': transaction.cashBalanceChange,
     };
 }
