@@ -236,13 +236,13 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                             cashTransaction: {
                                 id: '',
                                 assetId: cashAssets[0].id,
-                                amount: 1000,
+                                amount: 0,
                                 counterPartyAccountId: principalLenderAccountId,
                             },
                             fixedIncomeTransaction: {
                                 id: '',
                                 assetId: fixedIncomes[0].id,
-                                amount: 1000,
+                                amount: 0,
                             },
                         }}
                         fixedIncomes={fixedIncomes}

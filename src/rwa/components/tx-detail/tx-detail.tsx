@@ -155,7 +155,7 @@ export const GroupTransactionDetails: React.FC<
         <div
             {...mergeClassNameProps(
                 restProps,
-                'flex flex-col overflow-hidden rounded-md border border-gray-300',
+                'flex flex-col overflow-hidden rounded-md border border-gray-300 bg-white',
             )}
         >
             <div className="flex justify-between border-b border-gray-300 bg-gray-100 p-3 font-semibold text-gray-800">
