@@ -271,9 +271,14 @@ export const GroupTransactionDetails: React.FC<
                 append={append}
                 isViewOnly={isViewOnly}
             />
-            <div className="flex justify-between border-t border-gray-300 bg-gray-100 p-3 font-semibold text-gray-800">
-                <div>Cash Balance Change</div>
-                <div>{cashBalanceChange}</div>
+            <div className="flex items-center justify-between border-t border-gray-300 bg-gray-100 p-3 font-semibold text-gray-800">
+                <div className="mr-6 text-sm text-gray-600">
+                    Cash Balance Change $USD
+                </div>
+                <div className="h-px flex-1 border-b border-dashed border-gray-400" />
+                <div className="pl-8 text-sm text-gray-900">
+                    {cashBalanceChange}
+                </div>
             </div>
         </div>
     );
