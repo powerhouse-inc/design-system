@@ -1,3 +1,17 @@
+# [1.0.0-alpha.69](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.68...v1.0.0-alpha.69) (2024-03-05)
+
+
+### Features
+
+* added connect settings modal ([da94315](https://github.com/powerhouse-inc/design-system/commit/da943155443d83f0a33180d12ff963df0b463e74))
+
+# [1.0.0-alpha.68](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.67...v1.0.0-alpha.68) (2024-03-05)
+
+
+### Features
+
+* added handler for sidebar settings click ([b891659](https://github.com/powerhouse-inc/design-system/commit/b8916592d1c5e8a1ddd4be95166ddf35174350bd))
+
 # [1.0.0-alpha.67](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.66...v1.0.0-alpha.67) (2024-02-21)
 
 
