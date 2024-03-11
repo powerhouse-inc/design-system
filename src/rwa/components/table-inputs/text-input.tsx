@@ -53,7 +53,7 @@ export function RWATableTextInput<ControlInputs extends FieldValues>(
                         ...inputProps,
                     }}
                     className={twMerge(
-                        'h-[32px] rounded-md',
+                        'h-8 rounded-md',
                         disabled && 'bg-white p-0',
                     )}
                     {...restProps}

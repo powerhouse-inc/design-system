@@ -246,29 +246,16 @@ export const GroupTransactionDetails: React.FC<
                 />
                 <p>Unit price: {unitPricePercent}%</p>
             </div>
-            {fields.length > 0 && (
-                <FeeTransactionsTable
-                    register={register}
-                    feeInputs={fields}
-                    serviceProviderFeeTypes={serviceProviderFeeTypes}
-                    control={control}
-                    watch={watch}
-                    remove={remove}
-                    isViewOnly={isViewOnly}
-                />
-            )}
-            <button
-                onClick={() =>
-                    append({
-                        amount: 1000,
-                        serviceProviderFeeTypeId: serviceProviderFeeTypes[0].id,
-                    })
-                }
-                className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-white p-2 text-sm font-semibold text-gray-900"
-            >
-                <span>Add Fee</span>
-                <Icon name="plus" size={14} />
-            </button>
+            <FeeTransactionsTable
+                register={register}
+                feeInputs={fields}
+                serviceProviderFeeTypes={serviceProviderFeeTypes}
+                control={control}
+                watch={watch}
+                remove={remove}
+                append={append}
+                isViewOnly={isViewOnly}
+            />
             <div className="flex justify-between border-t border-gray-300 bg-gray-100 p-3 font-semibold text-gray-800">
                 <div>Cash Balance Change</div>
                 <div>{cashBalanceChange}</div>

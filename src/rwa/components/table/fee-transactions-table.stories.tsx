@@ -41,16 +41,15 @@ export const Primary: Story = {
         });
         return (
             <>
-                {fields.length > 0 && (
-                    <FeeTransactionsTable
-                        {...args}
-                        feeInputs={fields}
-                        register={register}
-                        control={control}
-                        watch={watch}
-                        remove={remove}
-                    />
-                )}
+                <FeeTransactionsTable
+                    {...args}
+                    feeInputs={fields}
+                    register={register}
+                    control={control}
+                    watch={watch}
+                    append={append}
+                    remove={remove}
+                />
                 <button
                     onClick={() =>
                         append({

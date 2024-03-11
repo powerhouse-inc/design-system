@@ -34,6 +34,10 @@ export function ServiceProviderAndFeeTypeTableInput<
                     onSelectionChange={onChange}
                     onBlur={onBlur}
                     selectedKey={selectedServiceProviderFeeType?.id}
+                    buttonProps={{
+                        className:
+                            'w-full h-8 bg-white border border-gray-300 rounded-lg',
+                    }}
                 />
             )}
         />

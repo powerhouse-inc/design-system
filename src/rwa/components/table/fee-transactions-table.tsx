@@ -1,9 +1,11 @@
+import { Icon } from '@/powerhouse';
 import { ServiceProviderFeeType } from '@/rwa';
 import {
     Control,
     FieldArrayWithId,
     FieldValues,
     Path,
+    UseFieldArrayAppend,
     UseFieldArrayRemove,
     UseFormRegister,
     UseFormWatch,
@@ -18,6 +20,7 @@ type Props<ControlInputs extends FieldValues> = {
     register: UseFormRegister<GroupTransactionDetailInputs>;
     control: Control<ControlInputs>;
     watch: UseFormWatch<GroupTransactionDetailInputs>;
+    append: UseFieldArrayAppend<GroupTransactionDetailInputs, 'fees'>;
     remove: UseFieldArrayRemove;
     isViewOnly: boolean;
 };
@@ -25,7 +28,7 @@ type Props<ControlInputs extends FieldValues> = {
 export function FeeTransactionsTable<ControlInputs extends FieldValues>(
     props: Props<ControlInputs>,
 ) {
-    const headings = ['Service Provider', 'Fee Type', 'Account ID', 'Fee $USD'];
+    const headings = ['Fees', 'Service Provider', 'Fee USD', ''];
 
     const serviceProviderFeeTypeOptions = props.serviceProviderFeeTypes.map(
         spft => ({
@@ -35,58 +38,97 @@ export function FeeTransactionsTable<ControlInputs extends FieldValues>(
     );
 
     return (
-        <table className="w-full table-fixed">
-            <thead>
-                <tr>
-                    {headings.map(heading => (
-                        <th key={heading} className="text-left">
-                            {heading}
-                        </th>
-                    ))}
-                </tr>
-            </thead>
-            <tbody>
-                {props.feeInputs.map((feeInput, index) => {
-                    const selectedServiceProviderFeeTypeId = props.watch(
-                        `fees.${index}.serviceProviderFeeTypeId`,
-                    );
+        <>
+            {props.feeInputs.length > 0 && (
+                <div className="bg-gray-50 px-6 pt-3">
+                    <table className="w-full">
+                        <thead className="mb-2">
+                            <tr>
+                                {headings.map(heading => (
+                                    <th
+                                        key={heading}
+                                        className="p-2 text-left text-xs font-medium text-gray-600"
+                                    >
+                                        {heading}
+                                    </th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {props.feeInputs.map((feeInput, index) => {
+                                const selectedServiceProviderFeeTypeId =
+                                    props.watch(
+                                        `fees.${index}.serviceProviderFeeTypeId`,
+                                    );
 
-                    const selectedServiceProviderFeeType =
-                        props.serviceProviderFeeTypes.find(
-                            spft =>
-                                spft.id === selectedServiceProviderFeeTypeId,
-                        );
+                                const selectedServiceProviderFeeType =
+                                    props.serviceProviderFeeTypes.find(
+                                        spft =>
+                                            spft.id ===
+                                            selectedServiceProviderFeeTypeId,
+                                    );
 
-                    return (
-                        <tr key={feeInput.id}>
-                            <td>
-                                <ServiceProviderAndFeeTypeTableInput
-                                    selectedServiceProviderFeeType={
-                                        selectedServiceProviderFeeType
-                                    }
-                                    index={index}
-                                    isViewOnly={props.isViewOnly}
-                                    serviceProviderFeeTypeOptions={
-                                        serviceProviderFeeTypeOptions
-                                    }
-                                    control={props.control}
-                                />
-                            </td>
-                            <td>{selectedServiceProviderFeeType?.feeType}</td>
-                            <td>{selectedServiceProviderFeeType?.accountId}</td>
-                            <td>
-                                <RWATableTextInput
-                                    name={
-                                        `fees.${index}.amount` as Path<ControlInputs>
-                                    }
-                                    control={props.control}
-                                    disabled={props.isViewOnly}
-                                />
-                            </td>
-                        </tr>
-                    );
-                })}
-            </tbody>
-        </table>
+                                return (
+                                    <tr key={feeInput.id}>
+                                        <td className="w-1/6 py-1"></td>
+                                        <td className="w-4/6 min-w-fit py-1 pr-4">
+                                            <ServiceProviderAndFeeTypeTableInput
+                                                selectedServiceProviderFeeType={
+                                                    selectedServiceProviderFeeType
+                                                }
+                                                index={index}
+                                                isViewOnly={props.isViewOnly}
+                                                serviceProviderFeeTypeOptions={
+                                                    serviceProviderFeeTypeOptions
+                                                }
+                                                control={props.control}
+                                            />
+                                        </td>
+                                        <td className="w-1/12 py-1 pr-4">
+                                            <RWATableTextInput
+                                                name={
+                                                    `fees.${index}.amount` as Path<ControlInputs>
+                                                }
+                                                control={props.control}
+                                                disabled={props.isViewOnly}
+                                            />
+                                        </td>
+                                        <td className="w-fit py-1">
+                                            {!props.isViewOnly && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        props.remove(index)
+                                                    }
+                                                    className="flex items-center"
+                                                >
+                                                    <Icon
+                                                        name="xmark"
+                                                        className="text-gray-900"
+                                                    />
+                                                </button>
+                                            )}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+            <button
+                onClick={() =>
+                    props.append({
+                        amount: 1000,
+                        serviceProviderFeeTypeId:
+                            props.serviceProviderFeeTypes[0].id,
+                    })
+                }
+                className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-white p-2 pb-6 text-sm font-semibold  text-gray-900"
+            >
+                <span>Add Fee</span>
+                <Icon name="plus" size={14} />
+            </button>
+        </>
     );
 }
