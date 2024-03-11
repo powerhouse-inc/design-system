@@ -93,10 +93,20 @@ export const GroupTransactionDetails: React.FC<
             label: groupTransactionTypeLabels[type],
             id: type,
         }));
-    const fixedIncomeOptions = fixedIncomes.map(({ id, name }) => ({
-        label: name,
-        id,
+    const fixedIncomeOptions = fixedIncomes.map(fixedIncome => ({
+        label: makeFixedIncomeOptionLabel(fixedIncome),
+        id: fixedIncome.id,
     }));
+    function makeFixedIncomeOptionLabel(fixedIncome: FixedIncome) {
+        let label = fixedIncome.name;
+        if (fixedIncome.ISIN) {
+            label += ` - ${fixedIncome.ISIN}`;
+        }
+        if (fixedIncome.CUSIP) {
+            label += ` - ${fixedIncome.CUSIP}`;
+        }
+        return label;
+    }
     const fixedIncome = fixedIncomes.find(
         ({ id }) => id === transaction?.fixedIncomeTransaction?.assetId,
     );
@@ -244,7 +254,12 @@ export const GroupTransactionDetails: React.FC<
                         />
                     }
                 />
-                <p>Unit price: {unitPricePercent}%</p>
+                <div className="ml-auto mr-6 w-fit  text-xs">
+                    <span className="mr-2 inline-block text-gray-600">
+                        Unit Price
+                    </span>{' '}
+                    <span className="text-gray-900">{unitPricePercent}%</span>
+                </div>
             </div>
             <FeeTransactionsTable
                 register={register}
