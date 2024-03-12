@@ -48,7 +48,7 @@
     "@storybook/addon-interactions": "^7.6.15",
     "@storybook/addon-links": "^7.6.15",
     "@storybook/addon-themes": "^7.6.15",
-    "@storybook/blocks": "^7.6.15",
+    "@storybook/blocks": "^8.0.0",
     "@storybook/preview-api": "^7.6.15",
     "@storybook/react": "^7.6.15",
     "@storybook/react-vite": "^7.6.15",
