@@ -71,8 +71,8 @@ devDependencies:
     specifier: ^7.6.15
     version: 7.6.15
   '@storybook/react':
-    specifier: ^7.6.15
-    version: 7.6.15(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
+    specifier: ^8.0.0
+    version: 8.0.0(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
   '@storybook/react-vite':
     specifier: ^7.6.15
     version: 7.6.15(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)(vite@5.1.2)
@@ -5437,6 +5437,16 @@ packages:
       tiny-invariant: 1.3.1
     dev: true
 
+  /@storybook/channels@8.0.0:
+    resolution: {integrity: sha512-uykCBlSIMVodsgTFC/XAgO7JeaTJrKtDmmM6Z4liGkPS6EUvurOEu2vK6FuvojzhLHdVJ5bP+VXSJerfm7aE4Q==}
+    dependencies:
+      '@storybook/client-logger': 8.0.0
+      '@storybook/core-events': 8.0.0
+      '@storybook/global': 5.0.0
+      telejson: 7.2.0
+      tiny-invariant: 1.3.1
+    dev: true
+
   /@storybook/cli@7.6.15:
     resolution: {integrity: sha512-2QRqCyVGDSkraHxX2JPYkkFccbu5Uo+JYFaFJo4vmMXzDurjWON+Ga2B8FCTd4A8P4C02Ca/79jgQoyBB3xoew==}
     hasBin: true
@@ -5490,6 +5500,12 @@ packages:
 
   /@storybook/client-logger@7.6.15:
     resolution: {integrity: sha512-n+K8IqnombqiQNnywVovS+lK61tvv/XSfgPt0cgvoF/hJZB0VDOMRjWsV+v9qQpj1TQEl1lLWeJwZMthTWupJA==}
+    dependencies:
+      '@storybook/global': 5.0.0
+    dev: true
+
+  /@storybook/client-logger@8.0.0:
+    resolution: {integrity: sha512-olc1vUfaZNkXc7L8UoCdGmyBieHQbsaB+0vVoivYMSa1DHYtXE75RefU3lhMSGrkvIZmXMvfaIDmnyJIOB5FxA==}
     dependencies:
       '@storybook/global': 5.0.0
     dev: true
@@ -5576,8 +5592,50 @@ packages:
       - supports-color
     dev: true
 
+  /@storybook/core-common@8.0.0:
+    resolution: {integrity: sha512-fqlQYw5/PDW/oj34QwU5u0HkNLPgELfszsvLFsUcwI7uAzwb/WC2WdPvncT7qRPNcSZLXKJcA8QAqKL4t4I8bg==}
+    dependencies:
+      '@storybook/core-events': 8.0.0
+      '@storybook/csf-tools': 8.0.0
+      '@storybook/node-logger': 8.0.0
+      '@storybook/types': 8.0.0
+      '@yarnpkg/fslib': 2.10.3
+      '@yarnpkg/libzip': 2.3.0
+      chalk: 4.1.2
+      cross-spawn: 7.0.3
+      esbuild: 0.19.12
+      esbuild-register: 3.5.0(esbuild@0.19.12)
+      execa: 5.1.1
+      file-system-cache: 2.3.0
+      find-cache-dir: 3.3.2
+      find-up: 5.0.0
+      fs-extra: 11.2.0
+      glob: 10.3.10
+      handlebars: 4.7.8
+      lazy-universal-dotenv: 4.0.0
+      node-fetch: 2.7.0
+      picomatch: 2.3.1
+      pkg-dir: 5.0.0
+      pretty-hrtime: 1.0.3
+      resolve-from: 5.0.0
+      semver: 7.6.0
+      tempy: 1.0.1
+      tiny-invariant: 1.3.1
+      ts-dedent: 2.2.0
+      util: 0.12.5
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+    dev: true
+
   /@storybook/core-events@7.6.15:
     resolution: {integrity: sha512-i4YnjGecbpGyrFe0340sPhQ9QjZZEBqvMy6kF4XWt6DYLHxZmsTj1HEdvxVl4Ej7V49Vw0Dm8MepJ1d4Y8MKrQ==}
+    dependencies:
+      ts-dedent: 2.2.0
+    dev: true
+
+  /@storybook/core-events@8.0.0:
+    resolution: {integrity: sha512-kkabj4V99gOTBW+y3HM/LTCDekglqb+lslZMamM+Ytxv1lCqCEOIR/OGfnYOyEaK4BLcx61Zp+fO30FZxtoT1w==}
     dependencies:
       ts-dedent: 2.2.0
     dev: true
@@ -5658,6 +5716,22 @@ packages:
       - supports-color
     dev: true
 
+  /@storybook/csf-tools@8.0.0:
+    resolution: {integrity: sha512-VIMaZJiGM2NVzlgxaOyaVlH1pw/VSrJygDqOZyANh/kl4KHA+6xIqOkZC+X0+5K295dTFx2nR6S3btTjwT/Wrg==}
+    dependencies:
+      '@babel/generator': 7.23.6
+      '@babel/parser': 7.23.9
+      '@babel/traverse': 7.23.9
+      '@babel/types': 7.23.9
+      '@storybook/csf': 0.1.2
+      '@storybook/types': 8.0.0
+      fs-extra: 11.2.0
+      recast: 0.23.6
+      ts-dedent: 2.2.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
   /@storybook/csf@0.0.1:
     resolution: {integrity: sha512-USTLkZze5gkel8MYCujSRBVIrUQ3YPBrLOx7GNk/0wttvVtlzWXAq9eLbQ4p/NicGxP+3T7KPEMVV//g+yubpw==}
     dependencies:
@@ -5680,6 +5754,21 @@ packages:
       '@storybook/core-common': 7.6.15
       '@storybook/preview-api': 7.6.15
       '@storybook/types': 7.6.15
+      '@types/doctrine': 0.0.3
+      assert: 2.1.0
+      doctrine: 3.0.0
+      lodash: 4.17.21
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+    dev: true
+
+  /@storybook/docs-tools@8.0.0:
+    resolution: {integrity: sha512-d6slxGMosurSTPp1zOTnr7EILnm9xmUrT0xF3Vxr3Yat5/YQEe3WSADktIFyWwlqvIu7MQ8Lh+oelAb5TuxiDw==}
+    dependencies:
+      '@storybook/core-common': 8.0.0
+      '@storybook/preview-api': 8.0.0
+      '@storybook/types': 8.0.0
       '@types/doctrine': 0.0.3
       assert: 2.1.0
       doctrine: 3.0.0
@@ -5727,6 +5816,10 @@ packages:
     resolution: {integrity: sha512-C+sCvRjR+5uVU3VTrfyv7/RlPBxesAjIucUAK0keGyIZ7sFQYCPdkm4m/C4s+TcubgAzVvuoUHlRrSppdA7WzQ==}
     dev: true
 
+  /@storybook/node-logger@8.0.0:
+    resolution: {integrity: sha512-C/sMNQqCIYVtJaLpe92RSkPgW3GXcWp6QeH5+glfP42kh+G9axxnEJJ996tyAnNQRzUuI+Eh+B7ytPZU1/WseQ==}
+    dev: true
+
   /@storybook/postinstall@7.6.15:
     resolution: {integrity: sha512-DXQQ4kjAbQ7BSd9M4lDI/12vEEciYMP8uYFDlrPFjwD9LezsxtRiORkazjNRRX4730faO5zZsnWhXxCVkxck0g==}
     dev: true
@@ -5750,12 +5843,41 @@ packages:
       util-deprecate: 1.0.2
     dev: true
 
+  /@storybook/preview-api@8.0.0:
+    resolution: {integrity: sha512-R2NBKtvHi+i1b/3PZe4u4YdJ7dlqr8YTqLn7syB/YSnKRAa7DYed+GJLu4qFJisE6IuYi+57AsdW16otRFEVvg==}
+    dependencies:
+      '@storybook/channels': 8.0.0
+      '@storybook/client-logger': 8.0.0
+      '@storybook/core-events': 8.0.0
+      '@storybook/csf': 0.1.2
+      '@storybook/global': 5.0.0
+      '@storybook/types': 8.0.0
+      '@types/qs': 6.9.11
+      dequal: 2.0.3
+      lodash: 4.17.21
+      memoizerific: 1.11.3
+      qs: 6.11.2
+      tiny-invariant: 1.3.1
+      ts-dedent: 2.2.0
+      util-deprecate: 1.0.2
+    dev: true
+
   /@storybook/preview@7.6.15:
     resolution: {integrity: sha512-q8d9v0+Bo/DHLV68OyV3Klep4knf2GAbrlHhLW1X4jlPccuEDUojIfqfK7m48ayeIxJzO48fcO0JdKM1XABx7g==}
     dev: true
 
   /@storybook/react-dom-shim@7.6.15(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-2+X0HIxIyvjfSKVyGGjSJJLEFJ2ox7Rr8FjlMiRo5QfoOJhohZuWH7p4Lw7JMwm5PotnjrwlfsZI3cCilYJeYA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: true
+
+  /@storybook/react-dom-shim@8.0.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-bpT/7XyO9T+mWJojAblnuScum/UI65UksaL1jKYySMpBuW4jTJVE1YPzN1oe9A4me8HQCPeDw4Rg+ZB91H5sKA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -5831,6 +5953,46 @@ packages:
       - supports-color
     dev: true
 
+  /@storybook/react@8.0.0(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-Nl3jEd8Ezd2aDXfoQAgfGmwna3U6NOLMcCRSYOR63bH4/u16MnnDE8ACy+mH/+yWGEoxNjqcWUJiDk2h4C07LA==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+      typescript: '>= 4.2.x'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@storybook/client-logger': 8.0.0
+      '@storybook/docs-tools': 8.0.0
+      '@storybook/global': 5.0.0
+      '@storybook/preview-api': 8.0.0
+      '@storybook/react-dom-shim': 8.0.0(react-dom@18.2.0)(react@18.2.0)
+      '@storybook/types': 8.0.0
+      '@types/escodegen': 0.0.6
+      '@types/estree': 0.0.51
+      '@types/node': 18.19.14
+      acorn: 7.4.1
+      acorn-jsx: 5.3.2(acorn@7.4.1)
+      acorn-walk: 7.2.0
+      escodegen: 2.1.0
+      html-tags: 3.3.1
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-element-to-jsx-string: 15.0.0(react-dom@18.2.0)(react@18.2.0)
+      semver: 7.6.0
+      ts-dedent: 2.2.0
+      type-fest: 2.19.0
+      typescript: 5.3.3
+      util-deprecate: 1.0.2
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+    dev: true
+
   /@storybook/router@7.6.15:
     resolution: {integrity: sha512-5yhXXoVZ1iKUgeZoO8PGqBclrLgoJisxIYVK/Y1iJMXZ2ZvwUiTswLALT6lu97tSrcoBVxmqSghg0+U0YEU4Fg==}
     dependencies:
@@ -5882,6 +6044,14 @@ packages:
     dependencies:
       '@storybook/channels': 7.6.15
       '@types/babel__core': 7.20.5
+      '@types/express': 4.17.21
+      file-system-cache: 2.3.0
+    dev: true
+
+  /@storybook/types@8.0.0:
+    resolution: {integrity: sha512-6nJipdgoAkVFk2JpRPCm9vb/Yuak2lmdZRv9qzl8cNRttlbOESVlzbmhgxCmWV0OYUaMeYge9L8NWhJ14LKbzw==}
+    dependencies:
+      '@storybook/channels': 8.0.0
       '@types/express': 4.17.21
       file-system-cache: 2.3.0
     dev: true
@@ -8581,6 +8751,17 @@ packages:
     dependencies:
       debug: 4.3.4
       esbuild: 0.18.20
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /esbuild-register@3.5.0(esbuild@0.19.12):
+    resolution: {integrity: sha512-+4G/XmakeBAsvJuDugJvtyF1x+XJT4FMocynNpxrvEBViirpfUn2PgNpCHedfWhF4WokNsO/OvMKrmJOIJsI5A==}
+    peerDependencies:
+      esbuild: '>=0.12 <1'
+    dependencies:
+      debug: 4.3.4
+      esbuild: 0.19.12
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -13110,6 +13291,17 @@ packages:
       tslib: 2.6.2
     dev: true
 
+  /recast@0.23.6:
+    resolution: {integrity: sha512-9FHoNjX1yjuesMwuthAmPKabxYQdOgihFYmT5ebXfYGBcnqXZf3WOVz+5foEZ8Y83P4ZY6yQD5GMmtV+pgCCAQ==}
+    engines: {node: '>= 4'}
+    dependencies:
+      ast-types: 0.16.1
+      esprima: 4.0.1
+      source-map: 0.6.1
+      tiny-invariant: 1.3.3
+      tslib: 2.6.2
+    dev: true
+
   /redent@3.0.0:
     resolution: {integrity: sha512-6tDA8g98We0zd0GvVeMT9arEOnTw9qM03L9cJXaCjrip1OO764RDBLBfrB4cwzNGDj5OA5ioymC9GkizgWJDUg==}
     engines: {node: '>=8'}
@@ -14351,6 +14543,10 @@ packages:
 
   /tiny-invariant@1.3.1:
     resolution: {integrity: sha512-AD5ih2NlSssTCwsMznbvwMZpJ1cbhkGd2uueNxzv2jDlEeZdU04JQfRnggJQ8DrcVBGjAsCKwFBbDlVNtEMlzw==}
+    dev: true
+
+  /tiny-invariant@1.3.3:
+    resolution: {integrity: sha512-+FbBPE1o9QAYvviau/qC5SE3caw21q3xkvWKBtja5vgqOWIHHJ3ioaq1VPfn/Szqctz2bU/oYeKd9/z5BL+PVg==}
     dev: true
 
   /tinybench@2.6.0:
