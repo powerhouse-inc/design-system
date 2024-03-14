@@ -153,6 +153,10 @@ export const GroupTransactionDetails: React.FC<
             ...data,
             cashAmount: Number(data.cashAmount),
             fixedIncomeAmount: Number(data.fixedIncomeAmount),
+            fees: data.fees?.map(fee => ({
+                ...fee,
+                amount: Number(fee.amount),
+            })),
             cashBalanceChange,
         });
     };
