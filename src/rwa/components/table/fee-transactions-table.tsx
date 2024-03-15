@@ -38,8 +38,6 @@ export function FeeTransactionsTable<ControlInputs extends FieldValues>(
         }),
     );
 
-    console.log(props.errors.fees?.[0]?.amount?.type);
-
     return (
         <>
             {props.feeInputs.length > 0 && (
