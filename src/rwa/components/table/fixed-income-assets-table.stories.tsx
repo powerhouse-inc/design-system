@@ -6,6 +6,7 @@ import { RWAAssetDetailInputs } from '../asset-details/form';
 
 import { mockFixedIncomes, mockFixedIncomeTypes, mockSpvs } from '@/rwa/mocks';
 import {
+    FixedIncomesTableFields,
     FixedIncomesTableProps,
     RWAFixedIncomesTable,
 } from './fixed-income-assets-table';
@@ -27,15 +28,17 @@ const columnCountByTableWidth = {
     984: 8,
 };
 
-const fieldsPriority: (keyof FixedIncome)[] = [
-    'name',
-    'maturity',
-    'notional',
-    'coupon',
-    'purchasePrice',
-    'purchaseDate',
-    'totalDiscount',
-    'purchaseProceeds',
+const fieldsPriority: (keyof FixedIncomesTableFields)[] = [
+    'Name',
+    'Maturity',
+    'Notional',
+    'Purchase Price',
+    'Realized Surplus',
+    'Purchase Date',
+    'Total Discount',
+    'Purchase Proceeds',
+    'Sales Proceeds',
+    'Coupon',
 ];
 
 function createAssetFromFormInputs(data: RWAAssetDetailInputs) {
@@ -74,9 +77,9 @@ export const Primary: Story = {
             useCallback(
                 item => {
                     setExpandedRowId(
-                        item.id === expandedRowId
+                        item?.id === expandedRowId
                             ? undefined
-                            : item.id || undefined,
+                            : item?.id || undefined,
                     );
                 },
                 [expandedRowId],

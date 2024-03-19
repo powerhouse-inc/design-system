@@ -40,7 +40,7 @@ const defaultLabels = {
 };
 
 export interface RWAAssetDetailsProps extends DivProps {
-    asset: FixedIncome;
+    asset: Partial<FixedIncome> | undefined;
     operation?: 'create' | 'edit';
     mode?: RWAComponentMode;
     fixedIncomeTypes: FixedIncomeType[];
@@ -69,9 +69,9 @@ export const RWAAssetDetails: React.FC<RWAAssetDetailsProps> = props => {
     } = props;
 
     const fixedIncomeType = fixedIncomeTypes.find(
-        ({ id }) => id === asset.fixedIncomeTypeId,
+        ({ id }) => id === asset?.fixedIncomeTypeId,
     );
-    const spv = spvs.find(({ id }) => id === asset.spvId);
+    const spv = spvs.find(({ id }) => id === asset?.spvId);
 
     const {
         register,
@@ -83,11 +83,13 @@ export const RWAAssetDetails: React.FC<RWAAssetDetailsProps> = props => {
         defaultValues: {
             fixedIncomeTypeId: fixedIncomeType?.id ?? fixedIncomeTypes[0].id,
             spvId: spv?.id ?? spvs[0].id,
-            name: asset.name,
-            maturity: parseDate(asset.maturity.split('T')[0]),
-            ISIN: asset.ISIN,
-            CUSIP: asset.CUSIP,
-            coupon: asset.coupon,
+            name: asset?.name,
+            maturity: asset?.maturity
+                ? parseDate(asset.maturity.split('T')[0])
+                : undefined,
+            ISIN: asset?.ISIN,
+            CUSIP: asset?.CUSIP,
+            coupon: asset?.coupon,
         },
     });
 
@@ -149,7 +151,7 @@ export const RWAAssetDetails: React.FC<RWAAssetDetailsProps> = props => {
                 <RWAFormRow
                     label="Asset ID"
                     hideLine={isEditMode}
-                    value={asset.id}
+                    value={asset?.id}
                 />
                 <RWAFormRow
                     label={labels.name}
@@ -252,22 +254,22 @@ export const RWAAssetDetails: React.FC<RWAAssetDetailsProps> = props => {
                         <RWAFormRow
                             label={labels.notional}
                             hideLine={isEditMode}
-                            value={asset.notional}
+                            value={asset?.notional}
                         />
                         <RWAFormRow
                             label={labels.purchaseDate}
                             hideLine={isEditMode}
-                            value={asset.purchaseDate}
+                            value={asset?.purchaseDate}
                         />
                         <RWAFormRow
                             label={labels.purchasePrice}
                             hideLine={isEditMode}
-                            value={asset.purchasePrice}
+                            value={asset?.purchasePrice}
                         />
                         <RWAFormRow
                             label={labels.purchaseProceeds}
                             hideLine={isEditMode}
-                            value={asset.purchaseProceeds}
+                            value={asset?.purchaseProceeds}
                         />
                     </>
                 )}

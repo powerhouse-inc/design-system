@@ -8,11 +8,14 @@ import {
 import { mockGroupTransactions } from '@/rwa/mocks/transactions';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useCallback, useState } from 'react';
-import { Fields, GroupTransactionsTable } from './group-transactions-table';
+import {
+    GroupTransactionsTable,
+    GroupTransactionsTableFields,
+} from './group-transactions-table';
 import { getColumnCount } from './useColumnPriority';
 
 const meta: Meta<typeof GroupTransactionsTable> = {
-    title: 'RWA/Components/GroupTransactionsTable',
+    title: 'RWA/Components/Group Transactions Table',
     component: GroupTransactionsTable,
 };
 
@@ -27,12 +30,12 @@ const columnCountByTableWidth = {
     984: 8,
 };
 
-const fieldsPriority: (keyof Fields)[] = [
-    'Entry time',
+const fieldsPriority: (keyof GroupTransactionsTableFields)[] = [
+    'Entry Time',
     'Asset',
     'Quantity',
-    'Cash Amount',
-    'Cash Balance Change',
+    'Cash Amount ($)',
+    'Cash Balance Change ($)',
 ];
 
 export const Primary: Story = {
