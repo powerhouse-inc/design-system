@@ -11,10 +11,7 @@ type Props<ControlInputs extends FieldValues> = ComponentPropsWithRef<
     disabled?: boolean;
     requiredErrorMessage?: string;
     currency?: 'USD';
-    allowNegative?: boolean;
-    decimalScale?: number;
-    thousandSeparator?: string;
-    fixedDecimalScale?: boolean;
+    numericFormatProps?: ComponentPropsWithRef<typeof NumericFormat>;
 };
 
 export function RWANumberInput<ControlInputs extends FieldValues>(
@@ -25,14 +22,18 @@ export function RWANumberInput<ControlInputs extends FieldValues>(
         control,
         requiredErrorMessage,
         currency,
-        allowNegative = false,
+        value: _,
+        onChange: __,
+        numericFormatProps,
+        ...inputProps
+    } = props;
+
+    const {
+        allowNegative = true,
         decimalScale = 2,
         thousandSeparator = ',',
         fixedDecimalScale = true,
-        value: _,
-        onChange: __,
-        ...inputProps
-    } = props;
+    } = numericFormatProps ?? {};
 
     const prefix = currency === 'USD' ? '$' : undefined;
 

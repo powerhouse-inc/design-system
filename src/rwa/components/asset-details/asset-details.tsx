@@ -15,6 +15,7 @@ import {
     RWATableSelect,
     RWATableTextInput,
 } from '../inputs';
+import { RWANumberInput } from '../inputs/number-input';
 import { RWAAssetDetailInputs } from './form';
 
 const defaultLabels = {
@@ -173,9 +174,17 @@ export const RWAAssetDetails: React.FC<RWAAssetDetailsProps> = props => {
                     label={labels.CUSIP}
                     hideLine={isEditMode}
                     value={
-                        <RWATableTextInput
-                            {...register('CUSIP', { disabled: !isEditMode })}
+                        <RWANumberInput
+                            name="CUSIP"
+                            control={control}
+                            disabled={!isEditMode}
                             placeholder="E.g. 123456789"
+                            maxLength={9}
+                            numericFormatProps={{
+                                allowNegative: false,
+                                decimalScale: 0,
+                                thousandSeparator: '',
+                            }}
                         />
                     }
                 />
@@ -183,9 +192,17 @@ export const RWAAssetDetails: React.FC<RWAAssetDetailsProps> = props => {
                     label={labels.ISIN}
                     hideLine={isEditMode}
                     value={
-                        <RWATableTextInput
-                            {...register('ISIN', { disabled: !isEditMode })}
+                        <RWANumberInput
+                            name="ISIN"
+                            control={control}
+                            disabled={!isEditMode}
                             placeholder="E.g. 123456789012"
+                            maxLength={12}
+                            numericFormatProps={{
+                                allowNegative: false,
+                                decimalScale: 0,
+                                thousandSeparator: '',
+                            }}
                         />
                     }
                 />

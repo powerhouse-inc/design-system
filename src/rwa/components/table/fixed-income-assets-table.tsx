@@ -8,7 +8,7 @@ import { RWAAssetDetails } from '../asset-details';
 import { RWAAssetDetailInputs } from '../asset-details/form';
 import { RWATableRow } from './expandable-row';
 import { useColumnPriority } from './useColumnPriority';
-import { handleDateInTable } from './utils';
+import { handleTableDatum } from './utils';
 
 export type FixedIncomesTableProps = Omit<
     RWATableProps<FixedIncome>,
@@ -101,7 +101,7 @@ export function RWAFixedIncomesTable(props: FixedIncomesTableProps) {
                     <RWATableCell>{index + 1}</RWATableCell>
                     {fields.map(field => (
                         <RWATableCell key={field}>
-                            {handleDateInTable(item[field]) ?? '--'}
+                            {handleTableDatum(item[field])}
                         </RWATableCell>
                     ))}
                     <RWATableCell>

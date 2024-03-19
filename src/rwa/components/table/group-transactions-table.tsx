@@ -12,7 +12,7 @@ import { twJoin, twMerge } from 'tailwind-merge';
 import { RWATable, RWATableCell, RWATableProps, useSortTableItems } from '.';
 import { RWATableRow } from './expandable-row';
 import { useColumnPriority } from './useColumnPriority';
-import { handleDateInTable } from './utils';
+import { handleTableDatum } from './utils';
 
 export type Fields = {
     id: string;
@@ -175,7 +175,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                     <RWATableCell>{index + 1}</RWATableCell>
                     {fields.map(field => (
                         <RWATableCell key={field}>
-                            {handleDateInTable(item[field] ?? '--')}
+                            {handleTableDatum(item[field])}
                         </RWATableCell>
                     ))}
                     <RWATableCell>
