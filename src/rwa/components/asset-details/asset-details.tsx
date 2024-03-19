@@ -14,7 +14,7 @@ import {
     RWATableDatePicker,
     RWATableSelect,
     RWATableTextInput,
-} from '../table-inputs';
+} from '../inputs';
 import { RWAAssetDetailInputs } from './form';
 
 const defaultLabels = {
