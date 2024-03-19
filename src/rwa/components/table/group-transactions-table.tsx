@@ -23,6 +23,23 @@ export type GroupTransactionsTableFields = {
     'Cash Balance Change ($)': number | undefined | null;
 };
 
+export const groupTransactionsColumnCountByTableWidth = {
+    1520: 12,
+    1394: 11,
+    1239: 10,
+    1112: 9,
+    984: 8,
+};
+
+export const groupTransactionsFieldsPriority: (keyof GroupTransactionsTableFields)[] =
+    [
+        'Entry Time',
+        'Asset',
+        'Quantity',
+        'Cash Amount ($)',
+        'Cash Balance Change ($)',
+    ];
+
 export function mapGroupTransactionsToTableFields(
     transactions: GroupTransaction[] | undefined,
     fixedIncomes: FixedIncome[],
@@ -66,8 +83,6 @@ export type GroupTransactionsTableProps = Omit<
     fixedIncomes: FixedIncome[];
     serviceProviderFeeTypes: ServiceProviderFeeType[];
     principalLenderAccountId: string;
-    columnCountByTableWidth: Record<string, number>;
-    fieldsPriority: (keyof GroupTransactionsTableFields)[];
     expandedRowId: string | undefined;
     selectedGroupTransactionToEdit?: GroupTransaction | null | undefined;
     showNewGroupTransactionForm: boolean;
@@ -89,8 +104,6 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
         cashAssets,
         serviceProviderFeeTypes,
         principalLenderAccountId,
-        fieldsPriority,
-        columnCountByTableWidth,
         expandedRowId,
         selectedGroupTransactionToEdit,
         showNewGroupTransactionForm,
@@ -108,8 +121,8 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
 
     const { fields, headerLabels } =
         useColumnPriority<GroupTransactionsTableFields>({
-            columnCountByTableWidth,
-            fieldsPriority,
+            columnCountByTableWidth: groupTransactionsColumnCountByTableWidth,
+            fieldsPriority: groupTransactionsFieldsPriority,
             tableContainerRef,
         });
 

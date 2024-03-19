@@ -24,6 +24,27 @@ export type FixedIncomesTableFields = {
     Coupon: number | undefined | null;
 };
 
+export const assetTableColumnCountByTableWidth = {
+    1520: 12,
+    1394: 11,
+    1239: 10,
+    1112: 9,
+    984: 8,
+};
+
+export const assetTableFieldsPriority: (keyof FixedIncomesTableFields)[] = [
+    'Name',
+    'Maturity',
+    'Notional',
+    'Purchase Price',
+    'Realized Surplus',
+    'Purchase Date',
+    'Total Discount',
+    'Purchase Proceeds',
+    'Sales Proceeds',
+    'Coupon',
+];
+
 export function mapAssetsToTableFields(
     assets: FixedIncome[] | undefined,
 ): FixedIncomesTableFields[] {
@@ -61,8 +82,6 @@ export type FixedIncomesTableProps = Omit<
 > & {
     fixedIncomeTypes: FixedIncomeType[];
     spvs: SPV[];
-    columnCountByTableWidth: Record<string, number>;
-    fieldsPriority: (keyof FixedIncomesTableFields)[];
     expandedRowId: string | undefined;
     selectedAssetToEdit?: FixedIncome | undefined;
     showNewAssetForm: boolean;
@@ -80,8 +99,6 @@ export function RWAFixedIncomesTable(props: FixedIncomesTableProps) {
         items,
         fixedIncomeTypes,
         spvs,
-        fieldsPriority,
-        columnCountByTableWidth,
         expandedRowId,
         selectedAssetToEdit,
         showNewAssetForm,
@@ -99,8 +116,8 @@ export function RWAFixedIncomesTable(props: FixedIncomesTableProps) {
 
     const { fields, headerLabels } = useColumnPriority<FixedIncomesTableFields>(
         {
-            columnCountByTableWidth,
-            fieldsPriority,
+            columnCountByTableWidth: assetTableColumnCountByTableWidth,
+            fieldsPriority: assetTableFieldsPriority,
             tableContainerRef,
         },
     );
