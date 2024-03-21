@@ -93,7 +93,7 @@
     "react-click-away-listener": "^2.2.3",
     "react-dom": "^18.2.0",
     "semantic-release": "^23.0.2",
-    "storybook": "^7.6.15",
+    "storybook": "^8.0.2",
     "storybook-addon-pseudo-states": "^2.1.2",
     "tailwind-merge": "^2.2.1",
     "tailwindcss": "^3.4.1",
