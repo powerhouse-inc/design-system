@@ -1,4 +1,5 @@
 import { DivProps, Icon, mergeClassNameProps } from '@/powerhouse';
+import { fixedForwardRef } from '@/powerhouse/utils/fixedForwardRef';
 import { Order } from 'natural-orderby';
 import React, { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -18,17 +19,6 @@ export interface RWATableProps<T extends object> extends DivProps {
     children?: React.ReactNode;
     onClickSort?: (key: string, direction: SortDirection) => void;
     footer?: React.ReactNode;
-}
-
-/** Allows using forward ref with generics.
- * @see: https://www.totaltypescript.com/forwardref-with-generic-components
- */
-// eslint-disable-next-line @typescript-eslint/ban-types
-function fixedForwardRef<T, P = {}>(
-    render: (props: P, ref: React.Ref<T>) => React.ReactNode,
-): (props: P & React.RefAttributes<T>) => React.ReactNode {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
-    return React.forwardRef(render) as any;
 }
 
 export const TableBase = fixedForwardRef(function TableBase<T extends object>(
