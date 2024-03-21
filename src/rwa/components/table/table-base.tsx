@@ -31,7 +31,7 @@ function fixedForwardRef<T, P = {}>(
     return React.forwardRef(render) as any;
 }
 
-export const RWATable = fixedForwardRef(function RWATable<T extends object>(
+export const TableBase = fixedForwardRef(function TableBase<T extends object>(
     props: RWATableProps<T>,
     ref: React.ForwardedRef<HTMLDivElement>,
 ) {

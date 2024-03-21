@@ -9,7 +9,7 @@ import {
 } from '@/rwa';
 import { useMemo, useRef } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
-import { RWATable, RWATableCell, RWATableProps, useSortTableItems } from '.';
+import { RWATableCell, RWATableProps, TableBase, useSortTableItems } from '.';
 import { RWATableRow } from './expandable-row';
 import { useColumnPriority } from './useColumnPriority';
 import { handleTableDatum } from './utils';
@@ -210,7 +210,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
 
     return (
         <>
-            <RWATable
+            <TableBase
                 {...restProps}
                 className={twJoin(
                     'rounded-b-none',

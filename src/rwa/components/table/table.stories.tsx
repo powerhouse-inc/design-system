@@ -5,7 +5,7 @@ import { orderBy } from 'natural-orderby';
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { RWATableRow } from './expandable-row';
-import { RWATable, RWATableProps } from './table';
+import { RWATableProps, TableBase } from './table-base';
 import { RWATableCell } from './table-cell';
 
 const exampleItems = [
@@ -31,9 +31,9 @@ const exampleItems = [
 
 type Item = (typeof exampleItems)[number];
 
-const meta: Meta<typeof RWATable<Item>> = {
+const meta: Meta<typeof TableBase<Item>> = {
     title: 'RWA/Components/RWATable',
-    component: RWATable,
+    component: TableBase,
     argTypes: {
         header: { control: 'object' },
         items: { control: 'object' },
@@ -151,7 +151,7 @@ const TableDemo = (props: RWATableProps<Item>) => {
     };
 
     return (
-        <RWATable
+        <TableBase
             {...restProps}
             className={twMerge(expandedRow && 'max-h-max')}
             onClickSort={onClickSort}

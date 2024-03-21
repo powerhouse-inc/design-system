@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { RWATableRow } from './expandable-row';
-import { RWATable } from './table';
+import { TableBase } from './table-base';
 
 const meta: Meta<typeof RWATableRow> = {
     title: 'RWA/Components/RWATableRow',
@@ -26,7 +26,7 @@ export const Primary: Story = {
         isExpanded: true,
     },
     render: args => (
-        <RWATable
+        <TableBase
             renderRow={row => (
                 <RWATableRow {...args} tdProps={{ colSpan: 4 }}>
                     <td>{row.cell1}</td>

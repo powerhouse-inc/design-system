@@ -3,7 +3,7 @@ import { FixedIncome, FixedIncomeType, SPV } from '@/rwa';
 import { addDays } from 'date-fns';
 import { useMemo, useRef } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
-import { RWATable, RWATableCell, RWATableProps, useSortTableItems } from '.';
+import { RWATableCell, RWATableProps, TableBase, useSortTableItems } from '.';
 import { RWAAssetDetails } from '../asset-details';
 import { RWAAssetDetailInputs } from '../asset-details/form';
 import { RWATableRow } from './expandable-row';
@@ -197,7 +197,7 @@ export function RWAFixedIncomesTable(props: FixedIncomesTableProps) {
 
     return (
         <>
-            <RWATable
+            <TableBase
                 {...restProps}
                 className={twJoin(
                     'rounded-b-none',
