@@ -47,7 +47,7 @@
     "@storybook/addon-essentials": "^7.6.15",
     "@storybook/addon-interactions": "^7.6.15",
     "@storybook/addon-links": "^7.6.15",
-    "@storybook/addon-themes": "^7.6.15",
+    "@storybook/addon-themes": "^8.0.4",
     "@storybook/blocks": "^7.6.15",
     "@storybook/preview-api": "^7.6.15",
     "@storybook/react": "^7.6.15",
