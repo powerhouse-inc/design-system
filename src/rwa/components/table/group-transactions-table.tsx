@@ -2,12 +2,14 @@ import {
     CashAsset,
     FixedIncome,
     GroupTransaction,
-    GroupTransactionDetailInputs,
-    GroupTransactionDetails,
     ServiceProviderFeeType,
 } from '@/rwa';
 import { useMemo } from 'react';
 import { RWATableProps } from '.';
+import {
+    GroupTransactionDetailInputs,
+    GroupTransactionItemDetails,
+} from './group-transaction-item-details';
 import { Table } from './table';
 import { getItemById } from './utils';
 
@@ -115,9 +117,8 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
     );
 
     const editForm = (props: { itemId: string; index: number }) => (
-        <GroupTransactionDetails
+        <GroupTransactionItemDetails
             transaction={getItemById(props.itemId, transactions)}
-            className="border-y border-gray-300"
             fixedIncomes={fixedIncomes}
             serviceProviderFeeTypes={serviceProviderFeeTypes}
             transactionNumber={props.index + 1}
@@ -126,7 +127,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                     ? 'edit'
                     : 'view'
             }
-            selectItemToEdit={() => {
+            selectTransactionToEdit={() => {
                 setSelectedGroupTransactionToEdit(
                     getItemById(props.itemId, transactions),
                 );
@@ -141,14 +142,14 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
     );
 
     const createForm = () => (
-        <GroupTransactionDetails
+        <GroupTransactionItemDetails
             transaction={{
                 id: '',
                 type: 'AssetPurchase',
                 cashTransaction: {
                     id: '',
                     assetId: cashAssets[0].id,
-                    amount: undefined,
+                    amount: null,
                     counterPartyAccountId: principalLenderAccountId,
                 },
                 fixedIncomeTransaction: {
@@ -156,6 +157,11 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                     assetId: fixedIncomes[0].id,
                     amount: null,
                 },
+                cashBalanceChange: 0,
+                entryTime: new Date().toISOString(),
+                fees: null,
+                feeTransactions: null,
+                interestTransaction: null,
             }}
             fixedIncomes={fixedIncomes}
             serviceProviderFeeTypes={serviceProviderFeeTypes}

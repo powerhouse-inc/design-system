@@ -1,5 +1,5 @@
 import { Icon } from '@/powerhouse';
-import { GroupTransactionDetailInputs, ServiceProviderFeeType } from '@/rwa';
+import { ServiceProviderFeeType } from '@/rwa';
 import {
     mockGroupTransactions,
     mockServiceProviderFeeTypes,
@@ -7,6 +7,7 @@ import {
 import { Meta, StoryObj } from '@storybook/react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { FeeTransactionsTable } from './fee-transactions-table';
+import { GroupTransactionDetailInputs } from './group-transaction-item-details';
 
 const meta = {
     title: 'RWA/Components/Fee Transactions Table',

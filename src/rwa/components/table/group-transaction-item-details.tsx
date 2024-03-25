@@ -1,5 +1,4 @@
 import { DateTimeLocalInput } from '@/connect/components/date-time-input';
-import { DivProps, Icon, mergeClassNameProps } from '@/powerhouse';
 import {
     FixedIncome,
     GroupTransaction,
@@ -13,18 +12,12 @@ import {
     groupTransactionTypes,
 } from '@/rwa/constants/transactions';
 import { InputMaybe } from 'document-model/document';
-import React from 'react';
-import {
-    SubmitHandler,
-    UseFormReset,
-    useFieldArray,
-    useForm,
-} from 'react-hook-form';
-import { RWAButton } from '../button';
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { RWAFormRow, RWATableSelect } from '../inputs';
 import { RWANumberInput } from '../inputs/number-input';
-import { FeeTransactionsTable } from '../table/fee-transactions-table';
-import { FormattedNumber } from '../table/formatted-number';
+import { FeeTransactionsTable } from './fee-transactions-table';
+import { FormattedNumber } from './formatted-number';
+import { ItemDetails } from './item-details';
 
 export type GroupTransactionDetailInputs = {
     type: InputMaybe<GroupTransactionType>;
@@ -60,29 +53,29 @@ function calculateCashBalanceChange(
     return cashAmount * operation - totalFees;
 }
 
-export interface GroupTransactionsDetailsProps extends DivProps {
-    transaction: Partial<GroupTransaction> | undefined;
-    operation: 'view' | 'create' | 'edit';
+type Props = {
+    transaction: GroupTransaction | undefined;
     fixedIncomes: FixedIncome[];
     serviceProviderFeeTypes: ServiceProviderFeeType[];
     transactionNumber: number;
-    onCancel: (reset: UseFormReset<GroupTransactionDetailInputs>) => void;
-    selectItemToEdit?: () => void;
+    operation: 'view' | 'create' | 'edit';
+    selectTransactionToEdit?: (
+        transaction: GroupTransaction | undefined,
+    ) => void;
     onSubmitForm: (data: GroupTransactionDetailInputs) => void;
-}
-export const GroupTransactionDetails: React.FC<
-    GroupTransactionsDetailsProps
-> = props => {
+    onCancel: () => void;
+};
+
+export function GroupTransactionItemDetails(props: Props) {
     const {
         transaction,
-        operation = 'view',
-        fixedIncomes,
-        onCancel,
-        selectItemToEdit,
-        onSubmitForm,
-        serviceProviderFeeTypes,
         transactionNumber,
-        ...restProps
+        fixedIncomes,
+        selectTransactionToEdit,
+        onCancel,
+        onSubmitForm,
+        operation,
+        serviceProviderFeeTypes,
     } = props;
 
     const currentlySupportedGroupTransactionTypes = [
@@ -139,9 +132,6 @@ export const GroupTransactionDetails: React.FC<
         name: 'fees', // Name of the field array in your form
     });
 
-    const isEditOperation = operation === 'edit';
-    const isCreateOperation = operation === 'create';
-    const isViewOnly = !isCreateOperation && !isEditOperation;
     const cashAmount = watch('cashAmount');
     const fixedIncomeAmount = watch('fixedIncomeAmount');
     const type = watch('type');
@@ -163,67 +153,38 @@ export const GroupTransactionDetails: React.FC<
         });
     };
 
-    return (
-        <div
-            {...mergeClassNameProps(
-                restProps,
-                'flex flex-col overflow-hidden rounded-md border border-gray-300 bg-white',
-            )}
-        >
-            <div className="flex justify-between border-b border-gray-300 bg-gray-100 p-3 font-semibold text-gray-800">
-                <div className="flex items-center">
-                    Transaction #{transactionNumber}
-                </div>
-                {isEditOperation || isCreateOperation ? (
-                    <div className="flex gap-x-2">
-                        <RWAButton
-                            onClick={() => onCancel(reset)}
-                            className="text-gray-600"
-                        >
-                            Cancel
-                        </RWAButton>
-                        <RWAButton
-                            onClick={handleSubmit(onSubmit)}
-                            iconPosition="right"
-                            icon={<Icon name="save" size={16} />}
-                        >
-                            {isCreateOperation
-                                ? 'Save New Transaction'
-                                : 'Save Edits'}
-                        </RWAButton>
-                    </div>
-                ) : (
-                    <RWAButton
-                        onClick={selectItemToEdit}
-                        iconPosition="right"
-                        icon={<Icon name="pencil" size={16} />}
-                    >
-                        Edit Transaction
-                    </RWAButton>
-                )}
-            </div>
+    const performSubmit = async () => {
+        await handleSubmit(onSubmit)();
+    };
+
+    function handleCancel() {
+        onCancel();
+        reset();
+    }
+    const formInputs = () => (
+        <>
             <div>
                 <RWAFormRow
                     label="Transaction Type"
-                    hideLine={!isViewOnly}
+                    hideLine={operation !== 'view'}
                     value={
                         <RWATableSelect
                             required
                             control={control}
                             name="type"
-                            disabled={isViewOnly}
+                            disabled={operation === 'view'}
                             options={transactionTypeOptions}
                         />
                     }
                 />
                 <RWAFormRow
                     label="Entry Time"
-                    hideLine={!isViewOnly}
+                    hideLine={operation !== 'view'}
                     value={
                         <DateTimeLocalInput
                             {...register('entryTime', {
                                 required: true,
-                                disabled: isViewOnly,
+                                disabled: operation === 'view',
                             })}
                             name="entryTime"
                             className="disabled:bg-transparent"
@@ -232,25 +193,25 @@ export const GroupTransactionDetails: React.FC<
                 />
                 <RWAFormRow
                     label="Asset name"
-                    hideLine={!isViewOnly}
+                    hideLine={operation !== 'view'}
                     value={
                         <RWATableSelect
                             control={control}
                             required
                             name="fixedIncomeId"
-                            disabled={isViewOnly}
+                            disabled={operation === 'view'}
                             options={fixedIncomeOptions}
                         />
                     }
                 />
                 <RWAFormRow
                     label="Quantity"
-                    hideLine={!isViewOnly}
+                    hideLine={operation !== 'view'}
                     value={
                         <RWANumberInput
                             name="fixedIncomeAmount"
                             requiredErrorMessage="Quantity is required"
-                            disabled={isViewOnly}
+                            disabled={operation === 'view'}
                             control={control}
                             aria-invalid={
                                 errors.fixedIncomeAmount?.type === 'required'
@@ -264,13 +225,13 @@ export const GroupTransactionDetails: React.FC<
                 />
                 <RWAFormRow
                     label="Asset Proceeds"
-                    hideLine={!isViewOnly}
+                    hideLine={operation !== 'view'}
                     value={
                         <RWANumberInput
                             name="cashAmount"
                             requiredErrorMessage="Asset Proceeds is required"
                             currency="USD"
-                            disabled={isViewOnly}
+                            disabled={operation === 'view'}
                             control={control}
                             aria-invalid={
                                 errors.cashAmount?.type === 'required'
@@ -298,7 +259,7 @@ export const GroupTransactionDetails: React.FC<
                 remove={remove}
                 append={append}
                 errors={errors}
-                isViewOnly={isViewOnly}
+                isViewOnly={operation === 'view'}
             />
             <div className="flex items-center justify-between border-t border-gray-300 bg-gray-100 p-3 font-semibold text-gray-800">
                 <div className="mr-6 text-sm text-gray-600">
@@ -309,6 +270,18 @@ export const GroupTransactionDetails: React.FC<
                     <FormattedNumber value={cashBalanceChange} />
                 </div>
             </div>
-        </div>
+        </>
     );
-};
+    return (
+        <ItemDetails
+            item={transaction}
+            itemName="Transaction"
+            operation={operation}
+            itemNumber={transactionNumber}
+            selectItemToEdit={() => selectTransactionToEdit?.(transaction)}
+            formInputs={formInputs}
+            performSubmit={performSubmit}
+            handleCancel={handleCancel}
+        />
+    );
+}

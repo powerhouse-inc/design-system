@@ -11,8 +11,8 @@ import {
     UseFormRegister,
     UseFormWatch,
 } from 'react-hook-form';
-import { GroupTransactionDetailInputs } from '..';
 import { RWANumberInput } from '../inputs/number-input';
+import { GroupTransactionDetailInputs } from './group-transaction-item-details';
 import { ServiceProviderAndFeeTypeTableInput } from './service-provider-fee-type-table-input';
 
 type Props<ControlInputs extends FieldValues> = {
