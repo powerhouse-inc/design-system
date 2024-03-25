@@ -1,5 +1,6 @@
 import { formatDateForDisplay } from '@/rwa';
 import { FormattedNumber } from './formatted-number';
+import { TableItem } from './types';
 
 export function isISODate(str: string) {
     if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false;
@@ -25,4 +26,11 @@ export function handleTableDatum(
     if (typeof datum === 'number') return <FormattedNumber value={datum} />;
 
     return handleDateInTable(datum);
+}
+
+export function getItemById<TItem extends TableItem = TableItem>(
+    id: string,
+    items: TItem[] | undefined,
+) {
+    return items?.find(item => item.id === id);
 }

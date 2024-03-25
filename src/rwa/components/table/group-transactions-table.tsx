@@ -7,21 +7,21 @@ import {
     GroupTransactionDetails,
     ServiceProviderFeeType,
 } from '@/rwa';
+import { InputMaybe } from 'document-model/document';
 import { useMemo, useRef } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
-import { RWATableCell, RWATableProps, TableBase, useSortTableItems } from '.';
+import {
+    IndexCell,
+    MoreDetailsCell,
+    RWATableCell,
+    RWATableProps,
+    TableBase,
+    useSortTableItems,
+} from '.';
 import { RWATableRow } from './expandable-row';
+import { SpecialColumns, TableColumn } from './types';
 import { useColumnPriority } from './useColumnPriority';
-import { handleTableDatum } from './utils';
-
-export type GroupTransactionsTableFields = {
-    id: string;
-    'Entry Time': string | undefined | null;
-    Asset: string | undefined | null;
-    Quantity: number | undefined | null;
-    'Cash Amount ($)': number | undefined | null;
-    'Cash Balance Change ($)': number | undefined | null;
-};
+import { getItemById, handleTableDatum } from './utils';
 
 export const groupTransactionsColumnCountByTableWidth = {
     1520: 12,
@@ -31,54 +31,69 @@ export const groupTransactionsColumnCountByTableWidth = {
     984: 8,
 };
 
-export const groupTransactionsFieldsPriority: (keyof GroupTransactionsTableFields)[] =
-    [
-        'Entry Time',
-        'Asset',
-        'Quantity',
-        'Cash Amount ($)',
-        'Cash Balance Change ($)',
-    ];
+type GroupTransactionTableData = {
+    id: string;
+    quantity: InputMaybe<number>;
+    asset: InputMaybe<string>;
+    cashAmount: InputMaybe<number>;
+    cashBalanceChange: InputMaybe<number>;
+    entryTime: InputMaybe<string>;
+};
 
-export function mapGroupTransactionsToTableFields(
+const columns = [
+    {
+        key: 'entryTime',
+        label: 'Entry Time',
+        allowSorting: true,
+    },
+    {
+        key: 'asset',
+        label: 'Asset',
+        allowSorting: true,
+    },
+    {
+        key: 'quantity',
+        label: 'Quantity',
+        allowSorting: true,
+    },
+    {
+        key: 'cashAmount',
+        label: 'Cash Amount ($)',
+        allowSorting: true,
+    },
+    {
+        key: 'cashBalanceChange',
+        label: 'Cash Balance Change ($)',
+        allowSorting: true,
+    },
+];
+
+export function makeGroupTransactionTableData(
     transactions: GroupTransaction[] | undefined,
     fixedIncomes: FixedIncome[],
-): GroupTransactionsTableFields[] {
-    return (transactions ?? [])
-        .map(transaction =>
-            mapGroupTransactionToTableFields(transaction, fixedIncomes),
-        )
-        .filter(Boolean);
-}
-
-export function mapGroupTransactionToTableFields(
-    transaction: GroupTransaction | undefined,
-    fixedIncomes: FixedIncome[],
-): GroupTransactionsTableFields | undefined {
-    if (!transaction) return;
-    const fixedIncome = fixedIncomes.find(
-        asset => asset.id === transaction.fixedIncomeTransaction?.assetId,
-    );
-    return {
-        id: transaction.id,
-        'Entry Time': transaction.entryTime,
-        Asset: fixedIncome?.name,
-        Quantity: transaction.fixedIncomeTransaction?.amount,
-        'Cash Amount ($)': transaction.cashTransaction?.amount,
-        'Cash Balance Change ($)': transaction.cashBalanceChange,
-    };
-}
-export function getGroupTransactionById(
-    id: string,
-    transactions: GroupTransaction[] | undefined,
 ) {
-    return transactions?.find(transaction => transaction.id === id);
+    if (!transactions?.length) return [];
+
+    return transactions.map(transaction => {
+        return {
+            id: transaction.id,
+            entryTime: transaction.entryTime,
+            asset: fixedIncomes.find(
+                asset =>
+                    asset.id === transaction.fixedIncomeTransaction?.assetId,
+            )?.name,
+            quantity: transaction.fixedIncomeTransaction?.amount,
+            cashAmount: transaction.cashTransaction?.amount,
+            cashBalanceChange: transaction.cashBalanceChange,
+        };
+    });
 }
 
 export type GroupTransactionsTableProps = Omit<
     RWATableProps<GroupTransaction>,
     'header' | 'renderRow'
 > & {
+    transactions: GroupTransaction[];
     cashAssets: CashAsset[];
     fixedIncomes: FixedIncome[];
     serviceProviderFeeTypes: ServiceProviderFeeType[];
@@ -88,7 +103,6 @@ export type GroupTransactionsTableProps = Omit<
     showNewGroupTransactionForm: boolean;
     setShowNewGroupTransactionForm: (show: boolean) => void;
     toggleExpandedRow: (id: string) => void;
-    onClickDetails: (item: GroupTransaction | undefined) => void;
     setSelectedGroupTransactionToEdit: (
         item: GroupTransaction | undefined,
     ) => void;
@@ -99,7 +113,7 @@ export type GroupTransactionsTableProps = Omit<
 
 export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
     const {
-        items,
+        transactions,
         fixedIncomes,
         cashAssets,
         serviceProviderFeeTypes,
@@ -109,7 +123,6 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
         showNewGroupTransactionForm,
         setShowNewGroupTransactionForm,
         toggleExpandedRow,
-        onClickDetails,
         setSelectedGroupTransactionToEdit,
         onCancelEdit,
         onSubmitEdit,
@@ -118,22 +131,23 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
     } = props;
 
     const tableContainerRef = useRef<HTMLDivElement>(null);
-
-    const { fields, headerLabels } =
-        useColumnPriority<GroupTransactionsTableFields>({
-            columnCountByTableWidth: groupTransactionsColumnCountByTableWidth,
-            fieldsPriority: groupTransactionsFieldsPriority,
-            tableContainerRef,
-        });
-
-    const mappedFields = useMemo(
-        () => mapGroupTransactionsToTableFields(items, fixedIncomes),
-        [items, fixedIncomes],
+    const tableData = useMemo(
+        () => makeGroupTransactionTableData(transactions, fixedIncomes),
+        [transactions, fixedIncomes],
     );
+    const { sortedItems, sortHandler } = useSortTableItems(tableData);
 
-    const { sortedItems, sortHandler } = useSortTableItems(mappedFields);
+    const { columnsToShow } = useColumnPriority({
+        columns,
+        columnCountByTableWidth: groupTransactionsColumnCountByTableWidth,
+        tableContainerRef,
+    });
 
-    const renderRow = (item: GroupTransactionsTableFields, index: number) => {
+    const renderRow = (
+        item: GroupTransactionTableData,
+        columns: TableColumn<GroupTransactionTableData & SpecialColumns>[],
+        index: number,
+    ) => {
         return (
             <RWATableRow
                 isExpanded={expandedRowId === item.id}
@@ -142,10 +156,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                 accordionContent={
                     expandedRowId === item.id && (
                         <GroupTransactionDetails
-                            transaction={getGroupTransactionById(
-                                item.id,
-                                items,
-                            )}
+                            transaction={getItemById(item.id, transactions)}
                             className="border-y border-gray-300"
                             fixedIncomes={fixedIncomes}
                             serviceProviderFeeTypes={serviceProviderFeeTypes}
@@ -157,7 +168,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                             }
                             selectItemToEdit={() => {
                                 setSelectedGroupTransactionToEdit(
-                                    getGroupTransactionById(item.id, items),
+                                    getItemById(item.id, transactions),
                                 );
                             }}
                             onCancel={() => {
@@ -177,32 +188,26 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                         index % 2 !== 0 && 'bg-gray-50',
                     )}
                 >
-                    <RWATableCell>{index + 1}</RWATableCell>
-                    {fields.map(field => (
-                        <RWATableCell key={field}>
-                            {handleTableDatum(item[field])}
-                        </RWATableCell>
-                    ))}
-                    <RWATableCell>
-                        <button
-                            className="flex size-full items-center justify-center"
-                            onClick={() => {
-                                toggleExpandedRow(item.id);
-                                onClickDetails(
-                                    getGroupTransactionById(item.id, items),
-                                );
-                            }}
-                        >
-                            <Icon
-                                name="caret-down"
-                                size={16}
-                                className={twMerge(
-                                    'text-gray-600',
-                                    expandedRowId === item.id && 'rotate-180',
+                    {columns.map(column => (
+                        <>
+                            {column.key === 'index' && (
+                                <IndexCell index={index} />
+                            )}
+                            {column.key !== 'index' &&
+                                column.key !== 'moreDetails' && (
+                                    <RWATableCell key={column.key}>
+                                        {handleTableDatum(item[column.key])}
+                                    </RWATableCell>
                                 )}
-                            />
-                        </button>
-                    </RWATableCell>
+                            {column.key === 'moreDetails' && (
+                                <MoreDetailsCell
+                                    id={item.id}
+                                    expandedRowId={expandedRowId}
+                                    toggleExpandedRow={toggleExpandedRow}
+                                />
+                            )}
+                        </>
+                    ))}
                 </tr>
             </RWATableRow>
         );
@@ -218,8 +223,8 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                 )}
                 onClickSort={sortHandler}
                 ref={tableContainerRef}
-                items={sortedItems}
-                header={headerLabels}
+                tableData={sortedItems}
+                columns={columnsToShow}
                 renderRow={renderRow}
             />
             <button
@@ -250,7 +255,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                         fixedIncomes={fixedIncomes}
                         serviceProviderFeeTypes={serviceProviderFeeTypes}
                         operation="create"
-                        transactionNumber={(items?.length ?? 0) + 1}
+                        transactionNumber={transactions.length + 1}
                         onCancel={() => setShowNewGroupTransactionForm(false)}
                         onSubmitForm={onSubmitCreate}
                     />

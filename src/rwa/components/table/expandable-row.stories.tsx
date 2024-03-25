@@ -35,7 +35,7 @@ export const Primary: Story = {
                     <td>{row.cell4}</td>
                 </RWATableRow>
             )}
-            items={[
+            tableData={[
                 {
                     id: '1',
                     cell1: 'Cell 1-1',
@@ -51,11 +51,11 @@ export const Primary: Story = {
                     cell4: 'Cell 4-2',
                 },
             ]}
-            header={[
-                { id: '1', label: 'Column 1' },
-                { id: '2', label: 'Column 2' },
-                { id: '3', label: 'Column 3' },
-                { id: '4', label: 'Column 4' },
+            columns={[
+                { key: 'cell1', label: 'Column 1' },
+                { key: 'cell2', label: 'Column 2' },
+                { key: 'cell3', label: 'Column 3' },
+                { key: 'cell4', label: 'Column 4' },
             ]}
         />
     ),

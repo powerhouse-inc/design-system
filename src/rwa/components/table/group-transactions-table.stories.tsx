@@ -24,7 +24,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
     args: {
-        items: mockGroupTransactions,
+        transactions: mockGroupTransactions,
         fixedIncomes: mockFixedIncomes,
         cashAssets: mockCashAssets,
         serviceProviderFeeTypes: mockServiceProviderFeeTypes,
@@ -42,9 +42,6 @@ export const Primary: Story = {
         const toggleExpandedRow = useCallback((id: string) => {
             setExpandedRowId(curr => (id === curr ? undefined : id));
         }, []);
-
-        const onClickDetails: GroupTransactionsTableProps['onClickDetails'] =
-            useCallback(() => {}, []);
 
         const onCancelEdit: GroupTransactionsTableProps['onCancelEdit'] =
             useCallback(() => {
@@ -68,7 +65,6 @@ export const Primary: Story = {
             expandedRowId,
             selectedGroupTransactionToEdit,
             toggleExpandedRow,
-            onClickDetails,
             setSelectedGroupTransactionToEdit,
             showNewGroupTransactionForm,
             setShowNewGroupTransactionForm,

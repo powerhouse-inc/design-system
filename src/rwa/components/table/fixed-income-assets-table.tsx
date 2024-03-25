@@ -1,28 +1,22 @@
 import { Icon } from '@/powerhouse';
 import { FixedIncome, FixedIncomeType, SPV } from '@/rwa';
 import { addDays } from 'date-fns';
-import { useMemo, useRef } from 'react';
+import { useRef } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
-import { RWATableCell, RWATableProps, TableBase, useSortTableItems } from '.';
+import {
+    IndexCell,
+    MoreDetailsCell,
+    RWATableCell,
+    RWATableProps,
+    TableBase,
+    useSortTableItems,
+} from '.';
 import { RWAAssetDetails } from '../asset-details';
 import { RWAAssetDetailInputs } from '../asset-details/form';
 import { RWATableRow } from './expandable-row';
+import { SpecialColumns, TableColumn } from './types';
 import { useColumnPriority } from './useColumnPriority';
-import { handleTableDatum } from './utils';
-
-export type FixedIncomesTableFields = {
-    id: string;
-    Name: string | undefined | null;
-    Maturity: string | undefined | null;
-    Notional: number | undefined | null;
-    'Purchase Price': number | undefined | null;
-    'Realized Surplus': number | undefined | null;
-    'Purchase Date': string | undefined | null;
-    'Total Discount': number | undefined | null;
-    'Purchase Proceeds': number | undefined | null;
-    'Sales Proceeds': number | undefined | null;
-    Coupon: number | undefined | null;
-};
+import { getItemById, handleTableDatum } from './utils';
 
 export const assetTableColumnCountByTableWidth = {
     1520: 12,
@@ -32,61 +26,38 @@ export const assetTableColumnCountByTableWidth = {
     984: 8,
 };
 
-export const assetTableFieldsPriority: (keyof FixedIncomesTableFields)[] = [
-    'Name',
-    'Maturity',
-    'Notional',
-    'Purchase Price',
-    'Realized Surplus',
-    'Purchase Date',
-    'Total Discount',
-    'Purchase Proceeds',
-    'Sales Proceeds',
-    'Coupon',
+const columns = [
+    { key: 'name', label: 'Name', allowSorting: true },
+    { key: 'maturity', label: 'Maturity', allowSorting: true },
+    { key: 'notional', label: 'Notional', allowSorting: true },
+    { key: 'purchasePrice', label: 'Purchase Price', allowSorting: true },
+    {
+        key: 'realizedSurplus',
+        label: 'Realized Surplus',
+        allowSorting: true,
+    },
+    { key: 'purchaseDate', label: 'Purchase Date', allowSorting: true },
+    { key: 'totalDiscount', label: 'Total Discount', allowSorting: true },
+    {
+        key: 'purchaseProceeds',
+        label: 'Purchase Proceeds',
+        allowSorting: true,
+    },
+    { key: 'salesProceeds', label: 'Sales Proceeds', allowSorting: true },
+    { key: 'coupon', label: 'Coupon', allowSorting: true },
 ];
-
-export function mapAssetsToTableFields(
-    assets: FixedIncome[] | undefined,
-): FixedIncomesTableFields[] {
-    return (assets ?? [])
-        .map(asset => mapAssetToTableFields(asset))
-        .filter(Boolean);
-}
-
-export function mapAssetToTableFields(
-    asset: FixedIncome | undefined,
-): FixedIncomesTableFields | undefined {
-    if (!asset) return;
-    return {
-        id: asset.id,
-        Name: asset.name,
-        Maturity: asset.maturity,
-        Notional: asset.notional,
-        'Purchase Price': asset.purchasePrice,
-        'Realized Surplus': asset.realizedSurplus,
-        'Purchase Date': asset.purchaseDate,
-        'Total Discount': asset.totalDiscount,
-        'Purchase Proceeds': asset.purchaseProceeds,
-        'Sales Proceeds': asset.salesProceeds,
-        Coupon: asset.coupon,
-    };
-}
-
-export function getAssetById(id: string, assets: FixedIncome[] | undefined) {
-    return assets?.find(asset => asset.id === id);
-}
 
 export type FixedIncomesTableProps = Omit<
     RWATableProps<FixedIncome>,
     'header' | 'renderRow'
 > & {
+    assets: FixedIncome[];
     fixedIncomeTypes: FixedIncomeType[];
     spvs: SPV[];
     expandedRowId: string | undefined;
     selectedAssetToEdit?: FixedIncome | undefined;
     showNewAssetForm: boolean;
     toggleExpandedRow: (id: string) => void;
-    onClickDetails: (item: FixedIncome | undefined) => void;
     setSelectedAssetToEdit: (item: FixedIncome | undefined) => void;
     onCancelEdit: () => void;
     onSubmitCreate: (data: RWAAssetDetailInputs) => void;
@@ -96,14 +67,13 @@ export type FixedIncomesTableProps = Omit<
 
 export function RWAFixedIncomesTable(props: FixedIncomesTableProps) {
     const {
-        items,
+        assets,
         fixedIncomeTypes,
         spvs,
         expandedRowId,
         selectedAssetToEdit,
         showNewAssetForm,
         toggleExpandedRow,
-        onClickDetails,
         setSelectedAssetToEdit,
         onCancelEdit,
         onSubmitCreate,
@@ -114,19 +84,19 @@ export function RWAFixedIncomesTable(props: FixedIncomesTableProps) {
 
     const tableContainerRef = useRef<HTMLDivElement>(null);
 
-    const { fields, headerLabels } = useColumnPriority<FixedIncomesTableFields>(
-        {
-            columnCountByTableWidth: assetTableColumnCountByTableWidth,
-            fieldsPriority: assetTableFieldsPriority,
-            tableContainerRef,
-        },
-    );
+    const { columnsToShow } = useColumnPriority({
+        columns,
+        columnCountByTableWidth: assetTableColumnCountByTableWidth,
+        tableContainerRef,
+    });
 
-    const mappedFields = useMemo(() => mapAssetsToTableFields(items), [items]);
+    const { sortedItems, sortHandler } = useSortTableItems(assets);
 
-    const { sortedItems, sortHandler } = useSortTableItems(mappedFields);
-
-    const renderRow = (item: FixedIncomesTableFields, index: number) => {
+    const renderRow = (
+        item: FixedIncome,
+        columns: TableColumn<FixedIncome & SpecialColumns>[],
+        index: number,
+    ) => {
         return (
             <RWATableRow
                 isExpanded={expandedRowId === item.id}
@@ -135,7 +105,7 @@ export function RWAFixedIncomesTable(props: FixedIncomesTableProps) {
                 accordionContent={
                     expandedRowId === item.id && (
                         <RWAAssetDetails
-                            asset={getAssetById(item.id, items)}
+                            asset={getItemById(item.id, assets)}
                             fixedIncomeTypes={fixedIncomeTypes}
                             spvs={spvs}
                             className="border-y border-gray-300"
@@ -146,7 +116,7 @@ export function RWAFixedIncomesTable(props: FixedIncomesTableProps) {
                             }
                             selectItemToEdit={() => {
                                 setSelectedAssetToEdit(
-                                    getAssetById(item.id, items),
+                                    getItemById(item.id, assets),
                                 );
                             }}
                             onCancel={() => {
@@ -166,30 +136,26 @@ export function RWAFixedIncomesTable(props: FixedIncomesTableProps) {
                         index % 2 !== 0 ? 'bg-gray-50' : 'bg-white',
                     )}
                 >
-                    <RWATableCell>{index + 1}</RWATableCell>
-                    {fields.map(field => (
-                        <RWATableCell key={field}>
-                            {handleTableDatum(item[field])}
-                        </RWATableCell>
-                    ))}
-                    <RWATableCell>
-                        <button
-                            className="flex size-full items-center justify-center"
-                            onClick={() => {
-                                toggleExpandedRow(item.id);
-                                onClickDetails(getAssetById(item.id, items));
-                            }}
-                        >
-                            <Icon
-                                name="caret-down"
-                                size={16}
-                                className={twMerge(
-                                    'text-gray-600',
-                                    expandedRowId === item.id && 'rotate-180',
+                    {columns.map(column => (
+                        <>
+                            {column.key === 'index' && (
+                                <IndexCell index={index} />
+                            )}
+                            {column.key !== 'index' &&
+                                column.key !== 'moreDetails' && (
+                                    <RWATableCell key={column.key}>
+                                        {handleTableDatum(item[column.key])}
+                                    </RWATableCell>
                                 )}
-                            />
-                        </button>
-                    </RWATableCell>
+                            {column.key === 'moreDetails' && (
+                                <MoreDetailsCell
+                                    id={item.id}
+                                    expandedRowId={expandedRowId}
+                                    toggleExpandedRow={toggleExpandedRow}
+                                />
+                            )}
+                        </>
+                    ))}
                 </tr>
             </RWATableRow>
         );
@@ -205,8 +171,8 @@ export function RWAFixedIncomesTable(props: FixedIncomesTableProps) {
                 )}
                 onClickSort={sortHandler}
                 ref={tableContainerRef}
-                items={sortedItems}
-                header={headerLabels}
+                tableData={sortedItems}
+                columns={columnsToShow}
                 renderRow={renderRow}
             />
             <button

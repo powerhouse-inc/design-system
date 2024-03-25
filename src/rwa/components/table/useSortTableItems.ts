@@ -1,12 +1,12 @@
 import { Identifier, Order, orderBy } from 'natural-orderby';
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 /**
  * Takes a list of items and returns a sorted list of items and a sort descriptor.
  * @param items - The list of items to sort.
  * @returns An object containing the sorted items and a sort handler func
  */
-export function useSortTableItems<TItem extends Record<string, ReactNode>>(
+export function useSortTableItems<TItem extends Record<string, any>>(
     items: TItem[],
 ) {
     const [sortedItems, setSortedItems] = useState<TItem[]>(items);

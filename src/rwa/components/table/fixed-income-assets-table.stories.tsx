@@ -33,7 +33,7 @@ function createAssetFromFormInputs(data: RWAAssetDetailInputs) {
 
 export const Primary: Story = {
     args: {
-        items: mockFixedIncomes,
+        assets: mockFixedIncomes,
         fixedIncomeTypes: mockFixedIncomeTypes,
         spvs: mockSpvs,
     },
@@ -49,18 +49,6 @@ export const Primary: Story = {
             },
             [expandedRowId],
         );
-
-        const onClickDetails: FixedIncomesTableProps['onClickDetails'] =
-            useCallback(
-                item => {
-                    setExpandedRowId(
-                        item?.id === expandedRowId
-                            ? undefined
-                            : item?.id || undefined,
-                    );
-                },
-                [expandedRowId],
-            );
 
         const onCancelEdit: FixedIncomesTableProps['onCancelEdit'] =
             useCallback(() => {
@@ -88,7 +76,6 @@ export const Primary: Story = {
             showNewAssetForm,
             setShowNewAssetForm,
             toggleExpandedRow,
-            onClickDetails,
             setSelectedAssetToEdit,
             onCancelEdit,
             onSubmitCreate,

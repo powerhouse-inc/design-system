@@ -1,34 +1,55 @@
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { TableColumn } from './types';
 
-type Props<TItem extends Record<string, ReactNode>> = {
-    columnCountByTableWidth: Record<string, number>;
+type Props<TItem extends Record<string, any>> = {
+    columnCountByTableWidth: Record<number, number>;
     tableContainerRef: React.RefObject<HTMLDivElement>;
-    fieldsPriority: (keyof TItem)[];
+    columns: TableColumn<TItem>[];
     hasIndexColumn?: boolean;
     hasMoreDetailsColumn?: boolean;
 };
 
-/**
- * Allows a table to have a variable number of columns depending on the width of the parent element.
- * @param columnCountByTableWidth - A map of table widths to the number of columns to display at that width.
- * @param tableContainerRef - A ref to the table container element.
- * @param fieldsPriority - The fields to display in the table, in order of priority.
- * @returns An object containing the fields to display in the table and the header labels for those fields.
- */
-export function useColumnPriority<TItem extends Record<string, ReactNode>>(
+export function useColumnPriority<TItem extends Record<string, any>>(
     props: Props<TItem>,
 ) {
     const {
         columnCountByTableWidth,
         tableContainerRef,
-        fieldsPriority,
+        columns,
         hasIndexColumn = true,
         hasMoreDetailsColumn = true,
     } = props;
 
     const [parentWidth, setParentWidth] = useState(0);
-    const [fields, setFields] = useState(fieldsPriority);
-    const headerLabels = makeHeaderLabels(fields);
+
+    // Define special columns individually for clarity
+    const indexColumn: TableColumn<TItem> | undefined = useMemo(
+        () =>
+            hasIndexColumn
+                ? {
+                      key: 'index' as keyof TItem & string,
+                      label: '#',
+                      isSpecialColumn: true,
+                  }
+                : undefined,
+        [hasIndexColumn],
+    );
+
+    const moreDetailsColumn: TableColumn<TItem> | undefined = useMemo(
+        () =>
+            hasMoreDetailsColumn
+                ? {
+                      key: 'moreDetails' as keyof TItem & string,
+                      label: '',
+                      isSpecialColumn: true,
+                  }
+                : undefined,
+        [hasMoreDetailsColumn],
+    );
+
+    const [columnsToShow, setColumnsToShow] = useState<TableColumn<TItem>[]>(
+        [],
+    );
 
     const handleResize = useCallback(() => {
         if (tableContainerRef.current?.parentElement) {
@@ -36,13 +57,25 @@ export function useColumnPriority<TItem extends Record<string, ReactNode>>(
         }
     }, [tableContainerRef]);
 
-    const handleDropFields = useCallback(() => {
+    const handleDropColumns = useCallback(() => {
         const columnCount = getColumnCount(
             parentWidth,
             columnCountByTableWidth,
         );
-        setFields(fieldsPriority.slice(0, columnCount));
-    }, [parentWidth, fieldsPriority, columnCountByTableWidth]);
+        const dynamicColumnsToShow = columns.slice(0, columnCount);
+        // Ensure the index column is first and the "more details" column is last
+        setColumnsToShow(
+            [indexColumn, ...dynamicColumnsToShow, moreDetailsColumn].filter(
+                Boolean,
+            ),
+        );
+    }, [
+        parentWidth,
+        columns,
+        columnCountByTableWidth,
+        indexColumn,
+        moreDetailsColumn,
+    ]);
 
     useEffect(() => {
         handleResize();
@@ -50,33 +83,11 @@ export function useColumnPriority<TItem extends Record<string, ReactNode>>(
         return () => window.removeEventListener('resize', handleResize);
     }, [handleResize]);
 
-    function makeHeaderLabels(fields: (keyof TItem)[]) {
-        const index = hasIndexColumn ? { id: 'index', label: '#' } : undefined;
-        const moreDetails = hasMoreDetailsColumn
-            ? {
-                  id: 'moreDetails',
-              }
-            : undefined;
-        const headerLabelsFromItems = fields
-            // the id field is for internal use and is not useful to the user
-            .filter(field => field !== 'id')
-            .map(field => ({
-                id: field,
-                label: field,
-                allowSorting: true,
-            }));
-
-        return [index, ...headerLabelsFromItems, moreDetails].filter(Boolean);
-    }
-
     useEffect(() => {
-        handleDropFields();
-    }, [handleDropFields, parentWidth]);
+        handleDropColumns();
+    }, [handleDropColumns, parentWidth]);
 
-    return useMemo(
-        () => ({ fields, headerLabels }) as const,
-        [fields, headerLabels],
-    );
+    return useMemo(() => ({ columnsToShow }) as const, [columnsToShow]);
 }
 
 export function getColumnCount(

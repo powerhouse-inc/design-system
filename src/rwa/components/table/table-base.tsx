@@ -3,32 +3,31 @@ import { fixedForwardRef } from '@/powerhouse/utils/fixedForwardRef';
 import { Order } from 'natural-orderby';
 import React, { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
+import { TableColumn } from './types';
 
 export type SortDirection = 'asc' | 'desc';
 
-export type RWAColumnHeader = {
-    id: string;
-    label?: React.ReactNode;
-    allowSorting?: boolean;
-};
-
-export interface RWATableProps<T extends object> extends DivProps {
-    header: RWAColumnHeader[];
-    items?: T[];
-    renderRow?: (item: T, index: number) => JSX.Element;
+export interface RWATableProps<TItem extends Record<string, any>>
+    extends DivProps {
+    columns: TableColumn<TItem>[];
+    tableData?: TItem[];
+    renderRow?: (
+        item: TItem,
+        columns: TableColumn<TItem>[],
+        index: number,
+    ) => JSX.Element;
     children?: React.ReactNode;
     onClickSort?: (key: string, direction: SortDirection) => void;
     footer?: React.ReactNode;
 }
 
-export const TableBase = fixedForwardRef(function TableBase<T extends object>(
-    props: RWATableProps<T>,
-    ref: React.ForwardedRef<HTMLDivElement>,
-) {
+export const TableBase = fixedForwardRef(function TableBase<
+    TItem extends Record<string, any>,
+>(props: RWATableProps<TItem>, ref: React.ForwardedRef<HTMLDivElement>) {
     const {
         children,
-        header,
-        items,
+        tableData,
+        columns,
         footer,
         renderRow,
         onClickSort,
@@ -52,40 +51,40 @@ export const TableBase = fixedForwardRef(function TableBase<T extends object>(
                 <table className="w-full">
                     <thead className="sticky top-0 z-10 select-none text-nowrap border-b border-gray-300 bg-gray-100">
                         <tr>
-                            {header.map(({ id, label, allowSorting }) => (
+                            {columns.map(column => (
                                 <th
                                     className={twMerge(
                                         'group border-l border-gray-300 p-3 text-start text-xs font-medium text-gray-600 first:border-l-0',
-                                        allowSorting &&
+                                        column.allowSorting &&
                                             'cursor-pointer hover:text-gray-900',
                                     )}
                                     onClick={() => {
-                                        if (!allowSorting) return;
+                                        if (!column.allowSorting) return;
                                         let sortDir: Order = 'asc';
 
                                         if (
-                                            sortKey === id &&
+                                            sortKey === column.key &&
                                             sortDirection === 'asc'
                                         ) {
                                             sortDir = 'desc';
                                         }
 
                                         setSortDirection(sortDir);
-                                        setSortKey(id);
+                                        setSortKey(column.key);
 
-                                        onClickSort?.(id, sortDir);
+                                        onClickSort?.(column.key, sortDir);
                                     }}
-                                    key={id}
+                                    key={column.key}
                                 >
                                     <div className="group flex items-center">
-                                        {label}
-                                        {allowSorting && (
+                                        {column.label}
+                                        {column.allowSorting && (
                                             <Icon
                                                 name="arrow-filled-right"
                                                 size={6}
                                                 className={twMerge(
                                                     'invisible ml-1 rotate-90',
-                                                    sortKey === id &&
+                                                    sortKey === column.key &&
                                                         'group-hover:visible',
                                                     sortDirection === 'asc' &&
                                                         'rotate-[270deg]',
@@ -99,9 +98,11 @@ export const TableBase = fixedForwardRef(function TableBase<T extends object>(
                     </thead>
                     <tbody>
                         {children}
-                        {items &&
+                        {tableData &&
                             renderRow &&
-                            items.map((item, index) => renderRow(item, index))}
+                            tableData.map((item, index) =>
+                                renderRow(item, columns, index),
+                            )}
                     </tbody>
                 </table>
             </div>
