@@ -2,9 +2,9 @@ import { FixedIncome } from '@/rwa';
 import type { Meta, StoryObj } from '@storybook/react';
 import { utils } from 'document-model/document';
 import { useCallback, useState } from 'react';
-import { RWAAssetDetailInputs } from '../asset-details/form';
 
 import { mockFixedIncomes, mockFixedIncomeTypes, mockSpvs } from '@/rwa/mocks';
+import { RWAAssetDetailInputs } from './asset-item-details';
 import {
     assetTableColumnCountByTableWidth,
     FixedIncomesTableProps,

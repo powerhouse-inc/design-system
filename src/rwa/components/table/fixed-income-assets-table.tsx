@@ -1,8 +1,7 @@
 import { FixedIncome, FixedIncomeType, SPV } from '@/rwa';
 import { addDays } from 'date-fns';
 import { RWATableProps } from '.';
-import { RWAAssetDetails } from '../asset-details';
-import { RWAAssetDetailInputs } from '../asset-details/form';
+import { AssetItemDetails, RWAAssetDetailInputs } from './asset-item-details';
 import { Table } from './table';
 import { getItemById } from './utils';
 
@@ -87,13 +86,15 @@ export function RWAFixedIncomesTable(props: FixedIncomesTableProps) {
     } = props;
 
     const editForm = (props: { itemId: string; index: number }) => (
-        <RWAAssetDetails
+        <AssetItemDetails
             asset={getItemById(props.itemId, assets)}
+            assetNumber={props.index + 1}
             fixedIncomeTypes={fixedIncomeTypes}
             spvs={spvs}
-            className="border-y border-gray-300"
-            mode={selectedAssetToEdit?.id === props.itemId ? 'edit' : 'view'}
-            selectItemToEdit={() => {
+            operation={
+                selectedAssetToEdit?.id === props.itemId ? 'edit' : 'view'
+            }
+            selectAssetToEdit={() => {
                 setSelectedAssetToEdit(getItemById(props.itemId, assets));
             }}
             onCancel={() => {
@@ -106,7 +107,7 @@ export function RWAFixedIncomesTable(props: FixedIncomesTableProps) {
     );
 
     const createForm = () => (
-        <RWAAssetDetails
+        <AssetItemDetails
             asset={{
                 id: '',
                 name: '',
@@ -122,11 +123,10 @@ export function RWAFixedIncomesTable(props: FixedIncomesTableProps) {
                 salesProceeds: 0,
                 realizedSurplus: 0,
             }}
-            mode="edit"
+            assetNumber={assets.length + 1}
             operation="create"
             fixedIncomeTypes={fixedIncomeTypes}
             spvs={spvs}
-            onClose={() => setShowNewAssetForm(false)}
             onCancel={() => setShowNewAssetForm(false)}
             onSubmitForm={onSubmitCreate}
         />
