@@ -1,14 +1,14 @@
 import { CalendarDate, parseDate } from '@internationalized/date';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { FixedIncome, FixedIncomeType, SPV } from '../../types';
+import { FixedIncome, FixedIncomeType, SPV } from '../../../types';
 import {
     RWAFormRow,
     RWATableDatePicker,
     RWATableSelect,
     RWATableTextInput,
-} from '../inputs';
-import { RWANumberInput } from '../inputs/number-input';
-import { ItemDetails } from './item-details';
+} from '../../inputs';
+import { RWANumberInput } from '../../inputs/number-input';
+import { ItemDetails } from '../item-details';
 
 export type RWAAssetDetailInputs = {
     fixedIncomeTypeId: FixedIncomeType['id'];

@@ -1,9 +1,9 @@
 import { FixedIncome, FixedIncomeType, SPV } from '@/rwa';
 import { addDays } from 'date-fns';
-import { RWATableProps } from '.';
+import { RWATableProps } from '..';
+import { Table } from '../table';
+import { getItemById } from '../utils';
 import { AssetItemDetails, RWAAssetDetailInputs } from './asset-item-details';
-import { Table } from './table';
-import { getItemById } from './utils';
 
 export const assetTableColumnCountByTableWidth = {
     1520: 12,

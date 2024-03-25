@@ -4,13 +4,13 @@ import { utils } from 'document-model/document';
 import { useCallback, useState } from 'react';
 
 import { mockFixedIncomes, mockFixedIncomeTypes, mockSpvs } from '@/rwa/mocks';
+import { getColumnCount } from '../useColumnPriority';
 import { RWAAssetDetailInputs } from './asset-item-details';
 import {
     assetTableColumnCountByTableWidth,
     FixedIncomesTableProps,
     RWAFixedIncomesTable,
 } from './fixed-income-assets-table';
-import { getColumnCount } from './useColumnPriority';
 
 const meta: Meta<typeof RWAFixedIncomesTable> = {
     title: 'RWA/Components/RWAFixedIncomesTable',

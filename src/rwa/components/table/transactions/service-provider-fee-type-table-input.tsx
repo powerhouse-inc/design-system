@@ -1,6 +1,6 @@
 import { ServiceProviderFeeType } from '@/rwa';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import { RWASelect } from '..';
+import { RWASelect } from '../..';
 
 type Props<ControlInputs extends FieldValues> = {
     selectedServiceProviderFeeType: ServiceProviderFeeType | undefined;

@@ -5,13 +5,13 @@ import {
     ServiceProviderFeeType,
 } from '@/rwa';
 import { useMemo } from 'react';
-import { RWATableProps } from '.';
+import { RWATableProps } from '..';
+import { Table } from '../table';
+import { getItemById } from '../utils';
 import {
     GroupTransactionDetailInputs,
     GroupTransactionItemDetails,
 } from './group-transaction-item-details';
-import { Table } from './table';
-import { getItemById } from './utils';
 
 export const groupTransactionsColumnCountByTableWidth = {
     1520: 12,

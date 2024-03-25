@@ -13,11 +13,11 @@ import {
 } from '@/rwa/constants/transactions';
 import { InputMaybe } from 'document-model/document';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
-import { RWAFormRow, RWATableSelect } from '../inputs';
-import { RWANumberInput } from '../inputs/number-input';
+import { RWAFormRow, RWATableSelect } from '../../inputs';
+import { RWANumberInput } from '../../inputs/number-input';
+import { FormattedNumber } from '../formatted-number';
+import { ItemDetails } from '../item-details';
 import { FeeTransactionsTable } from './fee-transactions-table';
-import { FormattedNumber } from './formatted-number';
-import { ItemDetails } from './item-details';
 
 export type GroupTransactionDetailInputs = {
     type: InputMaybe<GroupTransactionType>;
