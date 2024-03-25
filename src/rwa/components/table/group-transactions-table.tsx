@@ -1,4 +1,3 @@
-import { Icon } from '@/powerhouse';
 import {
     CashAsset,
     FixedIncome,
@@ -7,21 +6,10 @@ import {
     GroupTransactionDetails,
     ServiceProviderFeeType,
 } from '@/rwa';
-import { InputMaybe } from 'document-model/document';
-import { useMemo, useRef } from 'react';
-import { twJoin, twMerge } from 'tailwind-merge';
-import {
-    IndexCell,
-    MoreDetailsCell,
-    RWATableCell,
-    RWATableProps,
-    TableBase,
-    useSortTableItems,
-} from '.';
-import { RWATableRow } from './expandable-row';
-import { SpecialColumns, TableColumn } from './types';
-import { useColumnPriority } from './useColumnPriority';
-import { getItemById, handleTableDatum } from './utils';
+import { useMemo } from 'react';
+import { RWATableProps } from '.';
+import { Table } from './table';
+import { getItemById } from './utils';
 
 export const groupTransactionsColumnCountByTableWidth = {
     1520: 12,
@@ -31,38 +19,29 @@ export const groupTransactionsColumnCountByTableWidth = {
     984: 8,
 };
 
-type GroupTransactionTableData = {
-    id: string;
-    quantity: InputMaybe<number>;
-    asset: InputMaybe<string>;
-    cashAmount: InputMaybe<number>;
-    cashBalanceChange: InputMaybe<number>;
-    entryTime: InputMaybe<string>;
-};
-
 const columns = [
     {
-        key: 'entryTime',
+        key: 'entryTime' as const,
         label: 'Entry Time',
         allowSorting: true,
     },
     {
-        key: 'asset',
+        key: 'asset' as const,
         label: 'Asset',
         allowSorting: true,
     },
     {
-        key: 'quantity',
+        key: 'quantity' as const,
         label: 'Quantity',
         allowSorting: true,
     },
     {
-        key: 'cashAmount',
+        key: 'cashAmount' as const,
         label: 'Cash Amount ($)',
         allowSorting: true,
     },
     {
-        key: 'cashBalanceChange',
+        key: 'cashBalanceChange' as const,
         label: 'Cash Balance Change ($)',
         allowSorting: true,
     },
@@ -130,137 +109,79 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
         ...restProps
     } = props;
 
-    const tableContainerRef = useRef<HTMLDivElement>(null);
     const tableData = useMemo(
         () => makeGroupTransactionTableData(transactions, fixedIncomes),
         [transactions, fixedIncomes],
     );
-    const { sortedItems, sortHandler } = useSortTableItems(tableData);
 
-    const { columnsToShow } = useColumnPriority({
-        columns,
-        columnCountByTableWidth: groupTransactionsColumnCountByTableWidth,
-        tableContainerRef,
-    });
+    const editForm = (props: { itemId: string; index: number }) => (
+        <GroupTransactionDetails
+            transaction={getItemById(props.itemId, transactions)}
+            className="border-y border-gray-300"
+            fixedIncomes={fixedIncomes}
+            serviceProviderFeeTypes={serviceProviderFeeTypes}
+            transactionNumber={props.index + 1}
+            operation={
+                selectedGroupTransactionToEdit?.id === props.itemId
+                    ? 'edit'
+                    : 'view'
+            }
+            selectItemToEdit={() => {
+                setSelectedGroupTransactionToEdit(
+                    getItemById(props.itemId, transactions),
+                );
+            }}
+            onCancel={() => {
+                onCancelEdit();
+            }}
+            onSubmitForm={data => {
+                onSubmitEdit(data);
+            }}
+        />
+    );
 
-    const renderRow = (
-        item: GroupTransactionTableData,
-        columns: TableColumn<GroupTransactionTableData & SpecialColumns>[],
-        index: number,
-    ) => {
-        return (
-            <RWATableRow
-                isExpanded={expandedRowId === item.id}
-                tdProps={{ colSpan: 100 }}
-                key={item.id}
-                accordionContent={
-                    expandedRowId === item.id && (
-                        <GroupTransactionDetails
-                            transaction={getItemById(item.id, transactions)}
-                            className="border-y border-gray-300"
-                            fixedIncomes={fixedIncomes}
-                            serviceProviderFeeTypes={serviceProviderFeeTypes}
-                            transactionNumber={index + 1}
-                            operation={
-                                selectedGroupTransactionToEdit?.id === item.id
-                                    ? 'edit'
-                                    : 'view'
-                            }
-                            selectItemToEdit={() => {
-                                setSelectedGroupTransactionToEdit(
-                                    getItemById(item.id, transactions),
-                                );
-                            }}
-                            onCancel={() => {
-                                onCancelEdit();
-                            }}
-                            onSubmitForm={data => {
-                                onSubmitEdit(data);
-                            }}
-                        />
-                    )
-                }
-            >
-                <tr
-                    key={item.id}
-                    className={twMerge(
-                        '[&>td:not(:first-child)]:border-l [&>td:not(:first-child)]:border-gray-300',
-                        index % 2 !== 0 && 'bg-gray-50',
-                    )}
-                >
-                    {columns.map(column => (
-                        <>
-                            {column.key === 'index' && (
-                                <IndexCell index={index} />
-                            )}
-                            {column.key !== 'index' &&
-                                column.key !== 'moreDetails' && (
-                                    <RWATableCell key={column.key}>
-                                        {handleTableDatum(item[column.key])}
-                                    </RWATableCell>
-                                )}
-                            {column.key === 'moreDetails' && (
-                                <MoreDetailsCell
-                                    id={item.id}
-                                    expandedRowId={expandedRowId}
-                                    toggleExpandedRow={toggleExpandedRow}
-                                />
-                            )}
-                        </>
-                    ))}
-                </tr>
-            </RWATableRow>
-        );
-    };
+    const createForm = () => (
+        <GroupTransactionDetails
+            transaction={{
+                id: '',
+                type: 'AssetPurchase',
+                cashTransaction: {
+                    id: '',
+                    assetId: cashAssets[0].id,
+                    amount: undefined,
+                    counterPartyAccountId: principalLenderAccountId,
+                },
+                fixedIncomeTransaction: {
+                    id: '',
+                    assetId: fixedIncomes[0].id,
+                    amount: null,
+                },
+            }}
+            fixedIncomes={fixedIncomes}
+            serviceProviderFeeTypes={serviceProviderFeeTypes}
+            operation="create"
+            transactionNumber={transactions.length + 1}
+            onCancel={() => setShowNewGroupTransactionForm(false)}
+            onSubmitForm={onSubmitCreate}
+        />
+    );
 
     return (
-        <>
-            <TableBase
-                {...restProps}
-                className={twJoin(
-                    'rounded-b-none',
-                    expandedRowId && 'max-h-max',
-                )}
-                onClickSort={sortHandler}
-                ref={tableContainerRef}
-                tableData={sortedItems}
-                columns={columnsToShow}
-                renderRow={renderRow}
-            />
-            <button
-                onClick={() => setShowNewGroupTransactionForm(true)}
-                className="flex h-11 w-full items-center justify-center gap-x-2 rounded-b-lg border-x border-b border-gray-300 bg-white text-sm font-semibold text-gray-900"
-            >
-                <span>Create Group Transaction</span>
-                <Icon name="plus" size={14} />
-            </button>
-            {showNewGroupTransactionForm && (
-                <div className="mt-4 rounded-md bg-white">
-                    <GroupTransactionDetails
-                        transaction={{
-                            id: '',
-                            type: 'AssetPurchase',
-                            cashTransaction: {
-                                id: '',
-                                assetId: cashAssets[0].id,
-                                amount: undefined,
-                                counterPartyAccountId: principalLenderAccountId,
-                            },
-                            fixedIncomeTransaction: {
-                                id: '',
-                                assetId: fixedIncomes[0].id,
-                                amount: null,
-                            },
-                        }}
-                        fixedIncomes={fixedIncomes}
-                        serviceProviderFeeTypes={serviceProviderFeeTypes}
-                        operation="create"
-                        transactionNumber={transactions.length + 1}
-                        onCancel={() => setShowNewGroupTransactionForm(false)}
-                        onSubmitForm={onSubmitCreate}
-                    />
-                </div>
-            )}
-        </>
+        <Table
+            {...restProps}
+            tableItemName="Group Transaction"
+            tableData={tableData}
+            columns={columns}
+            columnCountByTableWidth={groupTransactionsColumnCountByTableWidth}
+            expandedRowId={expandedRowId}
+            showNewItemForm={showNewGroupTransactionForm}
+            setShowNewItemForm={setShowNewGroupTransactionForm}
+            toggleExpandedRow={toggleExpandedRow}
+            onCancelEdit={onCancelEdit}
+            onSubmitCreate={onSubmitCreate}
+            onSubmitEdit={onSubmitEdit}
+            editForm={editForm}
+            createForm={createForm}
+        />
     );
 }

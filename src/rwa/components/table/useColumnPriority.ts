@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { TableColumn } from './types';
+import { ColumnCountByTableWidth, TableColumn, TableItem } from './types';
 
-type Props<TItem extends Record<string, any>> = {
-    columnCountByTableWidth: Record<number, number>;
+type Props<TItem extends TableItem> = {
+    columnCountByTableWidth: ColumnCountByTableWidth;
     tableContainerRef: React.RefObject<HTMLDivElement>;
     columns: TableColumn<TItem>[];
     hasIndexColumn?: boolean;
     hasMoreDetailsColumn?: boolean;
 };
 
-export function useColumnPriority<TItem extends Record<string, any>>(
+export function useColumnPriority<TItem extends TableItem>(
     props: Props<TItem>,
 ) {
     const {

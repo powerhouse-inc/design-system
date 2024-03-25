@@ -29,8 +29,8 @@ export function handleTableDatum(
 }
 
 export function getItemById<TItem extends TableItem = TableItem>(
-    id: string,
-    items: TItem[] | undefined,
+    id: string | null | undefined,
+    items: TItem[] | null | undefined,
 ) {
     return items?.find(item => item.id === id);
 }

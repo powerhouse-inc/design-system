@@ -15,3 +15,5 @@ export interface TableColumn<TItem> {
     allowSorting?: boolean;
     isSpecialColumn?: boolean; // New property to identify index or more details columns
 }
+
+export type ColumnCountByTableWidth = Record<number, number>;
