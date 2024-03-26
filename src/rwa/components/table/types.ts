@@ -10,7 +10,6 @@ import {
     ServiceProviderFeeType,
     TransactionFee,
 } from '@/rwa';
-import { CalendarDate } from '@internationalized/date';
 import { InputMaybe } from 'document-model/document';
 import { ComponentType, ReactNode } from 'react';
 import { FieldValues, SubmitHandler, UseFormReturn } from 'react-hook-form';
@@ -108,6 +107,13 @@ export type ServiceProviderFeeTypesTableProps = Pick<
     accounts: Account[];
 };
 
+export type AccountsTableProps = Pick<
+    TableProps<Account>,
+    PropsToKeepFromTable
+> & {
+    accounts: Account[];
+};
+
 export type ItemDetailsFormProps<
     TFieldValues extends FieldValues = FieldValues,
 > = Pick<UseFormReturn<TFieldValues>, 'handleSubmit' | 'reset'> & {
@@ -156,12 +162,6 @@ export type GroupTransactionDetailsProps = Pick<
     onSubmitForm: (data: GroupTransactionFormInputs) => void;
 };
 
-export type ServiceProviderFeeTypeFormInputs = {
-    name: InputMaybe<string>;
-    feeType: InputMaybe<string>;
-    accountId: InputMaybe<string>;
-};
-
 export type ServiceProviderFeeTypeDetailsProps = Pick<
     ItemDetailsProps<ServiceProviderFeeType>,
     PropsToKeepFromItemDetails
@@ -170,10 +170,23 @@ export type ServiceProviderFeeTypeDetailsProps = Pick<
     onSubmitForm: (data: ServiceProviderFeeTypeFormInputs) => void;
 };
 
+export type AccountDetailsProps = Pick<
+    ItemDetailsProps<Account>,
+    PropsToKeepFromItemDetails
+> & {
+    onSubmitForm: (data: AccountFormInputs) => void;
+};
+
+export type ServiceProviderFeeTypeFormInputs = {
+    name: InputMaybe<string>;
+    feeType: InputMaybe<string>;
+    accountId: InputMaybe<string>;
+};
+
 export type AssetFormInputs = {
     fixedIncomeTypeId: string;
     spvId: string;
-    maturity: CalendarDate;
+    maturity: string;
     name: string;
     ISIN?: string;
     CUSIP?: string;
@@ -188,4 +201,9 @@ export type GroupTransactionFormInputs = {
     fixedIncomeAmount: InputMaybe<number>;
     fees: InputMaybe<TransactionFee[]>;
     cashBalanceChange: InputMaybe<number>;
+};
+
+export type AccountFormInputs = {
+    label: InputMaybe<string>;
+    reference: InputMaybe<string>;
 };

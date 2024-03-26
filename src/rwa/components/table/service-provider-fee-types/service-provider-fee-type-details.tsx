@@ -24,7 +24,7 @@ export function ServiceProviderFeeTypeDetails(
         defaultValues: {
             name: item?.name,
             feeType: item?.feeType,
-            accountId: account?.id,
+            accountId: account?.id ?? accounts[0].id,
         },
     });
 
