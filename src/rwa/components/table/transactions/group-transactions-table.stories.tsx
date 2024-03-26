@@ -38,12 +38,8 @@ export const Primary: Story = {
     },
     render: function Wrapper(args) {
         const [expandedRowId, setExpandedRowId] = useState<string>();
-        const [
-            selectedGroupTransactionToEdit,
-            setSelectedGroupTransactionToEdit,
-        ] = useState<GroupTransaction>();
-        const [showNewGroupTransactionForm, setShowNewGroupTransactionForm] =
-            useState(false);
+        const [selectedItem, setSelectedItem] = useState<GroupTransaction>();
+        const [showNewItemForm, setShowNewItemForm] = useState(false);
 
         const toggleExpandedRow = useCallback((id: string | undefined) => {
             setExpandedRowId(curr => (id === curr ? undefined : id));
@@ -52,23 +48,24 @@ export const Primary: Story = {
         const onSubmitEdit: GroupTransactionsTableProps['onSubmitEdit'] =
             useCallback(data => {
                 console.log('edit', { data });
-                setSelectedGroupTransactionToEdit(undefined);
+                setSelectedItem(undefined);
             }, []);
 
         const onSubmitCreate: GroupTransactionsTableProps['onSubmitCreate'] =
             useCallback(data => {
                 console.log('create', { data });
-                setShowNewGroupTransactionForm(false);
+                setShowNewItemForm(false);
             }, []);
 
-        const argsWithHandlers = {
+        const argsWithHandlers: GroupTransactionsTableProps = {
             ...args,
+            itemName: 'Group Transaction',
             expandedRowId,
-            selectedGroupTransactionToEdit,
+            selectedItem,
             toggleExpandedRow,
-            setSelectedGroupTransactionToEdit,
-            showNewGroupTransactionForm,
-            setShowNewGroupTransactionForm,
+            setSelectedItem,
+            showNewItemForm,
+            setShowNewItemForm,
             onSubmitEdit,
             onSubmitCreate,
         };

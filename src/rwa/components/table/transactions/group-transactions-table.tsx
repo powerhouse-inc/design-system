@@ -20,16 +20,19 @@ const columns = [
         key: 'quantity' as const,
         label: 'Quantity',
         allowSorting: true,
+        isNumberColumn: true,
     },
     {
         key: 'cashAmount' as const,
         label: 'Cash Amount ($)',
         allowSorting: true,
+        isNumberColumn: true,
     },
     {
         key: 'cashBalanceChange' as const,
         label: 'Cash Balance Change ($)',
         allowSorting: true,
+        isNumberColumn: true,
     },
 ];
 

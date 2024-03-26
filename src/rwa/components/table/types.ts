@@ -27,7 +27,8 @@ export interface TableColumn<TItem> {
     key: keyof TItem & string;
     label: ReactNode | null; // Allows JSX or string labels, null for no header
     allowSorting?: boolean;
-    isSpecialColumn?: boolean; // New property to identify index or more details columns
+    isSpecialColumn?: boolean; // Used to identify index or more details columns
+    isNumberColumn?: boolean; // Used to right-align numbers
 }
 
 export type ColumnCountByTableWidth = Record<number, number>;

@@ -6,16 +6,23 @@ import { AssetDetails } from './asset-details';
 const columns = [
     { key: 'name' as const, label: 'Name', allowSorting: true },
     { key: 'maturity' as const, label: 'Maturity', allowSorting: true },
-    { key: 'notional' as const, label: 'Notional', allowSorting: true },
+    {
+        key: 'notional' as const,
+        label: 'Notional',
+        allowSorting: true,
+        isNumberColumn: true,
+    },
     {
         key: 'purchasePrice' as const,
         label: 'Purchase Price',
         allowSorting: true,
+        isNumberColumn: true,
     },
     {
         key: 'realizedSurplus' as const,
         label: 'Realized Surplus',
         allowSorting: true,
+        isNumberColumn: true,
     },
     {
         key: 'purchaseDate' as const,
@@ -26,18 +33,26 @@ const columns = [
         key: 'totalDiscount' as const,
         label: 'Total Discount',
         allowSorting: true,
+        isNumberColumn: true,
     },
     {
         key: 'purchaseProceeds' as const,
         label: 'Purchase Proceeds',
         allowSorting: true,
+        isNumberColumn: true,
     },
     {
         key: 'salesProceeds' as const,
         label: 'Sales Proceeds',
         allowSorting: true,
+        isNumberColumn: true,
     },
-    { key: 'coupon' as const, label: 'Coupon', allowSorting: true },
+    {
+        key: 'coupon' as const,
+        label: 'Coupon',
+        allowSorting: true,
+        isNumberColumn: true,
+    },
 ];
 
 export function AssetsTable(props: AssetTableProps) {

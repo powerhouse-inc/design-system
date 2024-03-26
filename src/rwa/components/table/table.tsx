@@ -73,7 +73,14 @@ export function Table<
                             )}
                             {column.key !== 'index' &&
                                 column.key !== 'moreDetails' && (
-                                    <RWATableCell key={column.key}>
+                                    <RWATableCell
+                                        key={column.key}
+                                        className={
+                                            column.isNumberColumn
+                                                ? 'text-right'
+                                                : ''
+                                        }
+                                    >
                                         {handleTableDatum(item[column.key])}
                                     </RWATableCell>
                                 )}

@@ -38,7 +38,7 @@ export const TableBase = fixedForwardRef(function TableBase<
                             {columns.map(column => (
                                 <th
                                     className={twMerge(
-                                        'group border-l border-gray-300 p-3 text-start text-xs font-medium text-gray-600 first:border-l-0',
+                                        'group border-l border-gray-300 py-3 pl-3 text-start text-xs font-medium text-gray-600 first:border-l-0',
                                         column.allowSorting &&
                                             'cursor-pointer hover:text-gray-900',
                                     )}
@@ -60,7 +60,13 @@ export const TableBase = fixedForwardRef(function TableBase<
                                     }}
                                     key={column.key}
                                 >
-                                    <div className="group flex items-center">
+                                    <div
+                                        className={twMerge(
+                                            'group flex items-center',
+                                            column.isNumberColumn &&
+                                                'justify-end',
+                                        )}
+                                    >
                                         {column.label}
                                         {column.allowSorting && (
                                             <Icon

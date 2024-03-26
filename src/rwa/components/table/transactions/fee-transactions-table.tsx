@@ -11,6 +11,7 @@ import {
     UseFormRegister,
     UseFormWatch,
 } from 'react-hook-form';
+import { twMerge } from 'tailwind-merge';
 import { RWANumberInput } from '../../inputs/number-input';
 import { GroupTransactionFormInputs } from '../types';
 import { ServiceProviderAndFeeTypeTableInput } from './service-provider-fee-type-table-input';
@@ -30,7 +31,7 @@ type Props<ControlInputs extends FieldValues> = {
 export function FeeTransactionsTable<ControlInputs extends FieldValues>(
     props: Props<ControlInputs>,
 ) {
-    const headings = ['Fees', 'Service Provider', 'Amount', ''];
+    const headings = ['Fees', 'Service Provider', 'Amount', ''] as const;
 
     const serviceProviderFeeTypeOptions = props.serviceProviderFeeTypes.map(
         spft => ({
@@ -49,7 +50,11 @@ export function FeeTransactionsTable<ControlInputs extends FieldValues>(
                                 {headings.map(heading => (
                                     <th
                                         key={heading}
-                                        className="p-2 text-left text-xs font-medium text-gray-600"
+                                        className={twMerge(
+                                            'p-2 text-left text-xs font-medium text-gray-600',
+                                            heading === 'Amount' &&
+                                                'text-right',
+                                        )}
                                     >
                                         {heading}
                                     </th>

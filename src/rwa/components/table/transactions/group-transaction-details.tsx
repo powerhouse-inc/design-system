@@ -58,7 +58,7 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
     const currentlySupportedGroupTransactionTypes = [
         'AssetPurchase',
         'AssetSale',
-    ];
+    ] as const;
 
     const transactionTypeOptions = groupTransactionTypes
         .filter(type => currentlySupportedGroupTransactionTypes.includes(type))
@@ -93,12 +93,12 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
         formState: { errors },
     } = useForm<GroupTransactionFormInputs>({
         defaultValues: {
-            type: item?.type,
+            type: item?.type ?? currentlySupportedGroupTransactionTypes[0],
             entryTime: convertToDateTimeLocalFormat(
                 item?.entryTime ?? new Date(),
             ),
             cashAmount: item?.cashTransaction?.amount,
-            fixedIncomeId: fixedIncome?.id,
+            fixedIncomeId: fixedIncome?.id ?? fixedIncomes[0]?.id,
             fixedIncomeAmount: item?.fixedIncomeTransaction?.amount,
             fees: item?.fees,
         },
