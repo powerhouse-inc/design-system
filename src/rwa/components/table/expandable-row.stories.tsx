@@ -27,6 +27,7 @@ export const Primary: Story = {
     },
     render: args => (
         <TableBase
+            onClickSort={() => {}}
             renderRow={row => (
                 <RWATableRow {...args} tdProps={{ colSpan: 4 }}>
                     <td>{row.cell1}</td>

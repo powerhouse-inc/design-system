@@ -1,4 +1,4 @@
-export * from './assets/fixed-income-assets-table';
+export * from './assets/assets-table';
 export * from './header-label';
 export * from './table-base';
 export * from './table-cell';

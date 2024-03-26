@@ -1,26 +1,17 @@
-import { DivProps, Icon, mergeClassNameProps } from '@/powerhouse';
-import { ComponentType } from 'react';
+import { Icon, mergeClassNameProps } from '@/powerhouse';
 import { RWAButton } from '../button';
-import { TableItem } from './types';
+import { ItemDetailsProps, TableItem } from './types';
 
-export type ItemDetailsProps<TItem extends TableItem> = DivProps & {
-    item: TItem | undefined;
-    itemName: string;
-    operation: 'view' | 'create' | 'edit';
-    itemNumber: number;
-    formInputs: ComponentType;
-    selectItemToEdit: () => void;
-    performSubmit: () => void;
-    handleCancel: () => void;
-};
-export function ItemDetails(props: ItemDetailsProps<TableItem>) {
+export function ItemDetails<TItem extends TableItem>(
+    props: ItemDetailsProps<TItem>,
+) {
     const {
         item,
         itemName,
         itemNumber,
         formInputs: FormInputs,
         operation = 'view',
-        selectItemToEdit,
+        setSelectedItem,
         performSubmit,
         handleCancel,
         ...restProps
@@ -60,7 +51,7 @@ export function ItemDetails(props: ItemDetailsProps<TableItem>) {
                     </div>
                 ) : (
                     <RWAButton
-                        onClick={selectItemToEdit}
+                        onClick={() => setSelectedItem?.(item)}
                         iconPosition="right"
                         icon={<Icon name="pencil" size={16} />}
                     >

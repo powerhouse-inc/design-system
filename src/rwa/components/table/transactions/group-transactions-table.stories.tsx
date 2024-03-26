@@ -1,4 +1,4 @@
-import { GroupTransaction, GroupTransactionsTableProps } from '@/rwa';
+import { GroupTransaction } from '@/rwa';
 import {
     mockCashAssets,
     mockFixedIncomes,
@@ -8,11 +8,9 @@ import {
 import { mockGroupTransactions } from '@/rwa/mocks/transactions';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useCallback, useState } from 'react';
+import { GroupTransactionsTableProps } from '../types';
 import { getColumnCount } from '../useColumnPriority';
-import {
-    GroupTransactionsTable,
-    groupTransactionsColumnCountByTableWidth,
-} from './group-transactions-table';
+import { GroupTransactionsTable } from './group-transactions-table';
 
 const meta: Meta<typeof GroupTransactionsTable> = {
     title: 'RWA/Components/Group Transactions Table',
@@ -21,6 +19,14 @@ const meta: Meta<typeof GroupTransactionsTable> = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+const columnCountByTableWidth = {
+    1520: 12,
+    1394: 11,
+    1239: 10,
+    1112: 9,
+    984: 8,
+};
 
 export const Primary: Story = {
     args: {
@@ -78,7 +84,7 @@ export const Primary: Story = {
                     <p>parent element width: 100%</p>
                     <GroupTransactionsTable {...argsWithHandlers} />
                 </div>
-                {Object.keys(groupTransactionsColumnCountByTableWidth)
+                {Object.keys(columnCountByTableWidth)
                     .map(Number)
                     .map(width => width + 50)
                     .map(width => (
@@ -86,10 +92,7 @@ export const Primary: Story = {
                             <p>parent element width: {width}px</p>
                             <p>
                                 column count:{' '}
-                                {getColumnCount(
-                                    width,
-                                    groupTransactionsColumnCountByTableWidth,
-                                )}
+                                {getColumnCount(width, columnCountByTableWidth)}
                             </p>
                             <GroupTransactionsTable {...argsWithHandlers} />
                         </div>

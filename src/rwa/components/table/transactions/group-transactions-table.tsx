@@ -1,19 +1,11 @@
-import {
-    CashAsset,
-    FixedIncome,
-    GroupTransaction,
-    ServiceProviderFeeType,
-} from '@/rwa';
+import { FixedIncome, GroupTransaction } from '@/rwa';
 import { useMemo } from 'react';
-import { RWATableProps } from '..';
 import { Table } from '../table';
+import { GroupTransactionsTableProps } from '../types';
 import { getItemById } from '../utils';
-import {
-    GroupTransactionDetailInputs,
-    GroupTransactionItemDetails,
-} from './group-transaction-item-details';
+import { GroupTransactionDetails } from './group-transaction-details';
 
-export const groupTransactionsColumnCountByTableWidth = {
+const columnCountByTableWidth = {
     1520: 12,
     1394: 11,
     1239: 10,
@@ -70,28 +62,6 @@ export function makeGroupTransactionTableData(
     });
 }
 
-export type GroupTransactionsTableProps = Omit<
-    RWATableProps<GroupTransaction>,
-    'header' | 'renderRow'
-> & {
-    transactions: GroupTransaction[];
-    cashAssets: CashAsset[];
-    fixedIncomes: FixedIncome[];
-    serviceProviderFeeTypes: ServiceProviderFeeType[];
-    principalLenderAccountId: string;
-    expandedRowId: string | undefined;
-    selectedGroupTransactionToEdit?: GroupTransaction | null | undefined;
-    showNewGroupTransactionForm: boolean;
-    setShowNewGroupTransactionForm: (show: boolean) => void;
-    toggleExpandedRow: (id: string) => void;
-    setSelectedGroupTransactionToEdit: (
-        item: GroupTransaction | undefined,
-    ) => void;
-    onCancelEdit: () => void;
-    onSubmitEdit: (data: GroupTransactionDetailInputs) => void;
-    onSubmitCreate: (data: GroupTransactionDetailInputs) => void;
-};
-
 export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
     const {
         transactions,
@@ -100,15 +70,14 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
         serviceProviderFeeTypes,
         principalLenderAccountId,
         expandedRowId,
-        selectedGroupTransactionToEdit,
-        showNewGroupTransactionForm,
-        setShowNewGroupTransactionForm,
+        selectedItem,
+        showNewItemForm,
+        setSelectedItem,
+        setShowNewItemForm,
         toggleExpandedRow,
-        setSelectedGroupTransactionToEdit,
         onCancelEdit,
         onSubmitEdit,
         onSubmitCreate,
-        ...restProps
     } = props;
 
     const tableData = useMemo(
@@ -117,20 +86,14 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
     );
 
     const editForm = (props: { itemId: string; index: number }) => (
-        <GroupTransactionItemDetails
-            transaction={getItemById(props.itemId, transactions)}
+        <GroupTransactionDetails
+            item={getItemById(props.itemId, transactions)}
             fixedIncomes={fixedIncomes}
             serviceProviderFeeTypes={serviceProviderFeeTypes}
-            transactionNumber={props.index + 1}
-            operation={
-                selectedGroupTransactionToEdit?.id === props.itemId
-                    ? 'edit'
-                    : 'view'
-            }
-            selectTransactionToEdit={() => {
-                setSelectedGroupTransactionToEdit(
-                    getItemById(props.itemId, transactions),
-                );
+            itemNumber={props.index + 1}
+            operation={selectedItem?.id === props.itemId ? 'edit' : 'view'}
+            setSelectedItem={() => {
+                setSelectedItem(getItemById(props.itemId, transactions));
             }}
             onCancel={() => {
                 onCancelEdit();
@@ -142,8 +105,8 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
     );
 
     const createForm = () => (
-        <GroupTransactionItemDetails
-            transaction={{
+        <GroupTransactionDetails
+            item={{
                 id: '',
                 type: 'AssetPurchase',
                 cashTransaction: {
@@ -166,22 +129,23 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
             fixedIncomes={fixedIncomes}
             serviceProviderFeeTypes={serviceProviderFeeTypes}
             operation="create"
-            transactionNumber={transactions.length + 1}
-            onCancel={() => setShowNewGroupTransactionForm(false)}
+            itemNumber={transactions.length + 1}
+            onCancel={() => setShowNewItemForm(false)}
             onSubmitForm={onSubmitCreate}
         />
     );
 
     return (
         <Table
-            {...restProps}
-            tableItemName="Group Transaction"
+            itemName="Group Transaction"
             tableData={tableData}
             columns={columns}
-            columnCountByTableWidth={groupTransactionsColumnCountByTableWidth}
+            columnCountByTableWidth={columnCountByTableWidth}
             expandedRowId={expandedRowId}
-            showNewItemForm={showNewGroupTransactionForm}
-            setShowNewItemForm={setShowNewGroupTransactionForm}
+            selectedItem={selectedItem}
+            setSelectedItem={setSelectedItem}
+            showNewItemForm={showNewItemForm}
+            setShowNewItemForm={setShowNewItemForm}
             toggleExpandedRow={toggleExpandedRow}
             onCancelEdit={onCancelEdit}
             onSubmitCreate={onSubmitCreate}

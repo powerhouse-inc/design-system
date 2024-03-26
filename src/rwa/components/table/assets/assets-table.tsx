@@ -1,11 +1,10 @@
-import { FixedIncome, FixedIncomeType, SPV } from '@/rwa';
 import { addDays } from 'date-fns';
-import { RWATableProps } from '..';
 import { Table } from '../table';
+import { AssetTableProps } from '../types';
 import { getItemById } from '../utils';
-import { AssetItemDetails, RWAAssetDetailInputs } from './asset-item-details';
+import { AssetDetails } from './asset-details';
 
-export const assetTableColumnCountByTableWidth = {
+const columnCountByTableWidth = {
     1520: 12,
     1394: 11,
     1239: 10,
@@ -50,52 +49,31 @@ const columns = [
     { key: 'coupon' as const, label: 'Coupon', allowSorting: true },
 ];
 
-export type FixedIncomesTableProps = Omit<
-    RWATableProps<FixedIncome>,
-    'header' | 'renderRow'
-> & {
-    assets: FixedIncome[];
-    fixedIncomeTypes: FixedIncomeType[];
-    spvs: SPV[];
-    expandedRowId: string | undefined;
-    selectedAssetToEdit?: FixedIncome | undefined;
-    showNewAssetForm: boolean;
-    toggleExpandedRow: (id: string) => void;
-    setSelectedAssetToEdit: (item: FixedIncome | undefined) => void;
-    onCancelEdit: () => void;
-    onSubmitCreate: (data: RWAAssetDetailInputs) => void;
-    onSubmitEdit: (data: RWAAssetDetailInputs) => void;
-    setShowNewAssetForm: (show: boolean) => void;
-};
-
-export function RWAFixedIncomesTable(props: FixedIncomesTableProps) {
+export function AssetsTable(props: AssetTableProps) {
     const {
         assets,
         fixedIncomeTypes,
         spvs,
         expandedRowId,
-        selectedAssetToEdit,
-        showNewAssetForm,
+        selectedItem,
+        showNewItemForm,
         toggleExpandedRow,
-        setSelectedAssetToEdit,
+        setSelectedItem,
         onCancelEdit,
         onSubmitCreate,
         onSubmitEdit,
-        setShowNewAssetForm,
-        ...restProps
+        setShowNewItemForm,
     } = props;
 
     const editForm = (props: { itemId: string; index: number }) => (
-        <AssetItemDetails
-            asset={getItemById(props.itemId, assets)}
-            assetNumber={props.index + 1}
+        <AssetDetails
+            item={getItemById(props.itemId, assets)}
+            itemNumber={props.index + 1}
             fixedIncomeTypes={fixedIncomeTypes}
             spvs={spvs}
-            operation={
-                selectedAssetToEdit?.id === props.itemId ? 'edit' : 'view'
-            }
-            selectAssetToEdit={() => {
-                setSelectedAssetToEdit(getItemById(props.itemId, assets));
+            operation={selectedItem?.id === props.itemId ? 'edit' : 'view'}
+            setSelectedItem={() => {
+                setSelectedItem(getItemById(props.itemId, assets));
             }}
             onCancel={() => {
                 onCancelEdit();
@@ -107,8 +85,8 @@ export function RWAFixedIncomesTable(props: FixedIncomesTableProps) {
     );
 
     const createForm = () => (
-        <AssetItemDetails
-            asset={{
+        <AssetDetails
+            item={{
                 id: '',
                 name: '',
                 fixedIncomeTypeId: fixedIncomeTypes[0].id,
@@ -123,25 +101,26 @@ export function RWAFixedIncomesTable(props: FixedIncomesTableProps) {
                 salesProceeds: 0,
                 realizedSurplus: 0,
             }}
-            assetNumber={assets.length + 1}
+            itemNumber={assets.length + 1}
             operation="create"
             fixedIncomeTypes={fixedIncomeTypes}
             spvs={spvs}
-            onCancel={() => setShowNewAssetForm(false)}
+            onCancel={() => setShowNewItemForm(false)}
             onSubmitForm={onSubmitCreate}
         />
     );
 
     return (
         <Table
-            {...restProps}
-            tableItemName="Asset"
+            itemName="Asset"
             tableData={assets}
             columns={columns}
-            columnCountByTableWidth={assetTableColumnCountByTableWidth}
+            columnCountByTableWidth={columnCountByTableWidth}
             expandedRowId={expandedRowId}
-            showNewItemForm={showNewAssetForm}
-            setShowNewItemForm={setShowNewAssetForm}
+            showNewItemForm={showNewItemForm}
+            selectedItem={selectedItem}
+            setSelectedItem={setSelectedItem}
+            setShowNewItemForm={setShowNewItemForm}
             toggleExpandedRow={toggleExpandedRow}
             onCancelEdit={onCancelEdit}
             onSubmitEdit={onSubmitEdit}

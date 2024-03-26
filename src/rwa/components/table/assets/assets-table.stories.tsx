@@ -1,26 +1,32 @@
 import { FixedIncome } from '@/rwa';
 import type { Meta, StoryObj } from '@storybook/react';
 import { utils } from 'document-model/document';
-import { useCallback, useState } from 'react';
+import { ComponentPropsWithoutRef, useCallback, useState } from 'react';
 
 import { mockFixedIncomes, mockFixedIncomeTypes, mockSpvs } from '@/rwa/mocks';
+import { AssetFormInputs } from '../types';
 import { getColumnCount } from '../useColumnPriority';
-import { RWAAssetDetailInputs } from './asset-item-details';
-import {
-    assetTableColumnCountByTableWidth,
-    FixedIncomesTableProps,
-    RWAFixedIncomesTable,
-} from './fixed-income-assets-table';
+import { AssetsTable } from './assets-table';
 
-const meta: Meta<typeof RWAFixedIncomesTable> = {
+const meta: Meta<typeof AssetsTable> = {
     title: 'RWA/Components/RWAFixedIncomesTable',
-    component: RWAFixedIncomesTable,
+    component: AssetsTable,
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-function createAssetFromFormInputs(data: RWAAssetDetailInputs) {
+const columnCountByTableWidth = {
+    1520: 12,
+    1394: 11,
+    1239: 10,
+    1112: 9,
+    984: 8,
+};
+
+type FixedIncomesTableProps = ComponentPropsWithoutRef<typeof AssetsTable>;
+
+function createAssetFromFormInputs(data: AssetFormInputs) {
     const id = utils.hashKey();
     const maturity = data.maturity.toString();
 
@@ -57,14 +63,18 @@ export const Primary: Story = {
 
         const onSubmitEdit: FixedIncomesTableProps['onSubmitEdit'] =
             useCallback(data => {
-                const asset = createAssetFromFormInputs(data);
+                const asset = createAssetFromFormInputs(
+                    data as AssetFormInputs,
+                );
                 console.log({ asset, data });
                 setSelectedAssetToEdit(undefined);
             }, []);
 
         const onSubmitCreate: FixedIncomesTableProps['onSubmitCreate'] =
             useCallback(data => {
-                const asset = createAssetFromFormInputs(data);
+                const asset = createAssetFromFormInputs(
+                    data as AssetFormInputs,
+                );
                 console.log({ asset, data });
                 setShowNewAssetForm(false);
             }, []);
@@ -85,9 +95,9 @@ export const Primary: Story = {
             <div className="flex flex-col gap-4">
                 <div className="w-screen">
                     <p>parent element width: 100%</p>
-                    <RWAFixedIncomesTable {...argsWithHandlers} />
+                    <AssetsTable {...argsWithHandlers} />
                 </div>
-                {Object.keys(assetTableColumnCountByTableWidth)
+                {Object.keys(columnCountByTableWidth)
                     .map(Number)
                     .map(width => width + 50)
                     .map(width => (
@@ -95,12 +105,9 @@ export const Primary: Story = {
                             <p>parent element width: {width}px</p>
                             <p>
                                 column count:{' '}
-                                {getColumnCount(
-                                    width,
-                                    assetTableColumnCountByTableWidth,
-                                )}
+                                {getColumnCount(width, columnCountByTableWidth)}
                             </p>
-                            <RWAFixedIncomesTable {...argsWithHandlers} />
+                            <AssetsTable {...argsWithHandlers} />
                         </div>
                     ))}
             </div>

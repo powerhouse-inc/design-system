@@ -1,9 +1,7 @@
 import { DateTimeLocalInput } from '@/connect/components/date-time-input';
 import {
     FixedIncome,
-    GroupTransaction,
     GroupTransactionType,
-    ServiceProviderFeeType,
     TransactionFee,
     convertToDateTimeLocalFormat,
 } from '@/rwa';
@@ -17,17 +15,11 @@ import { RWAFormRow, RWATableSelect } from '../../inputs';
 import { RWANumberInput } from '../../inputs/number-input';
 import { FormattedNumber } from '../formatted-number';
 import { ItemDetails } from '../item-details';
+import {
+    GroupTransactionDetailsProps,
+    GroupTransactionFormInputs,
+} from '../types';
 import { FeeTransactionsTable } from './fee-transactions-table';
-
-export type GroupTransactionDetailInputs = {
-    type: InputMaybe<GroupTransactionType>;
-    entryTime: InputMaybe<string>;
-    cashAmount: InputMaybe<number>;
-    fixedIncomeId: InputMaybe<string>;
-    fixedIncomeAmount: InputMaybe<number>;
-    fees: InputMaybe<TransactionFee[]>;
-    cashBalanceChange: InputMaybe<number>;
-};
 
 function calculateUnitPricePercent(
     cashAmount: InputMaybe<number>,
@@ -53,25 +45,12 @@ function calculateCashBalanceChange(
     return cashAmount * operation - totalFees;
 }
 
-type Props = {
-    transaction: GroupTransaction | undefined;
-    fixedIncomes: FixedIncome[];
-    serviceProviderFeeTypes: ServiceProviderFeeType[];
-    transactionNumber: number;
-    operation: 'view' | 'create' | 'edit';
-    selectTransactionToEdit?: (
-        transaction: GroupTransaction | undefined,
-    ) => void;
-    onSubmitForm: (data: GroupTransactionDetailInputs) => void;
-    onCancel: () => void;
-};
-
-export function GroupTransactionItemDetails(props: Props) {
+export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
     const {
-        transaction,
-        transactionNumber,
+        item,
+        itemNumber,
         fixedIncomes,
-        selectTransactionToEdit,
+        setSelectedItem,
         onCancel,
         onSubmitForm,
         operation,
@@ -104,7 +83,7 @@ export function GroupTransactionItemDetails(props: Props) {
         return label;
     }
     const fixedIncome = fixedIncomes.find(
-        ({ id }) => id === transaction?.fixedIncomeTransaction?.assetId,
+        ({ id }) => id === item?.fixedIncomeTransaction?.assetId,
     );
 
     const {
@@ -114,16 +93,16 @@ export function GroupTransactionItemDetails(props: Props) {
         register,
         watch,
         formState: { errors },
-    } = useForm<GroupTransactionDetailInputs>({
+    } = useForm<GroupTransactionFormInputs>({
         defaultValues: {
-            type: transaction?.type,
+            type: item?.type,
             entryTime: convertToDateTimeLocalFormat(
-                transaction?.entryTime ?? new Date(),
+                item?.entryTime ?? new Date(),
             ),
-            cashAmount: transaction?.cashTransaction?.amount,
+            cashAmount: item?.cashTransaction?.amount,
             fixedIncomeId: fixedIncome?.id,
-            fixedIncomeAmount: transaction?.fixedIncomeTransaction?.amount,
-            fees: transaction?.fees,
+            fixedIncomeAmount: item?.fixedIncomeTransaction?.amount,
+            fees: item?.fees,
         },
     });
 
@@ -146,7 +125,7 @@ export function GroupTransactionItemDetails(props: Props) {
         fees,
     );
 
-    const onSubmit: SubmitHandler<GroupTransactionDetailInputs> = data => {
+    const onSubmit: SubmitHandler<GroupTransactionFormInputs> = data => {
         onSubmitForm({
             ...data,
             cashBalanceChange,
@@ -274,11 +253,11 @@ export function GroupTransactionItemDetails(props: Props) {
     );
     return (
         <ItemDetails
-            item={transaction}
+            item={item}
             itemName="Transaction"
             operation={operation}
-            itemNumber={transactionNumber}
-            selectItemToEdit={() => selectTransactionToEdit?.(transaction)}
+            itemNumber={itemNumber}
+            setSelectedItem={() => setSelectedItem?.(item)}
             formInputs={formInputs}
             performSubmit={performSubmit}
             handleCancel={handleCancel}

@@ -12,18 +12,18 @@ import {
     UseFormWatch,
 } from 'react-hook-form';
 import { RWANumberInput } from '../../inputs/number-input';
-import { GroupTransactionDetailInputs } from './group-transaction-item-details';
+import { GroupTransactionFormInputs } from '../types';
 import { ServiceProviderAndFeeTypeTableInput } from './service-provider-fee-type-table-input';
 
 type Props<ControlInputs extends FieldValues> = {
-    feeInputs: FieldArrayWithId<GroupTransactionDetailInputs, 'fees'>[];
+    feeInputs: FieldArrayWithId<GroupTransactionFormInputs, 'fees'>[];
     serviceProviderFeeTypes: ServiceProviderFeeType[];
-    register: UseFormRegister<GroupTransactionDetailInputs>;
+    register: UseFormRegister<GroupTransactionFormInputs>;
     control: Control<ControlInputs>;
-    watch: UseFormWatch<GroupTransactionDetailInputs>;
-    append: UseFieldArrayAppend<GroupTransactionDetailInputs, 'fees'>;
+    watch: UseFormWatch<GroupTransactionFormInputs>;
+    append: UseFieldArrayAppend<GroupTransactionFormInputs, 'fees'>;
     remove: UseFieldArrayRemove;
-    errors: FieldErrors<GroupTransactionDetailInputs>;
+    errors: FieldErrors<GroupTransactionFormInputs>;
     isViewOnly: boolean;
 };
 

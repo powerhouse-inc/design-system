@@ -1,6 +1,5 @@
-import { CalendarDate, parseDate } from '@internationalized/date';
+import { parseDate } from '@internationalized/date';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { FixedIncome, FixedIncomeType, SPV } from '../../../types';
 import {
     RWAFormRow,
     RWATableDatePicker,
@@ -9,45 +8,24 @@ import {
 } from '../../inputs';
 import { RWANumberInput } from '../../inputs/number-input';
 import { ItemDetails } from '../item-details';
+import { AssetDetailsProps, AssetFormInputs } from '../types';
 
-export type RWAAssetDetailInputs = {
-    fixedIncomeTypeId: FixedIncomeType['id'];
-    spvId: SPV['id'];
-    maturity: CalendarDate;
-    name: string;
-    ISIN?: string;
-    CUSIP?: string;
-    coupon?: number;
-};
-
-type Props = {
-    asset: FixedIncome | undefined;
-    assetNumber: number;
-    operation: 'view' | 'create' | 'edit';
-    fixedIncomeTypes: FixedIncomeType[];
-    spvs: SPV[];
-    onCancel: () => void;
-    selectAssetToEdit?: (asset: FixedIncome | undefined) => void;
-    onSubmitForm: (data: RWAAssetDetailInputs) => void;
-    hideNonEditableFields?: boolean;
-};
-
-export function AssetItemDetails(props: Props) {
+export function AssetDetails(props: AssetDetailsProps) {
     const {
-        asset,
-        assetNumber,
+        item,
+        itemNumber,
+        operation,
         fixedIncomeTypes,
         spvs,
-        selectAssetToEdit,
+        setSelectedItem,
         onCancel,
         onSubmitForm,
-        operation,
     } = props;
 
     const fixedIncomeType = fixedIncomeTypes.find(
-        ({ id }) => id === asset?.fixedIncomeTypeId,
+        ({ id }) => id === item?.fixedIncomeTypeId,
     );
-    const spv = spvs.find(({ id }) => id === asset?.spvId);
+    const spv = spvs.find(({ id }) => id === item?.spvId);
 
     const {
         register,
@@ -55,21 +33,21 @@ export function AssetItemDetails(props: Props) {
         control,
         reset,
         formState: { errors },
-    } = useForm<RWAAssetDetailInputs>({
+    } = useForm<AssetFormInputs>({
         defaultValues: {
             fixedIncomeTypeId: fixedIncomeType?.id ?? fixedIncomeTypes[0].id,
             spvId: spv?.id ?? spvs[0].id,
-            name: asset?.name,
-            maturity: asset?.maturity
-                ? parseDate(asset.maturity.split('T')[0])
+            name: item?.name,
+            maturity: item?.maturity
+                ? parseDate(item.maturity.split('T')[0])
                 : undefined,
-            ISIN: asset?.ISIN,
-            CUSIP: asset?.CUSIP,
-            coupon: asset?.coupon,
+            ISIN: item?.ISIN,
+            CUSIP: item?.CUSIP,
+            coupon: item?.coupon,
         },
     });
 
-    const onSubmit: SubmitHandler<RWAAssetDetailInputs> = data => {
+    const onSubmit: SubmitHandler<AssetFormInputs> = data => {
         onSubmitForm(data);
     };
 
@@ -87,7 +65,7 @@ export function AssetItemDetails(props: Props) {
             <RWAFormRow
                 label="Asset ID"
                 hideLine={operation !== 'view'}
-                value={asset?.id}
+                value={item?.id}
             />
             <RWAFormRow
                 label="Asset Name"
@@ -188,22 +166,22 @@ export function AssetItemDetails(props: Props) {
                     <RWAFormRow
                         label="Notional"
                         hideLine={operation !== 'view'}
-                        value={asset?.notional}
+                        value={item?.notional}
                     />
                     <RWAFormRow
                         label="Purchase Date"
                         hideLine={operation !== 'view'}
-                        value={asset?.purchaseDate}
+                        value={item?.purchaseDate}
                     />
                     <RWAFormRow
                         label="Purchase Price"
                         hideLine={operation !== 'view'}
-                        value={asset?.purchasePrice}
+                        value={item?.purchasePrice}
                     />
                     <RWAFormRow
                         label="Purchase Proceeds"
                         hideLine={operation !== 'view'}
-                        value={asset?.purchaseProceeds}
+                        value={item?.purchaseProceeds}
                     />
                 </>
             )}
@@ -212,11 +190,11 @@ export function AssetItemDetails(props: Props) {
 
     return (
         <ItemDetails
-            item={asset}
+            item={item}
             itemName="Asset"
             operation={operation}
-            itemNumber={assetNumber}
-            selectItemToEdit={() => selectAssetToEdit?.(asset)}
+            itemNumber={itemNumber}
+            setSelectedItem={setSelectedItem}
             formInputs={formInputs}
             performSubmit={performSubmit}
             handleCancel={handleCancel}

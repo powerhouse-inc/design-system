@@ -1,50 +1,26 @@
 import { Icon } from '@/powerhouse';
-import { ComponentType, useRef } from 'react';
+import { useRef } from 'react';
 import { FieldValues } from 'react-hook-form';
 import { twJoin, twMerge } from 'tailwind-merge';
 import {
     IndexCell,
     MoreDetailsCell,
     RWATableCell,
-    RWATableProps,
     TableBase,
     useSortTableItems,
 } from '.';
 import { RWATableRow } from './expandable-row';
-import {
-    ColumnCountByTableWidth,
-    SpecialColumns,
-    TableColumn,
-    TableItem,
-} from './types';
+import { SpecialColumns, TableColumn, TableItem, TableProps } from './types';
 import { useColumnPriority } from './useColumnPriority';
 import { handleTableDatum } from './utils';
-
-export type TableProps<
-    TItem extends TableItem,
-    TFieldValues extends FieldValues = FieldValues,
-> = Omit<RWATableProps<TItem>, 'header' | 'renderRow'> & {
-    tableItemName: string;
-    columns: TableColumn<TItem>[];
-    tableData: TItem[] | undefined;
-    columnCountByTableWidth: ColumnCountByTableWidth;
-    expandedRowId: string | undefined;
-    showNewItemForm: boolean;
-    setShowNewItemForm: (show: boolean) => void;
-    toggleExpandedRow: (id: string) => void;
-    onCancelEdit: () => void;
-    onSubmitEdit: (data: TFieldValues) => void;
-    onSubmitCreate: (data: TFieldValues) => void;
-    editForm: ComponentType<{ itemId: string; index: number }>;
-    createForm: ComponentType;
-};
 
 export function Table<
     TItem extends TableItem,
     TFieldValues extends FieldValues = FieldValues,
->(props: TableProps<TItem, TFieldValues>) {
+    TTableData extends TableItem = TItem,
+>(props: TableProps<TItem, TFieldValues, TTableData>) {
     const {
-        tableItemName,
+        itemName,
         columns,
         tableData,
         columnCountByTableWidth,
@@ -71,8 +47,8 @@ export function Table<
     });
 
     const renderRow = (
-        item: TItem,
-        columns: TableColumn<TItem & SpecialColumns>[],
+        item: TTableData,
+        columns: TableColumn<TTableData & SpecialColumns>[],
         index: number,
     ) => {
         return (
@@ -136,7 +112,7 @@ export function Table<
                 onClick={() => setShowNewItemForm(true)}
                 className="flex h-11 w-full items-center justify-center gap-x-2 rounded-b-lg border-x border-b border-gray-300 bg-white text-sm font-semibold text-gray-900"
             >
-                <span>Create {tableItemName}</span>
+                <span>Create {itemName}</span>
                 <Icon name="plus" size={14} />
             </button>
             {showNewItemForm && (

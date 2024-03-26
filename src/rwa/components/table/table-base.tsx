@@ -1,29 +1,13 @@
-import { DivProps, Icon, mergeClassNameProps } from '@/powerhouse';
+import { Icon, mergeClassNameProps } from '@/powerhouse';
 import { fixedForwardRef } from '@/powerhouse/utils/fixedForwardRef';
 import { Order } from 'natural-orderby';
 import React, { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { TableColumn } from './types';
-
-export type SortDirection = 'asc' | 'desc';
-
-export interface RWATableProps<TItem extends Record<string, any>>
-    extends DivProps {
-    columns: TableColumn<TItem>[];
-    tableData?: TItem[];
-    renderRow?: (
-        item: TItem,
-        columns: TableColumn<TItem>[],
-        index: number,
-    ) => JSX.Element;
-    children?: React.ReactNode;
-    onClickSort?: (key: string, direction: SortDirection) => void;
-    footer?: React.ReactNode;
-}
+import { SortDirection, TableBaseProps, TableItem } from './types';
 
 export const TableBase = fixedForwardRef(function TableBase<
-    TItem extends Record<string, any>,
->(props: RWATableProps<TItem>, ref: React.ForwardedRef<HTMLDivElement>) {
+    TItem extends TableItem,
+>(props: TableBaseProps<TItem>, ref: React.ForwardedRef<HTMLDivElement>) {
     const {
         children,
         tableData,
@@ -72,7 +56,7 @@ export const TableBase = fixedForwardRef(function TableBase<
                                         setSortDirection(sortDir);
                                         setSortKey(column.key);
 
-                                        onClickSort?.(column.key, sortDir);
+                                        onClickSort(column.key, sortDir);
                                     }}
                                     key={column.key}
                                 >
@@ -98,11 +82,9 @@ export const TableBase = fixedForwardRef(function TableBase<
                     </thead>
                     <tbody>
                         {children}
-                        {tableData &&
-                            renderRow &&
-                            tableData.map((item, index) =>
-                                renderRow(item, columns, index),
-                            )}
+                        {tableData?.map((item, index) =>
+                            renderRow(item, columns, index),
+                        )}
                     </tbody>
                 </table>
             </div>

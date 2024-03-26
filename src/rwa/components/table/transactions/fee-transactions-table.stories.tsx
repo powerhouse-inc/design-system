@@ -6,8 +6,8 @@ import {
 } from '@/rwa/mocks';
 import { Meta, StoryObj } from '@storybook/react';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { GroupTransactionFormInputs } from '../types';
 import { FeeTransactionsTable } from './fee-transactions-table';
-import { GroupTransactionDetailInputs } from './group-transaction-item-details';
 
 const meta = {
     title: 'RWA/Components/Fee Transactions Table',
@@ -34,7 +34,7 @@ export const Primary: Story = {
             register,
             watch,
             formState: { errors },
-        } = useForm<GroupTransactionDetailInputs>({
+        } = useForm<GroupTransactionFormInputs>({
             defaultValues: {
                 fees: transaction.fees,
             },
