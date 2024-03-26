@@ -46,7 +46,7 @@ export function ServiceProviderFeeTypeDetails(
     const formInputs = () => (
         <div>
             <RWAFormRow
-                label="ServiceP Provider ID"
+                label="Service Provider ID"
                 hideLine={operation !== 'view'}
                 value={item?.id}
             />

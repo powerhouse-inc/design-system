@@ -118,6 +118,13 @@ export type SPVsTableProps = Pick<TableProps<SPV>, PropsToKeepFromTable> & {
     spvs: SPV[];
 };
 
+export type FixedIncomeTypesTableProps = Pick<
+    TableProps<FixedIncomeType>,
+    PropsToKeepFromTable
+> & {
+    spvs: FixedIncomeType[];
+};
+
 export type ItemDetailsFormProps<
     TFieldValues extends FieldValues = FieldValues,
 > = Pick<UseFormReturn<TFieldValues>, 'handleSubmit' | 'reset'> & {
@@ -188,6 +195,13 @@ export type SPVDetailsProps = Pick<
     onSubmitForm: (data: SPVFormInputs) => void;
 };
 
+export type FixedIncomeTypeDetailsProps = Pick<
+    ItemDetailsProps<FixedIncomeType>,
+    PropsToKeepFromItemDetails
+> & {
+    onSubmitForm: (data: FixedIncomeTypeFormInputs) => void;
+};
+
 export type ServiceProviderFeeTypeFormInputs = {
     name: InputMaybe<string>;
     feeType: InputMaybe<string>;
@@ -220,5 +234,9 @@ export type AccountFormInputs = {
 };
 
 export type SPVFormInputs = {
+    name: InputMaybe<string>;
+};
+
+export type FixedIncomeTypeFormInputs = {
     name: InputMaybe<string>;
 };
