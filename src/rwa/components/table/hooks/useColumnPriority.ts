@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ColumnCountByTableWidth, TableColumn, TableItem } from './types';
+import { ColumnCountByTableWidth, TableColumn, TableItem } from '../types';
 
 type Props<TItem extends TableItem> = {
     columnCountByTableWidth: ColumnCountByTableWidth;

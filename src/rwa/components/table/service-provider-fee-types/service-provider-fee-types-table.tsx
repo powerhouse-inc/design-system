@@ -1,4 +1,4 @@
-import { Table } from '../table';
+import { Table } from '../base/table';
 import { ServiceProviderFeeTypesTableProps } from '../types';
 import { getItemById } from '../utils';
 import { ServiceProviderFeeTypeDetails } from './service-provider-fee-type-details';

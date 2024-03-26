@@ -1,7 +1,7 @@
 import { Account } from '@/rwa';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { RWAFormRow, RWATableSelect, RWATableTextInput } from '../../inputs';
-import { ItemDetails } from '../item-details';
+import { ItemDetails } from '../base/item-details';
 import {
     ServiceProviderFeeTypeDetailsProps,
     ServiceProviderFeeTypeFormInputs,

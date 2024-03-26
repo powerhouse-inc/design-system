@@ -4,8 +4,8 @@ import { ComponentPropsWithoutRef, useCallback, useState } from 'react';
 import { SPV } from '@/rwa';
 import { mockSPVs } from '@/rwa/mocks';
 import { utils } from 'document-model/document';
+import { getColumnCount } from '../hooks/useColumnPriority';
 import { SPVFormInputs } from '../types';
-import { getColumnCount } from '../useColumnPriority';
 import { SPVsTable } from './spvs-table';
 
 const meta: Meta<typeof SPVsTable> = {

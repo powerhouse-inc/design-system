@@ -1,4 +1,4 @@
-import { Table } from '../table';
+import { Table } from '../base/table';
 import { FixedIncomeTypesTableProps } from '../types';
 import { getItemById } from '../utils';
 import { FixedIncomeTypeDetails } from './fixed-income-type-details';

@@ -1,6 +1,6 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { RWAFormRow, RWATableTextInput } from '../../inputs';
-import { ItemDetails } from '../item-details';
+import { ItemDetails } from '../base/item-details';
 import { SPVDetailsProps, SPVFormInputs } from '../types';
 
 export function SPVDetails(props: SPVDetailsProps) {

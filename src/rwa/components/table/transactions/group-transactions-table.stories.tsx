@@ -8,8 +8,8 @@ import {
 import { mockGroupTransactions } from '@/rwa/mocks/transactions';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useCallback, useState } from 'react';
+import { getColumnCount } from '../hooks/useColumnPriority';
 import { GroupTransactionsTableProps } from '../types';
-import { getColumnCount } from '../useColumnPriority';
 import { GroupTransactionsTable } from './group-transactions-table';
 
 const meta: Meta<typeof GroupTransactionsTable> = {

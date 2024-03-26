@@ -1,5 +1,5 @@
 import { formatDateForDisplay } from '@/rwa';
-import { FormattedNumber } from './formatted-number';
+import { FormattedNumber } from './base/formatted-number';
 import { TableItem } from './types';
 
 export function isISODate(str: string) {

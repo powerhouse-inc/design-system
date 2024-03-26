@@ -4,8 +4,8 @@ import { ComponentPropsWithoutRef, useCallback, useState } from 'react';
 import { FixedIncomeType } from '@/rwa';
 import { mockFixedIncomeTypes } from '@/rwa/mocks';
 import { utils } from 'document-model/document';
+import { getColumnCount } from '../hooks/useColumnPriority';
 import { FixedIncomeTypeFormInputs } from '../types';
-import { getColumnCount } from '../useColumnPriority';
 import { FixedIncomeTypesTable } from './fixed-income-types-table';
 
 const meta: Meta<typeof FixedIncomeTypesTable> = {

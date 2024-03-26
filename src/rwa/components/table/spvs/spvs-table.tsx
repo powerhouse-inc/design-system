@@ -1,4 +1,4 @@
-import { Table } from '../table';
+import { Table } from '../base/table';
 import { SPVsTableProps } from '../types';
 import { getItemById } from '../utils';
 import { SPVDetails } from './spv-details';

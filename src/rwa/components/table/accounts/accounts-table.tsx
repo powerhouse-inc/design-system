@@ -1,4 +1,4 @@
-import { Table } from '../table';
+import { Table } from '../base/table';
 import { AccountsTableProps } from '../types';
 import { getItemById } from '../utils';
 import { AccountDetails } from './account-details';

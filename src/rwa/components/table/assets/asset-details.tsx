@@ -3,7 +3,7 @@ import { convertToDateTimeLocalFormat } from '@/rwa';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { RWAFormRow, RWATableSelect, RWATableTextInput } from '../../inputs';
 import { RWANumberInput } from '../../inputs/number-input';
-import { ItemDetails } from '../item-details';
+import { ItemDetails } from '../base/item-details';
 import { AssetDetailsProps, AssetFormInputs } from '../types';
 
 export function AssetDetails(props: AssetDetailsProps) {

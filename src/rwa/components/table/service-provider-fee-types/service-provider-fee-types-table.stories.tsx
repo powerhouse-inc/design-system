@@ -4,8 +4,8 @@ import { ComponentPropsWithoutRef, useCallback, useState } from 'react';
 import { ServiceProviderFeeType } from '@/rwa';
 import { mockAccounts, mockServiceProviderFeeTypes } from '@/rwa/mocks';
 import { utils } from 'document-model/document';
+import { getColumnCount } from '../hooks/useColumnPriority';
 import { ServiceProviderFeeTypeFormInputs } from '../types';
-import { getColumnCount } from '../useColumnPriority';
 import { ServiceProviderFeeTypesTable } from './service-provider-fee-types-table';
 
 const meta: Meta<typeof ServiceProviderFeeTypesTable> = {

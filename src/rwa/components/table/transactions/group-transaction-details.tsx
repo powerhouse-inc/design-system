@@ -13,8 +13,8 @@ import { InputMaybe } from 'document-model/document';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { RWAFormRow, RWATableSelect } from '../../inputs';
 import { RWANumberInput } from '../../inputs/number-input';
-import { FormattedNumber } from '../formatted-number';
-import { ItemDetails } from '../item-details';
+import { FormattedNumber } from '../base/formatted-number';
+import { ItemDetails } from '../base/item-details';
 import {
     GroupTransactionDetailsProps,
     GroupTransactionFormInputs,

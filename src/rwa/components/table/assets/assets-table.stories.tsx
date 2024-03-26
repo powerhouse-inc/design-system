@@ -4,8 +4,8 @@ import { utils } from 'document-model/document';
 import { ComponentPropsWithoutRef, useCallback, useState } from 'react';
 
 import { mockFixedIncomes, mockFixedIncomeTypes, mockSPVs } from '@/rwa/mocks';
+import { getColumnCount } from '../hooks/useColumnPriority';
 import { AssetFormInputs } from '../types';
-import { getColumnCount } from '../useColumnPriority';
 import { AssetsTable } from './assets-table';
 
 const meta: Meta<typeof AssetsTable> = {

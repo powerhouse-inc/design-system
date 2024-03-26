@@ -4,8 +4,8 @@ import { ComponentPropsWithoutRef, useCallback, useState } from 'react';
 import { Account } from '@/rwa';
 import { mockAccounts } from '@/rwa/mocks';
 import { utils } from 'document-model/document';
+import { getColumnCount } from '../hooks/useColumnPriority';
 import { AccountFormInputs } from '../types';
-import { getColumnCount } from '../useColumnPriority';
 import { AccountsTable } from './accounts-table';
 
 const meta: Meta<typeof AccountsTable> = {

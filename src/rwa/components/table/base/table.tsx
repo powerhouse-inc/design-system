@@ -9,11 +9,11 @@ import {
     TableBase,
     useSortTableItems,
 } from '.';
-import { defaultColumnCountByTableWidth } from './constants';
+import { defaultColumnCountByTableWidth } from '../constants';
+import { useColumnPriority } from '../hooks/useColumnPriority';
+import { SpecialColumns, TableColumn, TableItem, TableProps } from '../types';
+import { handleTableDatum } from '../utils';
 import { RWATableRow } from './expandable-row';
-import { SpecialColumns, TableColumn, TableItem, TableProps } from './types';
-import { useColumnPriority } from './useColumnPriority';
-import { handleTableDatum } from './utils';
 
 export function Table<
     TItem extends TableItem,
