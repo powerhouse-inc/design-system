@@ -1,16 +1,16 @@
-import { FixedIncome } from '@/rwa';
 import type { Meta, StoryObj } from '@storybook/react';
-import { utils } from 'document-model/document';
 import { ComponentPropsWithoutRef, useCallback, useState } from 'react';
 
-import { mockFixedIncomes, mockFixedIncomeTypes, mockSPVs } from '@/rwa/mocks';
-import { AssetFormInputs } from '../types';
+import { SPV } from '@/rwa';
+import { mockSPVs } from '@/rwa/mocks';
+import { utils } from 'document-model/document';
+import { SPVFormInputs } from '../types';
 import { getColumnCount } from '../useColumnPriority';
-import { AssetsTable } from './assets-table';
+import { SPVsTable } from './spvs-table';
 
-const meta: Meta<typeof AssetsTable> = {
-    title: 'RWA/Components/Assets Table',
-    component: AssetsTable,
+const meta: Meta<typeof SPVsTable> = {
+    title: 'RWA/Components/SPVs Table',
+    component: SPVsTable,
 };
 
 export default meta;
@@ -24,28 +24,15 @@ const columnCountByTableWidth = {
     984: 8,
 };
 
-type FixedIncomesTableProps = ComponentPropsWithoutRef<typeof AssetsTable>;
-
-function createAssetFromFormInputs(data: AssetFormInputs) {
-    const id = utils.hashKey();
-    const maturity = data.maturity.toString();
-
-    return {
-        ...data,
-        id,
-        maturity,
-    };
-}
+type SPVsTableProps = ComponentPropsWithoutRef<typeof SPVsTable>;
 
 export const Primary: Story = {
     args: {
-        assets: mockFixedIncomes,
-        fixedIncomeTypes: mockFixedIncomeTypes,
         spvs: mockSPVs,
     },
     render: function Wrapper(args) {
         const [expandedRowId, setExpandedRowId] = useState<string>();
-        const [selectedItem, setSelectedItem] = useState<FixedIncome>();
+        const [selectedItem, setSelectedItem] = useState<SPV>();
         const [showNewItemForm, setShowNewItemForm] = useState(false);
 
         const toggleExpandedRow = useCallback(
@@ -55,27 +42,36 @@ export const Primary: Story = {
             [expandedRowId],
         );
 
-        const onSubmitEdit: FixedIncomesTableProps['onSubmitEdit'] =
-            useCallback(data => {
-                const asset = createAssetFromFormInputs(
-                    data as AssetFormInputs,
-                );
-                console.log({ asset, data });
+        function createSPVFromFormInputs(data: SPVFormInputs) {
+            const id = utils.hashKey();
+
+            return {
+                ...data,
+                id,
+            };
+        }
+
+        const onSubmitEdit: SPVsTableProps['onSubmitEdit'] = useCallback(
+            data => {
+                const account = createSPVFromFormInputs(data as SPVFormInputs);
+                console.log({ account, data });
                 setSelectedItem(undefined);
-            }, []);
+            },
+            [],
+        );
 
-        const onSubmitCreate: FixedIncomesTableProps['onSubmitCreate'] =
-            useCallback(data => {
-                const asset = createAssetFromFormInputs(
-                    data as AssetFormInputs,
-                );
-                console.log({ asset, data });
+        const onSubmitCreate: SPVsTableProps['onSubmitCreate'] = useCallback(
+            data => {
+                const account = createSPVFromFormInputs(data as SPVFormInputs);
+                console.log({ account, data });
                 setShowNewItemForm(false);
-            }, []);
+            },
+            [],
+        );
 
-        const argsWithHandlers: FixedIncomesTableProps = {
+        const argsWithHandlers: SPVsTableProps = {
             ...args,
-            itemName: 'Asset',
+            itemName: 'SPV',
             expandedRowId,
             selectedItem,
             showNewItemForm,
@@ -89,7 +85,7 @@ export const Primary: Story = {
             <div className="flex flex-col gap-4">
                 <div className="w-screen">
                     <p>parent element width: 100%</p>
-                    <AssetsTable {...argsWithHandlers} />
+                    <SPVsTable {...argsWithHandlers} />
                 </div>
                 {Object.keys(columnCountByTableWidth)
                     .map(Number)
@@ -101,7 +97,7 @@ export const Primary: Story = {
                                 column count:{' '}
                                 {getColumnCount(width, columnCountByTableWidth)}
                             </p>
-                            <AssetsTable {...argsWithHandlers} />
+                            <SPVsTable {...argsWithHandlers} />
                         </div>
                     ))}
             </div>
