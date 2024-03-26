@@ -13,7 +13,7 @@ import {
 import { CalendarDate } from '@internationalized/date';
 import { InputMaybe } from 'document-model/document';
 import { ComponentType, ReactNode } from 'react';
-import { FieldValues } from 'react-hook-form';
+import { FieldValues, SubmitHandler, UseFormReturn } from 'react-hook-form';
 
 export type TableItem = {
     id: string;
@@ -109,22 +109,32 @@ export type ServiceProviderFeeTypesTableProps = Pick<
     accounts: Account[];
 };
 
-export type ItemDetailsProps<TItem extends TableItem> = DivProps & {
-    item: TItem | undefined;
-    itemName: string;
-    operation: 'view' | 'create' | 'edit';
-    itemNumber: number;
-    formInputs: ComponentType;
-    setSelectedItem?: (item: TItem | undefined) => void;
-    performSubmit: () => void;
-    handleCancel: () => void;
+export type ItemDetailsFormProps<
+    TFieldValues extends FieldValues = FieldValues,
+> = Pick<UseFormReturn<TFieldValues>, 'handleSubmit' | 'reset'> & {
+    onSubmit: SubmitHandler<TFieldValues>;
 };
+
+export type ItemDetailsProps<
+    TItem extends TableItem,
+    TFieldValues extends FieldValues = FieldValues,
+> = Omit<DivProps, 'onSubmit'> &
+    ItemDetailsFormProps<TFieldValues> & {
+        item: TItem | undefined;
+        itemName: string;
+        operation: 'view' | 'create' | 'edit';
+        itemNumber: number;
+        formInputs: ComponentType;
+        setSelectedItem?: (item: TItem | undefined) => void;
+        onCancel: () => void;
+    };
 
 export type PropsToKeepFromItemDetails =
     | 'item'
     | 'itemNumber'
     | 'operation'
-    | 'setSelectedItem';
+    | 'setSelectedItem'
+    | 'onCancel';
 
 export type AssetDetailsProps = Pick<
     ItemDetailsProps<FixedIncome>,
@@ -133,7 +143,6 @@ export type AssetDetailsProps = Pick<
     fixedIncomeTypes: FixedIncomeType[];
     spvs: SPV[];
     onSubmitForm: (data: AssetFormInputs) => void;
-    onCancel: () => void;
 };
 
 export type GroupTransactionDetailsProps = Pick<
@@ -143,7 +152,6 @@ export type GroupTransactionDetailsProps = Pick<
     fixedIncomes: FixedIncome[];
     serviceProviderFeeTypes: ServiceProviderFeeType[];
     onSubmitForm: (data: GroupTransactionFormInputs) => void;
-    onCancel: () => void;
 };
 
 export type ServiceProviderFeeTypeFormInputs = {
@@ -157,7 +165,6 @@ export type ServiceProviderFeeTypeDetailsProps = Pick<
     PropsToKeepFromItemDetails
 > & {
     accounts: Account[];
-    onCancel: () => void;
     onSubmitForm: (data: ServiceProviderFeeTypeFormInputs) => void;
 };
 

@@ -132,14 +132,6 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
         });
     };
 
-    const performSubmit = async () => {
-        await handleSubmit(onSubmit)();
-    };
-
-    function handleCancel() {
-        onCancel();
-        reset();
-    }
     const formInputs = () => (
         <>
             <div>
@@ -259,8 +251,10 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
             itemNumber={itemNumber}
             setSelectedItem={() => setSelectedItem?.(item)}
             formInputs={formInputs}
-            performSubmit={performSubmit}
-            handleCancel={handleCancel}
+            onSubmit={onSubmit}
+            handleSubmit={handleSubmit}
+            reset={reset}
+            onCancel={onCancel}
         />
     );
 }

@@ -1,24 +1,33 @@
 import { Icon, mergeClassNameProps } from '@/powerhouse';
+import { FieldValues } from 'react-hook-form';
 import { RWAButton } from '../button';
 import { ItemDetailsProps, TableItem } from './types';
 
-export function ItemDetails<TItem extends TableItem>(
-    props: ItemDetailsProps<TItem>,
-) {
+export function ItemDetails<
+    TItem extends TableItem,
+    TFieldValues extends FieldValues = FieldValues,
+>(props: ItemDetailsProps<TItem, TFieldValues>) {
     const {
         item,
         itemName,
         itemNumber,
         formInputs: FormInputs,
         operation = 'view',
+        handleSubmit,
+        onSubmit,
+        reset,
         setSelectedItem,
-        performSubmit,
-        handleCancel,
+        onCancel,
         ...restProps
     } = props;
 
     const isEditOperation = operation === 'edit';
     const isCreateOperation = operation === 'create';
+
+    function handleCancel() {
+        reset();
+        onCancel();
+    }
 
     return (
         <div
@@ -40,7 +49,7 @@ export function ItemDetails<TItem extends TableItem>(
                             Cancel
                         </RWAButton>
                         <RWAButton
-                            onClick={performSubmit}
+                            onClick={handleSubmit(onSubmit)}
                             iconPosition="right"
                             icon={<Icon name="save" size={16} />}
                         >

@@ -51,15 +51,6 @@ export function AssetDetails(props: AssetDetailsProps) {
         onSubmitForm(data);
     };
 
-    const performSubmit = async () => {
-        await handleSubmit(onSubmit)();
-    };
-
-    function handleCancel() {
-        reset();
-        onCancel();
-    }
-
     const formInputs = () => (
         <div>
             <RWAFormRow
@@ -194,10 +185,12 @@ export function AssetDetails(props: AssetDetailsProps) {
             itemName="Asset"
             operation={operation}
             itemNumber={itemNumber}
-            setSelectedItem={setSelectedItem}
+            setSelectedItem={() => setSelectedItem?.(item)}
             formInputs={formInputs}
-            performSubmit={performSubmit}
-            handleCancel={handleCancel}
+            handleSubmit={handleSubmit}
+            onSubmit={onSubmit}
+            reset={reset}
+            onCancel={onCancel}
         />
     );
 }

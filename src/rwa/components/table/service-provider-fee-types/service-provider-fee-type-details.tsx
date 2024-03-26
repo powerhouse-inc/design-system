@@ -40,15 +40,6 @@ export function ServiceProviderFeeTypeDetails(
         onSubmitForm(data);
     };
 
-    const performSubmit = async () => {
-        await handleSubmit(onSubmit)();
-    };
-
-    function handleCancel() {
-        reset();
-        onCancel();
-    }
-
     function makeAccountLabel(account: Account) {
         return `${account.label} (${account.id})`;
     }
@@ -123,9 +114,11 @@ export function ServiceProviderFeeTypeDetails(
             itemNumber={itemNumber}
             operation={operation}
             setSelectedItem={() => setSelectedItem?.(item)}
-            handleCancel={handleCancel}
-            performSubmit={performSubmit}
             formInputs={formInputs}
+            handleSubmit={handleSubmit}
+            onSubmit={onSubmit}
+            reset={reset}
+            onCancel={onCancel}
         />
     );
 }
