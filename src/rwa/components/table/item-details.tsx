@@ -1,5 +1,6 @@
-import { Icon, mergeClassNameProps } from '@/powerhouse';
+import { Icon } from '@/powerhouse';
 import { FieldValues } from 'react-hook-form';
+import { twMerge } from 'tailwind-merge';
 import { RWAButton } from '../button';
 import { ItemDetailsProps, TableItem } from './types';
 
@@ -11,14 +12,15 @@ export function ItemDetails<
         item,
         itemName,
         itemNumber,
+        className,
         formInputs: FormInputs,
         operation = 'view',
         handleSubmit,
         onSubmit,
         reset,
         setSelectedItem,
+        setShowNewItemForm,
         onCancel,
-        ...restProps
     } = props;
 
     const isEditOperation = operation === 'edit';
@@ -26,14 +28,16 @@ export function ItemDetails<
 
     function handleCancel() {
         reset();
-        onCancel();
+        onCancel?.();
+        if (operation === 'create') setShowNewItemForm?.(false);
+        else setSelectedItem?.(undefined);
     }
 
     return (
         <div
-            {...mergeClassNameProps(
-                restProps,
+            className={twMerge(
                 'flex flex-col overflow-hidden rounded-md border border-gray-300 bg-white',
+                className,
             )}
         >
             <div className="flex justify-between border-b border-gray-300 bg-gray-100 p-3 font-semibold text-gray-800">

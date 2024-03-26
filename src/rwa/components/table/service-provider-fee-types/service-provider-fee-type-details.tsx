@@ -10,15 +10,7 @@ import {
 export function ServiceProviderFeeTypeDetails(
     props: ServiceProviderFeeTypeDetailsProps,
 ) {
-    const {
-        item,
-        itemNumber,
-        accounts,
-        setSelectedItem,
-        onCancel,
-        onSubmitForm,
-        operation,
-    } = props;
+    const { accounts, onCancel, onSubmitForm, item, operation } = props;
 
     const account = accounts.find(({ id }) => id === item?.accountId);
 
@@ -107,18 +99,13 @@ export function ServiceProviderFeeTypeDetails(
         </div>
     );
 
-    return (
-        <ItemDetails
-            item={item}
-            itemName="Service Provider"
-            itemNumber={itemNumber}
-            operation={operation}
-            setSelectedItem={() => setSelectedItem?.(item)}
-            formInputs={formInputs}
-            handleSubmit={handleSubmit}
-            onSubmit={onSubmit}
-            reset={reset}
-            onCancel={onCancel}
-        />
-    );
+    const formProps = {
+        formInputs,
+        handleSubmit,
+        onSubmit,
+        reset,
+        onCancel,
+    };
+
+    return <ItemDetails {...props} {...formProps} />;
 }

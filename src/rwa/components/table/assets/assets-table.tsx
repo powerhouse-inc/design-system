@@ -1,16 +1,7 @@
-import { addDays } from 'date-fns';
 import { Table } from '../table';
 import { AssetTableProps } from '../types';
 import { getItemById } from '../utils';
 import { AssetDetails } from './asset-details';
-
-const columnCountByTableWidth = {
-    1520: 12,
-    1394: 11,
-    1239: 10,
-    1112: 9,
-    984: 8,
-};
 
 const columns = [
     { key: 'name' as const, label: 'Name', allowSorting: true },
@@ -50,81 +41,32 @@ const columns = [
 ];
 
 export function AssetsTable(props: AssetTableProps) {
-    const {
-        assets,
-        fixedIncomeTypes,
-        spvs,
-        expandedRowId,
-        selectedItem,
-        showNewItemForm,
-        toggleExpandedRow,
-        setSelectedItem,
-        onCancelEdit,
-        onSubmitCreate,
-        onSubmitEdit,
-        setShowNewItemForm,
-    } = props;
+    const { assets, selectedItem, onSubmitCreate, onSubmitEdit } = props;
 
-    const editForm = (props: { itemId: string; index: number }) => (
+    const editForm = ({ itemId, index }: { itemId: string; index: number }) => (
         <AssetDetails
-            item={getItemById(props.itemId, assets)}
-            itemNumber={props.index + 1}
-            fixedIncomeTypes={fixedIncomeTypes}
-            spvs={spvs}
-            operation={selectedItem?.id === props.itemId ? 'edit' : 'view'}
-            setSelectedItem={() => {
-                setSelectedItem(getItemById(props.itemId, assets));
-            }}
-            onCancel={() => {
-                onCancelEdit();
-            }}
-            onSubmitForm={data => {
-                onSubmitEdit(data);
-            }}
+            {...props}
+            item={getItemById(itemId, assets)}
+            itemNumber={index + 1}
+            operation={selectedItem?.id === itemId ? 'edit' : 'view'}
+            onSubmitForm={onSubmitEdit}
         />
     );
 
     const createForm = () => (
         <AssetDetails
-            item={{
-                id: '',
-                name: '',
-                fixedIncomeTypeId: fixedIncomeTypes[0].id,
-                spvId: spvs[0].id,
-                maturity: addDays(new Date(), 30).toISOString().split('T')[0],
-                notional: 0,
-                coupon: 0,
-                purchasePrice: 0,
-                purchaseDate: '',
-                totalDiscount: 0,
-                purchaseProceeds: 0,
-                salesProceeds: 0,
-                realizedSurplus: 0,
-            }}
+            {...props}
             itemNumber={assets.length + 1}
             operation="create"
-            fixedIncomeTypes={fixedIncomeTypes}
-            spvs={spvs}
-            onCancel={() => setShowNewItemForm(false)}
             onSubmitForm={onSubmitCreate}
         />
     );
 
     return (
         <Table
-            itemName="Asset"
+            {...props}
             tableData={assets}
             columns={columns}
-            columnCountByTableWidth={columnCountByTableWidth}
-            expandedRowId={expandedRowId}
-            showNewItemForm={showNewItemForm}
-            selectedItem={selectedItem}
-            setSelectedItem={setSelectedItem}
-            setShowNewItemForm={setShowNewItemForm}
-            toggleExpandedRow={toggleExpandedRow}
-            onCancelEdit={onCancelEdit}
-            onSubmitEdit={onSubmitEdit}
-            onSubmitCreate={onSubmitCreate}
             editForm={editForm}
             createForm={createForm}
         />

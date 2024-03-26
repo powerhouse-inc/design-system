@@ -5,14 +5,6 @@ import { GroupTransactionsTableProps } from '../types';
 import { getItemById } from '../utils';
 import { GroupTransactionDetails } from './group-transaction-details';
 
-const columnCountByTableWidth = {
-    1520: 12,
-    1394: 11,
-    1239: 10,
-    1112: 9,
-    984: 8,
-};
-
 const columns = [
     {
         key: 'entryTime' as const,
@@ -66,18 +58,9 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
     const {
         transactions,
         fixedIncomes,
-        cashAssets,
-        serviceProviderFeeTypes,
-        principalLenderAccountId,
-        expandedRowId,
         selectedItem,
-        showNewItemForm,
-        setSelectedItem,
-        setShowNewItemForm,
-        toggleExpandedRow,
-        onCancelEdit,
-        onSubmitEdit,
         onSubmitCreate,
+        onSubmitEdit,
     } = props;
 
     const tableData = useMemo(
@@ -85,71 +68,30 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
         [transactions, fixedIncomes],
     );
 
-    const editForm = (props: { itemId: string; index: number }) => (
+    const editForm = ({ itemId, index }: { itemId: string; index: number }) => (
         <GroupTransactionDetails
-            item={getItemById(props.itemId, transactions)}
-            fixedIncomes={fixedIncomes}
-            serviceProviderFeeTypes={serviceProviderFeeTypes}
-            itemNumber={props.index + 1}
-            operation={selectedItem?.id === props.itemId ? 'edit' : 'view'}
-            setSelectedItem={() => {
-                setSelectedItem(getItemById(props.itemId, transactions));
-            }}
-            onCancel={() => {
-                onCancelEdit();
-            }}
-            onSubmitForm={data => {
-                onSubmitEdit(data);
-            }}
+            {...props}
+            item={getItemById(itemId, transactions)}
+            itemNumber={index + 1}
+            operation={selectedItem?.id === itemId ? 'edit' : 'view'}
+            onSubmitForm={onSubmitEdit}
         />
     );
 
     const createForm = () => (
         <GroupTransactionDetails
-            item={{
-                id: '',
-                type: 'AssetPurchase',
-                cashTransaction: {
-                    id: '',
-                    assetId: cashAssets[0].id,
-                    amount: null,
-                    counterPartyAccountId: principalLenderAccountId,
-                },
-                fixedIncomeTransaction: {
-                    id: '',
-                    assetId: fixedIncomes[0].id,
-                    amount: null,
-                },
-                cashBalanceChange: 0,
-                entryTime: new Date().toISOString(),
-                fees: null,
-                feeTransactions: null,
-                interestTransaction: null,
-            }}
-            fixedIncomes={fixedIncomes}
-            serviceProviderFeeTypes={serviceProviderFeeTypes}
+            {...props}
             operation="create"
             itemNumber={transactions.length + 1}
-            onCancel={() => setShowNewItemForm(false)}
             onSubmitForm={onSubmitCreate}
         />
     );
 
     return (
         <Table
-            itemName="Group Transaction"
+            {...props}
             tableData={tableData}
             columns={columns}
-            columnCountByTableWidth={columnCountByTableWidth}
-            expandedRowId={expandedRowId}
-            selectedItem={selectedItem}
-            setSelectedItem={setSelectedItem}
-            showNewItemForm={showNewItemForm}
-            setShowNewItemForm={setShowNewItemForm}
-            toggleExpandedRow={toggleExpandedRow}
-            onCancelEdit={onCancelEdit}
-            onSubmitCreate={onSubmitCreate}
-            onSubmitEdit={onSubmitEdit}
             editForm={editForm}
             createForm={createForm}
         />

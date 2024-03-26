@@ -56,14 +56,13 @@ export type TableProps<
     columns: TableColumn<TTableData>[];
     tableData: TTableData[] | undefined;
     itemName: string;
-    columnCountByTableWidth: ColumnCountByTableWidth;
+    columnCountByTableWidth?: ColumnCountByTableWidth;
     expandedRowId: string | undefined;
     showNewItemForm: boolean;
     selectedItem: TItem | undefined;
     setSelectedItem: (item: TItem | undefined) => void;
     setShowNewItemForm: (show: boolean) => void;
-    toggleExpandedRow: (id: string) => void;
-    onCancelEdit: () => void;
+    toggleExpandedRow: (id: string | undefined) => void;
     onSubmitEdit: (data: TFieldValues) => void;
     onSubmitCreate: (data: TFieldValues) => void;
     editForm: ComponentType<{ itemId: string; index: number }>;
@@ -71,13 +70,13 @@ export type TableProps<
 };
 
 export type PropsToKeepFromTable =
+    | 'itemName'
     | 'expandedRowId'
     | 'selectedItem'
     | 'setSelectedItem'
     | 'showNewItemForm'
     | 'setShowNewItemForm'
     | 'toggleExpandedRow'
-    | 'onCancelEdit'
     | 'onSubmitEdit'
     | 'onSubmitCreate';
 
@@ -120,20 +119,23 @@ export type ItemDetailsProps<
     TFieldValues extends FieldValues = FieldValues,
 > = Omit<DivProps, 'onSubmit'> &
     ItemDetailsFormProps<TFieldValues> & {
-        item: TItem | undefined;
+        item?: TItem | undefined;
         itemName: string;
         operation: 'view' | 'create' | 'edit';
         itemNumber: number;
         formInputs: ComponentType;
         setSelectedItem?: (item: TItem | undefined) => void;
-        onCancel: () => void;
+        setShowNewItemForm?: (show: boolean) => void;
+        onCancel?: () => void;
     };
 
 export type PropsToKeepFromItemDetails =
     | 'item'
     | 'itemNumber'
+    | 'itemName'
     | 'operation'
     | 'setSelectedItem'
+    | 'setShowNewItemForm'
     | 'onCancel';
 
 export type AssetDetailsProps = Pick<

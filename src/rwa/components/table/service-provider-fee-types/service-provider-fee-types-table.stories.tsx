@@ -45,7 +45,7 @@ export const Primary: Story = {
         ] = useState(false);
 
         const toggleExpandedRow = useCallback(
-            (id: string) => {
+            (id: string | undefined) => {
                 setExpandedRowId(id === expandedRowId ? undefined : id);
             },
             [expandedRowId],
@@ -61,11 +61,6 @@ export const Primary: Story = {
                 id,
             };
         }
-
-        const onCancelEdit: ServiceProviderFeeTypesTableProps['onCancelEdit'] =
-            useCallback(() => {
-                setSelectedServiceProviderFeeTypeToEdit(undefined);
-            }, []);
 
         const onSubmitEdit: ServiceProviderFeeTypesTableProps['onSubmitEdit'] =
             useCallback(data => {
@@ -95,7 +90,6 @@ export const Primary: Story = {
             setShowNewServiceProviderFeeTypeForm,
             toggleExpandedRow,
             setSelectedServiceProviderFeeTypeToEdit,
-            onCancelEdit,
             onSubmitCreate,
             onSubmitEdit,
         };

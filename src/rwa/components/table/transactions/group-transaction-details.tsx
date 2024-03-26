@@ -47,14 +47,12 @@ function calculateCashBalanceChange(
 
 export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
     const {
-        item,
-        itemNumber,
         fixedIncomes,
-        setSelectedItem,
+        serviceProviderFeeTypes,
+        item,
+        operation,
         onCancel,
         onSubmitForm,
-        operation,
-        serviceProviderFeeTypes,
     } = props;
 
     const currentlySupportedGroupTransactionTypes = [
@@ -158,7 +156,6 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
                                 disabled: operation === 'view',
                             })}
                             name="entryTime"
-                            className="disabled:bg-transparent"
                         />
                     }
                 />
@@ -243,18 +240,14 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
             </div>
         </>
     );
-    return (
-        <ItemDetails
-            item={item}
-            itemName="Transaction"
-            operation={operation}
-            itemNumber={itemNumber}
-            setSelectedItem={() => setSelectedItem?.(item)}
-            formInputs={formInputs}
-            onSubmit={onSubmit}
-            handleSubmit={handleSubmit}
-            reset={reset}
-            onCancel={onCancel}
-        />
-    );
+
+    const formProps = {
+        formInputs,
+        handleSubmit,
+        onSubmit,
+        reset,
+        onCancel,
+    };
+
+    return <ItemDetails {...props} {...formProps} />;
 }

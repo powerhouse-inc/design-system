@@ -9,6 +9,7 @@ import {
     TableBase,
     useSortTableItems,
 } from '.';
+import { defaultColumnCountByTableWidth } from './constants';
 import { RWATableRow } from './expandable-row';
 import { SpecialColumns, TableColumn, TableItem, TableProps } from './types';
 import { useColumnPriority } from './useColumnPriority';
@@ -23,17 +24,13 @@ export function Table<
         itemName,
         columns,
         tableData,
-        columnCountByTableWidth,
+        columnCountByTableWidth = defaultColumnCountByTableWidth,
         expandedRowId,
         showNewItemForm,
         setShowNewItemForm,
         toggleExpandedRow,
-        onCancelEdit,
-        onSubmitEdit,
-        onSubmitCreate,
         editForm: EditForm,
         createForm: CreateForm,
-        ...restProps
     } = props;
 
     const tableContainerRef = useRef<HTMLDivElement>(null);
@@ -97,7 +94,6 @@ export function Table<
     return (
         <>
             <TableBase
-                {...restProps}
                 className={twJoin(
                     'rounded-b-none',
                     expandedRowId && 'max-h-max',

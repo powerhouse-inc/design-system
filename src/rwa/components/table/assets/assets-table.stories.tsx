@@ -9,7 +9,7 @@ import { getColumnCount } from '../useColumnPriority';
 import { AssetsTable } from './assets-table';
 
 const meta: Meta<typeof AssetsTable> = {
-    title: 'RWA/Components/RWAFixedIncomesTable',
+    title: 'RWA/Components/Assets Table',
     component: AssetsTable,
 };
 
@@ -45,21 +45,15 @@ export const Primary: Story = {
     },
     render: function Wrapper(args) {
         const [expandedRowId, setExpandedRowId] = useState<string>();
-        const [selectedAssetToEdit, setSelectedAssetToEdit] =
-            useState<FixedIncome>();
-        const [showNewAssetForm, setShowNewAssetForm] = useState(false);
+        const [selectedItem, setSelectedItem] = useState<FixedIncome>();
+        const [showNewItemForm, setShowNewItemForm] = useState(false);
 
         const toggleExpandedRow = useCallback(
-            (id: string) => {
+            (id: string | undefined) => {
                 setExpandedRowId(id === expandedRowId ? undefined : id);
             },
             [expandedRowId],
         );
-
-        const onCancelEdit: FixedIncomesTableProps['onCancelEdit'] =
-            useCallback(() => {
-                setSelectedAssetToEdit(undefined);
-            }, []);
 
         const onSubmitEdit: FixedIncomesTableProps['onSubmitEdit'] =
             useCallback(data => {
@@ -67,7 +61,7 @@ export const Primary: Story = {
                     data as AssetFormInputs,
                 );
                 console.log({ asset, data });
-                setSelectedAssetToEdit(undefined);
+                setSelectedItem(undefined);
             }, []);
 
         const onSubmitCreate: FixedIncomesTableProps['onSubmitCreate'] =
@@ -76,18 +70,18 @@ export const Primary: Story = {
                     data as AssetFormInputs,
                 );
                 console.log({ asset, data });
-                setShowNewAssetForm(false);
+                setShowNewItemForm(false);
             }, []);
 
-        const argsWithHandlers = {
+        const argsWithHandlers: FixedIncomesTableProps = {
             ...args,
+            itemName: 'Asset',
             expandedRowId,
-            selectedAssetToEdit,
-            showNewAssetForm,
-            setShowNewAssetForm,
+            selectedItem,
+            showNewItemForm,
+            setShowNewItemForm,
             toggleExpandedRow,
-            setSelectedAssetToEdit,
-            onCancelEdit,
+            setSelectedItem,
             onSubmitCreate,
             onSubmitEdit,
         };

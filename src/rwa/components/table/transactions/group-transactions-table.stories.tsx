@@ -45,14 +45,9 @@ export const Primary: Story = {
         const [showNewGroupTransactionForm, setShowNewGroupTransactionForm] =
             useState(false);
 
-        const toggleExpandedRow = useCallback((id: string) => {
+        const toggleExpandedRow = useCallback((id: string | undefined) => {
             setExpandedRowId(curr => (id === curr ? undefined : id));
         }, []);
-
-        const onCancelEdit: GroupTransactionsTableProps['onCancelEdit'] =
-            useCallback(() => {
-                setSelectedGroupTransactionToEdit(undefined);
-            }, []);
 
         const onSubmitEdit: GroupTransactionsTableProps['onSubmitEdit'] =
             useCallback(data => {
@@ -74,7 +69,6 @@ export const Primary: Story = {
             setSelectedGroupTransactionToEdit,
             showNewGroupTransactionForm,
             setShowNewGroupTransactionForm,
-            onCancelEdit,
             onSubmitEdit,
             onSubmitCreate,
         };

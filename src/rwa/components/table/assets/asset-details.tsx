@@ -1,26 +1,14 @@
-import { parseDate } from '@internationalized/date';
+import { DateTimeLocalInput } from '@/connect/components/date-time-input';
+import { convertToDateTimeLocalFormat } from '@/rwa';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import {
-    RWAFormRow,
-    RWATableDatePicker,
-    RWATableSelect,
-    RWATableTextInput,
-} from '../../inputs';
+import { RWAFormRow, RWATableSelect, RWATableTextInput } from '../../inputs';
 import { RWANumberInput } from '../../inputs/number-input';
 import { ItemDetails } from '../item-details';
 import { AssetDetailsProps, AssetFormInputs } from '../types';
 
 export function AssetDetails(props: AssetDetailsProps) {
-    const {
-        item,
-        itemNumber,
-        operation,
-        fixedIncomeTypes,
-        spvs,
-        setSelectedItem,
-        onCancel,
-        onSubmitForm,
-    } = props;
+    const { fixedIncomeTypes, spvs, onCancel, onSubmitForm, item, operation } =
+        props;
 
     const fixedIncomeType = fixedIncomeTypes.find(
         ({ id }) => id === item?.fixedIncomeTypeId,
@@ -38,9 +26,9 @@ export function AssetDetails(props: AssetDetailsProps) {
             fixedIncomeTypeId: fixedIncomeType?.id ?? fixedIncomeTypes[0].id,
             spvId: spv?.id ?? spvs[0].id,
             name: item?.name,
-            maturity: item?.maturity
-                ? parseDate(item.maturity.split('T')[0])
-                : undefined,
+            maturity: convertToDateTimeLocalFormat(
+                item?.maturity ?? new Date(),
+            ),
             ISIN: item?.ISIN,
             CUSIP: item?.CUSIP,
             coupon: item?.coupon,
@@ -115,10 +103,12 @@ export function AssetDetails(props: AssetDetailsProps) {
                 label="Maturity"
                 hideLine={operation !== 'view'}
                 value={
-                    <RWATableDatePicker
-                        control={control}
+                    <DateTimeLocalInput
+                        {...register('maturity', {
+                            required: true,
+                            disabled: operation === 'view',
+                        })}
                         name="maturity"
-                        disabled={operation === 'view'}
                     />
                 }
             />
@@ -179,18 +169,13 @@ export function AssetDetails(props: AssetDetailsProps) {
         </div>
     );
 
-    return (
-        <ItemDetails
-            item={item}
-            itemName="Asset"
-            operation={operation}
-            itemNumber={itemNumber}
-            setSelectedItem={() => setSelectedItem?.(item)}
-            formInputs={formInputs}
-            handleSubmit={handleSubmit}
-            onSubmit={onSubmit}
-            reset={reset}
-            onCancel={onCancel}
-        />
-    );
+    const formProps = {
+        formInputs,
+        handleSubmit,
+        onSubmit,
+        reset,
+        onCancel,
+    };
+
+    return <ItemDetails {...props} {...formProps} />;
 }
