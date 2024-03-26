@@ -27,24 +27,24 @@ export function FixedIncomeTypeDetails(props: FixedIncomeTypeDetailsProps) {
     const formInputs = () => (
         <div>
             <RWAFormRow
-                label="ServiceP Provider ID"
+                label="Fixed Income Type ID"
                 hideLine={operation !== 'view'}
                 value={item?.id}
             />
             <RWAFormRow
-                label="FixedIncomeType Label"
+                label="Fixed Income Type Name"
                 hideLine={operation !== 'view'}
                 value={
                     <RWATableTextInput
                         {...register('name', {
                             disabled: operation === 'view',
-                            required: 'FixedIncomeType name is required',
+                            required: 'Fixed Income Type name is required',
                         })}
                         aria-invalid={
                             errors.name?.type === 'required' ? 'true' : 'false'
                         }
                         errorMessage={errors.name?.message}
-                        placeholder="E.g. My FixedIncomeType name"
+                        placeholder="E.g. My Fixed Income Type name"
                     />
                 }
             />

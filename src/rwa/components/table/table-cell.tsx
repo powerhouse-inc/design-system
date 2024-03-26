@@ -12,7 +12,7 @@ export const RWATableCell: React.FC<ComponentPropsWithoutRef<'td'>> = props => (
 );
 
 export function IndexCell(props: { index: number }) {
-    return <RWATableCell>{props.index + 1}</RWATableCell>;
+    return <RWATableCell className="w-4">{props.index + 1}</RWATableCell>;
 }
 
 export function MoreDetailsCell(props: {
@@ -21,7 +21,7 @@ export function MoreDetailsCell(props: {
     toggleExpandedRow: (id: string) => void;
 }) {
     return (
-        <RWATableCell>
+        <RWATableCell className="w-4">
             <button
                 className="flex size-full items-center justify-center"
                 onClick={() => {
