@@ -35,14 +35,9 @@ export const Primary: Story = {
     },
     render: function Wrapper(args) {
         const [expandedRowId, setExpandedRowId] = useState<string>();
-        const [
-            selectedServiceProviderFeeTypeToEdit,
-            setSelectedServiceProviderFeeTypeToEdit,
-        ] = useState<ServiceProviderFeeType>();
-        const [
-            showNewServiceProviderFeeTypeForm,
-            setShowNewServiceProviderFeeTypeForm,
-        ] = useState(false);
+        const [selectedItem, setSelectedItem] =
+            useState<ServiceProviderFeeType>();
+        const [showNewItemForm, setShowNewItemForm] = useState(false);
 
         const toggleExpandedRow = useCallback(
             (id: string | undefined) => {
@@ -69,7 +64,7 @@ export const Primary: Story = {
                         data as ServiceProviderFeeTypeFormInputs,
                     );
                 console.log({ serviceProviderFeeType, data });
-                setSelectedServiceProviderFeeTypeToEdit(undefined);
+                setSelectedItem(undefined);
             }, []);
 
         const onSubmitCreate: ServiceProviderFeeTypesTableProps['onSubmitCreate'] =
@@ -79,17 +74,18 @@ export const Primary: Story = {
                         data as ServiceProviderFeeTypeFormInputs,
                     );
                 console.log({ serviceProviderFeeType, data });
-                setShowNewServiceProviderFeeTypeForm(false);
+                setShowNewItemForm(false);
             }, []);
 
-        const argsWithHandlers = {
+        const argsWithHandlers: ServiceProviderFeeTypesTableProps = {
             ...args,
+            itemName: 'Service Provider',
             expandedRowId,
-            selectedServiceProviderFeeTypeToEdit,
-            showNewServiceProviderFeeTypeForm,
-            setShowNewServiceProviderFeeTypeForm,
+            selectedItem,
+            showNewItemForm,
+            setShowNewItemForm,
             toggleExpandedRow,
-            setSelectedServiceProviderFeeTypeToEdit,
+            setSelectedItem,
             onSubmitCreate,
             onSubmitEdit,
         };
