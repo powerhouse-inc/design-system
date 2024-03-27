@@ -105,7 +105,7 @@ export function Table<
         <>
             <TableBase
                 className={twJoin(
-                    'rounded-b-none',
+                    'rounded-b-none bg-white',
                     expandedRowId && 'max-h-max',
                 )}
                 onClickSort={sortHandler}
