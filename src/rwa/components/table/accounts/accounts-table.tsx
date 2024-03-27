@@ -3,7 +3,6 @@ import { AccountDetails, AccountsTableProps, Table, getItemById } from '@/rwa';
 const columns = [
     { key: 'label' as const, label: 'Label', allowSorting: true },
     { key: 'reference' as const, label: 'Reference', allowSorting: true },
-    { key: 'id' as const, label: 'Account ID', allowSorting: true },
 ];
 
 export function AccountsTable(props: AccountsTableProps) {
