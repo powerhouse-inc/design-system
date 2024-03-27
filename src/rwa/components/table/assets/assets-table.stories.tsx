@@ -71,7 +71,6 @@ export const Primary: Story = {
 
         const argsWithHandlers: FixedIncomesTableProps = {
             ...args,
-            itemName: 'Asset',
             expandedRowId,
             selectedItem,
             showNewItemForm,

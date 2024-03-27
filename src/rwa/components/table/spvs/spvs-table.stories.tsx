@@ -71,7 +71,6 @@ export const Primary: Story = {
 
         const argsWithHandlers: SPVsTableProps = {
             ...args,
-            itemName: 'SPV',
             expandedRowId,
             selectedItem,
             showNewItemForm,

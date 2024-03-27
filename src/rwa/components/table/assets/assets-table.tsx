@@ -54,10 +54,12 @@ const columns = [
 
 export function AssetsTable(props: AssetsTableProps) {
     const { assets, selectedItem, onSubmitCreate, onSubmitEdit } = props;
+    const itemName = 'Asset';
 
     const editForm = ({ itemId, index }: { itemId: string; index: number }) => (
         <AssetDetails
             {...props}
+            itemName={itemName}
             item={getItemById(itemId, assets)}
             itemNumber={index + 1}
             operation={selectedItem?.id === itemId ? 'edit' : 'view'}
@@ -68,6 +70,7 @@ export function AssetsTable(props: AssetsTableProps) {
     const createForm = () => (
         <AssetDetails
             {...props}
+            itemName={itemName}
             itemNumber={assets.length + 1}
             operation="create"
             onSubmitForm={onSubmitCreate}
@@ -77,6 +80,7 @@ export function AssetsTable(props: AssetsTableProps) {
     return (
         <Table
             {...props}
+            itemName={itemName}
             tableData={assets}
             columns={columns}
             editForm={editForm}

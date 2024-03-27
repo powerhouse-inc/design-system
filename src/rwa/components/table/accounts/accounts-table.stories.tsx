@@ -69,7 +69,6 @@ export const Primary: Story = {
 
         const argsWithHandlers: AccountsTableProps = {
             ...args,
-            itemName: 'Account',
             expandedRowId,
             selectedItem,
             showNewItemForm,

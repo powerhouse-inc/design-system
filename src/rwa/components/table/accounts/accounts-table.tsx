@@ -8,10 +8,11 @@ const columns = [
 
 export function AccountsTable(props: AccountsTableProps) {
     const { accounts, selectedItem, onSubmitCreate, onSubmitEdit } = props;
-
+    const itemName = 'Account';
     const editForm = ({ itemId, index }: { itemId: string; index: number }) => (
         <AccountDetails
             {...props}
+            itemName={itemName}
             item={getItemById(itemId, accounts)}
             itemNumber={index + 1}
             operation={selectedItem?.id === itemId ? 'edit' : 'view'}
@@ -22,6 +23,7 @@ export function AccountsTable(props: AccountsTableProps) {
     const createForm = () => (
         <AccountDetails
             {...props}
+            itemName={itemName}
             itemNumber={accounts.length + 1}
             operation="create"
             onSubmitForm={onSubmitCreate}
@@ -31,6 +33,7 @@ export function AccountsTable(props: AccountsTableProps) {
     return (
         <Table
             {...props}
+            itemName={itemName}
             tableData={accounts}
             columns={columns}
             editForm={editForm}

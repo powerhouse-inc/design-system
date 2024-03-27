@@ -51,6 +51,8 @@ export function ServiceProviderFeeTypesTable(
         onSubmitEdit,
     } = props;
 
+    const itemName = 'Service Provider Fee Type';
+
     const tableData = useMemo(
         () =>
             makeServiceProviderFeeTypesTableData(
@@ -62,6 +64,7 @@ export function ServiceProviderFeeTypesTable(
     const editForm = ({ itemId, index }: { itemId: string; index: number }) => (
         <ServiceProviderFeeTypeDetails
             {...props}
+            itemName={itemName}
             item={getItemById(itemId, serviceProviderFeeTypes)}
             itemNumber={index + 1}
             operation={selectedItem?.id === itemId ? 'edit' : 'view'}
@@ -72,6 +75,7 @@ export function ServiceProviderFeeTypesTable(
     const createForm = () => (
         <ServiceProviderFeeTypeDetails
             {...props}
+            itemName={itemName}
             itemNumber={serviceProviderFeeTypes.length + 1}
             operation="create"
             onSubmitForm={onSubmitCreate}
@@ -81,6 +85,7 @@ export function ServiceProviderFeeTypesTable(
     return (
         <Table
             {...props}
+            itemName={itemName}
             tableData={tableData}
             columns={columns}
             editForm={editForm}

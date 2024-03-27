@@ -59,7 +59,6 @@ export const Primary: Story = {
 
         const argsWithHandlers: GroupTransactionsTableProps = {
             ...args,
-            itemName: 'Group Transaction',
             expandedRowId,
             selectedItem,
             toggleExpandedRow,

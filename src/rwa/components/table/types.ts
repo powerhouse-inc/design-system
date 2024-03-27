@@ -70,7 +70,6 @@ export type TableProps<
 };
 
 export type PropsToKeepFromTable =
-    | 'itemName'
     | 'expandedRowId'
     | 'selectedItem'
     | 'setSelectedItem'

@@ -69,6 +69,8 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
         onSubmitEdit,
     } = props;
 
+    const itemName = 'Group Transaction';
+
     const tableData = useMemo(
         () => makeGroupTransactionTableData(transactions, fixedIncomes),
         [transactions, fixedIncomes],
@@ -77,6 +79,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
     const editForm = ({ itemId, index }: { itemId: string; index: number }) => (
         <GroupTransactionDetails
             {...props}
+            itemName={itemName}
             item={getItemById(itemId, transactions)}
             itemNumber={index + 1}
             operation={selectedItem?.id === itemId ? 'edit' : 'view'}
@@ -87,6 +90,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
     const createForm = () => (
         <GroupTransactionDetails
             {...props}
+            itemName={itemName}
             operation="create"
             itemNumber={transactions.length + 1}
             onSubmitForm={onSubmitCreate}
@@ -96,6 +100,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
     return (
         <Table
             {...props}
+            itemName={itemName}
             tableData={tableData}
             columns={columns}
             editForm={editForm}

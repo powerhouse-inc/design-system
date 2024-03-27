@@ -75,7 +75,6 @@ export const Primary: Story = {
 
         const argsWithHandlers: ServiceProviderFeeTypesTableProps = {
             ...args,
-            itemName: 'Service Provider',
             expandedRowId,
             selectedItem,
             showNewItemForm,
