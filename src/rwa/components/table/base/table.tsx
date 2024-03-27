@@ -14,7 +14,7 @@ import {
     useColumnPriority,
     useSortTableItems,
 } from '@/rwa';
-import { useRef } from 'react';
+import { Fragment, useRef } from 'react';
 import { FieldValues } from 'react-hook-form';
 import { twJoin, twMerge } from 'tailwind-merge';
 
@@ -70,7 +70,7 @@ export function Table<
                     )}
                 >
                     {columns.map(column => (
-                        <>
+                        <Fragment key={column.key}>
                             {column.key === 'index' && (
                                 <IndexCell index={index} />
                             )}
@@ -94,7 +94,7 @@ export function Table<
                                     toggleExpandedRow={toggleExpandedRow}
                                 />
                             )}
-                        </>
+                        </Fragment>
                     ))}
                 </tr>
             </RWATableRow>
