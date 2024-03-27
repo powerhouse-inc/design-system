@@ -124,7 +124,7 @@ export type FixedIncomeTypesTableProps = Pick<
     TableProps<FixedIncomeType, FixedIncomeTypeFormInputs>,
     PropsToKeepFromTable
 > & {
-    spvs: FixedIncomeType[];
+    fixedIncomeTypes: FixedIncomeType[];
 };
 
 export type ItemDetailsFormProps<

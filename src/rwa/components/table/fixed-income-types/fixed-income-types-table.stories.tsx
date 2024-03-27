@@ -30,7 +30,7 @@ type FixedIncomeTypesTableProps = ComponentPropsWithoutRef<
 
 export const Primary: Story = {
     args: {
-        spvs: mockFixedIncomeTypes,
+        fixedIncomeTypes: mockFixedIncomeTypes,
     },
     render: function Wrapper(args) {
         const [expandedRowId, setExpandedRowId] = useState<string>();
