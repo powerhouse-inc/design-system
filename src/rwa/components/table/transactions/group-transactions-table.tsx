@@ -38,9 +38,9 @@ const columns = [
 
 export function makeGroupTransactionTableData(
     transactions: GroupTransaction[] | undefined,
-    fixedIncomes: FixedIncome[],
+    fixedIncomes: FixedIncome[] | undefined,
 ) {
-    if (!transactions?.length) return [];
+    if (!transactions?.length || !fixedIncomes?.length) return [];
 
     return transactions.map(transaction => {
         return {

@@ -1,3 +1,5 @@
+import { Account, ServiceProviderFeeType } from '@/rwa';
+import { useMemo } from 'react';
 import { Table } from '../base/table';
 import { ServiceProviderFeeTypesTableProps } from '../types';
 import { getItemById } from '../utils';
@@ -6,19 +8,54 @@ import { ServiceProviderFeeTypeDetails } from './service-provider-fee-type-detai
 const columns = [
     { key: 'name' as const, label: 'Name', allowSorting: true },
     { key: 'feeType' as const, label: 'Fee Type', allowSorting: true },
-    { key: 'accountId' as const, label: 'Account ID', allowSorting: true },
+    { key: 'accountName' as const, label: 'Account Name', allowSorting: true },
+    {
+        key: 'accountReference' as const,
+        label: 'Account Reference',
+        allowSorting: true,
+    },
 ];
+
+export function makeServiceProviderFeeTypesTableData(
+    serviceProviderFeeTypes: ServiceProviderFeeType[] | undefined,
+    accounts: Account[] | undefined,
+) {
+    if (!serviceProviderFeeTypes?.length || !accounts?.length) return [];
+
+    return serviceProviderFeeTypes.map(serviceProviderFeeType => {
+        const account = accounts.find(
+            account => account.id === serviceProviderFeeType.accountId,
+        );
+
+        return {
+            id: serviceProviderFeeType.id,
+            name: serviceProviderFeeType.name,
+            feeType: serviceProviderFeeType.feeType,
+            accountName: account?.label,
+            accountReference: account?.reference,
+        };
+    });
+}
 
 export function ServiceProviderFeeTypesTable(
     props: ServiceProviderFeeTypesTableProps,
 ) {
     const {
         serviceProviderFeeTypes,
+        accounts,
         selectedItem,
         onSubmitCreate,
         onSubmitEdit,
     } = props;
 
+    const tableData = useMemo(
+        () =>
+            makeServiceProviderFeeTypesTableData(
+                serviceProviderFeeTypes,
+                accounts,
+            ),
+        [serviceProviderFeeTypes, accounts],
+    );
     const editForm = ({ itemId, index }: { itemId: string; index: number }) => (
         <ServiceProviderFeeTypeDetails
             {...props}
@@ -41,7 +78,7 @@ export function ServiceProviderFeeTypesTable(
     return (
         <Table
             {...props}
-            tableData={serviceProviderFeeTypes}
+            tableData={tableData}
             columns={columns}
             editForm={editForm}
             createForm={createForm}

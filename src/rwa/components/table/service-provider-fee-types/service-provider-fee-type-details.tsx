@@ -57,7 +57,7 @@ export function ServiceProviderFeeTypeDetails(
                     <RWATableTextInput
                         {...register('name', {
                             disabled: operation === 'view',
-                            required: 'Service Provider name is required',
+                            required: 'Service provider name is required',
                         })}
                         aria-invalid={
                             errors.name?.type === 'required' ? 'true' : 'false'
@@ -85,7 +85,7 @@ export function ServiceProviderFeeTypeDetails(
                 }
             />
             <RWAFormRow
-                label="Account ID"
+                label="Account"
                 hideLine={operation !== 'view'}
                 value={
                     <RWATableSelect
