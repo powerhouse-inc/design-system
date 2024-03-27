@@ -1,6 +1,6 @@
 import { Icon } from '@/powerhouse';
 import {
-    IndexCell,
+    ItemNumberCell,
     MoreDetailsCell,
     RWATableCell,
     RWATableRow,
@@ -33,7 +33,7 @@ import { twJoin, twMerge } from 'tailwind-merge';
  * @param showNewItemForm - Whether to show the form for creating a new item
  * @param setShowNewItemForm - Function to set the showNewItemForm state
  * @param toggleExpandedRow - Function to toggle the expanded row
- * @param editForm - Form component for editing an item. Must be a React component that accepts an `itemId` prop and an `index` prop. Intended to be used with react-hook-form register/control.
+ * @param editForm - Form component for editing an item. Must be a React component that accepts an `itemId` prop and an `itemNumber` prop. Intended to be used with react-hook-form register/control.
  * @param createForm - Form component for creating an item. Must be a React component. Intended to be used with react-hook-form register/control.
  */
 export function Table<
@@ -76,7 +76,10 @@ export function Table<
                 key={item.id}
                 accordionContent={
                     expandedRowId === item.id && (
-                        <EditForm itemId={item.id} index={index} />
+                        <EditForm
+                            itemId={item.id}
+                            itemNumber={item.itemNumber ?? index}
+                        />
                     )
                 }
             >
@@ -89,10 +92,12 @@ export function Table<
                 >
                     {columns.map(column => (
                         <Fragment key={column.key}>
-                            {column.key === 'index' && (
-                                <IndexCell index={index} />
+                            {column.key === 'itemNumber' && (
+                                <ItemNumberCell
+                                    itemNumber={item.itemNumber ?? index + 1}
+                                />
                             )}
-                            {column.key !== 'index' &&
+                            {column.key !== 'itemNumber' &&
                                 column.key !== 'moreDetails' && (
                                     <RWATableCell
                                         key={column.key}

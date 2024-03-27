@@ -32,3 +32,10 @@ export function getItemById<TItem extends TableItem = TableItem>(
 ) {
     return items?.find(item => item.id === id);
 }
+
+export function addItemNumber<TItem extends TableItem>(items: TItem[]) {
+    return items.map((item, index) => ({
+        ...item,
+        itemNumber: index + 1,
+    }));
+}

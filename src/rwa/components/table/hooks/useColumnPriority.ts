@@ -5,7 +5,7 @@ type Props<TItem extends TableItem> = {
     columns: TableColumn<TItem>[];
     columnCountByTableWidth: ColumnCountByTableWidth;
     tableContainerRef: React.RefObject<HTMLDivElement>;
-    hasIndexColumn?: boolean;
+    hasItemNumberColumn?: boolean;
     hasMoreDetailsColumn?: boolean;
 };
 
@@ -25,7 +25,7 @@ export function useColumnPriority<TItem extends TableItem>(
         columnCountByTableWidth,
         tableContainerRef,
         columns,
-        hasIndexColumn = true,
+        hasItemNumberColumn = true,
         hasMoreDetailsColumn = true,
     } = props;
 
@@ -34,14 +34,15 @@ export function useColumnPriority<TItem extends TableItem>(
     // Define special columns individually for clarity
     const indexColumn: TableColumn<TItem> | undefined = useMemo(
         () =>
-            hasIndexColumn
+            hasItemNumberColumn
                 ? {
-                      key: 'index' as keyof TItem & string,
+                      key: 'itemNumber' as keyof TItem & string,
                       label: '#',
+                      allowSorting: true,
                       isSpecialColumn: true,
                   }
                 : undefined,
-        [hasIndexColumn],
+        [hasItemNumberColumn],
     );
 
     const moreDetailsColumn: TableColumn<TItem> | undefined = useMemo(

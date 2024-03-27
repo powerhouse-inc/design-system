@@ -1,4 +1,11 @@
-import { SPVDetails, SPVsTableProps, Table, getItemById } from '@/rwa';
+import {
+    SPVDetails,
+    SPVsTableProps,
+    Table,
+    addItemNumber,
+    getItemById,
+} from '@/rwa';
+import { useMemo } from 'react';
 
 const columns = [{ key: 'name' as const, label: 'Name', allowSorting: true }];
 
@@ -7,12 +14,20 @@ export function SPVsTable(props: SPVsTableProps) {
 
     const itemName = 'SPV';
 
-    const editForm = ({ itemId, index }: { itemId: string; index: number }) => (
+    const tableData = useMemo(() => addItemNumber(spvs), [spvs]);
+
+    const editForm = ({
+        itemId,
+        itemNumber,
+    }: {
+        itemId: string;
+        itemNumber: number;
+    }) => (
         <SPVDetails
             {...props}
             itemName={itemName}
             item={getItemById(itemId, spvs)}
-            itemNumber={index + 1}
+            itemNumber={itemNumber}
             operation={selectedItem?.id === itemId ? 'edit' : 'view'}
             onSubmitForm={onSubmitEdit}
         />
@@ -32,7 +47,7 @@ export function SPVsTable(props: SPVsTableProps) {
         <Table
             {...props}
             itemName={itemName}
-            tableData={spvs}
+            tableData={tableData}
             columns={columns}
             editForm={editForm}
             createForm={createForm}

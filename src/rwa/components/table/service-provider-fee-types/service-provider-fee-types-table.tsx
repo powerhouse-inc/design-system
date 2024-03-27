@@ -4,6 +4,7 @@ import {
     ServiceProviderFeeTypeDetails,
     ServiceProviderFeeTypesTableProps,
     Table,
+    addItemNumber,
     getItemById,
 } from '@/rwa';
 import { useMemo } from 'react';
@@ -25,7 +26,7 @@ export function makeServiceProviderFeeTypesTableData(
 ) {
     if (!serviceProviderFeeTypes?.length || !accounts?.length) return [];
 
-    return serviceProviderFeeTypes.map(serviceProviderFeeType => {
+    const tableData = serviceProviderFeeTypes.map(serviceProviderFeeType => {
         const account = accounts.find(
             account => account.id === serviceProviderFeeType.accountId,
         );
@@ -38,6 +39,10 @@ export function makeServiceProviderFeeTypesTableData(
             accountReference: account?.reference,
         };
     });
+
+    const withItemNumber = addItemNumber(tableData);
+
+    return withItemNumber;
 }
 
 export function ServiceProviderFeeTypesTable(
@@ -61,12 +66,18 @@ export function ServiceProviderFeeTypesTable(
             ),
         [serviceProviderFeeTypes, accounts],
     );
-    const editForm = ({ itemId, index }: { itemId: string; index: number }) => (
+    const editForm = ({
+        itemId,
+        itemNumber,
+    }: {
+        itemId: string;
+        itemNumber: number;
+    }) => (
         <ServiceProviderFeeTypeDetails
             {...props}
             itemName={itemName}
             item={getItemById(itemId, serviceProviderFeeTypes)}
-            itemNumber={index + 1}
+            itemNumber={itemNumber}
             operation={selectedItem?.id === itemId ? 'edit' : 'view'}
             onSubmitForm={onSubmitEdit}
         />

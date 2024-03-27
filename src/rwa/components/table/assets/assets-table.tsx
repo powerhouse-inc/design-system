@@ -1,4 +1,11 @@
-import { AssetDetails, AssetsTableProps, Table, getItemById } from '@/rwa';
+import {
+    AssetDetails,
+    AssetsTableProps,
+    Table,
+    addItemNumber,
+    getItemById,
+} from '@/rwa';
+import { useMemo } from 'react';
 
 const columns = [
     { key: 'name' as const, label: 'Name', allowSorting: true },
@@ -56,12 +63,20 @@ export function AssetsTable(props: AssetsTableProps) {
     const { assets, selectedItem, onSubmitCreate, onSubmitEdit } = props;
     const itemName = 'Asset';
 
-    const editForm = ({ itemId, index }: { itemId: string; index: number }) => (
+    const tableData = useMemo(() => addItemNumber(assets), [assets]);
+
+    const editForm = ({
+        itemId,
+        itemNumber,
+    }: {
+        itemId: string;
+        itemNumber: number;
+    }) => (
         <AssetDetails
             {...props}
             itemName={itemName}
             item={getItemById(itemId, assets)}
-            itemNumber={index + 1}
+            itemNumber={itemNumber}
             operation={selectedItem?.id === itemId ? 'edit' : 'view'}
             onSubmitForm={onSubmitEdit}
         />
@@ -81,7 +96,7 @@ export function AssetsTable(props: AssetsTableProps) {
         <Table
             {...props}
             itemName={itemName}
-            tableData={assets}
+            tableData={tableData}
             columns={columns}
             editForm={editForm}
             createForm={createForm}

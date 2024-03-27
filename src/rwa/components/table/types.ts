@@ -15,6 +15,7 @@ import { FieldValues, SubmitHandler, UseFormReturn } from 'react-hook-form';
 
 export type TableItem = {
     id: string;
+    itemNumber?: number;
 } & Record<string, any>;
 
 export type SpecialColumns = {
@@ -64,7 +65,7 @@ export type TableProps<
     toggleExpandedRow: (id: string | undefined) => void;
     onSubmitEdit: (data: TFieldValues) => void;
     onSubmitCreate: (data: TFieldValues) => void;
-    editForm: ComponentType<{ itemId: string; index: number }>;
+    editForm: ComponentType<{ itemId: string; itemNumber: number }>;
     createForm: ComponentType;
 };
 

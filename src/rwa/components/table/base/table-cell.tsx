@@ -11,8 +11,8 @@ export const RWATableCell: React.FC<ComponentPropsWithoutRef<'td'>> = props => (
     />
 );
 
-export function IndexCell(props: { index: number }) {
-    return <RWATableCell className="w-4">{props.index + 1}</RWATableCell>;
+export function ItemNumberCell(props: { itemNumber: number }) {
+    return <RWATableCell className="w-4">{props.itemNumber}</RWATableCell>;
 }
 
 export function MoreDetailsCell(props: {

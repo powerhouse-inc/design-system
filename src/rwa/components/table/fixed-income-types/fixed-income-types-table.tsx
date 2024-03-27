@@ -2,6 +2,7 @@ import {
     FixedIncomeTypeDetails,
     FixedIncomeTypesTableProps,
     Table,
+    addItemNumber,
     getItemById,
 } from '@/rwa';
 
@@ -11,12 +12,20 @@ export function FixedIncomeTypesTable(props: FixedIncomeTypesTableProps) {
     const { fixedIncomeTypes, selectedItem, onSubmitCreate, onSubmitEdit } =
         props;
     const itemName = 'Fixed Income Type';
-    const editForm = ({ itemId, index }: { itemId: string; index: number }) => (
+    const tableData = addItemNumber(fixedIncomeTypes);
+
+    const editForm = ({
+        itemId,
+        itemNumber,
+    }: {
+        itemId: string;
+        itemNumber: number;
+    }) => (
         <FixedIncomeTypeDetails
             {...props}
             itemName={itemName}
             item={getItemById(itemId, fixedIncomeTypes)}
-            itemNumber={index + 1}
+            itemNumber={itemNumber}
             operation={selectedItem?.id === itemId ? 'edit' : 'view'}
             onSubmitForm={onSubmitEdit}
         />
@@ -36,7 +45,7 @@ export function FixedIncomeTypesTable(props: FixedIncomeTypesTableProps) {
         <Table
             {...props}
             itemName={itemName}
-            tableData={fixedIncomeTypes}
+            tableData={tableData}
             columns={columns}
             editForm={editForm}
             createForm={createForm}

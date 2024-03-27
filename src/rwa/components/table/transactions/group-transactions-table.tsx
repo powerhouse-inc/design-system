@@ -4,6 +4,7 @@ import {
     GroupTransactionDetails,
     GroupTransactionsTableProps,
     Table,
+    addItemNumber,
     getItemById,
 } from '@/rwa';
 import { useMemo } from 'react';
@@ -45,7 +46,7 @@ export function makeGroupTransactionTableData(
 ) {
     if (!transactions?.length || !fixedIncomes?.length) return [];
 
-    return transactions.map(transaction => {
+    const tableData = transactions.map(transaction => {
         return {
             id: transaction.id,
             entryTime: transaction.entryTime,
@@ -58,6 +59,10 @@ export function makeGroupTransactionTableData(
             cashBalanceChange: transaction.cashBalanceChange,
         };
     });
+
+    const withItemNumber = addItemNumber(tableData);
+
+    return withItemNumber;
 }
 
 export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
@@ -76,12 +81,18 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
         [transactions, fixedIncomes],
     );
 
-    const editForm = ({ itemId, index }: { itemId: string; index: number }) => (
+    const editForm = ({
+        itemId,
+        itemNumber,
+    }: {
+        itemId: string;
+        itemNumber: number;
+    }) => (
         <GroupTransactionDetails
             {...props}
             itemName={itemName}
             item={getItemById(itemId, transactions)}
-            itemNumber={index + 1}
+            itemNumber={itemNumber}
             operation={selectedItem?.id === itemId ? 'edit' : 'view'}
             onSubmitForm={onSubmitEdit}
         />
