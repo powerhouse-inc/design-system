@@ -2,13 +2,22 @@ import { ColumnCountByTableWidth, TableColumn, TableItem } from '@/rwa';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 type Props<TItem extends TableItem> = {
+    columns: TableColumn<TItem>[];
     columnCountByTableWidth: ColumnCountByTableWidth;
     tableContainerRef: React.RefObject<HTMLDivElement>;
-    columns: TableColumn<TItem>[];
     hasIndexColumn?: boolean;
     hasMoreDetailsColumn?: boolean;
 };
 
+/**
+ * Hook to handle dropping columns for smaller screens.
+ *
+ * @param columns - Array of columns to display, column must satisfy TableColumn. The columns will be displayed in the order they are provided.
+ * @param columnCountByTableWidth - Object that specifies how many columns to show at different screen widths
+ * @param tableContainerRef - Ref to the table container element
+ * @param hasIndexColumn - When true, adds an "index" column with the index of the row as the _first column_. This column is exempt from being dropped.
+ * @param hasMoreDetailsColumn - When true, adds a "more details" column as the _last column_. This column is exempt from being dropped. This column has no header label by default.
+ */
 export function useColumnPriority<TItem extends TableItem>(
     props: Props<TItem>,
 ) {

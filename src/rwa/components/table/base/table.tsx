@@ -18,6 +18,24 @@ import { Fragment, useRef } from 'react';
 import { FieldValues } from 'react-hook-form';
 import { twJoin, twMerge } from 'tailwind-merge';
 
+/**
+ * Generic table with standard styles intended to be used for most of the RWA tables in the app.
+ * Also provides forms for creating / editing the table items.
+ *
+ * @type TItem - Table item type, any record with an "id" field and any string keys
+ * @type TFieldValues - Field values type for the forms, must satisfy FieldValues
+ * @type TTableData - Table data type, must satisfy TableItem, but can be different from TItem if need be. This is required for situations where the data items need to be transformed before being displayed in the table.
+ * @param itemName - Name of an individual item to be used in forms, e.g. "Transaction" or "Asset"
+ * @param columns - Array of columns to display, column must satisfy TableColumn. The columns will be displayed in the order they are provided. Use the `useColumnPriority` hook to handle dropping columns for smaller screens.
+ * @param tableData - Array of data to display, data must satisfy TTableData
+ * @param columnCountByTableWidth - Object that specifies how many columns to show at different screen widths
+ * @param expandedRowId - ID of the row that is expanded
+ * @param showNewItemForm - Whether to show the form for creating a new item
+ * @param setShowNewItemForm - Function to set the showNewItemForm state
+ * @param toggleExpandedRow - Function to toggle the expanded row
+ * @param editForm - Form component for editing an item. Must be a React component that accepts an `itemId` prop and an `index` prop. Intended to be used with react-hook-form register/control.
+ * @param createForm - Form component for creating an item. Must be a React component. Intended to be used with react-hook-form register/control.
+ */
 export function Table<
     TItem extends TableItem,
     TFieldValues extends FieldValues = FieldValues,

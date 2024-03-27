@@ -4,6 +4,18 @@ import { Order } from 'natural-orderby';
 import React, { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
+/**
+ * Base table component
+ *
+ * @type TItem - Table item type, any record with an "id" field and any string keys
+ * @type TableColumn - Specifies how to render a column. Must have a `key` which is a key of TItem, and a `label` which is the column header
+ * @param tableData - Array of data to display, data must satisfy TItem
+ * @param columns - Array of columns to display, column must satisfy TableColumn. The columns will be displayed in the order they are provided. Use the `useColumnPriority` hook to handle dropping columns for smaller screens.
+ * @param children - Content to render above the table rows
+ * @param footer - Content to render below the table rows
+ * @param renderRow - Function to render a row, must return a React element
+ * @param onClickSort - Function to handle sorting, called with key and direction
+ */
 export const TableBase = fixedForwardRef(function TableBase<
     TItem extends TableItem,
 >(props: TableBaseProps<TItem>, ref: React.ForwardedRef<HTMLDivElement>) {
