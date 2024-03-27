@@ -1,7 +1,4 @@
-import { Table } from '../base/table';
-import { AccountsTableProps } from '../types';
-import { getItemById } from '../utils';
-import { AccountDetails } from './account-details';
+import { AccountDetails, AccountsTableProps, Table, getItemById } from '@/rwa';
 
 const columns = [
     { key: 'label' as const, label: 'Label', allowSorting: true },

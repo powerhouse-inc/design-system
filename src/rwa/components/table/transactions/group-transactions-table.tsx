@@ -1,9 +1,12 @@
-import { FixedIncome, GroupTransaction } from '@/rwa';
+import {
+    FixedIncome,
+    GroupTransaction,
+    GroupTransactionDetails,
+    GroupTransactionsTableProps,
+    Table,
+    getItemById,
+} from '@/rwa';
 import { useMemo } from 'react';
-import { Table } from '../base/table';
-import { GroupTransactionsTableProps } from '../types';
-import { getItemById } from '../utils';
-import { GroupTransactionDetails } from './group-transaction-details';
 
 const columns = [
     {

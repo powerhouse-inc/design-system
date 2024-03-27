@@ -1,7 +1,4 @@
-import { Table } from '../base/table';
-import { AssetTableProps } from '../types';
-import { getItemById } from '../utils';
-import { AssetDetails } from './asset-details';
+import { AssetDetails, AssetTableProps, Table, getItemById } from '@/rwa';
 
 const columns = [
     { key: 'name' as const, label: 'Name', allowSorting: true },

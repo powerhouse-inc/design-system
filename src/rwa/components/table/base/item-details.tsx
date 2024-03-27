@@ -1,8 +1,7 @@
 import { Icon } from '@/powerhouse';
+import { ItemDetailsProps, RWAButton, TableItem } from '@/rwa';
 import { FieldValues } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
-import { RWAButton } from '../../button';
-import { ItemDetailsProps, TableItem } from '../types';
 
 export function ItemDetails<
     TItem extends TableItem,

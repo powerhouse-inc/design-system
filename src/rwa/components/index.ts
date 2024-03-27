@@ -1,4 +1,5 @@
 export * from './button';
+export * from './inputs';
 export * from './select';
-export * from './table/base';
+export * from './table';
 export * from './tabs';

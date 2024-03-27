@@ -1,10 +1,15 @@
-import { DateTimeLocalInput } from '@/connect/components/date-time-input';
-import { convertToDateTimeLocalFormat } from '@/rwa';
+import { DateTimeLocalInput } from '@/connect';
+import {
+    AssetDetailsProps,
+    AssetFormInputs,
+    ItemDetails,
+    RWAFormRow,
+    RWANumberInput,
+    RWATableSelect,
+    RWATableTextInput,
+    convertToDateTimeLocalFormat,
+} from '@/rwa';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { RWAFormRow, RWATableSelect, RWATableTextInput } from '../../inputs';
-import { RWANumberInput } from '../../inputs/number-input';
-import { ItemDetails } from '../base/item-details';
-import { AssetDetailsProps, AssetFormInputs } from '../types';
 
 export function AssetDetails(props: AssetDetailsProps) {
     const { fixedIncomeTypes, spvs, onCancel, onSubmitForm, item, operation } =

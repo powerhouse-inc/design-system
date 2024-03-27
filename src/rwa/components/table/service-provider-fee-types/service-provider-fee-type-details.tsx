@@ -1,11 +1,13 @@
-import { Account } from '@/rwa';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { RWAFormRow, RWATableSelect, RWATableTextInput } from '../../inputs';
-import { ItemDetails } from '../base/item-details';
 import {
+    Account,
+    ItemDetails,
+    RWAFormRow,
+    RWATableSelect,
+    RWATableTextInput,
     ServiceProviderFeeTypeDetailsProps,
     ServiceProviderFeeTypeFormInputs,
-} from '../types';
+} from '@/rwa';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 export function ServiceProviderFeeTypeDetails(
     props: ServiceProviderFeeTypeDetailsProps,

@@ -1,19 +1,22 @@
 import { Icon } from '@/powerhouse';
-import { useRef } from 'react';
-import { FieldValues } from 'react-hook-form';
-import { twJoin, twMerge } from 'tailwind-merge';
 import {
     IndexCell,
     MoreDetailsCell,
     RWATableCell,
+    RWATableRow,
+    SpecialColumns,
     TableBase,
+    TableColumn,
+    TableItem,
+    TableProps,
+    defaultColumnCountByTableWidth,
+    handleTableDatum,
+    useColumnPriority,
     useSortTableItems,
-} from '.';
-import { defaultColumnCountByTableWidth } from '../constants';
-import { useColumnPriority } from '../hooks/useColumnPriority';
-import { SpecialColumns, TableColumn, TableItem, TableProps } from '../types';
-import { handleTableDatum } from '../utils';
-import { RWATableRow } from './expandable-row';
+} from '@/rwa';
+import { useRef } from 'react';
+import { FieldValues } from 'react-hook-form';
+import { twJoin, twMerge } from 'tailwind-merge';
 
 export function Table<
     TItem extends TableItem,

@@ -1,9 +1,12 @@
-import { Account, ServiceProviderFeeType } from '@/rwa';
+import {
+    Account,
+    ServiceProviderFeeType,
+    ServiceProviderFeeTypeDetails,
+    ServiceProviderFeeTypesTableProps,
+    Table,
+    getItemById,
+} from '@/rwa';
 import { useMemo } from 'react';
-import { Table } from '../base/table';
-import { ServiceProviderFeeTypesTableProps } from '../types';
-import { getItemById } from '../utils';
-import { ServiceProviderFeeTypeDetails } from './service-provider-fee-type-details';
 
 const columns = [
     { key: 'name' as const, label: 'Name', allowSorting: true },

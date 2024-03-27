@@ -1,10 +1,11 @@
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { RWAFormRow, RWATableTextInput } from '../../inputs';
-import { ItemDetails } from '../base/item-details';
 import {
     FixedIncomeTypeDetailsProps,
     FixedIncomeTypeFormInputs,
-} from '../types';
+    ItemDetails,
+    RWAFormRow,
+    RWATableTextInput,
+} from '@/rwa';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 export function FixedIncomeTypeDetails(props: FixedIncomeTypeDetailsProps) {
     const { onCancel, onSubmitForm, item, operation } = props;

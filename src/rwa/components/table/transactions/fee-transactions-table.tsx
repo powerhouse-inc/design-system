@@ -1,5 +1,10 @@
 import { Icon } from '@/powerhouse';
-import { ServiceProviderFeeType } from '@/rwa';
+import {
+    GroupTransactionFormInputs,
+    RWANumberInput,
+    ServiceProviderAndFeeTypeTableInput,
+    ServiceProviderFeeType,
+} from '@/rwa';
 import {
     Control,
     FieldArrayWithId,
@@ -12,9 +17,6 @@ import {
     UseFormWatch,
 } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
-import { RWANumberInput } from '../../inputs/number-input';
-import { GroupTransactionFormInputs } from '../types';
-import { ServiceProviderAndFeeTypeTableInput } from './service-provider-fee-type-table-input';
 
 type Props<ControlInputs extends FieldValues> = {
     feeInputs: FieldArrayWithId<GroupTransactionFormInputs, 'fees'>[];

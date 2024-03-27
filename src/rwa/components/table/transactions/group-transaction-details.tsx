@@ -1,25 +1,22 @@
-import { DateTimeLocalInput } from '@/connect/components/date-time-input';
+import { DateTimeLocalInput } from '@/connect';
 import {
+    FeeTransactionsTable,
     FixedIncome,
-    GroupTransactionType,
-    TransactionFee,
-    convertToDateTimeLocalFormat,
-} from '@/rwa';
-import {
-    groupTransactionTypeLabels,
-    groupTransactionTypes,
-} from '@/rwa/constants/transactions';
-import { InputMaybe } from 'document-model/document';
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
-import { RWAFormRow, RWATableSelect } from '../../inputs';
-import { RWANumberInput } from '../../inputs/number-input';
-import { FormattedNumber } from '../base/formatted-number';
-import { ItemDetails } from '../base/item-details';
-import {
+    FormattedNumber,
     GroupTransactionDetailsProps,
     GroupTransactionFormInputs,
-} from '../types';
-import { FeeTransactionsTable } from './fee-transactions-table';
+    GroupTransactionType,
+    ItemDetails,
+    RWAFormRow,
+    RWANumberInput,
+    RWATableSelect,
+    TransactionFee,
+    convertToDateTimeLocalFormat,
+    groupTransactionTypeLabels,
+    groupTransactionTypes,
+} from '@/rwa';
+import { InputMaybe } from 'document-model/document';
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 
 function calculateUnitPricePercent(
     cashAmount: InputMaybe<number>,

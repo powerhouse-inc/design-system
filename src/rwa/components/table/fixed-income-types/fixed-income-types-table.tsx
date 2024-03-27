@@ -1,7 +1,9 @@
-import { Table } from '../base/table';
-import { FixedIncomeTypesTableProps } from '../types';
-import { getItemById } from '../utils';
-import { FixedIncomeTypeDetails } from './fixed-income-type-details';
+import {
+    FixedIncomeTypeDetails,
+    FixedIncomeTypesTableProps,
+    Table,
+    getItemById,
+} from '@/rwa';
 
 const columns = [{ key: 'name' as const, label: 'Name', allowSorting: true }];
 

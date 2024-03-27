@@ -1,7 +1,4 @@
-import { Table } from '../base/table';
-import { SPVsTableProps } from '../types';
-import { getItemById } from '../utils';
-import { SPVDetails } from './spv-details';
+import { SPVDetails, SPVsTableProps, Table, getItemById } from '@/rwa';
 
 const columns = [{ key: 'name' as const, label: 'Name', allowSorting: true }];
 

@@ -1,7 +1,11 @@
+import {
+    AccountDetailsProps,
+    AccountFormInputs,
+    ItemDetails,
+    RWAFormRow,
+    RWATableTextInput,
+} from '@/rwa';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { RWAFormRow, RWATableTextInput } from '../../inputs';
-import { ItemDetails } from '../base/item-details';
-import { AccountDetailsProps, AccountFormInputs } from '../types';
 
 export function AccountDetails(props: AccountDetailsProps) {
     const { onCancel, onSubmitForm, item, operation } = props;

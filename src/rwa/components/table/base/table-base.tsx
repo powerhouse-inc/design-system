@@ -1,9 +1,8 @@
-import { Icon, mergeClassNameProps } from '@/powerhouse';
-import { fixedForwardRef } from '@/powerhouse/utils/fixedForwardRef';
+import { Icon, fixedForwardRef, mergeClassNameProps } from '@/powerhouse';
+import { SortDirection, TableBaseProps, TableItem } from '@/rwa';
 import { Order } from 'natural-orderby';
 import React, { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { SortDirection, TableBaseProps, TableItem } from '../types';
 
 export const TableBase = fixedForwardRef(function TableBase<
     TItem extends TableItem,
