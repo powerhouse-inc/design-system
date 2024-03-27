@@ -17,7 +17,7 @@ export function AccountDetails(props: AccountDetailsProps) {
         formState: { errors },
     } = useForm<AccountFormInputs>({
         defaultValues: {
-            label: item?.label,
+            label: item?.label ?? undefined,
             reference: item?.reference,
         },
     });

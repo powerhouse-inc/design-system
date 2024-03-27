@@ -10,7 +10,6 @@ import {
     ServiceProviderFeeType,
     TransactionFee,
 } from '@/rwa';
-import { InputMaybe } from 'document-model/document';
 import { ComponentType, ReactNode } from 'react';
 import { FieldValues, SubmitHandler, UseFormReturn } from 'react-hook-form';
 
@@ -206,9 +205,9 @@ export type FixedIncomeTypeDetailsProps = Pick<
 };
 
 export type ServiceProviderFeeTypeFormInputs = {
-    name: InputMaybe<string>;
-    feeType: InputMaybe<string>;
-    accountId: InputMaybe<string>;
+    name: string;
+    feeType: string;
+    accountId: string;
 };
 
 export type AssetFormInputs = {
@@ -222,24 +221,24 @@ export type AssetFormInputs = {
 };
 
 export type GroupTransactionFormInputs = {
-    type: InputMaybe<GroupTransactionType>;
-    entryTime: InputMaybe<string>;
-    cashAmount: InputMaybe<number>;
-    fixedIncomeId: InputMaybe<string>;
-    fixedIncomeAmount: InputMaybe<number>;
-    fees: InputMaybe<TransactionFee[]>;
-    cashBalanceChange: InputMaybe<number>;
+    type: GroupTransactionType;
+    entryTime: string;
+    cashAmount: number;
+    fixedIncomeId: string;
+    fixedIncomeAmount: number;
+    fees: TransactionFee[];
+    cashBalanceChange: number;
 };
 
 export type AccountFormInputs = {
-    label: InputMaybe<string>;
-    reference: InputMaybe<string>;
+    label: string;
+    reference: string;
 };
 
 export type SPVFormInputs = {
-    name: InputMaybe<string>;
+    name: string;
 };
 
 export type FixedIncomeTypeFormInputs = {
-    name: InputMaybe<string>;
+    name: string;
 };
