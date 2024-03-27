@@ -53,9 +53,7 @@ export const Primary: Story = {
 
         const onSubmitEdit: AccountsTableProps['onSubmitEdit'] = useCallback(
             data => {
-                const account = createAccountFromFormInputs(
-                    data as AccountFormInputs,
-                );
+                const account = createAccountFromFormInputs(data);
                 console.log({ account, data });
                 setSelectedItem(undefined);
             },
@@ -64,9 +62,7 @@ export const Primary: Story = {
 
         const onSubmitCreate: AccountsTableProps['onSubmitCreate'] =
             useCallback(data => {
-                const account = createAccountFromFormInputs(
-                    data as AccountFormInputs,
-                );
+                const account = createAccountFromFormInputs(data);
                 console.log({ account, data });
                 setShowNewItemForm(false);
             }, []);

@@ -53,7 +53,7 @@ export const Primary: Story = {
 
         const onSubmitEdit: SPVsTableProps['onSubmitEdit'] = useCallback(
             data => {
-                const account = createSPVFromFormInputs(data as SPVFormInputs);
+                const account = createSPVFromFormInputs(data);
                 console.log({ account, data });
                 setSelectedItem(undefined);
             },
@@ -62,7 +62,7 @@ export const Primary: Story = {
 
         const onSubmitCreate: SPVsTableProps['onSubmitCreate'] = useCallback(
             data => {
-                const account = createSPVFromFormInputs(data as SPVFormInputs);
+                const account = createSPVFromFormInputs(data);
                 console.log({ account, data });
                 setShowNewItemForm(false);
             },

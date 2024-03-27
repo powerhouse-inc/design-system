@@ -57,18 +57,14 @@ export const Primary: Story = {
 
         const onSubmitEdit: FixedIncomeTypesTableProps['onSubmitEdit'] =
             useCallback(data => {
-                const account = createFixedIncomeTypeFromFormInputs(
-                    data as FixedIncomeTypeFormInputs,
-                );
+                const account = createFixedIncomeTypeFromFormInputs(data);
                 console.log({ account, data });
                 setSelectedItem(undefined);
             }, []);
 
         const onSubmitCreate: FixedIncomeTypesTableProps['onSubmitCreate'] =
             useCallback(data => {
-                const account = createFixedIncomeTypeFromFormInputs(
-                    data as FixedIncomeTypeFormInputs,
-                );
+                const account = createFixedIncomeTypeFromFormInputs(data);
                 console.log({ account, data });
                 setShowNewItemForm(false);
             }, []);

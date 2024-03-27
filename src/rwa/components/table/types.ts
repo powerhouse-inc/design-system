@@ -81,7 +81,7 @@ export type PropsToKeepFromTable =
     | 'onSubmitCreate';
 
 export type GroupTransactionsTableProps = Pick<
-    TableProps<GroupTransaction>,
+    TableProps<GroupTransaction, GroupTransactionFormInputs>,
     PropsToKeepFromTable
 > & {
     transactions: GroupTransaction[];
@@ -92,7 +92,7 @@ export type GroupTransactionsTableProps = Pick<
 };
 
 export type AssetsTableProps = Pick<
-    TableProps<FixedIncome>,
+    TableProps<FixedIncome, AssetFormInputs>,
     PropsToKeepFromTable
 > & {
     assets: FixedIncome[];
@@ -101,7 +101,7 @@ export type AssetsTableProps = Pick<
 };
 
 export type ServiceProviderFeeTypesTableProps = Pick<
-    TableProps<ServiceProviderFeeType>,
+    TableProps<ServiceProviderFeeType, ServiceProviderFeeTypeFormInputs>,
     PropsToKeepFromTable
 > & {
     serviceProviderFeeTypes: ServiceProviderFeeType[];
@@ -109,18 +109,21 @@ export type ServiceProviderFeeTypesTableProps = Pick<
 };
 
 export type AccountsTableProps = Pick<
-    TableProps<Account>,
+    TableProps<Account, AccountFormInputs>,
     PropsToKeepFromTable
 > & {
     accounts: Account[];
 };
 
-export type SPVsTableProps = Pick<TableProps<SPV>, PropsToKeepFromTable> & {
+export type SPVsTableProps = Pick<
+    TableProps<SPV, SPVFormInputs>,
+    PropsToKeepFromTable
+> & {
     spvs: SPV[];
 };
 
 export type FixedIncomeTypesTableProps = Pick<
-    TableProps<FixedIncomeType>,
+    TableProps<FixedIncomeType, FixedIncomeTypeFormInputs>,
     PropsToKeepFromTable
 > & {
     spvs: FixedIncomeType[];

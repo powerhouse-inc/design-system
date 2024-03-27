@@ -60,9 +60,7 @@ export const Primary: Story = {
         const onSubmitEdit: ServiceProviderFeeTypesTableProps['onSubmitEdit'] =
             useCallback(data => {
                 const serviceProviderFeeType =
-                    createServiceProviderFeeTypeFromFormInputs(
-                        data as ServiceProviderFeeTypeFormInputs,
-                    );
+                    createServiceProviderFeeTypeFromFormInputs(data);
                 console.log({ serviceProviderFeeType, data });
                 setSelectedItem(undefined);
             }, []);
@@ -70,9 +68,7 @@ export const Primary: Story = {
         const onSubmitCreate: ServiceProviderFeeTypesTableProps['onSubmitCreate'] =
             useCallback(data => {
                 const serviceProviderFeeType =
-                    createServiceProviderFeeTypeFromFormInputs(
-                        data as ServiceProviderFeeTypeFormInputs,
-                    );
+                    createServiceProviderFeeTypeFromFormInputs(data);
                 console.log({ serviceProviderFeeType, data });
                 setShowNewItemForm(false);
             }, []);
