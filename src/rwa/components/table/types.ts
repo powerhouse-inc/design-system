@@ -91,7 +91,7 @@ export type GroupTransactionsTableProps = Pick<
     principalLenderAccountId: string;
 };
 
-export type AssetTableProps = Pick<
+export type AssetsTableProps = Pick<
     TableProps<FixedIncome>,
     PropsToKeepFromTable
 > & {

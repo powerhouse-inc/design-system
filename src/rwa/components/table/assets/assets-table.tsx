@@ -1,4 +1,4 @@
-import { AssetDetails, AssetTableProps, Table, getItemById } from '@/rwa';
+import { AssetDetails, AssetsTableProps, Table, getItemById } from '@/rwa';
 
 const columns = [
     { key: 'name' as const, label: 'Name', allowSorting: true },
@@ -52,7 +52,7 @@ const columns = [
     },
 ];
 
-export function AssetsTable(props: AssetTableProps) {
+export function AssetsTable(props: AssetsTableProps) {
     const { assets, selectedItem, onSubmitCreate, onSubmitEdit } = props;
 
     const editForm = ({ itemId, index }: { itemId: string; index: number }) => (
