@@ -132,7 +132,7 @@ devDependencies:
     version: 2.29.1(@typescript-eslint/parser@6.21.0)(eslint@8.56.0)
   eslint-plugin-jest-dom:
     specifier: ^5.1.0
-    version: 5.1.0(@testing-library/dom@9.3.4)(eslint@8.56.0)
+    version: 5.2.0(@testing-library/dom@9.3.4)(eslint@8.56.0)
   eslint-plugin-n:
     specifier: ^16.6.2
     version: 16.6.2(eslint@8.56.0)
@@ -8291,8 +8291,8 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-plugin-jest-dom@5.1.0(@testing-library/dom@9.3.4)(eslint@8.56.0):
-    resolution: {integrity: sha512-JIXZp+E/h/aGlP/rQc4tuOejiHlZXg65qw8JAJMIJA5VsdjOkss/SYcRSqBrQuEOytEM8JvngUjcz31d1RrCrA==}
+  /eslint-plugin-jest-dom@5.2.0(@testing-library/dom@9.3.4)(eslint@8.56.0):
+    resolution: {integrity: sha512-ctnCP0MsLmUvbCyhnOQ+/1OmsZj+e7V6kFunazIx5728Yq7TQnuKI8HOsgPTStB+9iYEpiEa+VfKB09Lq7/3fA==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0, npm: '>=6', yarn: '>=1'}
     peerDependencies:
       '@testing-library/dom': ^8.0.0 || ^9.0.0
@@ -13234,9 +13234,6 @@ packages:
   /sqlite3@5.1.7:
     resolution: {integrity: sha512-GGIyOiFaG+TUra3JIfkI/zGP8yZYLPQ0pl1bH+ODjiX57sPhrLU5sQJn1y9bDKZUFYkX1crlrPfSYt0BKKdkog==}
     requiresBuild: true
-    peerDependenciesMeta:
-      node-gyp:
-        optional: true
     dependencies:
       bindings: 1.5.0
       node-addon-api: 7.1.0
