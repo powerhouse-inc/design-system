@@ -18,12 +18,12 @@ import {
 import { InputMaybe } from 'document-model/document';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 
-function calculateUnitPricePercent(
+function calculateUnitPrice(
     cashAmount: InputMaybe<number>,
     fixedIncomeAmount: InputMaybe<number>,
 ) {
     if (!cashAmount || !fixedIncomeAmount) return 0;
-    return ((cashAmount / fixedIncomeAmount) * 100).toFixed(2);
+    return (cashAmount / fixedIncomeAmount).toFixed(2);
 }
 
 function calculateCashBalanceChange(
@@ -111,10 +111,7 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
     const fixedIncomeAmount = watch('fixedIncomeAmount');
     const type = watch('type');
     const fees = watch('fees');
-    const unitPricePercent = calculateUnitPricePercent(
-        cashAmount,
-        fixedIncomeAmount,
-    );
+    const unitPrice = calculateUnitPrice(cashAmount, fixedIncomeAmount);
     const cashBalanceChange = calculateCashBalanceChange(
         type,
         cashAmount,
@@ -213,7 +210,7 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
                     <span className="mr-2 inline-block text-gray-600">
                         Unit Price
                     </span>{' '}
-                    <span className="text-gray-900">{unitPricePercent}%</span>
+                    <span className="text-gray-900">{unitPrice}</span>
                 </div>
             </div>
             <FeeTransactionsTable
