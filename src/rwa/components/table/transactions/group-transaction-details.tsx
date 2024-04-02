@@ -89,6 +89,7 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
         watch,
         formState: { errors },
     } = useForm<GroupTransactionFormInputs>({
+        mode: 'onBlur',
         defaultValues: {
             type: item?.type ?? currentlySupportedGroupTransactionTypes[0],
             entryTime: convertToDateTimeLocalFormat(

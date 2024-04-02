@@ -55,9 +55,7 @@ export function AssetDetails(props: AssetDetailsProps) {
                             disabled: operation === 'view',
                             required: 'Asset name is required',
                         })}
-                        aria-invalid={
-                            errors.name?.type === 'required' ? 'true' : 'false'
-                        }
+                        aria-invalid={errors.name ? 'true' : 'false'}
                         errorMessage={errors.name?.message}
                         placeholder="E.g. My Asset"
                     />
@@ -67,58 +65,62 @@ export function AssetDetails(props: AssetDetailsProps) {
                 label="CUSIP"
                 hideLine={operation !== 'view'}
                 value={
-                    <RWATableTextInput
-                        {...register('CUSIP', {
-                            disabled: operation === 'view',
-                            maxLength: {
-                                value: 9,
-                                message:
-                                    'CUSIP cannot be longer than 9 characters',
-                            },
-                            minLength: {
-                                value: 9,
-                                message:
-                                    'CUSIP cannot be shorter than 9 characters',
-                            },
-                            pattern: {
-                                value: /^[a-zA-Z0-9]*$/,
-                                message: 'CUSIP must be alphanumeric',
-                            },
-                        })}
-                        disabled={operation === 'view'}
-                        errorMessage={errors.CUSIP?.message}
-                        aria-invalid={errors.CUSIP ? 'true' : 'false'}
-                        placeholder="E.g. A2345B789"
-                    />
+                    operation === 'view' ? (
+                        item?.CUSIP ?? 'Not available'
+                    ) : (
+                        <RWATableTextInput
+                            {...register('CUSIP', {
+                                maxLength: {
+                                    value: 9,
+                                    message:
+                                        'CUSIP cannot be longer than 9 characters',
+                                },
+                                minLength: {
+                                    value: 9,
+                                    message:
+                                        'CUSIP cannot be shorter than 9 characters',
+                                },
+                                pattern: {
+                                    value: /^[a-zA-Z0-9]*$/,
+                                    message: 'CUSIP must be alphanumeric',
+                                },
+                            })}
+                            errorMessage={errors.CUSIP?.message}
+                            aria-invalid={errors.CUSIP ? 'true' : 'false'}
+                            placeholder="E.g. A2345B789"
+                        />
+                    )
                 }
             />
             <RWAFormRow
                 label="ISIN"
                 hideLine={operation !== 'view'}
                 value={
-                    <RWATableTextInput
-                        {...register('ISIN', {
-                            disabled: operation === 'view',
-                            maxLength: {
-                                value: 12,
-                                message:
-                                    'ISIN cannot be longer than 12 characters',
-                            },
-                            minLength: {
-                                value: 12,
-                                message:
-                                    'ISIN cannot be shorter than 12 characters',
-                            },
-                            pattern: {
-                                value: /^[a-zA-Z0-9]*$/,
-                                message: 'ISIN must be alphanumeric',
-                            },
-                        })}
-                        disabled={operation === 'view'}
-                        errorMessage={errors.ISIN?.message}
-                        aria-invalid={errors.ISIN ? 'true' : 'false'}
-                        placeholder="E.g. 123456789ABC"
-                    />
+                    operation === 'view' ? (
+                        item?.ISIN ?? 'Not available'
+                    ) : (
+                        <RWATableTextInput
+                            {...register('ISIN', {
+                                maxLength: {
+                                    value: 12,
+                                    message:
+                                        'ISIN cannot be longer than 12 characters',
+                                },
+                                minLength: {
+                                    value: 12,
+                                    message:
+                                        'ISIN cannot be shorter than 12 characters',
+                                },
+                                pattern: {
+                                    value: /^[a-zA-Z0-9]*$/,
+                                    message: 'ISIN must be alphanumeric',
+                                },
+                            })}
+                            errorMessage={errors.ISIN?.message}
+                            aria-invalid={errors.ISIN ? 'true' : 'false'}
+                            placeholder="E.g. 123456789ABC"
+                        />
+                    )
                 }
             />
             <RWAFormRow
