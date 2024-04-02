@@ -28,11 +28,6 @@ export function SPVDetails(props: SPVDetailsProps) {
     const formInputs = () => (
         <div>
             <RWAFormRow
-                label="SPV ID"
-                hideLine={operation !== 'view'}
-                value={item?.id}
-            />
-            <RWAFormRow
                 label="SPV Label"
                 hideLine={operation !== 'view'}
                 value={

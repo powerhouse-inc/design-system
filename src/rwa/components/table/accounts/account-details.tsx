@@ -29,11 +29,6 @@ export function AccountDetails(props: AccountDetailsProps) {
     const formInputs = () => (
         <div>
             <RWAFormRow
-                label="Account ID"
-                hideLine={operation !== 'view'}
-                value={item?.id}
-            />
-            <RWAFormRow
                 label="Account Label"
                 hideLine={operation !== 'view'}
                 value={
