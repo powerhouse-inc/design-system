@@ -4,7 +4,6 @@ import {
     AssetFormInputs,
     ItemDetails,
     RWAFormRow,
-    RWANumberInput,
     RWATableSelect,
     RWATableTextInput,
     convertToDateTimeLocalFormat,
@@ -27,6 +26,7 @@ export function AssetDetails(props: AssetDetailsProps) {
         reset,
         formState: { errors },
     } = useForm<AssetFormInputs>({
+        mode: 'onBlur',
         defaultValues: {
             fixedIncomeTypeId: fixedIncomeType?.id ?? fixedIncomeTypes[0].id,
             spvId: spv?.id ?? spvs[0].id,
@@ -41,11 +41,7 @@ export function AssetDetails(props: AssetDetailsProps) {
     });
 
     const onSubmit: SubmitHandler<AssetFormInputs> = data => {
-        onSubmitForm({
-            ...data,
-            ISIN: data.ISIN?.toString(),
-            CUSIP: data.CUSIP?.toString(),
-        });
+        onSubmitForm(data);
     };
 
     const formInputs = () => (
@@ -76,17 +72,28 @@ export function AssetDetails(props: AssetDetailsProps) {
                 label="CUSIP"
                 hideLine={operation !== 'view'}
                 value={
-                    <RWANumberInput
-                        name="CUSIP"
-                        control={control}
+                    <RWATableTextInput
+                        {...register('CUSIP', {
+                            disabled: operation === 'view',
+                            maxLength: {
+                                value: 9,
+                                message:
+                                    'CUSIP cannot be longer than 9 characters',
+                            },
+                            minLength: {
+                                value: 9,
+                                message:
+                                    'CUSIP cannot be shorter than 9 characters',
+                            },
+                            pattern: {
+                                value: /^[a-zA-Z0-9]*$/,
+                                message: 'CUSIP must be alphanumeric',
+                            },
+                        })}
                         disabled={operation === 'view'}
-                        placeholder="E.g. 123456789"
-                        maxLength={9}
-                        numericFormatProps={{
-                            allowNegative: false,
-                            decimalScale: 0,
-                            thousandSeparator: '',
-                        }}
+                        errorMessage={errors.CUSIP?.message}
+                        aria-invalid={errors.CUSIP ? 'true' : 'false'}
+                        placeholder="E.g. A2345B789"
                     />
                 }
             />
@@ -94,17 +101,28 @@ export function AssetDetails(props: AssetDetailsProps) {
                 label="ISIN"
                 hideLine={operation !== 'view'}
                 value={
-                    <RWANumberInput
-                        name="ISIN"
-                        control={control}
+                    <RWATableTextInput
+                        {...register('ISIN', {
+                            disabled: operation === 'view',
+                            maxLength: {
+                                value: 12,
+                                message:
+                                    'ISIN cannot be longer than 12 characters',
+                            },
+                            minLength: {
+                                value: 12,
+                                message:
+                                    'ISIN cannot be shorter than 12 characters',
+                            },
+                            pattern: {
+                                value: /^[a-zA-Z0-9]*$/,
+                                message: 'ISIN must be alphanumeric',
+                            },
+                        })}
                         disabled={operation === 'view'}
-                        placeholder="E.g. 123456789012"
-                        maxLength={12}
-                        numericFormatProps={{
-                            allowNegative: false,
-                            decimalScale: 0,
-                            thousandSeparator: '',
-                        }}
+                        errorMessage={errors.ISIN?.message}
+                        aria-invalid={errors.ISIN ? 'true' : 'false'}
+                        placeholder="E.g. 123456789ABC"
                     />
                 }
             />
