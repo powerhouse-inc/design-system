@@ -47,11 +47,6 @@ export function AssetDetails(props: AssetDetailsProps) {
     const formInputs = () => (
         <div>
             <RWAFormRow
-                label="Asset ID"
-                hideLine={operation !== 'view'}
-                value={item?.id}
-            />
-            <RWAFormRow
                 label="Asset Name"
                 hideLine={operation !== 'view'}
                 value={
