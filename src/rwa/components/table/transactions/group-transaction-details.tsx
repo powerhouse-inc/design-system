@@ -10,7 +10,7 @@ import {
     RWAFormRow,
     RWANumberInput,
     RWATableSelect,
-    TransactionFee,
+    TransactionFeeInput,
     convertToDateTimeLocalFormat,
     groupTransactionTypeLabels,
     groupTransactionTypes,
@@ -35,7 +35,7 @@ function calculateUnitPrice(
 function calculateCashBalanceChange(
     transactionType: InputMaybe<GroupTransactionType>,
     cashAmount: InputMaybe<number>,
-    fees: InputMaybe<TransactionFee[]>,
+    fees: InputMaybe<TransactionFeeInput[]>,
 ) {
     if (!cashAmount || !transactionType) return 0;
 
@@ -146,11 +146,13 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
             entryTime: convertToDateTimeLocalFormat(
                 item?.entryTime ?? new Date(),
             ),
-            cashAmount: item?.cashTransaction?.amount ?? undefined,
-            fixedIncomeId: fixedIncome?.id ?? fixedIncomes[0]?.id,
-            fixedIncomeAmount:
-                item?.fixedIncomeTransaction?.amount ?? undefined,
-            fees: item?.fees ?? undefined,
+            cashAmount: item?.cashTransaction?.amount ?? null,
+            fixedIncomeId:
+                fixedIncome?.id ?? fixedIncomes.length > 0
+                    ? fixedIncomes[0].id
+                    : null,
+            fixedIncomeAmount: item?.fixedIncomeTransaction?.amount ?? null,
+            fees: item?.fees ?? null,
         },
     });
 

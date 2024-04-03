@@ -28,15 +28,18 @@ export function AssetDetails(props: AssetDetailsProps) {
     } = useForm<AssetFormInputs>({
         mode: 'onBlur',
         defaultValues: {
-            fixedIncomeTypeId: fixedIncomeType?.id ?? fixedIncomeTypes[0]?.id,
-            spvId: spv?.id ?? spvs[0]?.id,
-            name: item?.name,
+            fixedIncomeTypeId:
+                fixedIncomeType?.id ?? fixedIncomeTypes.length > 0
+                    ? fixedIncomeTypes[0].id
+                    : null,
+            spvId: spv?.id ?? spvs.length > 0 ? spvs[0].id : null,
+            name: item?.name ?? null,
             maturity: convertToDateTimeLocalFormat(
                 item?.maturity ?? new Date(),
             ),
-            ISIN: item?.ISIN,
-            CUSIP: item?.CUSIP,
-            coupon: item?.coupon,
+            ISIN: item?.ISIN ?? null,
+            CUSIP: item?.CUSIP ?? null,
+            coupon: item?.coupon ?? null,
         },
     });
 
