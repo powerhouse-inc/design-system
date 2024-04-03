@@ -84,7 +84,7 @@ export type GroupTransactionsTableProps = Pick<
     PropsToKeepFromTable
 > & {
     transactions: GroupTransaction[];
-    cashAssets: CashAsset[];
+    cashAsset: CashAsset | undefined;
     fixedIncomes: FixedIncome[];
     serviceProviderFeeTypes: ServiceProviderFeeType[];
     principalLenderAccountId: string;

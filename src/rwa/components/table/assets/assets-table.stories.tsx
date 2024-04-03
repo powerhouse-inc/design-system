@@ -29,11 +29,11 @@ function createAssetFromFormInputs(data: AssetFormInputs) {
     };
 }
 
-export const Primary: Story = {
+export const Empty: Story = {
     args: {
-        assets: mockFixedIncomes,
-        fixedIncomeTypes: mockFixedIncomeTypes,
-        spvs: mockSPVs,
+        assets: [],
+        fixedIncomeTypes: [],
+        spvs: [],
     },
     render: function Wrapper(args) {
         const [expandedRowId, setExpandedRowId] = useState<string>();
@@ -96,5 +96,14 @@ export const Primary: Story = {
                     ))}
             </div>
         );
+    },
+};
+
+export const WithData: Story = {
+    ...Empty,
+    args: {
+        assets: mockFixedIncomes,
+        fixedIncomeTypes: mockFixedIncomeTypes,
+        spvs: mockSPVs,
     },
 };

@@ -141,7 +141,7 @@ export function FeeTransactionsTable<ControlInputs extends FieldValues>(
                         props.append({
                             amount: undefined,
                             serviceProviderFeeTypeId:
-                                props.serviceProviderFeeTypes[0].id,
+                                props.serviceProviderFeeTypes[0]?.id,
                         })
                     }
                     className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-white pb-6 pt-0 text-sm font-semibold  text-gray-900"
