@@ -20,7 +20,7 @@ type FixedIncomesTableProps = ComponentPropsWithoutRef<typeof AssetsTable>;
 
 function createAssetFromFormInputs(data: AssetFormInputs) {
     const id = utils.hashKey();
-    const maturity = data.maturity.toString();
+    const maturity = data.maturity?.toString() ?? null;
 
     return {
         ...data,

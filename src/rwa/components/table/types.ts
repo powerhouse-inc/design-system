@@ -205,45 +205,45 @@ export type FixedIncomeTypeDetailsProps = Pick<
 };
 
 export type ServiceProviderFeeTypeFormInputs = {
-    name: string | null;
-    feeType: string | null;
-    accountId: string | null;
+    name?: string | null;
+    feeType?: string | null;
+    accountId?: string | null;
 };
 
 export type AssetFormInputs = {
-    fixedIncomeTypeId: string | null;
-    spvId: string | null;
-    maturity: string;
-    name: string | null;
+    fixedIncomeTypeId?: string | null;
+    spvId?: string | null;
+    maturity?: string;
+    name?: string | null;
     ISIN?: string | null;
     CUSIP?: string | null;
     coupon?: number | null;
 };
 
 export type TransactionFeeInput = {
-    amount: number | null;
-    serviceProviderFeeTypeId: string | null;
+    amount?: number | null;
+    serviceProviderFeeTypeId?: string | null;
 };
 
 export type GroupTransactionFormInputs = {
-    type: GroupTransactionType;
-    entryTime: string;
-    fixedIncomeId: string | null;
-    fees: TransactionFeeInput[] | null;
-    cashAmount: number | null;
-    fixedIncomeAmount: number | null;
-    cashBalanceChange: number | null;
+    type?: GroupTransactionType;
+    entryTime?: string;
+    fixedIncomeId?: string | null;
+    fees?: TransactionFeeInput[] | null;
+    cashAmount?: number | null;
+    fixedIncomeAmount?: number | null;
+    cashBalanceChange?: number | null;
 };
 
 export type AccountFormInputs = {
-    label: string | null;
-    reference: string | null;
+    label?: string | null;
+    reference?: string | null;
 };
 
 export type SPVFormInputs = {
-    name: string | null;
+    name?: string | null;
 };
 
 export type FixedIncomeTypeFormInputs = {
-    name: string | null;
+    name?: string | null;
 };
