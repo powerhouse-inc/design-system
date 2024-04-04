@@ -1,5 +1,6 @@
 import { DateTimeLocalInput } from '@/connect';
 import {
+    ASSET_SALE,
     FEES_PAYMENT,
     FeeTransactionsTable,
     FixedIncome,
@@ -8,6 +9,7 @@ import {
     GroupTransactionFormInputs,
     GroupTransactionType,
     ItemDetails,
+    PRINCIPAL_RETURN,
     RWAFormRow,
     RWANumberInput,
     RWATableSelect,
@@ -41,7 +43,10 @@ function calculateCashBalanceChange(
 ) {
     if (!cashAmount || !transactionType) return 0;
 
-    const operation = transactionType === 'AssetPurchase' ? -1 : 1;
+    const operation =
+        transactionType === ASSET_SALE || transactionType === PRINCIPAL_RETURN
+            ? 1
+            : -1;
 
     const feeAmounts = fees?.map(fee => fee.amount).filter(Boolean) ?? [];
 
@@ -150,7 +155,7 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
         },
     });
 
-    const type = watch('type');
+    const type = useWatch({ control, name: 'type' });
 
     const isAssetTransaction = assetGroupTransactions.includes(
         type ?? allGroupTransactionTypes[0],
@@ -163,13 +168,28 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
     });
 
     const onSubmit: SubmitHandler<GroupTransactionFormInputs> = data => {
+        const type = data.type;
+        const entryTime = data.entryTime;
+        const cashAmount = data.cashAmount;
+        const cashBalanceChange = calculateCashBalanceChange(
+            data.type,
+            data.cashAmount,
+            data.fees,
+        );
+        const fixedIncomeId = isAssetTransaction ? data.fixedIncomeId : null;
+        const fixedIncomeAmount = isAssetTransaction
+            ? data.fixedIncomeAmount
+            : null;
+        const fees = canHaveTransactionFees ? data.fees : null;
+
         onSubmitForm({
-            ...data,
-            cashBalanceChange: calculateCashBalanceChange(
-                data.type,
-                data.cashAmount,
-                data.fees,
-            ),
+            type,
+            entryTime,
+            cashAmount,
+            cashBalanceChange,
+            fixedIncomeId,
+            fixedIncomeAmount,
+            fees,
         });
     };
 
