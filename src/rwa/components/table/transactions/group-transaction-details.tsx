@@ -1,5 +1,6 @@
 import { DateTimeLocalInput } from '@/connect';
 import {
+    FEES_PAYMENT,
     FeeTransactionsTable,
     FixedIncome,
     FormattedNumber,
@@ -11,9 +12,10 @@ import {
     RWANumberInput,
     RWATableSelect,
     TransactionFeeInput,
+    allGroupTransactionTypes,
+    assetGroupTransactions,
     convertToDateTimeLocalFormat,
     groupTransactionTypeLabels,
-    groupTransactionTypes,
 } from '@/rwa';
 import { InputMaybe } from 'document-model/document';
 import {
@@ -102,18 +104,10 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
         onCancel,
         onSubmitForm,
     } = props;
-
-    const currentlySupportedGroupTransactionTypes = [
-        'AssetPurchase',
-        'AssetSale',
-    ] as const;
-
-    const transactionTypeOptions = groupTransactionTypes
-        .filter(type => currentlySupportedGroupTransactionTypes.includes(type))
-        .map(type => ({
-            label: groupTransactionTypeLabels[type],
-            id: type,
-        }));
+    const transactionTypeOptions = allGroupTransactionTypes.map(type => ({
+        label: groupTransactionTypeLabels[type],
+        id: type,
+    }));
     const fixedIncomeOptions = fixedIncomes.map(fixedIncome => ({
         label: makeFixedIncomeOptionLabel(fixedIncome),
         id: fixedIncome.id,
@@ -142,7 +136,7 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
     } = useForm<GroupTransactionFormInputs>({
         mode: 'onBlur',
         defaultValues: {
-            type: item?.type ?? currentlySupportedGroupTransactionTypes[0],
+            type: item?.type ?? allGroupTransactionTypes[0],
             entryTime: convertToDateTimeLocalFormat(
                 item?.entryTime ?? new Date(),
             ),
@@ -155,6 +149,13 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
             fees: item?.fees ?? null,
         },
     });
+
+    const type = watch('type');
+
+    const isAssetTransaction = assetGroupTransactions.includes(
+        type ?? allGroupTransactionTypes[0],
+    );
+    const canHaveTransactionFees = type !== FEES_PAYMENT;
 
     const { fields, append, remove } = useFieldArray({
         control,
@@ -201,38 +202,43 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
                         />
                     }
                 />
-                <RWAFormRow
-                    label="Asset name"
-                    hideLine={operation !== 'view'}
-                    value={
-                        <RWATableSelect
-                            control={control}
-                            required
-                            name="fixedIncomeId"
-                            disabled={operation === 'view'}
-                            options={fixedIncomeOptions}
-                        />
-                    }
-                />
-                <RWAFormRow
-                    label="Quantity"
-                    hideLine={operation !== 'view'}
-                    value={
-                        <RWANumberInput
-                            name="fixedIncomeAmount"
-                            requiredErrorMessage="Quantity is required"
-                            disabled={operation === 'view'}
-                            control={control}
-                            aria-invalid={
-                                errors.fixedIncomeAmount?.type === 'required'
-                                    ? 'true'
-                                    : 'false'
-                            }
-                            errorMessage={errors.fixedIncomeAmount?.message}
-                            placeholder="E.g. 1,000.00"
-                        />
-                    }
-                />
+                {isAssetTransaction && (
+                    <RWAFormRow
+                        label="Asset name"
+                        hideLine={operation !== 'view'}
+                        value={
+                            <RWATableSelect
+                                control={control}
+                                required
+                                name="fixedIncomeId"
+                                disabled={operation === 'view'}
+                                options={fixedIncomeOptions}
+                            />
+                        }
+                    />
+                )}
+                {isAssetTransaction && (
+                    <RWAFormRow
+                        label="Quantity"
+                        hideLine={operation !== 'view'}
+                        value={
+                            <RWANumberInput
+                                name="fixedIncomeAmount"
+                                requiredErrorMessage="Quantity is required"
+                                disabled={operation === 'view'}
+                                control={control}
+                                aria-invalid={
+                                    errors.fixedIncomeAmount?.type ===
+                                    'required'
+                                        ? 'true'
+                                        : 'false'
+                                }
+                                errorMessage={errors.fixedIncomeAmount?.message}
+                                placeholder="E.g. 1,000.00"
+                            />
+                        }
+                    />
+                )}
                 <RWAFormRow
                     label="Asset Proceeds"
                     hideLine={operation !== 'view'}
@@ -253,19 +259,21 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
                         />
                     }
                 />
-                <UnitPrice control={control} />
+                {isAssetTransaction && <UnitPrice control={control} />}
             </div>
-            <FeeTransactionsTable
-                register={register}
-                feeInputs={fields}
-                serviceProviderFeeTypes={serviceProviderFeeTypes}
-                control={control}
-                watch={watch}
-                remove={remove}
-                append={append}
-                errors={errors}
-                isViewOnly={operation === 'view'}
-            />
+            {canHaveTransactionFees && (
+                <FeeTransactionsTable
+                    register={register}
+                    feeInputs={fields}
+                    serviceProviderFeeTypes={serviceProviderFeeTypes}
+                    control={control}
+                    watch={watch}
+                    remove={remove}
+                    append={append}
+                    errors={errors}
+                    isViewOnly={operation === 'view'}
+                />
+            )}
             <CashBalanceChange control={control} />
         </>
     );
