@@ -45,6 +45,7 @@ export type TableBaseProps<TTableData extends TableItem> = DivProps & {
     onClickSort: (key: string, direction: SortDirection) => void;
     children?: ReactNode;
     footer?: ReactNode;
+    hasExpandedRow?: boolean;
 };
 
 export type TableProps<

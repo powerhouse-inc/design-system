@@ -70,3 +70,19 @@ export const mockGroupTransactions: GroupTransaction[] =
             id: `group-transaction-${i}`,
         };
     });
+
+export const manyMockGroupTransactions: GroupTransaction[] = [
+    ...mockGroupTransactions,
+    ...mockGroupTransactions,
+    ...mockGroupTransactions,
+    ...mockGroupTransactions,
+    ...mockGroupTransactions,
+    ...mockGroupTransactions,
+    ...mockGroupTransactions,
+    ...mockGroupTransactions,
+    ...mockGroupTransactions,
+    ...mockGroupTransactions,
+].map((transaction, i) => ({
+    ...transaction,
+    id: `group-transaction-${i}`,
+}));

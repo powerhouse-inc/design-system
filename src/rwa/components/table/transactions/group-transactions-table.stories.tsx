@@ -1,5 +1,6 @@
 import { GroupTransaction } from '@/rwa';
 import {
+    manyMockGroupTransactions,
     mockAccounts,
     mockCashAsset,
     mockFixedIncomes,
@@ -110,5 +111,13 @@ export const WithData: Story = {
         serviceProviderFeeTypes: mockServiceProviderFeeTypes,
         principalLenderAccountId: mockPrincipalLenderAccountId,
         accounts: mockAccounts,
+    },
+};
+
+export const WithManyItems: Story = {
+    ...WithData,
+    args: {
+        ...WithData.args,
+        transactions: manyMockGroupTransactions,
     },
 };
