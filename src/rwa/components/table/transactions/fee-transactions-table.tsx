@@ -1,5 +1,6 @@
 import { Icon } from '@/powerhouse';
 import {
+    Account,
     GroupTransactionFormInputs,
     RWANumberInput,
     ServiceProviderAndFeeTypeTableInput,
@@ -20,6 +21,7 @@ import { twMerge } from 'tailwind-merge';
 type Props = {
     feeInputs: FieldArrayWithId<GroupTransactionFormInputs, 'fees'>[];
     serviceProviderFeeTypes: ServiceProviderFeeType[];
+    accounts: Account[];
     register: UseFormRegister<GroupTransactionFormInputs>;
     control: Control<GroupTransactionFormInputs>;
     watch: UseFormWatch<GroupTransactionFormInputs>;
@@ -34,7 +36,7 @@ export function FeeTransactionsTable(props: Props) {
 
     const serviceProviderFeeTypeOptions = props.serviceProviderFeeTypes.map(
         spft => ({
-            label: `${spft.name} — ${spft.feeType} — ${spft.accountId}`,
+            label: `${spft.name} — ${spft.feeType} — ${props.accounts.find(account => account.id === spft.accountId)?.reference}`,
             id: spft.id,
         }),
     );

@@ -86,6 +86,7 @@ export type GroupTransactionsTableProps = Pick<
     cashAsset: CashAsset | undefined;
     fixedIncomes: FixedIncome[];
     serviceProviderFeeTypes: ServiceProviderFeeType[];
+    accounts: Account[];
     principalLenderAccountId: string;
 };
 
@@ -172,6 +173,7 @@ export type GroupTransactionDetailsProps = Pick<
 > & {
     fixedIncomes: FixedIncome[];
     serviceProviderFeeTypes: ServiceProviderFeeType[];
+    accounts: Account[];
     onSubmitForm: (data: GroupTransactionFormInputs) => void;
 };
 

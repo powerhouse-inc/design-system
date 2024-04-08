@@ -102,6 +102,7 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
     const {
         fixedIncomes,
         serviceProviderFeeTypes,
+        accounts,
         item,
         operation,
         onCancel,
@@ -289,6 +290,7 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
                     register={register}
                     feeInputs={fields}
                     serviceProviderFeeTypes={serviceProviderFeeTypes}
+                    accounts={accounts}
                     control={control}
                     watch={watch}
                     remove={remove}
