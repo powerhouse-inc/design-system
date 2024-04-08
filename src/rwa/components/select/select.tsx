@@ -57,7 +57,7 @@ export const RWASelect: React.FC<RWASelectProps> = props => {
                 <ListBox
                     {...mergeClassNameProps(
                         listBoxProps,
-                        'modal-shadow rounded-xl bg-white py-3 text-xs outline-none',
+                        'modal-shadow w-[--trigger-width] rounded-xl bg-white py-3 text-xs outline-none',
                     )}
                 >
                     {options.map(option => (
