@@ -27,3 +27,11 @@ export const cashTransactionSignByTransactionType: Record<
     [FEES_PAYMENT]: -1,
     [INTEREST_PAYMENT]: -1,
 } as const;
+
+export const assetTransactionSignByTransactionType: Record<
+    typeof ASSET_PURCHASE | typeof ASSET_SALE,
+    -1 | 1
+> = {
+    [ASSET_SALE]: -1,
+    [ASSET_PURCHASE]: 1,
+} as const;

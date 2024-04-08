@@ -1,5 +1,6 @@
 import { GroupTransaction } from '@/rwa';
 import {
+    mockAccounts,
     mockCashAsset,
     mockFixedIncomes,
     mockGroupTransactions,
@@ -34,6 +35,7 @@ export const Empty: Story = {
         fixedIncomes: [],
         cashAsset: mockCashAsset,
         serviceProviderFeeTypes: [],
+        accounts: [],
         principalLenderAccountId: mockPrincipalLenderAccountId,
     },
     render: function Wrapper(args) {
@@ -100,5 +102,6 @@ export const WithData: Story = {
         cashAsset: mockCashAsset,
         serviceProviderFeeTypes: mockServiceProviderFeeTypes,
         principalLenderAccountId: mockPrincipalLenderAccountId,
+        accounts: mockAccounts,
     },
 };

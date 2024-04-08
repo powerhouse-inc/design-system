@@ -1,5 +1,11 @@
 import { mockFixedIncomes, mockPrincipalLenderAccountId } from '.';
-import { allGroupTransactionTypes } from '../constants/transactions';
+import { calculateCashBalanceChange } from '../components';
+import {
+    FEES_PAYMENT,
+    allGroupTransactionTypes,
+} from '../constants/transactions';
+import { GroupTransaction } from '../types';
+import { isAssetGroupTransactionType } from '../utils';
 
 export const mockFixedIncomeTransaction = {
     id: 'fixed-income-transaction-1',
@@ -43,8 +49,24 @@ export const mockGroupTransaction = {
     interestTransaction: null,
 };
 
-export const mockGroupTransactions = Array.from({ length: 10 }, (_, i) => ({
-    ...mockGroupTransaction,
-    cashBalanceChange: i % 2 === 0 ? 1000 : -1000,
-    id: `group-transaction-${i}`,
-}));
+export const mockGroupTransactions: GroupTransaction[] =
+    allGroupTransactionTypes.map((type, i) => {
+        const fees = type !== FEES_PAYMENT ? mockGroupTransaction.fees : null;
+        const cashTransaction = mockCashTransaction;
+        const fixedIncomeTransaction = isAssetGroupTransactionType(type)
+            ? mockFixedIncomeTransaction
+            : null;
+        const cashBalanceChange = calculateCashBalanceChange(
+            type,
+            cashTransaction.amount,
+            fees,
+        );
+        return {
+            ...mockGroupTransaction,
+            type,
+            fees,
+            cashBalanceChange,
+            fixedIncomeTransaction,
+            id: `group-transaction-${i}`,
+        };
+    });

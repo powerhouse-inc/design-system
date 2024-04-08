@@ -6,19 +6,17 @@ import {
     FormattedNumber,
     GroupTransactionDetailsProps,
     GroupTransactionFormInputs,
-    GroupTransactionType,
     ItemDetails,
     RWAFormRow,
     RWANumberInput,
     RWATableSelect,
-    TransactionFeeInput,
     allGroupTransactionTypes,
     assetGroupTransactions,
-    cashTransactionSignByTransactionType,
+    calculateCashBalanceChange,
+    calculateUnitPrice,
     convertToDateTimeLocalFormat,
     groupTransactionTypeLabels,
 } from '@/rwa';
-import { InputMaybe } from 'document-model/document';
 import {
     Control,
     SubmitHandler,
@@ -26,30 +24,6 @@ import {
     useForm,
     useWatch,
 } from 'react-hook-form';
-
-function calculateUnitPrice(
-    cashAmount: InputMaybe<number>,
-    fixedIncomeAmount: InputMaybe<number>,
-) {
-    if (!cashAmount || !fixedIncomeAmount) return 0;
-    return cashAmount / fixedIncomeAmount;
-}
-
-function calculateCashBalanceChange(
-    transactionType: InputMaybe<GroupTransactionType>,
-    cashAmount: InputMaybe<number>,
-    fees: InputMaybe<TransactionFeeInput[]>,
-) {
-    if (!cashAmount || !transactionType) return 0;
-
-    const sign = cashTransactionSignByTransactionType[transactionType];
-
-    const feeAmounts = fees?.map(fee => fee.amount).filter(Boolean) ?? [];
-
-    const totalFees = feeAmounts.reduce((acc, fee) => acc + fee, 0);
-
-    return cashAmount * sign - totalFees;
-}
 
 function CashBalanceChange(props: {
     control: Control<GroupTransactionFormInputs>;
