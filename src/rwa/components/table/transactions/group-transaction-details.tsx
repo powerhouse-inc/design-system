@@ -81,6 +81,7 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
         operation,
         onCancel,
         onSubmitForm,
+        onSubmitDelete,
     } = props;
     const transactionTypeOptions = allGroupTransactionTypes.map(type => ({
         label: groupTransactionTypeLabels[type],
@@ -169,6 +170,10 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
             cashBalanceChange,
             unitPrice,
         });
+    };
+
+    const onDelete = (itemId: string) => {
+        onSubmitDelete(itemId);
     };
 
     const formInputs = () => (
@@ -283,6 +288,7 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
         onSubmit,
         reset,
         onCancel,
+        onDelete,
     };
 
     return <ItemDetails {...props} {...formProps} />;

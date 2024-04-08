@@ -8,7 +8,7 @@ import {
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 export function AccountDetails(props: AccountDetailsProps) {
-    const { onCancel, onSubmitForm, item, operation } = props;
+    const { onSubmitForm, item, operation } = props;
 
     const {
         register,
@@ -72,7 +72,6 @@ export function AccountDetails(props: AccountDetailsProps) {
         handleSubmit,
         onSubmit,
         reset,
-        onCancel,
     };
 
     return <ItemDetails {...props} {...formProps} />;

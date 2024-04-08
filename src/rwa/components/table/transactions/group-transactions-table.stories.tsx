@@ -59,6 +59,12 @@ export const Empty: Story = {
                 setShowNewItemForm(false);
             }, []);
 
+        const onSubmitDelete: GroupTransactionsTableProps['onSubmitDelete'] =
+            useCallback(id => {
+                console.log('delete', { id });
+                setSelectedItem(undefined);
+            }, []);
+
         const argsWithHandlers: GroupTransactionsTableProps = {
             ...args,
             expandedRowId,
@@ -69,6 +75,7 @@ export const Empty: Story = {
             setShowNewItemForm,
             onSubmitEdit,
             onSubmitCreate,
+            onSubmitDelete,
         };
         return (
             <div className="flex flex-col gap-4">
