@@ -1,6 +1,5 @@
 import { DateTimeLocalInput } from '@/connect';
 import {
-    ASSET_SALE,
     FEES_PAYMENT,
     FeeTransactionsTable,
     FixedIncome,
@@ -9,13 +8,13 @@ import {
     GroupTransactionFormInputs,
     GroupTransactionType,
     ItemDetails,
-    PRINCIPAL_RETURN,
     RWAFormRow,
     RWANumberInput,
     RWATableSelect,
     TransactionFeeInput,
     allGroupTransactionTypes,
     assetGroupTransactions,
+    cashTransactionSignByTransactionType,
     convertToDateTimeLocalFormat,
     groupTransactionTypeLabels,
 } from '@/rwa';
@@ -43,16 +42,13 @@ function calculateCashBalanceChange(
 ) {
     if (!cashAmount || !transactionType) return 0;
 
-    const operation =
-        transactionType === ASSET_SALE || transactionType === PRINCIPAL_RETURN
-            ? 1
-            : -1;
+    const sign = cashTransactionSignByTransactionType[transactionType];
 
     const feeAmounts = fees?.map(fee => fee.amount).filter(Boolean) ?? [];
 
     const totalFees = feeAmounts.reduce((acc, fee) => acc + fee, 0);
 
-    return cashAmount * operation - totalFees;
+    return cashAmount * sign - totalFees;
 }
 
 function CashBalanceChange(props: {
