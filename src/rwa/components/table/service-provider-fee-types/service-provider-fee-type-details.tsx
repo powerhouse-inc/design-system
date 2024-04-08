@@ -36,7 +36,7 @@ export function ServiceProviderFeeTypeDetails(
     };
 
     function makeAccountLabel(account: Account) {
-        return `${account.label} (${account.id})`;
+        return `${account.label} (${account.reference})`;
     }
 
     function makeAccountOptions(accounts: Account[]) {
