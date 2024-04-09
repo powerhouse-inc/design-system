@@ -7,7 +7,6 @@ import {
     GroupTransactionDetailsProps,
     GroupTransactionFormInputs,
     ItemDetails,
-    RWAFormRow,
     RWANumberInput,
     RWATableSelect,
     allGroupTransactionTypes,
@@ -24,6 +23,8 @@ import {
     useForm,
     useWatch,
 } from 'react-hook-form';
+import { twMerge } from 'tailwind-merge';
+import { FormInputs } from '../../inputs/form-inputs';
 
 function CashBalanceChange(props: {
     control: Control<GroupTransactionFormInputs>;
@@ -54,7 +55,10 @@ function CashBalanceChange(props: {
     );
 }
 
-function UnitPrice(props: { control: Control<GroupTransactionFormInputs> }) {
+function UnitPrice(props: {
+    control: Control<GroupTransactionFormInputs>;
+    isViewOnly: boolean;
+}) {
     const { control } = props;
 
     const cashAmount = useWatch({ control, name: 'cashAmount' });
@@ -63,8 +67,8 @@ function UnitPrice(props: { control: Control<GroupTransactionFormInputs> }) {
     const unitPrice = calculateUnitPrice(cashAmount, fixedIncomeAmount);
 
     return (
-        <div className="my-2 ml-auto mr-6 w-fit text-xs">
-            <span className="mr-2 inline-block text-gray-600">Unit Price</span>{' '}
+        <div className={twMerge('mt-1 w-fit', !props.isViewOnly && 'ml-auto')}>
+            <span className="text-gray-600">Unit Price</span>{' '}
             <span className="text-gray-900">
                 <FormattedNumber value={unitPrice} />
             </span>
@@ -176,94 +180,97 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
         onSubmitDelete(itemId);
     };
 
+    const inputs = [
+        {
+            label: 'Transaction Type',
+            Input: () => (
+                <RWATableSelect
+                    required
+                    control={control}
+                    name="type"
+                    disabled={operation === 'view'}
+                    options={transactionTypeOptions}
+                />
+            ),
+        },
+        {
+            label: 'Entry Time',
+            Input: () => (
+                <DateTimeLocalInput
+                    {...register('entryTime', {
+                        required: true,
+                        disabled: operation === 'view',
+                    })}
+                    name="entryTime"
+                />
+            ),
+        },
+        isAssetTransaction
+            ? {
+                  label: 'Asset name',
+                  Input: () => (
+                      <RWATableSelect
+                          control={control}
+                          required
+                          name="fixedIncomeId"
+                          disabled={operation === 'view'}
+                          options={fixedIncomeOptions}
+                      />
+                  ),
+              }
+            : undefined,
+        isAssetTransaction
+            ? {
+                  label: 'Quantity',
+                  Input: () => (
+                      <RWANumberInput
+                          name="fixedIncomeAmount"
+                          requiredErrorMessage="Quantity is required"
+                          disabled={operation === 'view'}
+                          control={control}
+                          aria-invalid={
+                              errors.fixedIncomeAmount?.type === 'required'
+                                  ? 'true'
+                                  : 'false'
+                          }
+                          errorMessage={errors.fixedIncomeAmount?.message}
+                          placeholder="E.g. 1,000.00"
+                      />
+                  ),
+              }
+            : undefined,
+        {
+            label: 'Asset Proceeds',
+            Input: () => (
+                <>
+                    <RWANumberInput
+                        name="cashAmount"
+                        requiredErrorMessage="Asset proceeds is required"
+                        currency="USD"
+                        disabled={operation === 'view'}
+                        control={control}
+                        aria-invalid={
+                            errors.cashAmount?.type === 'required'
+                                ? 'true'
+                                : 'false'
+                        }
+                        errorMessage={errors.cashAmount?.message}
+                        placeholder="E.g. $1,000.00"
+                    />
+                    {isAssetTransaction && (
+                        <UnitPrice
+                            control={control}
+                            isViewOnly={operation === 'view'}
+                        />
+                    )}
+                </>
+            ),
+        },
+    ].filter(Boolean);
+
     const formInputs = () => (
         <>
-            <div>
-                <RWAFormRow
-                    label="Transaction Type"
-                    hideLine={operation !== 'view'}
-                    value={
-                        <RWATableSelect
-                            required
-                            control={control}
-                            name="type"
-                            disabled={operation === 'view'}
-                            options={transactionTypeOptions}
-                        />
-                    }
-                />
-                <RWAFormRow
-                    label="Entry Time"
-                    hideLine={operation !== 'view'}
-                    value={
-                        <DateTimeLocalInput
-                            {...register('entryTime', {
-                                required: true,
-                                disabled: operation === 'view',
-                            })}
-                            name="entryTime"
-                        />
-                    }
-                />
-                {isAssetTransaction && (
-                    <RWAFormRow
-                        label="Asset name"
-                        hideLine={operation !== 'view'}
-                        value={
-                            <RWATableSelect
-                                control={control}
-                                required
-                                name="fixedIncomeId"
-                                disabled={operation === 'view'}
-                                options={fixedIncomeOptions}
-                            />
-                        }
-                    />
-                )}
-                {isAssetTransaction && (
-                    <RWAFormRow
-                        label="Quantity"
-                        hideLine={operation !== 'view'}
-                        value={
-                            <RWANumberInput
-                                name="fixedIncomeAmount"
-                                requiredErrorMessage="Quantity is required"
-                                disabled={operation === 'view'}
-                                control={control}
-                                aria-invalid={
-                                    errors.fixedIncomeAmount?.type ===
-                                    'required'
-                                        ? 'true'
-                                        : 'false'
-                                }
-                                errorMessage={errors.fixedIncomeAmount?.message}
-                                placeholder="E.g. 1,000.00"
-                            />
-                        }
-                    />
-                )}
-                <RWAFormRow
-                    label="Asset Proceeds"
-                    hideLine={operation !== 'view'}
-                    value={
-                        <RWANumberInput
-                            name="cashAmount"
-                            requiredErrorMessage="Asset Proceeds is required"
-                            currency="USD"
-                            disabled={operation === 'view'}
-                            control={control}
-                            aria-invalid={
-                                errors.cashAmount?.type === 'required'
-                                    ? 'true'
-                                    : 'false'
-                            }
-                            errorMessage={errors.cashAmount?.message}
-                            placeholder="E.g. $1,000.00"
-                        />
-                    }
-                />
-                {isAssetTransaction && <UnitPrice control={control} />}
-            </div>
+            <FormInputs inputs={inputs} />
             {canHaveTransactionFees && (
                 <FeeTransactionsTable
                     register={register}

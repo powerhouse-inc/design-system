@@ -44,16 +44,17 @@ export function FeeTransactionsTable(props: Props) {
     return (
         <>
             {props.feeInputs.length > 0 && (
-                <div className="bg-gray-50 px-6 pt-3">
-                    <table className="w-full border-separate border-spacing-x-4 border-spacing-y-1">
+                <div className="bg-gray-50 pl-5 pt-3">
+                    <table className="w-full border-separate text-xs font-medium">
                         <thead className="mb-2">
                             <tr>
                                 {headings.map(heading => (
                                     <th
                                         key={heading}
                                         className={twMerge(
-                                            'p-2 text-left text-xs font-medium text-gray-600',
+                                            'py-2 text-left font-medium text-gray-600',
                                             heading === 'Amount' &&
+                                                !props.isViewOnly &&
                                                 'text-right',
                                         )}
                                     >
@@ -78,8 +79,8 @@ export function FeeTransactionsTable(props: Props) {
 
                                 return (
                                     <tr key={feeInput.id}>
-                                        <td className=""></td>
-                                        <td className="">
+                                        <td className="w-52"></td>
+                                        <td className="w-96">
                                             <ServiceProviderAndFeeTypeTableInput
                                                 selectedServiceProviderFeeType={
                                                     selectedServiceProviderFeeType
@@ -92,7 +93,7 @@ export function FeeTransactionsTable(props: Props) {
                                                 control={props.control}
                                             />
                                         </td>
-                                        <td className="w-1/4">
+                                        <td className="w-52">
                                             <RWANumberInput
                                                 required
                                                 name={
@@ -143,7 +144,7 @@ export function FeeTransactionsTable(props: Props) {
                                 props.serviceProviderFeeTypes[0]?.id,
                         })
                     }
-                    className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-white pb-6 pt-0 text-sm font-semibold  text-gray-900"
+                    className="ml-[234px] mt-1 flex w-fit items-center justify-center gap-x-2 rounded-lg bg-white pb-6 text-sm font-semibold text-gray-900"
                 >
                     <span>Add Fee</span>
                     <Icon name="plus" size={16} />
