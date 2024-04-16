@@ -255,7 +255,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
             return (
                 <SyncStatusIcon
                     syncStatus={item.syncStatus}
-                    className="absolute right-2 top-4"
+                    className="absolute right-0 top-4"
                 />
             );
         }

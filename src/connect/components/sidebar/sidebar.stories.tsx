@@ -8,6 +8,8 @@ import { useArgs } from '@storybook/preview-api';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ConnectSidebar, DriveView, DriveViewProps } from '..';
 
+const emptyDrives = []
+
 const drives = [
     ...generateMockDriveData({
         path: 'drive',
@@ -105,19 +107,16 @@ export const Sidebar: Story = {
                 <DriveViewImpl
                     type="PUBLIC_DRIVE"
                     name="Public Drives"
-                    className="mx-2 mb-2"
                     onItemOptionsClick={onItemOptionsClick}
                 />
                 <DriveViewImpl
                     type="CLOUD_DRIVE"
                     name="Secure Cloud Storage"
-                    className="mx-2 mb-2"
                     onItemOptionsClick={onItemOptionsClick}
                 />
                 <DriveViewImpl
                     type="LOCAL_DRIVE"
                     name="My Local Drives"
-                    className="mx-2 mb-2"
                     onItemOptionsClick={onItemOptionsClick}
                 />
             </>

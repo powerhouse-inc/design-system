@@ -13,7 +13,7 @@ import {
 } from '@/connect';
 import { Icon } from '@/powerhouse';
 import { useState } from 'react';
-import { twMerge } from 'tailwind-merge';
+import { twJoin, twMerge } from 'tailwind-merge';
 
 export interface DriveViewProps
     extends Omit<
@@ -87,13 +87,18 @@ export function DriveView(props: DriveViewProps) {
     return (
         <div
             className={twMerge(
-                'pb-2',
-                type === 'PUBLIC_DRIVE' && 'rounded-lg bg-gray-100',
+                'mx-2 pb-2',
+                type === 'PUBLIC_DRIVE' && 'mb-2 rounded-lg bg-gray-100',
                 className,
             )}
             {...restProps}
         >
-            <div className="flex items-center justify-between border-y border-gray-100 px-4 py-3">
+            <div
+                className={twJoin(
+                    'flex items-center justify-between border-y border-gray-100 p-2 py-3',
+                    type === 'PUBLIC_DRIVE' && 'border-t-0',
+                )}
+            >
                 <p className="text-sm font-medium leading-6 text-gray-500">
                     {name}
                 </p>

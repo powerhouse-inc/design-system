@@ -15,7 +15,7 @@ const config: StorybookConfig = {
     },
     staticDirs: ['../public'],
     docs: {
-        autodocs: 'tag',
+        autodocs: false,
     },
     async viteFinal(config) {
         return {
@@ -25,5 +25,8 @@ const config: StorybookConfig = {
             ),
         };
     },
+    typescript: {
+        reactDocgen: false,
+    }
 };
 export default config;
