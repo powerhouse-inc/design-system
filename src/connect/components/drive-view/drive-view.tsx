@@ -130,6 +130,7 @@ export function DriveView(props: DriveViewProps) {
                     onItemOptionsClick={onItemOptionsClick}
                     defaultItemOptions={defaultItemOptions}
                     allowedTypes={allowedTypes}
+                    isAllowedToCreateDocuments={isAllowedToCreateDocuments}
                 />
             </div>
             {props.type === 'LOCAL_DRIVE' && isAllowedToCreateDocuments && (
