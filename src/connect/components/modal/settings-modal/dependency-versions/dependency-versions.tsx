@@ -122,26 +122,4 @@ export function DependencyVersions(props: Props) {
             </ul>
         </Disclosure>
     );
-
-    // return (
-    //     <div>
-    //         <h1>App version: {packageJson.version}</h1>
-    // <ul>
-    //     <li>
-    //         design-system:{' '}
-    //         {packageJson.dependencies['@powerhousedao/design-system']}
-    //     </li>
-    //     <li>
-    //         document-drive: {packageJson.dependencies['document-drive']}
-    //     </li>
-    //     <li>
-    //         document-model: {packageJson.dependencies['document-model']}
-    //     </li>
-    //     <li>
-    //         document-model-libs:{' '}
-    //         {packageJson.devDependencies['document-model-libs']}
-    //     </li>
-    // </ul>
-    //     </div>
-    // );
 }
