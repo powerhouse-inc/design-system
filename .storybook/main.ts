@@ -28,8 +28,5 @@ const config: StorybookConfig = {
             ),
         };
     },
-    typescript: {
-        reactDocgen: false,
-    }
 };
 export default config;

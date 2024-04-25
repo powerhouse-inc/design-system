@@ -90,16 +90,16 @@ export function DriveView(props: DriveViewProps) {
     return (
         <div
             className={twMerge(
-                'mx-2 pb-2',
-                type === 'PUBLIC_DRIVE' && 'mb-2 rounded-lg bg-gray-100',
+                'pb-2',
+                type === 'PUBLIC_DRIVE' && 'bg-gray-100',
                 className,
             )}
             {...restProps}
         >
             <div
                 className={twJoin(
-                    'flex items-center justify-between border-y border-gray-100 p-2 py-3',
-                    type === 'PUBLIC_DRIVE' && 'border-t-0',
+                    'mb-2 flex items-center justify-between border-y border-gray-100 py-1.5 pl-4 pr-2',
+                    type === 'PUBLIC_DRIVE' && 'border-t-0 pt-3.5',
                 )}
             >
                 <p className="text-sm font-medium leading-6 text-gray-500">
@@ -110,7 +110,7 @@ export function DriveView(props: DriveViewProps) {
                         <button
                             onClick={() => setShowAddModal(true)}
                             className={twMerge(
-                                'transition hover:text-gray-800',
+                                'mr-2 transition hover:text-gray-800',
                             )}
                         >
                             <Icon name="plus-circle" size={16} />
@@ -121,7 +121,7 @@ export function DriveView(props: DriveViewProps) {
                     </button> */}
                 </div>
             </div>
-            <div className="p-2 text-gray-800">
+            <div className="px-2 text-gray-800">
                 <ConnectTreeView
                     allowedPaths={allowedDrives}
                     disableHighlightStyles={disableHighlightStyles}
