@@ -4,6 +4,7 @@ import {
     ConnectDropdownMenuItem,
     DriveSettingsFormSubmitHandler,
     DriveSettingsModal,
+    DriveTreeItem,
     FILE,
     FOLDER,
     LOCAL_DRIVE,
@@ -21,7 +22,11 @@ import {
 } from '@/powerhouse';
 import { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
-import { getIsDrive, getIsLocalDrive } from '../drive-view/utils';
+import {
+    getIsCloudDrive,
+    getIsDrive,
+    getIsPublicDrive,
+} from '../drive-view/utils';
 import { SyncStatusIcon } from '../status-icon';
 
 const submitIcon = <Icon name="check" className="text-gray-600" />;
@@ -45,6 +50,7 @@ export type ConnectTreeViewItemProps = {
     onDragStart?: UseDraggableTargetProps<TreeItem>['onDragStart'];
     onDragEnd?: UseDraggableTargetProps<TreeItem>['onDragEnd'];
     disableHighlightStyles?: boolean;
+    isAllowedToCreateDocuments?: boolean;
 };
 
 export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
@@ -64,6 +70,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         disableDropBetween = false,
         disableHighlightStyles = false,
         defaultOptions = defaultDropdownMenuOptions,
+        isAllowedToCreateDocuments = true,
         ...divProps
     } = props;
 
@@ -103,9 +110,9 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
     const isWriteMode = props.mode === 'write';
     const isHighlighted = getIsHighlighted();
     const showDropdownMenuButton = mouseIsWithinItemContainer && !isWriteMode;
-    const isDrive = getIsDrive(item.type);
-    const isLocalDrive = getIsLocalDrive(item.type);
-    const isCloudOrPublicDrive = isDrive && !isLocalDrive;
+    const isDrive = getIsDrive(item);
+    const isCloudDrive = getIsCloudDrive(item);
+    const isPublicDrive = getIsPublicDrive(item);
     const itemOptions =
         item.options ?? (defaultOptions as ConnectDropdownMenuItem[]);
     const dropdownMenuItems = isDrive
@@ -188,6 +195,16 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                 },
                 'change-availability',
             );
+            if (getIsPublicDrive(item)) {
+                onOptionsClick?.(
+                    {
+                        ...item,
+                        icon: data.driveIcon,
+                    } as DriveTreeItem,
+                    'change-icon',
+                );
+            }
+
             setIsDriveSettingsModalOpen(false);
         };
 
@@ -209,6 +226,17 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
     }
 
     function getItemIcon() {
+        if (isPublicDrive && item.icon) {
+            return {
+                icon: (
+                    <img
+                        src={item.icon}
+                        className="size-7 object-contain"
+                        alt="drive icon"
+                    />
+                ),
+            };
+        }
         switch (item.type) {
             case FOLDER:
                 return {
@@ -250,8 +278,9 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         };
     }
     function statusIconOrDropdownMenuButton() {
-        if (showDropdownMenuButton) return dropdownMenuButton;
-        if (item.syncStatus && isCloudOrPublicDrive) {
+        if (showDropdownMenuButton && isAllowedToCreateDocuments)
+            return dropdownMenuButton;
+        if ((isCloudDrive || isPublicDrive) && item.syncStatus) {
             return (
                 <SyncStatusIcon
                     syncStatus={item.syncStatus}
@@ -281,20 +310,22 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                 {children}
             </TreeViewItem>
             {statusIconOrDropdownMenuButton()}
-            <ConnectDropdownMenu
-                isOpen={isDropdownMenuOpen}
-                onOpenChange={onDropdownMenuOpenChange}
-                items={dropdownMenuItems}
-                menuClassName="bg-white cursor-pointer"
-                menuItemClassName="hover:bg-slate-50 px-2"
-                onItemClick={onItemOptionsClick}
-                popoverProps={{
-                    triggerRef: containerRef,
-                    placement: 'bottom end',
-                    offset: -10,
-                }}
-            />
-            {isDrive && (
+            {isAllowedToCreateDocuments && (
+                <ConnectDropdownMenu
+                    isOpen={isDropdownMenuOpen}
+                    onOpenChange={onDropdownMenuOpenChange}
+                    items={dropdownMenuItems}
+                    menuClassName="bg-white cursor-pointer"
+                    menuItemClassName="hover:bg-slate-50 px-2"
+                    onItemClick={onItemOptionsClick}
+                    popoverProps={{
+                        triggerRef: containerRef,
+                        placement: 'bottom end',
+                        offset: -10,
+                    }}
+                />
+            )}
+            {isDrive && isAllowedToCreateDocuments && (
                 <DriveSettingsModal
                     formProps={{
                         driveName: item.label,

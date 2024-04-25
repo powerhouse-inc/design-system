@@ -12,6 +12,7 @@ import { generateMockDriveData } from '@/connect/utils/mocks/tree-item';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ItemsContextProvider } from '../../context/ItemsContext';
 import { DriveView, DriveViewProps } from './drive-view';
+import { mockCustomDriveIcon } from './mocks';
 
 const filteredDriveOptions = defaultDropdownMenuOptions.filter(
     option => option.id !== 'delete',
@@ -26,6 +27,8 @@ const drives = [
         expanded: false,
         availableOffline: false,
         syncStatus: SUCCESS,
+        // @ts-expect-error mock
+        icon: mockCustomDriveIcon,
     }),
     ...generateMockDriveData({
         path: 'public-only-disconnected',
@@ -214,4 +217,12 @@ export const Local: Story = {
         disableAddDrives: false,
     },
     render: args => <DriveViewImpl {...(args as DriveViewProps)} />,
+};
+
+export const NotAllowedToCreateDocuments: Story = {
+    ...Local,
+    args: {
+        ...Local.args,
+        isAllowedToCreateDocuments: false,
+    },
 };

@@ -1,3 +1,62 @@
+# [1.0.0-alpha.101](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.100...v1.0.0-alpha.101) (2024-04-24)
+
+
+### Features
+
+* add change icon to form handler ([105d654](https://github.com/powerhouse-inc/design-system/commit/105d6541a79b26cf70d7817ea175fff595494565))
+* add image input component ([8f2eafc](https://github.com/powerhouse-inc/design-system/commit/8f2eafc7cf6e20687e81b3aa5b3aef643f44afa5))
+* add image input to drive settings ([10e1a02](https://github.com/powerhouse-inc/design-system/commit/10e1a023d45d681f51067de2069741db31fefca1))
+* added object-fit to drive icon ([1a647ed](https://github.com/powerhouse-inc/design-system/commit/1a647edd99b0543ddfce5663a111ce6481506318))
+
+# [1.0.0-alpha.100](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.99...v1.0.0-alpha.100) (2024-04-22)
+
+
+### Features
+
+* move libs to dependency in package json type ([b3e8d5d](https://github.com/powerhouse-inc/design-system/commit/b3e8d5d986fead392e67b17c6d98d561fa4dd047))
+
+# [1.0.0-alpha.99](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.98...v1.0.0-alpha.99) (2024-04-19)
+
+
+### Features
+
+* add missing export ([f96f54b](https://github.com/powerhouse-inc/design-system/commit/f96f54b64c1da6d9a2a2c7448cfacb75b22d9103))
+
+# [1.0.0-alpha.98](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.97...v1.0.0-alpha.98) (2024-04-18)
+
+
+### Features
+
+* add dependency versions component ([#275](https://github.com/powerhouse-inc/design-system/issues/275)) ([b9cded4](https://github.com/powerhouse-inc/design-system/commit/b9cded447020c74ed3cfb5f8fb83ff6de877e28a))
+
+# [1.0.0-alpha.97](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.96...v1.0.0-alpha.97) (2024-04-17)
+
+
+### Features
+
+* add allow param to folder item ([#273](https://github.com/powerhouse-inc/design-system/issues/273)) ([1220624](https://github.com/powerhouse-inc/design-system/commit/12206247b38e87e3ddb0c436fccf11ea0421bece))
+
+# [1.0.0-alpha.96](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.95...v1.0.0-alpha.96) (2024-04-17)
+
+
+### Features
+
+* remove buttons when not whitelisted ([#272](https://github.com/powerhouse-inc/design-system/issues/272)) ([c2549a7](https://github.com/powerhouse-inc/design-system/commit/c2549a7f2f95945729ec5a8f8cc8b0bf1a510fc9))
+
+# [1.0.0-alpha.95](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.94...v1.0.0-alpha.95) (2024-04-16)
+
+
+### Features
+
+* show user address on top if there is no username ([c235e42](https://github.com/powerhouse-inc/design-system/commit/c235e425c0b0013184119210641b55bf2e3dae95))
+
+# [1.0.0-alpha.94](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.93...v1.0.0-alpha.94) (2024-04-12)
+
+
+### Features
+
+* sidebar login improvements ([719cb28](https://github.com/powerhouse-inc/design-system/commit/719cb2810d746842834d678db0fb438b8597332c))
+
 # [1.0.0-alpha.93](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.92...v1.0.0-alpha.93) (2024-04-11)
 
 
