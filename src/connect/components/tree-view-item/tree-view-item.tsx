@@ -235,13 +235,13 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                     icon: (
                         <Icon
                             name="folder-close"
-                            className="text-gray-600 transition-colors group-hover:text-gray-900 group-aria-[selected=true]:text-gray-900"
+                            className="text-gray-600 transition-colors group-hover/item:text-gray-900 group-aria-[selected=true]:text-gray-900"
                         />
                     ),
                     expandedIcon: (
                         <Icon
                             name="folder-open"
-                            className="text-gray-600 transition-colors group-hover:text-gray-900 group-aria-[selected=true]:text-gray-900"
+                            className="text-gray-600 transition-colors group-hover/item:text-gray-900 group-aria-[selected=true]:text-gray-900"
                         />
                     ),
                 };
@@ -270,7 +270,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         itemContainerClassNameOverrides?: string,
     ) {
         const commonStyles =
-            'group rounded-lg py-3 transition-colors text-gray-800';
+            'group/item rounded-lg py-3 transition-colors text-gray-800';
         const publicDriveHighlightStyles = 'bg-gray-300 text-gray-900';
         const otherHighlightStyles = 'bg-slate-50 text-gray-900';
         const highlightStyles = isChildOfPublicDrive

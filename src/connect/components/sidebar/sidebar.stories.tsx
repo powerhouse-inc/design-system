@@ -8,8 +8,6 @@ import { useArgs } from '@storybook/preview-api';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ConnectSidebar, DriveView, DriveViewProps } from '..';
 
-const emptyDrives = []
-
 const drives = [
     ...generateMockDriveData({
         path: 'drive',
@@ -80,18 +78,16 @@ const DriveViewImpl = (args: DriveViewProps) => {
 };
 
 export const Sidebar: Story = {
-    decorators: [
-        function Component(Story, ctx) {
-            const [, setArgs] = useArgs<typeof ctx.args>();
-
-            const onToggle = () => {
-                ctx.args.onToggle();
-                setArgs({ collapsed: !ctx.args.collapsed });
-            };
-
-            return <Story args={{ ...ctx.args, onToggle }} />;
-        },
-    ],
+    render: function Wrapper(args) {
+        const [{ collapsed, ...restArgs }, updateArgs] = useArgs<typeof args>();
+        return (
+            <ConnectSidebar
+                collapsed={collapsed}
+                {...restArgs}
+                onToggle={() => updateArgs({ collapsed: !collapsed })}
+            />
+        );
+    },
     args: {
         collapsed: false,
         username: 'Willow.eth',

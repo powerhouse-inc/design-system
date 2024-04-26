@@ -3,7 +3,7 @@
 exports[`Connect Sidebar Component > should match snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="group/sidebar expanded flex h-full flex-col overflow-hidden transition-none duration-300 animate-in fade-in shadow-sidebar"
+    class="group expanded flex h-full flex-col overflow-hidden transition-none duration-300 animate-in fade-in shadow-sidebar"
     data-testid="sidebar"
     style="width: 304px;"
   >
@@ -40,7 +40,7 @@ exports[`Connect Sidebar Component > should match snapshot 1`] = `
         </button>
       </div>
       <div
-        class="collapsed:hidden expanded:block"
+        class="hidden expanded:block"
       />
     </div>
     <div
