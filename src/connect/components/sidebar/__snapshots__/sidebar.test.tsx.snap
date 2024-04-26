@@ -44,43 +44,32 @@ exports[`Connect Sidebar Component > should match snapshot 1`] = `
       />
     </div>
     <div
-      class="flex-shrink-0 border-t border-slate-700/10 p-4 collapsed:px-1 expanding:px-1"
+      class="flex-shrink-0 border-t border-slate-700/10 bg-gray-50 p-4 collapsed:px-1 expanding:px-1"
     >
       <div
-        class="bg-gray-50 collapsed:bg-transparent collapsing:bg-transparent expanding:bg-transparent"
+        class="collapsed:bg-transparent collapsing:bg-transparent expanding:bg-transparent"
       >
         <div
           class="flex gap-2 rounded-sm px-3 py-2.5 collapsed:justify-center
-            collapsed:px-1 expanding:justify-center expanding:px-1
-        "
+            collapsed:px-1 expanding:justify-center expanding:px-1"
         >
           <img
             alt="Willow"
-            class="size-10 rounded-full object-contain transition-opacity"
-            height="40"
+            class="size-10 flex-none rounded-full object-contain transition-opacity duration-1000 animate-in fade-in"
             src="/src/assets/powerhouse-rounded.png"
-            width="40"
           />
           <div
-            class="w-full collapsed:hidden expanding:hidden"
+            class="grid w-full items-center font-semibold collapsed:hidden expanding:hidden"
           >
             <p
-              class="h-6 text-sm font-semibold text-gray-800"
+              class="mb-2 h-4 text-sm text-gray-800 duration-1000 animate-in fade-in"
             >
-              <span
-                class="duration-1000 animate-in fade-in"
-              >
-                Willow
-              </span>
+              Willow
             </p>
             <p
-              class="h-[18px] text-xs font-semibold text-gray-600"
+              class="h-3 text-xs text-gray-600 duration-1000 animate-in fade-in"
             >
-              <span
-                class="duration-1000 animate-in fade-in"
-              >
-                0x123
-              </span>
+              0x123
             </p>
           </div>
         </div>

@@ -171,6 +171,23 @@ export const ExpandedWithUserAndName: Story = {
     },
 };
 
+export const ExpandedWithUserAndAvatarAndName: Story = {
+    ...Expanded,
+    args: {
+        ...Expanded.args,
+        ...userWithAvatarAndName,
+    },
+};
+
+export const ExpandedWithUserAndAvatarAndNameLoading: Story = {
+    ...Expanded,
+    args: {
+        ...Expanded.args,
+        ...userWithAvatarAndName,
+        loadingUser: true,
+    },
+};
+
 export const ExpandedWithDrives: Story = {
     ...Expanded,
     args: {

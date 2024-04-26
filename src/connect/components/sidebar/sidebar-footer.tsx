@@ -25,11 +25,11 @@ export const ConnectSidebarFooter: React.FC<ConnectSidebarFooterProps> = ({
         <SidebarFooter
             {...props}
             className={twMerge(
-                'border-t border-slate-700/10 p-4 collapsed:px-1 expanding:px-1',
+                'border-t border-slate-700/10  bg-gray-50 p-4 collapsed:px-1 expanding:px-1',
                 className,
             )}
         >
-            <div className="bg-gray-50 collapsed:bg-transparent collapsing:bg-transparent expanding:bg-transparent">
+            <div className="collapsed:bg-transparent collapsing:bg-transparent expanding:bg-transparent">
                 {address || loadingUser ? (
                     <SidebarUser
                         username={username}
