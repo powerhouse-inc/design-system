@@ -29,6 +29,7 @@ export interface ConnectTreeViewProps
     allowedPaths?: string[];
     allowedTypes?: TreeItemType[];
     isAllowedToCreateDocuments?: boolean;
+    isChildOfPublicDrive?: boolean;
 }
 
 export function ConnectTreeView(props: ConnectTreeViewProps) {
@@ -44,6 +45,7 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
         allowedPaths,
         allowedTypes,
         isAllowedToCreateDocuments = true,
+        isChildOfPublicDrive = false,
         ...elementProps
     } = props;
 
@@ -76,6 +78,7 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
                         onClick={e => onItemClick?.(e, item)}
                         disableDropBetween={level === 0 && !item.expanded}
                         isAllowedToCreateDocuments={isAllowedToCreateDocuments}
+                        isChildOfPublicDrive={isChildOfPublicDrive}
                         {...elementProps}
                     >
                         {item.expanded && (
