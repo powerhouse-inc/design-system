@@ -8,7 +8,7 @@ export interface SidebarLoginProps {
 export const SidebarLogin: React.FC<SidebarLoginProps> = ({ onLogin }) => {
     return (
         <button
-            className="group/sidebar-footer flex w-full cursor-pointer items-baseline justify-start px-5 py-2.5 text-sm font-semibold leading-10 text-gray-600"
+            className="group/sidebar-footer flex w-full cursor-pointer items-baseline justify-start text-sm font-semibold leading-10 text-gray-600"
             onClick={onLogin}
         >
             <span>Login with</span>
@@ -18,7 +18,7 @@ export const SidebarLogin: React.FC<SidebarLoginProps> = ({ onLogin }) => {
             />
             <img
                 src={renownHover}
-                className="ml-2 hidden  h-5 text-gray-900 group-hover/sidebar-footer:block"
+                className="ml-2 hidden h-5 text-gray-900 group-hover/sidebar-footer:block"
             />
         </button>
     );

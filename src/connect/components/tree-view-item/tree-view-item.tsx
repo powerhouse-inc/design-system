@@ -319,7 +319,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
     }
 
     return (
-        <article className="relative">
+        <article className={twJoin('relative')}>
             <TreeViewItem
                 {...(onDropEvent && { ...dragProps, ...dropProps })}
                 bottomIndicator={!disableDropBetween && bottomIndicator}

@@ -101,16 +101,15 @@ export function DriveView(props: DriveViewProps) {
     return (
         <div
             className={twMerge(
-                'pb-2',
-                isPublicDrive && 'bg-gray-100',
+                'border-y border-gray-100 first-of-type:border-b-0 last-of-type:border-t-0',
+                isPublicDrive && 'bg-gray-100 ',
                 className,
             )}
             {...restProps}
         >
             <div
                 className={twJoin(
-                    'mb-2 flex items-center justify-between border-y border-gray-100 py-1.5 pl-4 pr-2',
-                    isPublicDrive && 'border-t-0 pt-3.5',
+                    'flex items-center justify-between py-1.5 pl-4 pr-2',
                 )}
             >
                 <p className="text-sm font-medium leading-6 text-gray-500">
@@ -132,7 +131,7 @@ export function DriveView(props: DriveViewProps) {
                     </button> */}
                 </div>
             </div>
-            <div className="px-2 text-gray-800">
+            <>
                 <ConnectTreeView
                     allowedPaths={allowedDrives}
                     disableHighlightStyles={disableHighlightStyles}
@@ -149,7 +148,7 @@ export function DriveView(props: DriveViewProps) {
                     isAllowedToCreateDocuments={isAllowedToCreateDocuments}
                     isChildOfPublicDrive={isPublicDrive}
                 />
-            </div>
+            </>
             {isLocalDrive && isAllowedToCreateDocuments && (
                 <CreateDriveModal
                     modalProps={{

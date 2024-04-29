@@ -5,6 +5,7 @@ import {
     TreeItemType,
     usePathContent,
 } from '@/connect';
+import { twMerge } from 'tailwind-merge';
 
 export interface ConnectTreeViewProps
     extends Omit<
@@ -53,8 +54,15 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
 
     const { defaultItemOptions: _, ...childrenProps } = props;
 
+    const hasItems = items.length > 0;
+
     return (
-        <>
+        <div
+            className={twMerge(
+                'px-2 text-gray-800',
+                level === 0 && hasItems && 'py-2',
+            )}
+        >
             {items.map(item => {
                 const mode =
                     item.action === 'NEW' ||
@@ -91,6 +99,6 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
                     </ConnectTreeViewItem>
                 );
             })}
-        </>
+        </div>
     );
 }
