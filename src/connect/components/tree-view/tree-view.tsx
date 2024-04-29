@@ -59,7 +59,7 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
     return (
         <div
             className={twMerge(
-                'px-2 text-gray-800',
+                'text-gray-800',
                 level === 0 && hasItems && 'py-2',
             )}
         >

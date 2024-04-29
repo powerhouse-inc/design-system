@@ -81,7 +81,7 @@ export const SidebarUser: React.FC<SidebarUserProps> = ({
 
     return (
         <div
-            className="flex gap-2 rounded-sm px-3 py-2.5 collapsed:justify-center
+            className="flex gap-2 rounded-sm py-2.5 collapsed:justify-center
             collapsed:px-1 expanding:justify-center expanding:px-1"
         >
             {image}

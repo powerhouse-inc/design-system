@@ -50,7 +50,7 @@ exports[`Connect Sidebar Component > should match snapshot 1`] = `
         class="collapsed:bg-transparent collapsing:bg-transparent expanding:bg-transparent"
       >
         <div
-          class="flex gap-2 rounded-sm px-3 py-2.5 collapsed:justify-center
+          class="flex gap-2 rounded-sm py-2.5 collapsed:justify-center
             collapsed:px-1 expanding:justify-center expanding:px-1"
         >
           <img

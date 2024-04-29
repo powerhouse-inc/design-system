@@ -1,8 +1,8 @@
+import connectLogo from '@/assets/connect.png';
 import { SUCCESS, TreeItem } from '@/connect';
 import { ItemsContextProvider } from '@/connect/context/ItemsContext';
 import { useItemActions } from '@/connect/hooks/tree-view/useItemActions';
 import { generateMockDriveData } from '@/connect/utils/mocks/tree-item';
-import { Icon } from '@/powerhouse';
 import { action } from '@storybook/addon-actions';
 import { useArgs } from '@storybook/preview-api';
 import type { Meta, StoryObj } from '@storybook/react';
@@ -77,7 +77,11 @@ const DriveViewImpl = (args: DriveViewProps) => {
 
 const headerContent = (
     <div className="flex h-full items-center">
-        <Icon name="connect" className="!h-[30px] !w-[100px]" />
+        <img
+            src={connectLogo}
+            alt="Connect logo"
+            className="h-5 object-contain"
+        />
     </div>
 );
 

@@ -101,7 +101,7 @@ export function DriveView(props: DriveViewProps) {
     return (
         <div
             className={twMerge(
-                'border-y border-gray-100 first-of-type:border-b-0 last-of-type:border-t-0',
+                'border-y border-gray-100 pl-4 pr-1 first-of-type:border-b-0 last-of-type:border-t-0',
                 isPublicDrive && 'bg-gray-100 ',
                 className,
             )}
@@ -109,13 +109,13 @@ export function DriveView(props: DriveViewProps) {
         >
             <div
                 className={twJoin(
-                    'flex items-center justify-between py-1.5 pl-4 pr-2',
+                    'flex items-center justify-between py-1.5 pr-2',
                 )}
             >
                 <p className="text-sm font-medium leading-6 text-gray-500">
                     {name}
                 </p>
-                <div className="flex gap-1 text-gray-600">
+                <div className="size-4 text-gray-600">
                     {!disableAddDrives && isAllowedToCreateDocuments && (
                         <button
                             onClick={() => setShowAddModal(true)}
