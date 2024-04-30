@@ -34,6 +34,7 @@ export function CreateDriveForm(props: CreateDriveFormProps) {
     const [showLocationSettings, setShowLocationSettings] = useState(false);
     const [showUpload, setShowUpload] = useState(false);
     const { register, handleSubmit, control } = useForm<Inputs>({
+        mode: 'onBlur',
         defaultValues: {
             driveName: '',
             sharingType: 'PRIVATE',
@@ -46,7 +47,7 @@ export function CreateDriveForm(props: CreateDriveFormProps) {
         <form onSubmit={handleSubmit(props.onSubmit)}>
             <Label htmlFor="driveName">Drive Name</Label>
             <DriveNameInput {...register('driveName')} />
-            <Divider className="mb-[18px] mt-4" />
+            <Divider className="my-4" />
             <Label htmlFor="sharingType">Sharing settings</Label>
             <SharingTypeFormInput control={control} />
             <Divider className="my-3" />
