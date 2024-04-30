@@ -17,9 +17,6 @@ import {
 import React, { useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-const submitIcon = <Icon name="check" className="text-gray-600" />;
-const cancelIcon = <Icon name="xmark" className="text-gray-600" />;
-
 type FolderItem = object;
 
 export interface FolderItemProps
@@ -89,8 +86,6 @@ export const FolderItem: React.FC<FolderItemProps> = ({
             <TreeViewInput
                 className="ml-3 flex-1 font-medium"
                 defaultValue={title}
-                cancelIcon={cancelIcon}
-                submitIcon={submitIcon}
                 onCancelInput={onCancelInput}
                 onSubmitInput={onSubmitInput}
             />

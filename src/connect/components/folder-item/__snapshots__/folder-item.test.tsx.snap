@@ -90,38 +90,6 @@ exports[`FolderItem Component > should match write snapshot 1`] = `
               value="Chronicle Labs"
             />
           </div>
-          <div
-            class="flex items-center pr-2"
-          >
-            <button
-              class="outline-none"
-              data-rac=""
-              type="button"
-            >
-              <svg
-                class="text-gray-600"
-                style="width: 24px; height: 24px;"
-              >
-                <use
-                  href="icons.svg#xmark"
-                />
-              </svg>
-            </button>
-            <button
-              class="outline-none"
-              data-rac=""
-              type="button"
-            >
-              <svg
-                class="text-gray-600"
-                style="width: 24px; height: 24px;"
-              >
-                <use
-                  href="icons.svg#check"
-                />
-              </svg>
-            </button>
-          </div>
         </div>
       </div>
     </div>

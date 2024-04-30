@@ -20,9 +20,6 @@ import {
 import React, { useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-const submitIcon = <Icon name="check" className="text-gray-600" />;
-const cancelIcon = <Icon name="xmark" className="text-gray-600" />;
-
 const iconMap = {
     legal: LegalImg,
     global: GlobalImg,
@@ -103,8 +100,6 @@ export const FileItem: React.FC<FileItemProps> = ({
         <TreeViewInput
             className="ml-3 flex-1 font-medium"
             defaultValue={title}
-            cancelIcon={cancelIcon}
-            submitIcon={submitIcon}
             onCancelInput={onCancelInput}
             onSubmitInput={onSubmitInput}
         />
