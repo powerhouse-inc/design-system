@@ -19,6 +19,7 @@ export const DriveNameInput = forwardRef(function DriveNameInput(
             ref={ref}
             icon={props.icon ?? <Icon name="drive" />}
             id="driveName"
+            placeholder="Drive name"
             required
         />
     );
