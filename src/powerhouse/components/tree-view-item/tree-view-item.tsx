@@ -87,7 +87,7 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                             {open ? expandedIcon || icon : icon}
                         </span>
                     )}
-                    <div className="w-full cursor-pointer truncate hover:overflow-x-scroll hover:text-clip">
+                    <div className="w-full cursor-pointer truncate">
                         {content}
                     </div>
                 </div>

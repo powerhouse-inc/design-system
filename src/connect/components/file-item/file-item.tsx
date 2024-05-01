@@ -91,8 +91,10 @@ export const FileItem: React.FC<FileItemProps> = ({
 
     const content = isReadMode ? (
         <>
-            <div className="max-h-6 truncate text-sm font-medium">{title}</div>
-            <div className="max-h-6 truncate text-xs font-medium text-gray-600">
+            <div className="max-h-6 truncate text-sm font-medium group-hover:text-gray-800">
+                {title}
+            </div>
+            <div className="max-h-6 truncate text-xs font-medium text-gray-600 group-hover:text-gray-800">
                 {subTitle}
             </div>
         </>
