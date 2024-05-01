@@ -73,7 +73,7 @@ export function AddPublicDriveForm(props: AddPublicDriveFormProps) {
                 setErrorMessage((error as Error).message);
             }
         }
-    }, [url, setValue]);
+    }, [url, setValue, sharingType]);
 
     function onSubmit({ availableOffline }: Inputs) {
         if (!publicDriveDetails) return;
@@ -115,7 +115,7 @@ export function AddPublicDriveForm(props: AddPublicDriveFormProps) {
                         placeholder="Drive URL"
                         required
                         onChange={e => setUrl(e.target.value)}
-                        errorOverride={errorMessage}
+                        errorMessage={errorMessage}
                     />
                     <Divider className="mb-3" />
                     <Button
