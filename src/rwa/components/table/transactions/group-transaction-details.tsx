@@ -109,6 +109,8 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
         ({ id }) => id === item?.fixedIncomeTransaction?.assetId,
     );
 
+    console.log(fixedIncomeOptions);
+
     const {
         control,
         handleSubmit,
