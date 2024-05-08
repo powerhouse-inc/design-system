@@ -16,7 +16,7 @@ type Props = Omit<
 function DropdownIndicator(props: DropdownIndicatorProps) {
     return (
         <components.DropdownIndicator {...props}>
-            <Icon name="chevron-down" />
+            <Icon name="chevron-down" size={16} />
         </components.DropdownIndicator>
     );
 }
@@ -24,7 +24,7 @@ function DropdownIndicator(props: DropdownIndicatorProps) {
 function ClearIndicator(props: ClearIndicatorProps) {
     return (
         <components.ClearIndicator {...props}>
-            <Icon name="xmark" />
+            <Icon name="xmark" size={16} />
         </components.ClearIndicator>
     );
 }
@@ -57,6 +57,7 @@ export function Combobox(props: Props) {
                     return {
                         ...baseStyles,
                         borderColor: 'var(--gray-200)',
+                        fontSize: 12,
                     };
                 },
                 control: () => {
