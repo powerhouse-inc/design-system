@@ -84,7 +84,7 @@ export function ItemDetails<
             iconPosition="right"
             icon={<Icon name="save" size={16} />}
         >
-            {isCreateOperation ? 'Save New ' + itemName : 'Save Edits'}
+            {isCreateOperation ? 'Save' : 'Save Edits'}
         </RWAButton>
     );
 
