@@ -135,6 +135,8 @@ export type AccountsTableProps = Pick<
 > & {
     accounts: Account[];
     principalLenderAccountId: string;
+    serviceProviderFeeTypes: ServiceProviderFeeType[];
+    transactions: GroupTransaction[];
 };
 
 export type SPVsTableProps = Pick<
@@ -230,6 +232,8 @@ export type AccountDetailsProps = Pick<
 > & {
     isPrincipalLenderAccount: boolean;
     onSubmitForm: (data: AccountFormInputs) => void;
+    serviceProviderFeeTypes: ServiceProviderFeeType[];
+    transactions: GroupTransaction[];
 };
 
 export type SPVDetailsProps = Pick<
