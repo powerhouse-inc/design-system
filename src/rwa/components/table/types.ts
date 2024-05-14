@@ -126,6 +126,7 @@ export type ServiceProviderFeeTypesTableProps = Pick<
 > & {
     serviceProviderFeeTypes: ServiceProviderFeeType[];
     accounts: Account[];
+    transactions: GroupTransaction[];
 };
 
 export type AccountsTableProps = Pick<
@@ -219,6 +220,7 @@ export type ServiceProviderFeeTypeDetailsProps = Pick<
     PropsToKeepFromItemDetails
 > & {
     accounts: Account[];
+    transactions: GroupTransaction[];
     onSubmitForm: (data: ServiceProviderFeeTypeFormInputs) => void;
 };
 
