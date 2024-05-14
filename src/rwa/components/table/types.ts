@@ -152,6 +152,7 @@ export type FixedIncomeTypesTableProps = Pick<
     PropsToKeepFromTable
 > & {
     fixedIncomeTypes: FixedIncomeType[];
+    assets: FixedIncome[];
 };
 
 export type ItemDetailsFormProps<
@@ -249,6 +250,7 @@ export type FixedIncomeTypeDetailsProps = Pick<
     PropsToKeepFromItemDetails
 > & {
     onSubmitForm: (data: FixedIncomeTypeFormInputs) => void;
+    assets: FixedIncome[];
 };
 
 export type ServiceProviderFeeTypeFormInputs = {
