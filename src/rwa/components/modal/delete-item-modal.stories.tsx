@@ -28,7 +28,5 @@ export const Primary: Story = {
             <div key={7}>Transaction 2</div>,
             <div key={8}>Transaction 3</div>,
         ],
-        cancelLabel: 'Cancel',
-        continueLabel: 'Continue',
     },
 };

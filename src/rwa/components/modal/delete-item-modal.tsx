@@ -11,10 +11,7 @@ export type RWADeleteItemModalProps = ComponentPropsWithoutRef<typeof Modal> & {
     dependentItemName: React.ReactNode;
     dependentItemList: React.ReactNode[];
     onContinue: () => void;
-    cancelLabel: string;
-    continueLabel: string;
     bodyProps?: DivProps;
-    cancelButtonProps?: ButtonProps;
     continueButtonProps?: ButtonProps;
     headerProps?: DivProps;
     buttonContainerProps?: DivProps;
@@ -28,8 +25,6 @@ export const RWADeleteItemModal = (props: RWADeleteItemModalProps) => {
         dependentItemList,
         onOpenChange,
         onContinue,
-        cancelLabel,
-        continueLabel,
         overlayProps,
         contentProps,
         bodyProps = {},

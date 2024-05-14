@@ -141,6 +141,7 @@ export type SPVsTableProps = Pick<
     PropsToKeepFromTable
 > & {
     spvs: SPV[];
+    assets: FixedIncome[];
 };
 
 export type FixedIncomeTypesTableProps = Pick<
@@ -169,7 +170,12 @@ export type ItemDetailsProps<
         isAllowedToCreateDocuments: boolean;
         isAllowedToEditDocuments: boolean;
         isAllowedToDeleteItem?: boolean;
+        hasDependentItems?: boolean;
         formInputs: ComponentType;
+        dependentItemProps?: {
+            dependentItemName: string;
+            dependentItemList: ReactNode[];
+        };
         setSelectedItem?: (item: TItem | undefined) => void;
         setShowNewItemForm?: (show: boolean) => void;
         onCancel?: () => void;
@@ -182,6 +188,7 @@ export type PropsToKeepFromItemDetails =
     | 'operation'
     | 'isAllowedToCreateDocuments'
     | 'isAllowedToEditDocuments'
+    | 'dependentItemProps'
     | 'setSelectedItem'
     | 'setShowNewItemForm'
     | 'onCancel'
@@ -227,6 +234,7 @@ export type SPVDetailsProps = Pick<
     ItemDetailsProps<SPV>,
     PropsToKeepFromItemDetails
 > & {
+    assets: FixedIncome[];
     onSubmitForm: (data: SPVFormInputs) => void;
 };
 
