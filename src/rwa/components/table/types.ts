@@ -118,6 +118,7 @@ export type AssetsTableProps = Pick<
     assets: FixedIncome[];
     fixedIncomeTypes: FixedIncomeType[];
     spvs: SPV[];
+    transactions: GroupTransaction[];
 };
 
 export type ServiceProviderFeeTypesTableProps = Pick<
@@ -204,6 +205,7 @@ export type AssetDetailsProps = Pick<
 > & {
     fixedIncomeTypes: FixedIncomeType[];
     spvs: SPV[];
+    transactions: GroupTransaction[];
     onSubmitForm: (data: AssetFormInputs) => void;
     onSubmitDelete: (itemId: string) => void;
 };

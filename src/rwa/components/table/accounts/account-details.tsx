@@ -76,11 +76,16 @@ export function AccountDetails(props: AccountDetailsProps) {
         ({ accountId }) => accountId === item?.id,
     );
 
-    const dependentTransactions = transactions.filter(
-        t =>
-            t.cashTransaction?.accountId === item?.id ||
-            t.fixedIncomeTransaction?.accountId === item?.id,
-    );
+    const dependentTransactions = transactions
+        .map((t, index) => ({
+            ...t,
+            txNumber: index + 1,
+        }))
+        .filter(
+            t =>
+                t.cashTransaction?.accountId === item?.id ||
+                t.fixedIncomeTransaction?.accountId === item?.id,
+        );
 
     const dependentItemName =
         dependentServiceProviderFeeTypes.length && dependentTransactions.length
@@ -105,8 +110,8 @@ export function AccountDetails(props: AccountDetailsProps) {
               <div key={5} className="mb-0.5 mt-1 font-semibold">
                   Transactions:
               </div>,
-              ...dependentTransactions.map((t, index) => (
-                  <div key={index}>Transaction #{index + 1}</div>
+              ...dependentTransactions.map(t => (
+                  <div key={t.id}>Transaction #{t.txNumber}</div>
               )),
           ]
         : [];
