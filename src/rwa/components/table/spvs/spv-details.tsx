@@ -3,12 +3,15 @@ import {
     RWATableTextInput,
     SPVDetailsProps,
     SPVFormInputs,
+    getFixedIncomeAssets,
 } from '@/rwa';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { FormInputs } from '../../inputs/form-inputs';
 
 export function SPVDetails(props: SPVDetailsProps) {
-    const { onCancel, onSubmitForm, item, operation, assets } = props;
+    const { onCancel, onSubmitForm, item, operation, state } = props;
+
+    const assets = getFixedIncomeAssets(state);
 
     const {
         register,

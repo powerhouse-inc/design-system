@@ -15,6 +15,7 @@ export type FixedIncome = {
     CUSIP?: string | null;
     coupon?: number | null;
     // derived fields
+    type: 'FixedIncome';
     notional: number;
     purchaseDate: string;
     purchasePrice: number;
@@ -23,6 +24,16 @@ export type FixedIncome = {
     realizedSurplus: number;
     salesProceeds: number;
 };
+
+export type CashAsset = {
+    id: string;
+    type: 'Cash';
+    spvId: string;
+    currency: string;
+    balance: number;
+};
+
+export type Asset = CashAsset | FixedIncome;
 
 export type FixedIncomeType = {
     id: string;
@@ -58,15 +69,6 @@ export type TransactionFee = {
     amount: number;
     serviceProviderFeeTypeId: string;
 };
-
-export type CashAsset = {
-    id: string;
-    spvId: string;
-    currency: string;
-    balance: number;
-};
-
-export type Asset = CashAsset | FixedIncome;
 
 export type BaseTransaction = {
     id: string;

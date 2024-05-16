@@ -8,14 +8,12 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { FormInputs } from '../../inputs/form-inputs';
 
 export function AccountDetails(props: AccountDetailsProps) {
-    const {
-        onSubmitForm,
-        item,
-        operation,
-        isPrincipalLenderAccount,
-        serviceProviderFeeTypes,
-        transactions,
-    } = props;
+    const { onSubmitForm, item, operation, state } = props;
+
+    const { serviceProviderFeeTypes, transactions, principalLenderAccountId } =
+        state;
+
+    const isPrincipalLenderAccount = item?.id === principalLenderAccountId;
 
     const {
         register,

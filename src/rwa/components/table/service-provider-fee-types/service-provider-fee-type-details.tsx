@@ -12,8 +12,9 @@ import { FormInputs } from '../../inputs/form-inputs';
 export function ServiceProviderFeeTypeDetails(
     props: ServiceProviderFeeTypeDetailsProps,
 ) {
-    const { accounts, transactions, onCancel, onSubmitForm, item, operation } =
-        props;
+    const { onCancel, onSubmitForm, item, operation, state } = props;
+
+    const { accounts, transactions } = state;
 
     const account = accounts.find(({ id }) => id === item?.accountId);
 

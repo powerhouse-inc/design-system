@@ -1,13 +1,6 @@
 import { GroupTransaction } from '@/rwa';
-import {
-    manyMockGroupTransactions,
-    mockAccounts,
-    mockCashAsset,
-    mockFixedIncomes,
-    mockGroupTransactions,
-    mockPrincipalLenderAccountId,
-    mockServiceProviderFeeTypes,
-} from '@/rwa/mocks';
+import { manyMockGroupTransactions } from '@/rwa/mocks';
+import { mockStateInitial, mockStateWithData } from '@/rwa/mocks/state';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useCallback, useState } from 'react';
 import { getColumnCount } from '../hooks/useColumnPriority';
@@ -32,12 +25,7 @@ const columnCountByTableWidth = {
 
 export const Empty: Story = {
     args: {
-        transactions: [],
-        fixedIncomes: [],
-        cashAsset: mockCashAsset,
-        serviceProviderFeeTypes: [],
-        accounts: [],
-        principalLenderAccountId: mockPrincipalLenderAccountId,
+        state: mockStateInitial,
     },
     render: function Wrapper(args) {
         const [expandedRowId, setExpandedRowId] = useState<string>();
@@ -106,12 +94,7 @@ export const WithDataReadyOnly: Story = {
     ...Empty,
     args: {
         ...Empty.args,
-        transactions: mockGroupTransactions,
-        fixedIncomes: mockFixedIncomes,
-        cashAsset: mockCashAsset,
-        serviceProviderFeeTypes: mockServiceProviderFeeTypes,
-        principalLenderAccountId: mockPrincipalLenderAccountId,
-        accounts: mockAccounts,
+        state: mockStateWithData,
     },
 };
 
@@ -128,6 +111,9 @@ export const WithManyItems: Story = {
     ...WithDataReadyOnly,
     args: {
         ...WithDataReadyOnly.args,
-        transactions: manyMockGroupTransactions,
+        state: {
+            ...mockStateWithData,
+            transactions: manyMockGroupTransactions,
+        },
     },
 };

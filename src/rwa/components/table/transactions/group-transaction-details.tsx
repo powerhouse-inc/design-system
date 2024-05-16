@@ -13,6 +13,7 @@ import {
     calculateCashBalanceChange,
     calculateUnitPrice,
     convertToDateTimeLocalFormat,
+    getFixedIncomeAssets,
     groupTransactionTypeLabels,
     makeFixedIncomeOptionLabel,
 } from '@/rwa';
@@ -77,16 +78,10 @@ function UnitPrice(props: {
 }
 
 export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
-    const {
-        fixedIncomes,
-        serviceProviderFeeTypes,
-        accounts,
-        item,
-        operation,
-        onCancel,
-        onSubmitForm,
-        onSubmitDelete,
-    } = props;
+    const { state, item, operation, onCancel, onSubmitForm, onSubmitDelete } =
+        props;
+    const { serviceProviderFeeTypes, accounts } = state;
+    const fixedIncomes = getFixedIncomeAssets(state);
     const transactionTypeOptions = allGroupTransactionTypes.map(type => ({
         label: groupTransactionTypeLabels[type],
         id: type,

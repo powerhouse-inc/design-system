@@ -3,12 +3,15 @@ import {
     FixedIncomeTypeFormInputs,
     ItemDetails,
     RWATableTextInput,
+    getFixedIncomeAssets,
 } from '@/rwa';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { FormInputs } from '../../inputs/form-inputs';
 
 export function FixedIncomeTypeDetails(props: FixedIncomeTypeDetailsProps) {
-    const { onCancel, onSubmitForm, item, operation, assets } = props;
+    const { onCancel, onSubmitForm, item, operation, state } = props;
+
+    const assets = getFixedIncomeAssets(state);
 
     const {
         register,

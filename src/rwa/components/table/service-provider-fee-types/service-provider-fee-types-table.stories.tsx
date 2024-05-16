@@ -2,11 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ComponentPropsWithoutRef, useCallback, useState } from 'react';
 
 import { ServiceProviderFeeType } from '@/rwa';
-import {
-    mockAccounts,
-    mockGroupTransactions,
-    mockServiceProviderFeeTypes,
-} from '@/rwa/mocks';
+import { mockStateInitial, mockStateWithData } from '@/rwa/mocks/state';
 import { utils } from 'document-model/document';
 import { getColumnCount } from '../hooks/useColumnPriority';
 import { ServiceProviderFeeTypeFormInputs } from '../types';
@@ -34,9 +30,7 @@ type ServiceProviderFeeTypesTableProps = ComponentPropsWithoutRef<
 
 export const Empty: Story = {
     args: {
-        serviceProviderFeeTypes: [],
-        accounts: [],
-        transactions: [],
+        state: mockStateInitial,
     },
     render: function Wrapper(args) {
         const [expandedRowId, setExpandedRowId] = useState<string>();
@@ -119,9 +113,7 @@ export const WithDataReadOnly: Story = {
     ...Empty,
     args: {
         ...Empty.args,
-        serviceProviderFeeTypes: mockServiceProviderFeeTypes,
-        accounts: mockAccounts,
-        transactions: mockGroupTransactions,
+        state: mockStateWithData,
     },
 };
 
