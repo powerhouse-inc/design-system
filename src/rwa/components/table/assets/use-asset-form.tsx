@@ -1,29 +1,23 @@
 import { DateTimeLocalInput } from '@/connect';
-import { FixedIncome, FixedIncomeType, SPV } from '@/rwa/types';
+import { FixedIncome } from '@/rwa/types';
 import { useCallback, useMemo } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { RWATableSelect, RWATableTextInput } from '../../inputs';
-import { AssetFormInputs } from '../types';
+import { AssetFormInputs, RealWorldAssetsState } from '../types';
 import { handleTableDatum } from '../utils';
 
 type Props = {
     item?: FixedIncome | undefined;
     defaultValues: AssetFormInputs;
-    fixedIncomeTypes: FixedIncomeType[];
-    spvs: SPV[];
+    state: RealWorldAssetsState;
     onSubmitForm: (data: AssetFormInputs) => void;
     operation: 'create' | 'view' | 'edit';
 };
 
 export function useAssetForm(props: Props) {
-    const {
-        item,
-        fixedIncomeTypes,
-        spvs,
-        defaultValues,
-        onSubmitForm,
-        operation,
-    } = props;
+    const { item, state, defaultValues, onSubmitForm, operation } = props;
+
+    const { fixedIncomeTypes, spvs } = state;
 
     const useFormReturn = useForm<AssetFormInputs>({
         mode: 'onBlur',
@@ -214,9 +208,10 @@ export function useAssetForm(props: Props) {
     return useMemo(
         () => ({
             ...useFormReturn,
+            ...props,
             onSubmit,
             inputs,
         }),
-        [inputs, onSubmit, useFormReturn],
+        [inputs, onSubmit, props, useFormReturn],
     );
 }

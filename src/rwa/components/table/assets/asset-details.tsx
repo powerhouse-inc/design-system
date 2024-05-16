@@ -29,8 +29,7 @@ export function AssetDetails(props: AssetDetailsProps) {
     const { handleSubmit, reset, inputs, onSubmit } = useAssetForm({
         item,
         defaultValues,
-        fixedIncomeTypes,
-        spvs,
+        state,
         onSubmitForm,
         operation,
     });

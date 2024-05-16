@@ -17,6 +17,7 @@ import {
     groupTransactionTypeLabels,
     makeFixedIncomeOptionLabel,
 } from '@/rwa';
+import { useState } from 'react';
 import {
     Control,
     SubmitHandler,
@@ -26,6 +27,8 @@ import {
 } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 import { FormInputs } from '../../inputs/form-inputs';
+import { RWACreateItemModal } from '../../modal/create-item-modal';
+import { useAssetForm } from '../assets/use-asset-form';
 
 function CashBalanceChange(props: {
     control: Control<GroupTransactionFormInputs>;
@@ -78,9 +81,17 @@ function UnitPrice(props: {
 }
 
 export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
-    const { state, item, operation, onCancel, onSubmitForm, onSubmitDelete } =
-        props;
-    const { serviceProviderFeeTypes, accounts } = state;
+    const {
+        state,
+        item,
+        operation,
+        onCancel,
+        onSubmitForm,
+        onSubmitDelete,
+        onSubmitCreateAsset,
+    } = props;
+    const [showCreateAssetModal, setShowCreateAssetModal] = useState(false);
+    const { serviceProviderFeeTypes, accounts, fixedIncomeTypes, spvs } = state;
     const fixedIncomes = getFixedIncomeAssets(state);
     const transactionTypeOptions = allGroupTransactionTypes.map(type => ({
         label: groupTransactionTypeLabels[type],
@@ -114,6 +125,17 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
             fixedIncomeAmount: item?.fixedIncomeTransaction?.amount,
             fees: item?.fees,
         },
+    });
+
+    const assetFormProps = useAssetForm({
+        defaultValues: {
+            fixedIncomeTypeId: fixedIncomeTypes[0]?.id,
+            spvId: spvs[0]?.id,
+            maturity: convertToDateTimeLocalFormat(new Date()),
+        },
+        state,
+        onSubmitForm: onSubmitCreateAsset,
+        operation: 'create',
     });
 
     const type = useWatch({ control, name: 'type' });
@@ -198,6 +220,10 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
                           name="fixedIncomeId"
                           disabled={operation === 'view'}
                           options={fixedIncomeOptions}
+                          createItemButtonProps={{
+                              onClick: () => setShowCreateAssetModal(true),
+                              label: 'Create Asset',
+                          }}
                       />
                   ),
               }
@@ -281,5 +307,17 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
         onDelete,
     };
 
-    return <ItemDetails {...props} {...formProps} />;
+    return (
+        <>
+            <ItemDetails {...props} {...formProps} />
+            {showCreateAssetModal && (
+                <RWACreateItemModal
+                    {...props}
+                    {...assetFormProps}
+                    open={showCreateAssetModal}
+                    onOpenChange={setShowCreateAssetModal}
+                />
+            )}
+        </>
+    );
 }

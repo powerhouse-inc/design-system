@@ -4,6 +4,8 @@ import {
     groupTransactionTypeLabels,
 } from '@/rwa';
 
+export type AssetType = 'Cash' | 'FixedIncome';
+
 export type FixedIncome = {
     // editable fields
     id: string;
@@ -15,7 +17,7 @@ export type FixedIncome = {
     CUSIP?: string | null;
     coupon?: number | null;
     // derived fields
-    type: 'FixedIncome';
+    type: AssetType;
     notional: number;
     purchaseDate: string;
     purchasePrice: number;
@@ -27,7 +29,7 @@ export type FixedIncome = {
 
 export type CashAsset = {
     id: string;
-    type: 'Cash';
+    type: AssetType;
     spvId: string;
     currency: string;
     balance: number;
