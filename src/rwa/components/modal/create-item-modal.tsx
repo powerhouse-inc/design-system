@@ -6,18 +6,16 @@ import { useAssetForm } from '../table/assets/use-asset-form';
 import { ModalFormInputs } from './modal-form-inputs';
 
 export type RWACreateItemModalProps = ComponentPropsWithoutRef<typeof Modal> & {
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
-    itemName: string;
     state: RealWorldAssetsState;
+    open: boolean;
+    itemName: string;
+    onOpenChange: (open: boolean) => void;
     onSubmitForm: (data: AssetFormInputs) => void;
 };
 
 export const RWACreateItemModal = (props: RWACreateItemModalProps) => {
     const { itemName, open, state, onOpenChange, onSubmitForm, ...restProps } =
         props;
-
-    console.log('props:', props);
 
     const { fixedIncomeTypes, spvs } = state;
 
