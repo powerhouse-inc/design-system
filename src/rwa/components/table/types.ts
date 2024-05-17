@@ -115,6 +115,9 @@ export type GroupTransactionsTableProps = Pick<
     PropsToKeepFromTable
 > & {
     onSubmitCreateAsset: (data: AssetFormInputs) => void;
+    onSubmitCreateServiceProviderFeeType: (
+        data: ServiceProviderFeeTypeFormInputs,
+    ) => void;
 };
 
 export type AssetsTableProps = Pick<
@@ -201,6 +204,9 @@ export type GroupTransactionDetailsProps = Pick<
 > & {
     onSubmitForm: (data: GroupTransactionFormInputs) => void;
     onSubmitCreateAsset: (data: AssetFormInputs) => void;
+    onSubmitCreateServiceProviderFeeType: (
+        data: ServiceProviderFeeTypeFormInputs,
+    ) => void;
 };
 
 export type ServiceProviderFeeTypeDetailsProps = Pick<

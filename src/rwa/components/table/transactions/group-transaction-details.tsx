@@ -28,7 +28,9 @@ import {
 import { twMerge } from 'tailwind-merge';
 import { FormInputs } from '../../inputs/form-inputs';
 import { CreateAssetModal } from '../../modal/create-asset-modal';
+import { CreateServiceProviderFeeTypeModal } from '../../modal/create-service-provider-fee-type-modal';
 import { useAssetForm } from '../assets/useAssetForm';
+import { useServiceProviderFeeTypeForm } from '../service-provider-fee-types/useServiceProviderFeeTypeForm';
 
 function CashBalanceChange(props: {
     control: Control<GroupTransactionFormInputs>;
@@ -89,8 +91,13 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
         onSubmitForm,
         onSubmitDelete,
         onSubmitCreateAsset,
+        onSubmitCreateServiceProviderFeeType,
     } = props;
     const [showCreateAssetModal, setShowCreateAssetModal] = useState(false);
+    const [
+        showCreateServiceProviderFeeTypeModal,
+        setShowCreateServiceProviderFeeTypeModal,
+    ] = useState(false);
     const { serviceProviderFeeTypes, accounts, fixedIncomeTypes, spvs } = state;
     const fixedIncomes = getFixedIncomeAssets(state);
     const transactionTypeOptions = allGroupTransactionTypes.map(type => ({
@@ -137,6 +144,18 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
         onSubmitForm: data => {
             setShowCreateAssetModal(false);
             onSubmitCreateAsset(data);
+        },
+        operation: 'create',
+    });
+
+    const serviceProviderFeeTypeFormProps = useServiceProviderFeeTypeForm({
+        defaultValues: {
+            accountId: accounts[0]?.id,
+        },
+        state,
+        onSubmitForm: data => {
+            setShowCreateServiceProviderFeeTypeModal(false);
+            onSubmitCreateServiceProviderFeeType(data);
         },
         operation: 'create',
     });
@@ -288,6 +307,9 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
                     register={register}
                     feeInputs={fields}
                     serviceProviderFeeTypes={serviceProviderFeeTypes}
+                    setShowServiceProviderFeeTypeModal={
+                        setShowCreateServiceProviderFeeTypeModal
+                    }
                     accounts={accounts}
                     control={control}
                     watch={watch}
@@ -319,6 +341,14 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
                     {...assetFormProps}
                     open={showCreateAssetModal}
                     onOpenChange={setShowCreateAssetModal}
+                />
+            )}
+            {showCreateServiceProviderFeeTypeModal && (
+                <CreateServiceProviderFeeTypeModal
+                    {...props}
+                    {...serviceProviderFeeTypeFormProps}
+                    open={showCreateServiceProviderFeeTypeModal}
+                    onOpenChange={setShowCreateServiceProviderFeeTypeModal}
                 />
             )}
         </>
