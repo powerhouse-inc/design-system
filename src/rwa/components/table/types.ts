@@ -128,7 +128,9 @@ export type AssetsTableProps = Pick<
 export type ServiceProviderFeeTypesTableProps = Pick<
     TableProps<ServiceProviderFeeType, ServiceProviderFeeTypeFormInputs>,
     PropsToKeepFromTable
->;
+> & {
+    onSubmitCreateAccount: (data: AccountFormInputs) => void;
+};
 
 export type AccountsTableProps = Pick<
     TableProps<Account, AccountFormInputs>,
@@ -214,6 +216,7 @@ export type ServiceProviderFeeTypeDetailsProps = Pick<
     PropsToKeepFromItemDetails
 > & {
     onSubmitForm: (data: ServiceProviderFeeTypeFormInputs) => void;
+    onSubmitCreateAccount: (data: AccountFormInputs) => void;
 };
 
 export type AccountDetailsProps = Pick<

@@ -72,6 +72,12 @@ export const Empty: Story = {
                 setShowNewItemForm(false);
             }, []);
 
+        const onSubmitCreateAccount: ServiceProviderFeeTypesTableProps['onSubmitCreateAccount'] =
+            useCallback(data => {
+                console.log({ data });
+                setShowNewItemForm(false);
+            }, []);
+
         const argsWithHandlers: ServiceProviderFeeTypesTableProps = {
             ...args,
             expandedRowId,
@@ -82,6 +88,7 @@ export const Empty: Story = {
             setSelectedItem,
             onSubmitCreate,
             onSubmitEdit,
+            onSubmitCreateAccount,
         };
         return (
             <div className="flex flex-col gap-4">

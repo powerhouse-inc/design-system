@@ -1,5 +1,5 @@
-import { Account, ServiceProviderFeeType } from '@/rwa/types';
-import { useCallback, useMemo } from 'react';
+import { Account } from '@/rwa/types';
+import { useCallback, useMemo, useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { RWATableSelect, RWATableTextInput } from '../../inputs';
 import {
@@ -8,7 +8,6 @@ import {
 } from '../types';
 
 type Props = {
-    item?: ServiceProviderFeeType | undefined;
     defaultValues: ServiceProviderFeeTypeFormInputs;
     state: RealWorldAssetsState;
     operation: 'create' | 'view' | 'edit';
@@ -16,6 +15,8 @@ type Props = {
 };
 
 export function useServiceProviderFeeTypeForm(props: Props) {
+    const [showCreateAccountModal, setShowCreateAccountModal] = useState(false);
+
     const { state, defaultValues, onSubmitForm, operation } = props;
 
     const { accounts } = state;
@@ -93,6 +94,10 @@ export function useServiceProviderFeeTypeForm(props: Props) {
                         name="accountId"
                         disabled={operation === 'view'}
                         options={makeAccountOptions(accounts)}
+                        addItemButtonProps={{
+                            onAddItem: () => setShowCreateAccountModal(true),
+                            addItemButtonLabel: 'Create Account',
+                        }}
                     />
                 ),
             },
@@ -118,6 +123,16 @@ export function useServiceProviderFeeTypeForm(props: Props) {
             control,
             inputs,
             formState: { errors },
+            showCreateAccountModal,
+            setShowCreateAccountModal,
         };
-    }, [submit, reset, register, control, errors, inputs]);
+    }, [
+        submit,
+        reset,
+        register,
+        control,
+        inputs,
+        errors,
+        showCreateAccountModal,
+    ]);
 }
