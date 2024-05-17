@@ -1,5 +1,5 @@
 import { GroupTransaction } from '@/rwa';
-import { manyMockGroupTransactions } from '@/rwa/mocks';
+import { manyMockGroupTransactions, mockFixedIncomes } from '@/rwa/mocks';
 import { mockStateInitial, mockStateWithData } from '@/rwa/mocks/state';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useCallback, useState } from 'react';
@@ -108,12 +108,19 @@ export const WithDataIsAllowedToCreateDocuments: Story = {
 };
 
 export const WithManyItems: Story = {
-    ...WithDataReadyOnly,
+    ...WithDataIsAllowedToCreateDocuments,
     args: {
-        ...WithDataReadyOnly.args,
+        ...WithDataIsAllowedToCreateDocuments.args,
         state: {
             ...mockStateWithData,
             transactions: manyMockGroupTransactions,
+            portfolio: [
+                ...mockFixedIncomes,
+                ...Array.from({ length: 100 }, (_, i) => ({
+                    ...mockFixedIncomes[0],
+                    id: `fixed-income-${i + 1}`,
+                })),
+            ],
         },
     },
 };

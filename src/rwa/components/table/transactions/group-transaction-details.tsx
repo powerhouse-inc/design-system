@@ -95,11 +95,11 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
     const fixedIncomes = getFixedIncomeAssets(state);
     const transactionTypeOptions = allGroupTransactionTypes.map(type => ({
         label: groupTransactionTypeLabels[type],
-        id: type,
+        value: type,
     }));
     const fixedIncomeOptions = fixedIncomes.map(fixedIncome => ({
         label: makeFixedIncomeOptionLabel(fixedIncome),
-        id: fixedIncome.id,
+        value: fixedIncome.id,
     }));
 
     const fixedIncome = fixedIncomes.find(
@@ -220,10 +220,6 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
                           name="fixedIncomeId"
                           disabled={operation === 'view'}
                           options={fixedIncomeOptions}
-                          createItemButtonProps={{
-                              onClick: () => setShowCreateAssetModal(true),
-                              label: 'Create Asset',
-                          }}
                       />
                   ),
               }

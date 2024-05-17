@@ -43,6 +43,7 @@ export function ServiceProviderFeeTypeDetails(
     function makeAccountOptions(accounts: Account[]) {
         return accounts.map(account => ({
             ...account,
+            value: account.id,
             label: makeAccountLabel(account),
         }));
     }

@@ -169,6 +169,7 @@ export function useAssetForm(props: Props) {
                         disabled={operation === 'view'}
                         options={fixedIncomeTypes.map(t => ({
                             ...t,
+                            value: t.id,
                             label: t.name,
                         }))}
                     />
@@ -183,6 +184,7 @@ export function useAssetForm(props: Props) {
                         disabled={operation === 'view'}
                         options={spvs.map(t => ({
                             ...t,
+                            value: t.id,
                             label: t.name,
                         }))}
                     />
