@@ -1,51 +1,20 @@
-import {
-    ItemDetails,
-    RWATableTextInput,
-    SPVDetailsProps,
-    SPVFormInputs,
-    getFixedIncomeAssets,
-} from '@/rwa';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { ItemDetails, SPVDetailsProps, getFixedIncomeAssets } from '@/rwa';
 import { FormInputs } from '../../inputs/form-inputs';
+import { useSpvForm } from './useSpvForm';
 
 export function SPVDetails(props: SPVDetailsProps) {
     const { onCancel, onSubmitForm, item, operation, state } = props;
 
     const assets = getFixedIncomeAssets(state);
 
-    const {
-        register,
-        handleSubmit,
-        reset,
-        formState: { errors },
-    } = useForm<SPVFormInputs>({
+    const { submit, reset, inputs } = useSpvForm({
         defaultValues: {
             name: item?.name,
         },
+        state,
+        operation,
+        onSubmitForm,
     });
-
-    const onSubmit: SubmitHandler<SPVFormInputs> = data => {
-        onSubmitForm(data);
-    };
-
-    const inputs = [
-        {
-            label: 'SPV name',
-            Input: () => (
-                <RWATableTextInput
-                    {...register('name', {
-                        disabled: operation === 'view',
-                        required: 'SPV name is required',
-                    })}
-                    aria-invalid={
-                        errors.name?.type === 'required' ? 'true' : 'false'
-                    }
-                    errorMessage={errors.name?.message}
-                    placeholder="E.g. My SPV name"
-                />
-            ),
-        },
-    ];
 
     const formInputs = () => <FormInputs inputs={inputs} />;
 
@@ -57,8 +26,6 @@ export function SPVDetails(props: SPVDetailsProps) {
             <div key={asset.id}>{asset.name}</div>
         )),
     };
-
-    const submit = handleSubmit(onSubmit);
 
     const formProps = {
         formInputs,

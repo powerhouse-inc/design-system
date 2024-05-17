@@ -4,10 +4,21 @@ import {
     convertToDateTimeLocalFormat,
 } from '@/rwa';
 import { FormInputs } from '../../inputs/form-inputs';
+import { CreateFixedIncomeTypeModal } from '../../modal/create-fixed-income-type-modal';
+import { useFixedIncomeTypeForm } from '../fixed-income-types/useFixedIncomeTypeForm';
+import { useSpvForm } from '../spvs/useSpvForm';
 import { useAssetForm } from './useAssetForm';
 
 export function AssetDetails(props: AssetDetailsProps) {
-    const { state, onCancel, onSubmitForm, item, operation } = props;
+    const {
+        state,
+        onCancel,
+        onSubmitForm,
+        onSubmitCreateFixedIncomeType,
+        onSubmitCreateSpv,
+        item,
+        operation,
+    } = props;
 
     const { fixedIncomeTypes, spvs, transactions } = state;
 
@@ -26,7 +37,15 @@ export function AssetDetails(props: AssetDetailsProps) {
         coupon: item?.coupon,
     };
 
-    const { submit, reset, inputs } = useAssetForm({
+    const {
+        submit,
+        reset,
+        inputs,
+        showCreateFixedIncomeTypeModal,
+        setShowCreateFixedIncomeTypeModal,
+        showCreateSpvModal,
+        setShowCreateSpvModal,
+    } = useAssetForm({
         item,
         defaultValues,
         state,
@@ -35,6 +54,26 @@ export function AssetDetails(props: AssetDetailsProps) {
     });
 
     const formInputs = () => <FormInputs inputs={inputs} />;
+
+    const createFixedIncomeTypeModalProps = useFixedIncomeTypeForm({
+        defaultValues: {},
+        state,
+        operation: 'create',
+        onSubmitForm: data => {
+            onSubmitCreateFixedIncomeType(data);
+            setShowCreateFixedIncomeTypeModal(false);
+        },
+    });
+
+    const createSpvModalProps = useSpvForm({
+        defaultValues: {},
+        state,
+        operation: 'create',
+        onSubmitForm: data => {
+            onSubmitCreateSpv(data);
+            setShowCreateSpvModal(false);
+        },
+    });
 
     const dependentTransactions = transactions
         .map((t, index) => ({
@@ -60,5 +99,25 @@ export function AssetDetails(props: AssetDetailsProps) {
         onCancel,
     };
 
-    return <ItemDetails {...props} {...formProps} />;
+    return (
+        <>
+            <ItemDetails {...props} {...formProps} />
+            {showCreateFixedIncomeTypeModal && (
+                <CreateFixedIncomeTypeModal
+                    {...createFixedIncomeTypeModalProps}
+                    state={state}
+                    onOpenChange={setShowCreateFixedIncomeTypeModal}
+                    open={showCreateFixedIncomeTypeModal}
+                />
+            )}
+            {showCreateSpvModal && (
+                <CreateFixedIncomeTypeModal
+                    {...createSpvModalProps}
+                    state={state}
+                    onOpenChange={setShowCreateSpvModal}
+                    open={showCreateSpvModal}
+                />
+            )}
+        </>
+    );
 }

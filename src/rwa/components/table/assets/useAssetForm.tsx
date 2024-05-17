@@ -1,6 +1,6 @@
 import { DateTimeLocalInput } from '@/connect';
 import { FixedIncome } from '@/rwa/types';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { RWATableSelect, RWATableTextInput } from '../../inputs';
 import { AssetFormInputs, RealWorldAssetsState } from '../types';
@@ -15,6 +15,9 @@ type Props = {
 };
 
 export function useAssetForm(props: Props) {
+    const [showCreateFixedIncomeTypeModal, setShowCreateFixedIncomeTypeModal] =
+        useState(false);
+    const [showCreateSpvModal, setShowCreateSpvModal] = useState(false);
     const { item, state, defaultValues, onSubmitForm, operation } = props;
 
     const { fixedIncomeTypes, spvs } = state;
@@ -174,6 +177,11 @@ export function useAssetForm(props: Props) {
                             value: t.id,
                             label: t.name,
                         }))}
+                        addItemButtonProps={{
+                            onAddItem: () =>
+                                setShowCreateFixedIncomeTypeModal(true),
+                            addItemButtonLabel: 'Create Fixed Income Type',
+                        }}
                     />
                 ),
             },
@@ -189,6 +197,10 @@ export function useAssetForm(props: Props) {
                             value: t.id,
                             label: t.name,
                         }))}
+                        addItemButtonProps={{
+                            onAddItem: () => setShowCreateSpvModal(true),
+                            addItemButtonLabel: 'Create SPV',
+                        }}
                     />
                 ),
             },
@@ -219,6 +231,19 @@ export function useAssetForm(props: Props) {
             control,
             inputs,
             formState: { errors },
+            showCreateFixedIncomeTypeModal,
+            setShowCreateFixedIncomeTypeModal,
+            showCreateSpvModal,
+            setShowCreateSpvModal,
         };
-    }, [submit, reset, register, control, errors, inputs]);
+    }, [
+        submit,
+        reset,
+        register,
+        control,
+        inputs,
+        errors,
+        showCreateFixedIncomeTypeModal,
+        showCreateSpvModal,
+    ]);
 }

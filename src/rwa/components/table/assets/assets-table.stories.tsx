@@ -66,6 +66,16 @@ export const Empty: Story = {
                 setShowNewItemForm(false);
             }, []);
 
+        const onSubmitCreateFixedIncomeType: FixedIncomesTableProps['onSubmitCreateFixedIncomeType'] =
+            useCallback(data => {
+                console.log({ data });
+            }, []);
+
+        const onSubmitCreateSpv: FixedIncomesTableProps['onSubmitCreateSpv'] =
+            useCallback(data => {
+                console.log({ data });
+            }, []);
+
         const argsWithHandlers: FixedIncomesTableProps = {
             ...args,
             expandedRowId,
@@ -76,6 +86,8 @@ export const Empty: Story = {
             setSelectedItem,
             onSubmitCreate,
             onSubmitEdit,
+            onSubmitCreateFixedIncomeType,
+            onSubmitCreateSpv,
         };
         return (
             <div className="flex flex-col gap-4">

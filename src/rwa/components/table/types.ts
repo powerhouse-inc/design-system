@@ -123,7 +123,10 @@ export type GroupTransactionsTableProps = Pick<
 export type AssetsTableProps = Pick<
     TableProps<FixedIncome, AssetFormInputs>,
     PropsToKeepFromTable
->;
+> & {
+    onSubmitCreateFixedIncomeType: (data: FixedIncomeTypeFormInputs) => void;
+    onSubmitCreateSpv: (data: SPVFormInputs) => void;
+};
 
 export type ServiceProviderFeeTypesTableProps = Pick<
     TableProps<ServiceProviderFeeType, ServiceProviderFeeTypeFormInputs>,
@@ -198,6 +201,8 @@ export type AssetDetailsProps = Pick<
 > & {
     onSubmitForm: (data: AssetFormInputs) => void;
     onSubmitDelete: (itemId: string) => void;
+    onSubmitCreateFixedIncomeType: (data: FixedIncomeTypeFormInputs) => void;
+    onSubmitCreateSpv: (data: SPVFormInputs) => void;
 };
 
 export type GroupTransactionDetailsProps = Pick<
