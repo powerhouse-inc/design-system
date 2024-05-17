@@ -323,10 +323,11 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
         </>
     );
 
+    const submit = handleSubmit(onSubmit);
+
     const formProps = {
         formInputs,
-        handleSubmit,
-        onSubmit,
+        submit,
         reset,
         onCancel,
         onDelete,
@@ -337,18 +338,20 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
             <ItemDetails {...props} {...formProps} />
             {showCreateAssetModal && (
                 <CreateAssetModal
-                    {...props}
                     {...assetFormProps}
+                    state={state}
                     open={showCreateAssetModal}
                     onOpenChange={setShowCreateAssetModal}
+                    onSubmitForm={onSubmitCreateAsset}
                 />
             )}
             {showCreateServiceProviderFeeTypeModal && (
                 <CreateServiceProviderFeeTypeModal
-                    {...props}
                     {...serviceProviderFeeTypeFormProps}
+                    state={state}
                     open={showCreateServiceProviderFeeTypeModal}
                     onOpenChange={setShowCreateServiceProviderFeeTypeModal}
+                    onSubmitForm={onSubmitCreateServiceProviderFeeType}
                 />
             )}
         </>

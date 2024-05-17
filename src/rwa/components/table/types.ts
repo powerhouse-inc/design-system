@@ -10,7 +10,7 @@ import {
     ServiceProviderFeeType,
 } from '@/rwa';
 import { ComponentType, ReactNode } from 'react';
-import { FieldValues, SubmitHandler, UseFormReturn } from 'react-hook-form';
+import { FieldValues, UseFormReturn } from 'react-hook-form';
 
 export type RealWorldAssetsState = {
     accounts: Account[];
@@ -147,8 +147,8 @@ export type FixedIncomeTypesTableProps = Pick<
 
 export type ItemDetailsFormProps<
     TFieldValues extends FieldValues = FieldValues,
-> = Pick<UseFormReturn<TFieldValues>, 'handleSubmit' | 'reset'> & {
-    onSubmit: SubmitHandler<TFieldValues>;
+> = Pick<UseFormReturn<TFieldValues>, 'reset'> & {
+    submit: (e?: React.BaseSyntheticEvent | undefined) => Promise<void>;
     onSubmitDelete: (itemId: string) => void;
 };
 

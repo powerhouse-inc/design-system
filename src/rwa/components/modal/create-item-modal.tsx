@@ -1,12 +1,7 @@
 import { Modal } from '@/powerhouse';
 import { ComponentPropsWithoutRef } from 'react';
-import {
-    FieldValues,
-    SubmitHandler,
-    UseFormHandleSubmit,
-    UseFormReset,
-} from 'react-hook-form';
-import { AssetFormInputs, RealWorldAssetsState } from '../table';
+import { FieldValues, UseFormReset } from 'react-hook-form';
+import { RealWorldAssetsState } from '../table';
 import { ModalFormInputs } from './modal-form-inputs';
 
 export type RWACreateItemModalProps = ComponentPropsWithoutRef<typeof Modal> & {
@@ -18,10 +13,9 @@ export type RWACreateItemModalProps = ComponentPropsWithoutRef<typeof Modal> & {
         label: string;
         Input: () => string | JSX.Element;
     }[];
-    handleSubmit: UseFormHandleSubmit<FieldValues>;
-    onSubmit: SubmitHandler<FieldValues>;
     onOpenChange: (open: boolean) => void;
-    onSubmitForm: (data: AssetFormInputs) => void;
+    onSubmitForm: (data: FieldValues) => void;
+    submit: (e?: React.BaseSyntheticEvent | undefined) => Promise<void>;
     reset: UseFormReset<FieldValues>;
 };
 
@@ -34,8 +28,7 @@ export const RWACreateItemModal = (props: RWACreateItemModalProps) => {
         inputs,
         onOpenChange,
         reset,
-        handleSubmit,
-        onSubmit,
+        submit,
         ...restProps
     } = props;
 
@@ -71,7 +64,7 @@ export const RWACreateItemModal = (props: RWACreateItemModalProps) => {
                         Cancel
                     </button>
                     <button
-                        onClick={handleSubmit(onSubmit)}
+                        onClick={submit}
                         className="min-h-12 min-w-36 flex-1 rounded-xl bg-gray-800 px-6 py-3 text-base font-semibold text-gray-50 outline-none transition-all hover:scale-105 active:opacity-75"
                     >
                         Save

@@ -5,7 +5,8 @@ import {
     RWACreateItemModalProps,
 } from './create-item-modal';
 
-export const CreateAssetModal = (props: RWACreateItemModalProps) => {
+type Props = Omit<RWACreateItemModalProps, 'itemName' | 'defaultValues'>;
+export const CreateAssetModal = (props: Props) => {
     const { fixedIncomeTypes, spvs } = props.state;
 
     const defaultValues = {
@@ -20,5 +21,12 @@ export const CreateAssetModal = (props: RWACreateItemModalProps) => {
         operation: 'create',
     });
 
-    return <RWACreateItemModal {...props} {...useAssetFormReturn} />;
+    return (
+        <RWACreateItemModal
+            {...props}
+            {...useAssetFormReturn}
+            itemName="Asset"
+            defaultValues={defaultValues}
+        />
+    );
 };

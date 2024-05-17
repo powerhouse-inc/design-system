@@ -16,13 +16,12 @@ export function ServiceProviderFeeTypeDetails(
         feeType: item?.feeType,
         accountId: account?.id ?? accounts[0]?.id,
     };
-    const { inputs, handleSubmit, onSubmit, reset } =
-        useServiceProviderFeeTypeForm({
-            defaultValues,
-            state,
-            onSubmitForm,
-            operation,
-        });
+    const { inputs, submit, reset } = useServiceProviderFeeTypeForm({
+        defaultValues,
+        state,
+        onSubmitForm,
+        operation,
+    });
 
     const formInputs = () => <FormInputs inputs={inputs} />;
 
@@ -40,8 +39,7 @@ export function ServiceProviderFeeTypeDetails(
     const formProps = {
         formInputs,
         dependentItemProps,
-        handleSubmit,
-        onSubmit,
+        submit,
         reset,
         onCancel,
     };

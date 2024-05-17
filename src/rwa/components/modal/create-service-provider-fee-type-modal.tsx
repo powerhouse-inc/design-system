@@ -4,9 +4,9 @@ import {
     RWACreateItemModalProps,
 } from './create-item-modal';
 
-export const CreateServiceProviderFeeTypeModal = (
-    props: RWACreateItemModalProps,
-) => {
+type Props = Omit<RWACreateItemModalProps, 'itemName' | 'defaultValues'>;
+
+export const CreateServiceProviderFeeTypeModal = (props: Props) => {
     const { accounts } = props.state;
 
     const defaultValues = {
@@ -23,6 +23,8 @@ export const CreateServiceProviderFeeTypeModal = (
         <RWACreateItemModal
             {...props}
             {...useServiceProviderFeeTypeFormReturn}
+            itemName="Service Provider Fee Type"
+            defaultValues={defaultValues}
         />
     );
 };

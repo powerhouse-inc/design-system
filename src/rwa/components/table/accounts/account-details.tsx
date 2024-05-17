@@ -124,11 +124,12 @@ export function AccountDetails(props: AccountDetailsProps) {
         dependentItemList,
     };
 
+    const submit = handleSubmit(onSubmit);
+
     const formProps = {
         formInputs,
         dependentItemProps,
-        handleSubmit,
-        onSubmit,
+        submit,
         reset,
         isAllowedToDeleteItem,
     };

@@ -1,6 +1,6 @@
 import { Account, ServiceProviderFeeType } from '@/rwa/types';
 import { useCallback, useMemo } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { RWATableSelect, RWATableTextInput } from '../../inputs';
 import {
     RealWorldAssetsState,
@@ -11,8 +11,8 @@ type Props = {
     item?: ServiceProviderFeeType | undefined;
     defaultValues: ServiceProviderFeeTypeFormInputs;
     state: RealWorldAssetsState;
-    onSubmitForm: (data: ServiceProviderFeeTypeFormInputs) => void;
     operation: 'create' | 'view' | 'edit';
+    onSubmitForm: (data: FieldValues) => void;
 };
 
 export function useServiceProviderFeeTypeForm(props: Props) {
@@ -20,16 +20,16 @@ export function useServiceProviderFeeTypeForm(props: Props) {
 
     const { accounts } = state;
 
-    const useFormReturn = useForm<ServiceProviderFeeTypeFormInputs>({
-        mode: 'onBlur',
-        defaultValues,
-    });
-
     const {
+        handleSubmit,
+        reset,
         register,
         control,
         formState: { errors },
-    } = useFormReturn;
+    } = useForm<ServiceProviderFeeTypeFormInputs>({
+        mode: 'onBlur',
+        defaultValues,
+    });
 
     const onSubmit: SubmitHandler<ServiceProviderFeeTypeFormInputs> =
         useCallback(
@@ -108,12 +108,19 @@ export function useServiceProviderFeeTypeForm(props: Props) {
         ],
     );
 
+    const submit = useCallback(handleSubmit(onSubmit), [
+        onSubmit,
+        handleSubmit,
+    ]);
+
     return useMemo(() => {
         return {
-            ...useFormReturn,
-            ...props,
-            onSubmit,
+            submit,
+            reset,
+            register,
+            control,
             inputs,
+            formState: { errors },
         };
-    }, [inputs, onSubmit, props, useFormReturn]);
+    }, [submit, reset, register, control, errors, inputs]);
 }

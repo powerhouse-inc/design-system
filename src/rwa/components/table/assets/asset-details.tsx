@@ -26,7 +26,7 @@ export function AssetDetails(props: AssetDetailsProps) {
         coupon: item?.coupon,
     };
 
-    const { handleSubmit, reset, inputs, onSubmit } = useAssetForm({
+    const { submit, reset, inputs } = useAssetForm({
         item,
         defaultValues,
         state,
@@ -55,8 +55,7 @@ export function AssetDetails(props: AssetDetailsProps) {
     const formProps = {
         formInputs,
         dependentItemProps,
-        handleSubmit,
-        onSubmit,
+        submit,
         reset,
         onCancel,
     };

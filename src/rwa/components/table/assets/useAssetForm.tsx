@@ -25,7 +25,9 @@ export function useAssetForm(props: Props) {
     });
 
     const {
+        handleSubmit,
         register,
+        reset,
         control,
         formState: { errors },
     } = useFormReturn;
@@ -207,13 +209,19 @@ export function useAssetForm(props: Props) {
         ],
     );
 
-    return useMemo(
-        () => ({
-            ...useFormReturn,
-            ...props,
-            onSubmit,
+    const submit = useCallback(handleSubmit(onSubmit), [
+        onSubmit,
+        handleSubmit,
+    ]);
+
+    return useMemo(() => {
+        return {
+            submit,
+            reset,
+            register,
+            control,
             inputs,
-        }),
-        [inputs, onSubmit, props, useFormReturn],
-    );
+            formState: { errors },
+        };
+    }, [submit, reset, register, control, errors, inputs]);
 }

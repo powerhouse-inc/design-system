@@ -62,11 +62,12 @@ export function FixedIncomeTypeDetails(props: FixedIncomeTypeDetailsProps) {
         dependentItemList: dependentItemsList,
     };
 
+    const submit = handleSubmit(onSubmit);
+
     const formProps = {
         formInputs,
         dependentItemProps,
-        handleSubmit,
-        onSubmit,
+        submit,
         reset,
         onCancel,
     };

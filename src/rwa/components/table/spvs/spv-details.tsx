@@ -58,11 +58,12 @@ export function SPVDetails(props: SPVDetailsProps) {
         )),
     };
 
+    const submit = handleSubmit(onSubmit);
+
     const formProps = {
         formInputs,
         dependentItemProps,
-        handleSubmit,
-        onSubmit,
+        submit,
         reset,
         onCancel,
     };
