@@ -209,10 +209,7 @@ export function useAssetForm(props: Props) {
         ],
     );
 
-    const submit = useCallback(handleSubmit(onSubmit), [
-        onSubmit,
-        handleSubmit,
-    ]);
+    const submit = handleSubmit(onSubmit);
 
     return useMemo(() => {
         return {

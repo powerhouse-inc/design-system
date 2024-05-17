@@ -59,6 +59,11 @@ export const Empty: Story = {
                 console.log('create asset', { data });
             }, []);
 
+        const onSubmitCreateServiceProviderFeeType: GroupTransactionsTableProps['onSubmitCreateServiceProviderFeeType'] =
+            useCallback(data => {
+                console.log('create asset', { data });
+            }, []);
+
         const argsWithHandlers: GroupTransactionsTableProps = {
             ...args,
             expandedRowId,
@@ -71,6 +76,7 @@ export const Empty: Story = {
             onSubmitCreate,
             onSubmitDelete,
             onSubmitCreateAsset,
+            onSubmitCreateServiceProviderFeeType,
         };
         return (
             <div className="flex flex-col gap-4">

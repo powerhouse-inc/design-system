@@ -7,14 +7,17 @@ import {
 type Props = Omit<RWACreateItemModalProps, 'itemName' | 'defaultValues'>;
 
 export const CreateServiceProviderFeeTypeModal = (props: Props) => {
-    const { accounts } = props.state;
+    const { state, onSubmitForm } = props;
+
+    const { accounts } = state;
 
     const defaultValues = {
         accountId: accounts[0]?.id,
     };
 
     const useServiceProviderFeeTypeFormReturn = useServiceProviderFeeTypeForm({
-        ...props,
+        state,
+        onSubmitForm,
         defaultValues,
         operation: 'create',
     });
