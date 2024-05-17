@@ -1,14 +1,20 @@
 import { Icon } from '@/powerhouse';
-import { ComponentPropsWithoutRef } from 'react';
+import { ComponentPropsWithoutRef, ReactNode } from 'react';
 import Select, {
     ClearIndicatorProps,
-    components,
     DropdownIndicatorProps,
+    MenuListProps,
+    components,
 } from 'react-select';
 
 type SelectProps = ComponentPropsWithoutRef<typeof Select>;
 
-type Props = Omit<SelectProps, 'components' | 'styles' | 'theme'>;
+type Props = Omit<SelectProps, 'components' | 'styles' | 'theme'> & {
+    addItemButtonProps?: {
+        addItemButtonLabel?: ReactNode;
+        onAddItem?: () => void;
+    };
+};
 
 function DropdownIndicator(props: DropdownIndicatorProps) {
     return (
@@ -26,11 +32,43 @@ function ClearIndicator(props: ClearIndicatorProps) {
     );
 }
 
+function MenuList(
+    props: MenuListProps & {
+        addItemButtonLabel?: ReactNode;
+        onAddItem?: () => void;
+    },
+) {
+    const { addItemButtonLabel, onAddItem, ...rest } = props;
+
+    const hasAddItemButton = !!addItemButtonLabel && !!onAddItem;
+
+    return (
+        <components.MenuList {...rest}>
+            {props.children}
+            {hasAddItemButton && (
+                <button
+                    onClick={onAddItem}
+                    className="w-full px-2 py-3 hover:bg-slate-50"
+                >
+                    {addItemButtonLabel}
+                </button>
+            )}
+        </components.MenuList>
+    );
+}
+
 export function Combobox(props: Props) {
+    const { addItemButtonProps, ...rest } = props;
+
     return (
         <Select
-            {...props}
-            components={{ DropdownIndicator, ClearIndicator }}
+            {...rest}
+            components={{
+                DropdownIndicator,
+                ClearIndicator,
+                MenuList: menuListProps =>
+                    MenuList({ ...menuListProps, ...addItemButtonProps }),
+            }}
             styles={{
                 dropdownIndicator: () => {
                     return {
@@ -75,16 +113,18 @@ export function Combobox(props: Props) {
                         boxSizing: 'border-box',
                     };
                 },
-                option: (baseStyles, state) => ({
-                    ...baseStyles,
-                    backgroundColor: state.isSelected
-                        ? 'var(--slate-50)'
-                        : 'var(--white)',
-                    color: 'var(--gray-800)',
-                    ':hover': {
-                        backgroundColor: 'var(--slate-50)',
-                    },
-                }),
+                option: (baseStyles, state) => {
+                    return {
+                        ...baseStyles,
+                        backgroundColor: state.isSelected
+                            ? 'var(--slate-50)'
+                            : 'var(--white)',
+                        color: 'var(--gray-800)',
+                        ':hover': {
+                            backgroundColor: 'var(--slate-50)',
+                        },
+                    };
+                },
                 menuList: baseStyles => ({
                     ...baseStyles,
                     padding: 0,
