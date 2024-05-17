@@ -1,36 +1,43 @@
 import { Modal } from '@/powerhouse';
-import { convertToDateTimeLocalFormat } from '@/rwa/utils';
 import { ComponentPropsWithoutRef } from 'react';
+import {
+    FieldValues,
+    SubmitHandler,
+    UseFormHandleSubmit,
+    UseFormReset,
+} from 'react-hook-form';
 import { AssetFormInputs, RealWorldAssetsState } from '../table';
-import { useAssetForm } from '../table/assets/use-asset-form';
 import { ModalFormInputs } from './modal-form-inputs';
 
 export type RWACreateItemModalProps = ComponentPropsWithoutRef<typeof Modal> & {
     state: RealWorldAssetsState;
     open: boolean;
     itemName: string;
+    defaultValues: FieldValues;
+    inputs: {
+        label: string;
+        Input: () => string | JSX.Element;
+    }[];
+    handleSubmit: UseFormHandleSubmit<FieldValues>;
+    onSubmit: SubmitHandler<FieldValues>;
     onOpenChange: (open: boolean) => void;
     onSubmitForm: (data: AssetFormInputs) => void;
+    reset: UseFormReset<FieldValues>;
 };
 
 export const RWACreateItemModal = (props: RWACreateItemModalProps) => {
-    const { itemName, open, state, onOpenChange, onSubmitForm, ...restProps } =
-        props;
-
-    const { fixedIncomeTypes, spvs } = state;
-
-    const defaultValues = {
-        fixedIncomeTypeId: fixedIncomeTypes[0]?.id,
-        spvId: spvs[0]?.id,
-        maturity: convertToDateTimeLocalFormat(new Date()),
-    };
-
-    const { handleSubmit, reset, inputs, onSubmit } = useAssetForm({
-        defaultValues,
+    const {
+        itemName,
+        open,
         state,
-        onSubmitForm,
-        operation: 'create',
-    });
+        defaultValues,
+        inputs,
+        onOpenChange,
+        reset,
+        handleSubmit,
+        onSubmit,
+        ...restProps
+    } = props;
 
     function handleCancel() {
         reset();

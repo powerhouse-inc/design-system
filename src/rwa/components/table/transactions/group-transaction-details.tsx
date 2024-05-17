@@ -27,8 +27,8 @@ import {
 } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 import { FormInputs } from '../../inputs/form-inputs';
-import { RWACreateItemModal } from '../../modal/create-item-modal';
-import { useAssetForm } from '../assets/use-asset-form';
+import { CreateAssetModal } from '../../modal/create-asset-modal';
+import { useAssetForm } from '../assets/useAssetForm';
 
 function CashBalanceChange(props: {
     control: Control<GroupTransactionFormInputs>;
@@ -134,7 +134,10 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
             maturity: convertToDateTimeLocalFormat(new Date()),
         },
         state,
-        onSubmitForm: onSubmitCreateAsset,
+        onSubmitForm: data => {
+            setShowCreateAssetModal(false);
+            onSubmitCreateAsset(data);
+        },
         operation: 'create',
     });
 
@@ -220,6 +223,10 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
                           name="fixedIncomeId"
                           disabled={operation === 'view'}
                           options={fixedIncomeOptions}
+                          addItemButtonProps={{
+                              onAddItem: () => setShowCreateAssetModal(true),
+                              addItemButtonLabel: 'Create Asset',
+                          }}
                       />
                   ),
               }
@@ -307,7 +314,7 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
         <>
             <ItemDetails {...props} {...formProps} />
             {showCreateAssetModal && (
-                <RWACreateItemModal
+                <CreateAssetModal
                     {...props}
                     {...assetFormProps}
                     open={showCreateAssetModal}

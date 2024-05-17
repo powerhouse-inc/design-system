@@ -54,6 +54,11 @@ export const Empty: Story = {
                 setSelectedItem(undefined);
             }, []);
 
+        const onSubmitCreateAsset: GroupTransactionsTableProps['onSubmitCreateAsset'] =
+            useCallback(data => {
+                console.log('create asset', { data });
+            }, []);
+
         const argsWithHandlers: GroupTransactionsTableProps = {
             ...args,
             expandedRowId,
@@ -65,6 +70,7 @@ export const Empty: Story = {
             onSubmitEdit,
             onSubmitCreate,
             onSubmitDelete,
+            onSubmitCreateAsset,
         };
         return (
             <div className="flex flex-col gap-4">

@@ -4,7 +4,7 @@ import {
     convertToDateTimeLocalFormat,
 } from '@/rwa';
 import { FormInputs } from '../../inputs/form-inputs';
-import { useAssetForm } from './use-asset-form';
+import { useAssetForm } from './useAssetForm';
 
 export function AssetDetails(props: AssetDetailsProps) {
     const { state, onCancel, onSubmitForm, item, operation } = props;
