@@ -12,9 +12,9 @@ export function ModalFormInputs(props: Props) {
     return (
         <div className="bg-white text-xs font-medium">
             {inputs.map(({ label, Input }, index) => (
-                <div key={label}>
-                    <div>{label}</div>
-                    <div className="py-2 text-gray-900" key={index}>
+                <div key={label} className="mb-4 mt-2 grid gap-1">
+                    <label className="text-base">{label}</label>
+                    <div key={index}>
                         <Input />
                     </div>
                 </div>

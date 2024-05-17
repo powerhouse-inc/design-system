@@ -1,6 +1,7 @@
-import { Modal } from '@/powerhouse';
+import { Icon, Modal } from '@/powerhouse';
 import { ComponentPropsWithoutRef } from 'react';
 import { FieldValues, UseFormReset } from 'react-hook-form';
+import { twMerge } from 'tailwind-merge';
 import { RealWorldAssetsState } from '../table';
 import { ModalFormInputs } from './modal-form-inputs';
 
@@ -37,6 +38,9 @@ export const RWACreateItemModal = (props: RWACreateItemModalProps) => {
         onOpenChange(false);
     }
 
+    const buttonStyles =
+        'min-h-[48px] min-w-[142px] text-base font-semibold py-3 px-6 rounded-xl outline-none active:opacity-75 hover:scale-105 transform transition-all';
+
     return (
         <Modal
             open={open}
@@ -50,22 +54,33 @@ export const RWACreateItemModal = (props: RWACreateItemModalProps) => {
             {...restProps}
         >
             <div className="w-[400px] p-6 text-slate-300">
-                <div className="border-b border-slate-50 pb-2 text-2xl font-bold text-gray-800">
-                    Create {itemName}
+                <div className="mb-6 flex justify-between">
+                    <h1 className="text-xl font-bold">Create {itemName}</h1>
+                    <button
+                        className="flex size-8 items-center justify-center rounded-md bg-gray-100 text-gray-500 outline-none hover:text-gray-900"
+                        onClick={handleCancel}
+                        tabIndex={-1}
+                    >
+                        <Icon name="xmark-light" size={24} />
+                    </button>
                 </div>
-                <div className="my-6 rounded-md bg-slate-50 p-4 text-slate-200">
-                    <ModalFormInputs inputs={inputs} />
-                </div>
+                <ModalFormInputs inputs={inputs} />
                 <div className="mt-8 flex justify-between gap-3">
                     <button
                         onClick={handleCancel}
-                        className="min-h-12 min-w-36 flex-1 rounded-xl bg-gray-800 px-6 py-3 text-base font-semibold text-gray-50 outline-none transition-all hover:scale-105 active:opacity-75"
+                        className={twMerge(
+                            buttonStyles,
+                            'flex-1 bg-slate-50 text-slate-800',
+                        )}
                     >
                         Cancel
                     </button>
                     <button
                         onClick={submit}
-                        className="min-h-12 min-w-36 flex-1 rounded-xl bg-gray-800 px-6 py-3 text-base font-semibold text-gray-50 outline-none transition-all hover:scale-105 active:opacity-75"
+                        className={twMerge(
+                            buttonStyles,
+                            'flex-1 bg-gray-800 text-gray-50',
+                        )}
                     >
                         Save
                     </button>
