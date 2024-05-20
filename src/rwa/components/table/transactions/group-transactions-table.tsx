@@ -13,7 +13,7 @@ import {
     isFixedIncomeAsset,
     makeFixedIncomeOptionLabel,
 } from '@/rwa';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 const columns = [
     {
@@ -108,6 +108,23 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
     const [filteredTransactions, setFilteredTransactions] =
         useState(transactions);
 
+    const [filterAssetId, setFilterAssetId] = useState<string>();
+
+    useEffect(() => {
+        if (!filterAssetId) {
+            setFilteredTransactions(transactions);
+            return;
+        }
+
+        setFilteredTransactions(
+            transactions.filter(
+                transaction =>
+                    transaction.fixedIncomeTransaction?.assetId ===
+                    filterAssetId,
+            ),
+        );
+    }, [filterAssetId, transactions]);
+
     const filterByAssetOptions = useMemo(
         () =>
             fixedIncomes.map(asset => ({
@@ -124,18 +141,13 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
 
     function handleFilterByAssetChange(update: unknown) {
         if (!update || !(typeof update === 'object') || !('value' in update)) {
-            setFilteredTransactions(transactions);
+            setFilterAssetId(undefined);
             return;
         }
 
         const { value: assetId } = update;
 
-        setFilteredTransactions(
-            transactions.filter(
-                transaction =>
-                    transaction.fixedIncomeTransaction?.assetId === assetId,
-            ),
-        );
+        setFilterAssetId(assetId as string);
     }
 
     const editForm = ({
@@ -171,6 +183,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                 <Combobox
                     options={filterByAssetOptions}
                     onChange={handleFilterByAssetChange}
+                    isClearable
                     placeholder="Filter by Asset"
                 />
             </div>
