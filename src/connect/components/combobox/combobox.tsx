@@ -11,8 +11,8 @@ type SelectProps = ComponentPropsWithoutRef<typeof Select>;
 
 type Props = Omit<SelectProps, 'components' | 'styles' | 'theme'> & {
     addItemButtonProps?: {
-        addItemButtonLabel?: ReactNode;
-        onAddItem?: () => void;
+        label?: ReactNode;
+        onClick?: () => void;
     };
 };
 
@@ -34,23 +34,23 @@ function ClearIndicator(props: ClearIndicatorProps) {
 
 function MenuList(
     props: MenuListProps & {
-        addItemButtonLabel?: ReactNode;
-        onAddItem?: () => void;
+        label?: ReactNode;
+        onClick?: () => void;
     },
 ) {
-    const { addItemButtonLabel, onAddItem, ...rest } = props;
+    const { label, onClick, ...rest } = props;
 
-    const hasAddItemButton = !!addItemButtonLabel && !!onAddItem;
+    const hasAddItemButton = !!label && !!onClick;
 
     return (
         <components.MenuList {...rest}>
             {props.children}
             {hasAddItemButton && (
                 <button
-                    onClick={onAddItem}
+                    onClick={onClick}
                     className="w-full px-2 py-3 hover:bg-slate-50"
                 >
-                    {addItemButtonLabel}
+                    {label}
                 </button>
             )}
         </components.MenuList>

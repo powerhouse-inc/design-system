@@ -79,12 +79,11 @@ export function FeeTransactionsTable(props: Props) {
                                                     serviceProviderFeeTypeOptions
                                                 }
                                                 addItemButtonProps={{
-                                                    onAddItem: () =>
+                                                    onClick: () =>
                                                         props.setShowServiceProviderFeeTypeModal(
                                                             true,
                                                         ),
-                                                    addItemButtonLabel:
-                                                        'Add Service Provider',
+                                                    label: 'Add Service Provider',
                                                 }}
                                             />
                                         </td>

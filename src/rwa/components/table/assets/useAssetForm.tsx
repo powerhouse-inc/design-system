@@ -178,9 +178,9 @@ export function useAssetForm(props: Props) {
                             label: t.name,
                         }))}
                         addItemButtonProps={{
-                            onAddItem: () =>
+                            onClick: () =>
                                 setShowCreateFixedIncomeTypeModal(true),
-                            addItemButtonLabel: 'Create Fixed Income Type',
+                            label: 'Create Fixed Income Type',
                         }}
                     />
                 ),
@@ -198,8 +198,8 @@ export function useAssetForm(props: Props) {
                             label: t.name,
                         }))}
                         addItemButtonProps={{
-                            onAddItem: () => setShowCreateSpvModal(true),
-                            addItemButtonLabel: 'Create SPV',
+                            onClick: () => setShowCreateSpvModal(true),
+                            label: 'Create SPV',
                         }}
                     />
                 ),

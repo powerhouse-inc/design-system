@@ -243,8 +243,8 @@ export function GroupTransactionDetails(props: GroupTransactionDetailsProps) {
                           disabled={operation === 'view'}
                           options={fixedIncomeOptions}
                           addItemButtonProps={{
-                              onAddItem: () => setShowCreateAssetModal(true),
-                              addItemButtonLabel: 'Create Asset',
+                              onClick: () => setShowCreateAssetModal(true),
+                              label: 'Create Asset',
                           }}
                       />
                   ),

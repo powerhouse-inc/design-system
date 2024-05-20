@@ -64,8 +64,8 @@ export const WithAddItemButton: Story = {
     args: {
         ...Default.args,
         addItemButtonProps: {
-            addItemButtonLabel: 'Add New Item',
-            onAddItem: () => {
+            label: 'Add New Item',
+            onClick: () => {
                 alert('Add Item');
             },
         },

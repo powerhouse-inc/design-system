@@ -95,8 +95,8 @@ export function useServiceProviderFeeTypeForm(props: Props) {
                         disabled={operation === 'view'}
                         options={makeAccountOptions(accounts)}
                         addItemButtonProps={{
-                            onAddItem: () => setShowCreateAccountModal(true),
-                            addItemButtonLabel: 'Create Account',
+                            onClick: () => setShowCreateAccountModal(true),
+                            label: 'Create Account',
                         }}
                     />
                 ),
