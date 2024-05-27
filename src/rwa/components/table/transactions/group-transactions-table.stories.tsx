@@ -20,7 +20,11 @@ const meta: Meta<typeof GroupTransactionsTable> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<
+    GroupTransactionsTableProps & {
+        simulateBackgroundUpdates?: boolean;
+    }
+>;
 
 const columnCountByTableWidth = {
     1520: 12,
@@ -33,21 +37,28 @@ const columnCountByTableWidth = {
 export const Empty: Story = {
     args: {
         state: mockStateInitial,
+        simulateBackgroundUpdates: false,
     },
     render: function Wrapper(args) {
         const [, setArgs] = useArgs<typeof args>();
-        useInterval(() => {
-            setArgs({
-                ...args,
-                state: {
-                    ...args.state,
-                    transactions: [
-                        ...args.state.transactions,
-                        { ...mockGroupTransaction, id: `new-${Date.now()}` },
-                    ],
-                },
-            });
-        }, 4000);
+        useInterval(
+            () => {
+                setArgs({
+                    ...args,
+                    state: {
+                        ...args.state,
+                        transactions: [
+                            ...args.state.transactions,
+                            {
+                                ...mockGroupTransaction,
+                                id: `new-${Date.now()}`,
+                            },
+                        ],
+                    },
+                });
+            },
+            args.simulateBackgroundUpdates ? 3000 : null,
+        );
 
         const onSubmitEdit: GroupTransactionsTableProps['onSubmitEdit'] =
             useCallback(data => {

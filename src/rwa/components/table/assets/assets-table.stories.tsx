@@ -22,7 +22,11 @@ const meta: Meta<typeof AssetsTable> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<
+    AssetsTableProps & {
+        simulateBackgroundUpdates?: boolean;
+    }
+>;
 
 function createAssetFromFormInputs(data: AssetFormInputs) {
     const id = utils.hashKey();
@@ -38,21 +42,25 @@ function createAssetFromFormInputs(data: AssetFormInputs) {
 export const Empty: Story = {
     args: {
         state: mockStateInitial,
+        simulateBackgroundUpdates: false,
     },
     render: function Wrapper(args) {
         const [, setArgs] = useArgs<typeof args>();
-        useInterval(() => {
-            setArgs({
-                ...args,
-                state: {
-                    ...args.state,
-                    portfolio: [
-                        ...args.state.portfolio,
-                        { ...mockFixedIncomes[0], id: `new-${Date.now()}` },
-                    ],
-                },
-            });
-        }, 4000);
+        useInterval(
+            () => {
+                setArgs({
+                    ...args,
+                    state: {
+                        ...args.state,
+                        portfolio: [
+                            ...args.state.portfolio,
+                            { ...mockFixedIncomes[0], id: `new-${Date.now()}` },
+                        ],
+                    },
+                });
+            },
+            args.simulateBackgroundUpdates ? 3000 : 0,
+        );
 
         const onSubmitEdit: AssetsTableProps['onSubmitEdit'] = useCallback(
             data => {
