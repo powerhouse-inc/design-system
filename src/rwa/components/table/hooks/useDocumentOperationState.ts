@@ -1,6 +1,5 @@
-import { RealWorldAssetsState } from '@/rwa/types';
+import { Operation, RealWorldAssetsState } from '@/rwa';
 import { useEffect, useMemo, useState } from 'react';
-import { Operation } from '../types';
 
 type Props = {
     state: RealWorldAssetsState;

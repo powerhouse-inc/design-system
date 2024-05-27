@@ -1,8 +1,13 @@
-import { Account, RealWorldAssetsState } from '@/rwa/types';
+import {
+    Account,
+    Operation,
+    RWATableSelect,
+    RWATableTextInput,
+    RealWorldAssetsState,
+    ServiceProviderFeeTypeFormInputs,
+} from '@/rwa';
 import { useCallback, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { RWATableSelect, RWATableTextInput } from '../../inputs';
-import { Operation, ServiceProviderFeeTypeFormInputs } from '../types';
 
 type Props = {
     item?: ServiceProviderFeeTypeFormInputs | undefined;

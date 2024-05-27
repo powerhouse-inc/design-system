@@ -1,19 +1,23 @@
-import { FixedIncome } from '@/rwa/types';
-import { getCashAsset, getFixedIncomeAssets } from '@/rwa/utils';
-import { Fragment, useMemo, useState } from 'react';
-import { twMerge } from 'tailwind-merge';
-import { RWATableCell, RWATableRow, Table } from '../base';
-import { useDocumentOperationState } from '../hooks/useDocumentOperationState';
 import {
+    AssetDetails,
     AssetFormInputs,
+    FixedIncome,
     FixedIncomeTypeFormInputs,
+    RWATableCell,
+    RWATableRow,
     SPVFormInputs,
+    Table,
     TableItem,
     TableProps,
     TableWrapperProps,
-} from '../types';
-import { handleTableDatum, makeTableData } from '../utils';
-import { AssetDetails } from './asset-details';
+    getCashAsset,
+    getFixedIncomeAssets,
+    handleTableDatum,
+    makeTableData,
+    useDocumentOperationState,
+} from '@/rwa';
+import { Fragment, useMemo, useState } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 const columns = [
     { key: 'name' as const, label: 'Name', allowSorting: true },

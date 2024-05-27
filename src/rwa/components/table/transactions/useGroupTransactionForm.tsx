@@ -1,15 +1,23 @@
 import { DateTimeLocalInput } from '@/connect';
 import {
     FEES_PAYMENT,
+    FormattedNumber,
+    GroupTransactionFormInputs,
+    GroupTransactionsTableItem,
+    Operation,
+    RWANumberInput,
+    RWATableSelect,
+    RealWorldAssetsState,
     allGroupTransactionTypes,
     assetGroupTransactions,
-    groupTransactionTypeLabels,
-} from '@/rwa/constants';
-import { RealWorldAssetsState } from '@/rwa/types';
-import {
+    calculateCashBalanceChange,
+    calculateUnitPrice,
     convertToDateTimeLocalFormat,
     getFixedIncomeAssets,
-} from '@/rwa/utils';
+    groupTransactionTypeLabels,
+    makeFixedIncomeOptionLabel,
+} from '@/rwa';
+
 import { useCallback, useMemo, useState } from 'react';
 import {
     Control,
@@ -19,15 +27,6 @@ import {
     useWatch,
 } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
-import { RWANumberInput, RWATableSelect } from '../../inputs';
-import { FormattedNumber } from '../base';
-import {
-    GroupTransactionFormInputs,
-    GroupTransactionsTableItem,
-    Operation,
-} from '../types';
-import { calculateCashBalanceChange, calculateUnitPrice } from '../utils';
-import { makeFixedIncomeOptionLabel } from './utils';
 
 function UnitPrice(props: {
     control: Control<GroupTransactionFormInputs>;

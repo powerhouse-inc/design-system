@@ -1,17 +1,17 @@
-import { FixedIncome } from '@/rwa/types';
-import { memo } from 'react';
-import { FormInputs } from '../../inputs/form-inputs';
-import { RWACreateItemModal } from '../../modal/create-item-modal';
-import { ItemDetails } from '../base';
-import { useFixedIncomeTypeForm } from '../fixed-income-types/useFixedIncomeTypeForm';
-import { useSpvForm } from '../spvs/useSpvForm';
 import {
     AssetFormInputs,
+    FixedIncome,
     FixedIncomeTypeFormInputs,
+    FormInputs,
+    ItemDetails,
     ItemDetailsProps,
+    RWACreateItemModal,
     SPVFormInputs,
-} from '../types/index';
-import { useAssetForm } from './useAssetForm';
+    useAssetForm,
+    useFixedIncomeTypeForm,
+    useSpvForm,
+} from '@/rwa';
+import { memo } from 'react';
 
 type AssetDetailsProps = Omit<
     ItemDetailsProps<FixedIncome, AssetFormInputs>,

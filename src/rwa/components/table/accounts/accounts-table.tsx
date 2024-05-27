@@ -1,6 +1,5 @@
 import { Icon } from '@/powerhouse';
-import { Table } from '@/rwa';
-import { Account } from '@/rwa/types';
+import { Account, Table } from '@/rwa';
 import { useMemo, useState } from 'react';
 import { useDocumentOperationState } from '../hooks/useDocumentOperationState';
 import {

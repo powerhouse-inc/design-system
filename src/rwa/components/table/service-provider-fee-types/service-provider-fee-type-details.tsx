@@ -1,15 +1,15 @@
 import {
     AccountFormInputs,
+    FormInputs,
     ItemDetails,
     ItemDetailsProps,
+    RWACreateItemModal,
     ServiceProviderFeeTypeFormInputs,
     ServiceProviderFeeTypeTableItem,
+    useAccountForm,
+    useServiceProviderFeeTypeForm,
 } from '@/rwa';
 import { memo } from 'react';
-import { FormInputs } from '../../inputs/form-inputs';
-import { RWACreateItemModal } from '../../modal/create-item-modal';
-import { useAccountForm } from '../accounts/useAccountForm';
-import { useServiceProviderFeeTypeForm } from './useServiceProviderFeeTypeForm';
 
 export type ServiceProviderFeeTypeDetailsProps = Omit<
     ItemDetailsProps<

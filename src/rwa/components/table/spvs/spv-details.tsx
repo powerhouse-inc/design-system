@@ -1,12 +1,12 @@
 import {
+    FormInputs,
     ItemDetails,
     ItemDetailsProps,
     SPV,
     SPVFormInputs,
     getFixedIncomeAssets,
+    useSpvForm,
 } from '@/rwa';
-import { FormInputs } from '../../inputs/form-inputs';
-import { useSpvForm } from './useSpvForm';
 
 export type SPVDetailsProps = Omit<
     ItemDetailsProps<SPV, SPVFormInputs>,

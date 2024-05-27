@@ -1,10 +1,14 @@
-import { Table } from '@/rwa';
-import { SPV } from '@/rwa/types';
+import {
+    SPV,
+    SPVDetails,
+    SPVFormInputs,
+    Table,
+    TableItem,
+    TableWrapperProps,
+    makeTableData,
+    useDocumentOperationState,
+} from '@/rwa';
 import { useMemo, useState } from 'react';
-import { useDocumentOperationState } from '../hooks/useDocumentOperationState';
-import { SPVFormInputs, TableItem, TableWrapperProps } from '../types';
-import { makeTableData } from '../utils';
-import { SPVDetails } from './spv-details';
 
 const columns = [{ key: 'name' as const, label: 'Name', allowSorting: true }];
 

@@ -3,7 +3,7 @@ import {
     GroupTransaction,
     RealWorldAssetsState,
     ServiceProviderFeeType,
-} from '@/rwa/types';
+} from '@/rwa';
 import { ReactNode, RefObject } from 'react';
 import { FieldValues } from 'react-hook-form';
 

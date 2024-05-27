@@ -1,24 +1,24 @@
-import { Combobox } from '@/connect/components/combobox';
-import { Table } from '@/rwa';
-import { FixedIncome, GroupTransaction } from '@/rwa/types';
-import { isAssetGroupTransactionType, isFixedIncomeAsset } from '@/rwa/utils';
-import { useEffect, useMemo, useState } from 'react';
-import {
-    assetTransactionSignByTransactionType,
-    cashTransactionSignByTransactionType,
-} from '../constants';
-import { useDocumentOperationState } from '../hooks/useDocumentOperationState';
+import { Combobox } from '@/connect';
 import {
     AssetFormInputs,
+    FixedIncome,
+    GroupTransaction,
+    GroupTransactionDetails,
     GroupTransactionFormInputs,
     GroupTransactionsTableItem,
     ServiceProviderFeeTypeFormInputs,
+    Table,
     TableItem,
     TableWrapperProps,
-} from '../types';
-import { makeTableData } from '../utils';
-import { GroupTransactionDetails } from './group-transaction-details';
-import { makeFixedIncomeOptionLabel } from './utils';
+    assetTransactionSignByTransactionType,
+    cashTransactionSignByTransactionType,
+    isAssetGroupTransactionType,
+    isFixedIncomeAsset,
+    makeFixedIncomeOptionLabel,
+    makeTableData,
+    useDocumentOperationState,
+} from '@/rwa';
+import { useEffect, useMemo, useState } from 'react';
 
 const columns = [
     {

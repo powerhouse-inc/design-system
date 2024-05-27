@@ -1,7 +1,12 @@
-import { GroupTransactionType, RealWorldAssetsState } from '@/rwa/types';
+import {
+    GroupTransactionType,
+    Item,
+    Operation,
+    RealWorldAssetsState,
+    TableItem,
+} from '@/rwa';
 import { ComponentType, ReactNode } from 'react';
 import { FieldValues, UseFormReturn } from 'react-hook-form';
-import { Item, Operation, TableItem } from './table';
 
 export type ItemDetailsFormProps<
     TFieldValues extends FieldValues = FieldValues,

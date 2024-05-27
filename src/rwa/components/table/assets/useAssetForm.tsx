@@ -1,11 +1,16 @@
 import { DateTimeLocalInput } from '@/connect';
-import { FixedIncome, RealWorldAssetsState } from '@/rwa/types';
-import { convertToDateTimeLocalFormat } from '@/rwa/utils';
+import {
+    AssetFormInputs,
+    FixedIncome,
+    Operation,
+    RWATableSelect,
+    RWATableTextInput,
+    RealWorldAssetsState,
+    convertToDateTimeLocalFormat,
+    handleTableDatum,
+} from '@/rwa';
 import { useCallback, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { RWATableSelect, RWATableTextInput } from '../../inputs';
-import { AssetFormInputs, Operation } from '../types';
-import { handleTableDatum } from '../utils';
 
 type Props = {
     item?: FixedIncome | undefined;

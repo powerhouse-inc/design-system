@@ -1,9 +1,8 @@
 import { Icon } from '@/powerhouse';
-import { Item, ItemDetailsProps, RWAButton } from '@/rwa';
+import { Item, ItemDetailsProps, RWAButton, RWADeleteItemModal } from '@/rwa';
 import { useState } from 'react';
 import { FieldValues } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
-import { RWADeleteItemModal } from '../../modal';
 
 /**
  * Displays and allows creating or editing an item. Intended to be used with react-hook-form.

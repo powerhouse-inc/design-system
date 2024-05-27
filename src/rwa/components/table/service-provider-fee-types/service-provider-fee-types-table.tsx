@@ -1,16 +1,17 @@
-import { Table } from '@/rwa';
-import { Account, ServiceProviderFeeType } from '@/rwa/types';
-import { useMemo, useState } from 'react';
-import { useDocumentOperationState } from '../hooks/useDocumentOperationState';
 import {
+    Account,
     AccountFormInputs,
+    ServiceProviderFeeType,
+    ServiceProviderFeeTypeDetails,
     ServiceProviderFeeTypeFormInputs,
     ServiceProviderFeeTypeTableItem,
+    Table,
     TableItem,
     TableWrapperProps,
-} from '../types';
-import { makeTableData } from '../utils';
-import { ServiceProviderFeeTypeDetails } from './service-provider-fee-type-details';
+    makeTableData,
+    useDocumentOperationState,
+} from '@/rwa';
+import { useMemo, useState } from 'react';
 
 const columns = [
     { key: 'name' as const, label: 'Name', allowSorting: true },

@@ -1,12 +1,12 @@
 import {
     Account,
     AccountFormInputs,
+    FormInputs,
     ItemDetails,
     ItemDetailsProps,
+    useAccountForm,
 } from '@/rwa';
 import { memo } from 'react';
-import { FormInputs } from '../../inputs/form-inputs';
-import { useAccountForm } from './useAccountForm';
 
 export type AccountDetailsProps = Omit<
     ItemDetailsProps<Account, AccountFormInputs>,

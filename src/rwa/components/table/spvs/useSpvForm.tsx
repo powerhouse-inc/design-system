@@ -1,8 +1,11 @@
-import { RealWorldAssetsState } from '@/rwa/types';
+import {
+    Operation,
+    RWATableTextInput,
+    RealWorldAssetsState,
+    SPVFormInputs,
+} from '@/rwa';
 import { useCallback, useMemo } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { RWATableTextInput } from '../../inputs';
-import { Operation, SPVFormInputs } from '../types';
 
 type Props = {
     item?: SPVFormInputs | undefined;

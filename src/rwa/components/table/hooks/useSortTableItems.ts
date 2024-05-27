@@ -1,6 +1,6 @@
+import { Item, TableItem } from '@/rwa';
 import { Identifier, Order, orderBy } from 'natural-orderby';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Item, TableItem } from '..';
 
 /**
  * Takes a list of items and returns a sorted list of items and a sort descriptor.

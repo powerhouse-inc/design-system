@@ -1,13 +1,13 @@
 import {
     FixedIncomeType,
     FixedIncomeTypeFormInputs,
+    FormInputs,
     ItemDetails,
     ItemDetailsProps,
     getFixedIncomeAssets,
+    useFixedIncomeTypeForm,
 } from '@/rwa';
 import { memo } from 'react';
-import { FormInputs } from '../../inputs/form-inputs';
-import { useFixedIncomeTypeForm } from './useFixedIncomeTypeForm';
 
 export type FixedIncomeTypeDetailsProps = Omit<
     ItemDetailsProps<FixedIncomeType, FixedIncomeTypeFormInputs>,

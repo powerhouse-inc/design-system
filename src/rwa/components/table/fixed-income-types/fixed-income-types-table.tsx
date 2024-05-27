@@ -1,14 +1,14 @@
-import { Table } from '@/rwa';
-import { FixedIncomeType } from '@/rwa/types';
-import { useMemo, useState } from 'react';
-import { useDocumentOperationState } from '../hooks/useDocumentOperationState';
 import {
+    FixedIncomeType,
+    FixedIncomeTypeDetails,
     FixedIncomeTypeFormInputs,
+    Table,
     TableItem,
     TableWrapperProps,
-} from '../types';
-import { makeTableData } from '../utils';
-import { FixedIncomeTypeDetails } from './fixed-income-type-details';
+    makeTableData,
+    useDocumentOperationState,
+} from '@/rwa';
+import { useMemo, useState } from 'react';
 
 const columns = [{ key: 'name' as const, label: 'Name', allowSorting: true }];
 
