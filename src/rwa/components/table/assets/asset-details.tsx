@@ -23,11 +23,6 @@ export function _AssetDetails(props: AssetDetailsProps) {
         state,
         tableItem,
         operation,
-        itemName,
-        isAllowedToCreateDocuments,
-        isAllowedToEditDocuments,
-        setOperation,
-        setSelectedTableItem,
         onSubmitCreate,
         onSubmitEdit,
         onSubmitDelete,
@@ -93,21 +88,11 @@ export function _AssetDetails(props: AssetDetailsProps) {
     return (
         <>
             <ItemDetails
-                state={state}
-                tableItem={tableItem}
-                itemName={itemName}
+                {...props}
                 formInputs={formInputs}
                 dependentItemProps={dependentItemProps}
-                operation={operation}
-                isAllowedToCreateDocuments={isAllowedToCreateDocuments}
-                isAllowedToEditDocuments={isAllowedToEditDocuments}
-                setSelectedTableItem={setSelectedTableItem}
-                setOperation={setOperation}
                 submit={submit}
                 reset={reset}
-                onSubmitCreate={onSubmitCreate}
-                onSubmitEdit={onSubmitEdit}
-                onSubmitDelete={onSubmitDelete}
             />
             {showCreateFixedIncomeTypeModal && (
                 <RWACreateItemModal

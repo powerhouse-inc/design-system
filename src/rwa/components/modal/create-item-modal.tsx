@@ -5,20 +5,23 @@ import { FieldValues, UseFormReset } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 import { ModalFormInputs } from './modal-form-inputs';
 
-export type RWACreateItemModalProps = ComponentPropsWithoutRef<typeof Modal> & {
-    state: RealWorldAssetsState;
-    open: boolean;
-    itemName: string;
-    inputs: {
-        label: string;
-        Input: () => string | JSX.Element;
-    }[];
-    onOpenChange: (open: boolean) => void;
-    submit: (e?: React.BaseSyntheticEvent | undefined) => Promise<void>;
-    reset: UseFormReset<FieldValues>;
-};
+export type RWACreateItemModalProps<TFieldValues extends FieldValues> =
+    ComponentPropsWithoutRef<typeof Modal> & {
+        state: RealWorldAssetsState;
+        open: boolean;
+        itemName: string;
+        inputs: {
+            label: string;
+            Input: () => string | JSX.Element;
+        }[];
+        onOpenChange: (open: boolean) => void;
+        submit: (e?: React.BaseSyntheticEvent | undefined) => Promise<void>;
+        reset: UseFormReset<TFieldValues>;
+    };
 
-export const RWACreateItemModal = (props: RWACreateItemModalProps) => {
+export function RWACreateItemModal<TFieldValues extends FieldValues>(
+    props: RWACreateItemModalProps<TFieldValues>,
+) {
     const {
         itemName,
         open,
@@ -85,4 +88,4 @@ export const RWACreateItemModal = (props: RWACreateItemModalProps) => {
             </div>
         </Modal>
     );
-};
+}

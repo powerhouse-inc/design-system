@@ -8,8 +8,8 @@ import {
     convertToDateTimeLocalFormat,
     handleTableDatum,
 } from '@/rwa';
-import { useCallback, useMemo, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useMemo, useState } from 'react';
+import { useSubmit } from '../hooks/useSubmit';
 
 export function useAssetForm(
     props: FormHookProps<FixedIncome, AssetFormInputs>,
@@ -50,30 +50,16 @@ export function useAssetForm(
           }
         : createDefaultValues;
 
-    const defaultValues =
-        operation === 'create' ? createDefaultValues : editDefaultValues;
-
-    const { handleSubmit, register, reset, control, formState } =
-        useForm<AssetFormInputs>({
-            mode: 'onBlur',
-            defaultValues,
-        });
+    const { submit, reset, register, control, formState } = useSubmit({
+        operation,
+        createDefaultValues,
+        editDefaultValues,
+        onSubmitCreate,
+        onSubmitEdit,
+        onSubmitDelete,
+    });
 
     const { errors } = formState;
-
-    const onSubmit: SubmitHandler<AssetFormInputs> = useCallback(
-        data => {
-            if (!operation || operation === 'view') return;
-            const formActions = {
-                create: onSubmitCreate,
-                edit: onSubmitEdit,
-                delete: onSubmitDelete,
-            };
-            const onSubmitForm = formActions[operation];
-            onSubmitForm?.(data);
-        },
-        [onSubmitCreate, onSubmitDelete, onSubmitEdit, operation],
-    );
 
     const derivedInputsToDisplay = useMemo(
         () =>
@@ -253,8 +239,6 @@ export function useAssetForm(
             spvs,
         ],
     );
-
-    const submit = handleSubmit(onSubmit);
 
     return useMemo(() => {
         return {

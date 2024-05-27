@@ -7,7 +7,7 @@ import {
     ServiceProviderFeeTypeFormInputs,
 } from '@/rwa';
 import { useCallback, useMemo, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useSubmit } from '../hooks/useSubmit';
 
 export function useServiceProviderFeeTypeForm(
     props: FormHookProps<
@@ -42,34 +42,16 @@ export function useServiceProviderFeeTypeForm(
           }
         : createDefaultValues;
 
-    const defaultValues =
-        operation === 'create' ? createDefaultValues : editDefaultValues;
-
-    const {
-        handleSubmit,
-        reset,
-        register,
-        control,
-        formState: { errors },
-    } = useForm<ServiceProviderFeeTypeFormInputs>({
-        mode: 'onBlur',
-        defaultValues,
+    const { submit, reset, register, control, formState } = useSubmit({
+        operation,
+        createDefaultValues,
+        editDefaultValues,
+        onSubmitCreate,
+        onSubmitEdit,
+        onSubmitDelete,
     });
 
-    const onSubmit: SubmitHandler<ServiceProviderFeeTypeFormInputs> =
-        useCallback(
-            data => {
-                if (!operation || operation === 'view') return;
-                const formActions = {
-                    create: onSubmitCreate,
-                    edit: onSubmitEdit,
-                    delete: onSubmitDelete,
-                };
-                const onSubmitForm = formActions[operation];
-                onSubmitForm?.(data);
-            },
-            [onSubmitCreate, onSubmitDelete, onSubmitEdit, operation],
-        );
+    const { errors } = formState;
 
     function makeAccountLabel(account: Account) {
         return `${account.label} (${account.reference})`;
@@ -143,8 +125,6 @@ export function useServiceProviderFeeTypeForm(
             register,
         ],
     );
-
-    const submit = handleSubmit(onSubmit);
 
     return useMemo(() => {
         return {

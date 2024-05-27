@@ -74,11 +74,8 @@ export function _ServiceProviderFeeTypeDetails(
         <>
             <ItemDetails
                 {...props}
-                state={state}
-                tableItem={tableItem}
                 formInputs={formInputs}
                 dependentItemProps={dependentItemProps}
-                operation={operation}
                 submit={submit}
                 reset={reset}
                 onSubmitCreate={onSubmitCreate}

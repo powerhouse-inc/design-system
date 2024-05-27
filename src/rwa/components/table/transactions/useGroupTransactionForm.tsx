@@ -17,15 +17,10 @@ import {
     makeFixedIncomeOptionLabel,
 } from '@/rwa';
 
-import { useCallback, useMemo, useState } from 'react';
-import {
-    Control,
-    SubmitHandler,
-    useFieldArray,
-    useForm,
-    useWatch,
-} from 'react-hook-form';
+import { useMemo, useState } from 'react';
+import { Control, useFieldArray, useWatch } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
+import { useSubmit } from '../hooks/useSubmit';
 
 function UnitPrice(props: {
     control: Control<GroupTransactionFormInputs>;
@@ -99,18 +94,15 @@ export function useGroupTransactionForm(
           }
         : createDefaultValues;
 
-    const defaultValues =
-        operation === 'create' ? createDefaultValues : editDefaultValues;
-
-    const useFormReturn = useForm<GroupTransactionFormInputs>({
-        mode: 'onBlur',
-        defaultValues,
+    const { submit, reset, register, watch, control, formState } = useSubmit({
+        operation,
+        createDefaultValues,
+        editDefaultValues,
+        onSubmitCreate,
+        onSubmitEdit,
+        onSubmitDelete,
+        customSubmitHandler,
     });
-
-    const { handleSubmit, register, reset, watch, control, formState } =
-        useFormReturn;
-
-    const { errors } = formState;
 
     const type = useWatch({ control, name: 'type' });
 
@@ -119,60 +111,50 @@ export function useGroupTransactionForm(
     );
     const canHaveTransactionFees = type !== FEES_PAYMENT;
 
+    function customSubmitHandler(data: GroupTransactionFormInputs) {
+        if (!operation || operation === 'view') return;
+        const type = data.type;
+        const entryTime = data.entryTime;
+        const cashAmount = data.cashAmount;
+        const fixedIncomeId = isAssetTransaction ? data.fixedIncomeId : null;
+        const fixedIncomeAmount = isAssetTransaction
+            ? data.fixedIncomeAmount
+            : null;
+        const fees = canHaveTransactionFees ? data.fees : null;
+        const cashBalanceChange = calculateCashBalanceChange(
+            data.type,
+            data.cashAmount,
+            data.fees,
+        );
+        const unitPrice = calculateUnitPrice(
+            data.cashAmount,
+            data.fixedIncomeAmount,
+        );
+        const formActions = {
+            create: onSubmitCreate,
+            edit: onSubmitEdit,
+            delete: onSubmitDelete,
+        };
+        const onSubmitForm = formActions[operation];
+
+        onSubmitForm?.({
+            type,
+            entryTime,
+            cashAmount,
+            fixedIncomeId,
+            fixedIncomeAmount,
+            fees,
+            cashBalanceChange,
+            unitPrice,
+        });
+    }
+
+    const { errors } = formState;
+
     const { fields, append, remove } = useFieldArray({
         control,
         name: 'fees',
     });
-
-    const onSubmit: SubmitHandler<GroupTransactionFormInputs> = useCallback(
-        data => {
-            if (!operation || operation === 'view') return;
-            const type = data.type;
-            const entryTime = data.entryTime;
-            const cashAmount = data.cashAmount;
-            const fixedIncomeId = isAssetTransaction
-                ? data.fixedIncomeId
-                : null;
-            const fixedIncomeAmount = isAssetTransaction
-                ? data.fixedIncomeAmount
-                : null;
-            const fees = canHaveTransactionFees ? data.fees : null;
-            const cashBalanceChange = calculateCashBalanceChange(
-                data.type,
-                data.cashAmount,
-                data.fees,
-            );
-            const unitPrice = calculateUnitPrice(
-                data.cashAmount,
-                data.fixedIncomeAmount,
-            );
-            const formActions = {
-                create: onSubmitCreate,
-                edit: onSubmitEdit,
-                delete: onSubmitDelete,
-            };
-            const onSubmitForm = formActions[operation];
-
-            onSubmitForm?.({
-                type,
-                entryTime,
-                cashAmount,
-                fixedIncomeId,
-                fixedIncomeAmount,
-                fees,
-                cashBalanceChange,
-                unitPrice,
-            });
-        },
-        [
-            canHaveTransactionFees,
-            isAssetTransaction,
-            onSubmitCreate,
-            onSubmitDelete,
-            onSubmitEdit,
-            operation,
-        ],
-    );
 
     const inputs = [
         {
@@ -265,8 +247,6 @@ export function useGroupTransactionForm(
             ),
         },
     ].filter(Boolean);
-
-    const submit = handleSubmit(onSubmit);
 
     return useMemo(() => {
         return {

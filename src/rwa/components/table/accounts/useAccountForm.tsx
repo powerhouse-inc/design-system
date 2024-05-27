@@ -4,8 +4,8 @@ import {
     FormHookProps,
     RWATableTextInput,
 } from '@/rwa';
-import { useCallback, useMemo } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useMemo } from 'react';
+import { useSubmit } from '../hooks/useSubmit';
 
 export function useAccountForm(
     props: FormHookProps<Account, AccountFormInputs>,
@@ -25,34 +25,16 @@ export function useAccountForm(
           }
         : createDefaultValues;
 
-    const defaultValues =
-        operation === 'create' ? createDefaultValues : editDefaultValues;
-
-    const {
-        register,
-        handleSubmit,
-        reset,
-        control,
-        formState: { errors },
-    } = useForm<AccountFormInputs>({
-        defaultValues,
+    const { submit, reset, register, control, formState } = useSubmit({
+        operation,
+        createDefaultValues,
+        editDefaultValues,
+        onSubmitCreate,
+        onSubmitEdit,
+        onSubmitDelete,
     });
 
-    const onSubmit: SubmitHandler<AccountFormInputs> = useCallback(
-        data => {
-            if (!operation || operation === 'view') return;
-            const formActions = {
-                create: onSubmitCreate,
-                edit: onSubmitEdit,
-                delete: onSubmitDelete,
-            };
-            const onSubmitForm = formActions[operation];
-            onSubmitForm?.(data);
-        },
-        [onSubmitCreate, onSubmitDelete, onSubmitEdit, operation],
-    );
-
-    const submit = handleSubmit(onSubmit);
+    const { errors } = formState;
 
     const inputs = useMemo(
         () => [

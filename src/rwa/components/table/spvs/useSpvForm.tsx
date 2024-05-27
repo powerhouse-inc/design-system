@@ -1,6 +1,6 @@
 import { FormHookProps, RWATableTextInput, SPV, SPVFormInputs } from '@/rwa';
-import { useCallback, useMemo } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useMemo } from 'react';
+import { useSubmit } from '../hooks/useSubmit';
 
 export function useSpvForm(props: FormHookProps<SPV, SPVFormInputs>) {
     const { item, onSubmitCreate, onSubmitEdit, onSubmitDelete, operation } =
@@ -16,34 +16,16 @@ export function useSpvForm(props: FormHookProps<SPV, SPVFormInputs>) {
           }
         : createDefaultValues;
 
-    const defaultValues =
-        operation === 'create' ? createDefaultValues : editDefaultValues;
-
-    const {
-        register,
-        handleSubmit,
-        reset,
-        control,
-        formState: { errors },
-    } = useForm<SPVFormInputs>({
-        defaultValues,
+    const { submit, reset, register, control, formState } = useSubmit({
+        operation,
+        createDefaultValues,
+        editDefaultValues,
+        onSubmitCreate,
+        onSubmitEdit,
+        onSubmitDelete,
     });
 
-    const onSubmit: SubmitHandler<SPVFormInputs> = useCallback(
-        data => {
-            if (!operation || operation === 'view') return;
-            const formActions = {
-                create: onSubmitCreate,
-                edit: onSubmitEdit,
-                delete: onSubmitDelete,
-            };
-            const onSubmitForm = formActions[operation];
-            onSubmitForm?.(data);
-        },
-        [onSubmitCreate, onSubmitDelete, onSubmitEdit, operation],
-    );
-
-    const submit = handleSubmit(onSubmit);
+    const { errors } = formState;
 
     const inputs = useMemo(
         () => [
@@ -74,7 +56,7 @@ export function useSpvForm(props: FormHookProps<SPV, SPVFormInputs>) {
             register,
             control,
             inputs,
-            formState: { errors },
+            formState,
         };
-    }, [submit, reset, register, control, inputs, errors]);
+    }, [submit, reset, register, control, inputs, formState]);
 }
