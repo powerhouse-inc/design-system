@@ -1,13 +1,16 @@
+import { Table } from '@/rwa';
+import { Account, ServiceProviderFeeType } from '@/rwa/types';
+import { useMemo, useState } from 'react';
+import { useDocumentOperationState } from '../hooks/useDocumentOperationState';
 import {
-    Account,
-    ServiceProviderFeeType,
-    ServiceProviderFeeTypeDetails,
-    ServiceProviderFeeTypesTableProps,
-    Table,
-    addItemNumber,
-    getItemById,
-} from '@/rwa';
-import { useMemo } from 'react';
+    AccountFormInputs,
+    ServiceProviderFeeTypeFormInputs,
+    ServiceProviderFeeTypeTableItem,
+    TableItem,
+    TableWrapperProps,
+} from '../types';
+import { makeTableData } from '../utils';
+import { ServiceProviderFeeTypeDetails } from './service-provider-fee-type-details';
 
 const columns = [
     { key: 'name' as const, label: 'Name', allowSorting: true },
@@ -20,10 +23,10 @@ const columns = [
     },
 ];
 
-export function makeServiceProviderFeeTypesTableData(
+export function makeServiceProviderFeeTypesTableItems(
     serviceProviderFeeTypes: ServiceProviderFeeType[] | undefined,
     accounts: Account[] | undefined,
-) {
+): TableItem<ServiceProviderFeeTypeTableItem>[] {
     if (!serviceProviderFeeTypes?.length || !accounts?.length) return [];
 
     const tableData = serviceProviderFeeTypes.map(serviceProviderFeeType => {
@@ -32,70 +35,65 @@ export function makeServiceProviderFeeTypesTableData(
         );
 
         return {
-            id: serviceProviderFeeType.id,
-            name: serviceProviderFeeType.name,
-            feeType: serviceProviderFeeType.feeType,
+            ...serviceProviderFeeType,
             accountName: account?.label,
             accountReference: account?.reference,
         };
     });
 
-    const withItemNumber = addItemNumber(tableData);
-
-    return withItemNumber;
+    return makeTableData(tableData);
 }
+
+export type ServiceProviderFeeTypesTableProps =
+    TableWrapperProps<ServiceProviderFeeTypeFormInputs> & {
+        onSubmitCreateAccount: (data: AccountFormInputs) => void;
+    };
 
 export function ServiceProviderFeeTypesTable(
     props: ServiceProviderFeeTypesTableProps,
 ) {
-    const { state, selectedItem, onSubmitCreate, onSubmitEdit } = props;
+    const { state } = props;
     const { serviceProviderFeeTypes, accounts } = state;
 
     const itemName = 'Service Provider Fee Type';
 
     const tableData = useMemo(
         () =>
-            makeServiceProviderFeeTypesTableData(
+            makeServiceProviderFeeTypesTableItems(
                 serviceProviderFeeTypes,
                 accounts,
             ),
         [serviceProviderFeeTypes, accounts],
     );
-    const editForm = ({
-        itemId,
-        itemNumber,
-    }: {
-        itemId: string;
-        itemNumber: number;
-    }) => (
-        <ServiceProviderFeeTypeDetails
-            {...props}
-            itemName={itemName}
-            item={getItemById(itemId, serviceProviderFeeTypes)}
-            itemNumber={itemNumber}
-            operation={selectedItem?.id === itemId ? 'edit' : 'view'}
-            onSubmitForm={onSubmitEdit}
-        />
-    );
-
-    const createForm = () => (
-        <ServiceProviderFeeTypeDetails
-            {...props}
-            itemName={itemName}
-            itemNumber={serviceProviderFeeTypes.length + 1}
-            operation="create"
-            onSubmitForm={onSubmitCreate}
-        />
-    );
+    const [selectedTableItem, setSelectedTableItem] =
+        useState<TableItem<ServiceProviderFeeTypeTableItem>>();
+    const { operation, setOperation, showForm, existingState } =
+        useDocumentOperationState({ state });
 
     return (
-        <Table
-            {...props}
-            itemName={itemName}
-            tableData={tableData}
-            columns={columns}
-            editForm={editForm}
-            createForm={createForm}
-        />
+        <>
+            <Table
+                {...props}
+                itemName={itemName}
+                tableData={tableData}
+                columns={columns}
+                selectedTableItem={selectedTableItem}
+                setSelectedTableItem={setSelectedTableItem}
+                setOperation={setOperation}
+            />
+            {showForm && (
+                <div className="mt-4 rounded-md bg-white">
+                    <ServiceProviderFeeTypeDetails
+                        {...props}
+                        itemName={itemName}
+                        state={existingState}
+                        tableItem={selectedTableItem}
+                        operation={operation}
+                        setSelectedTableItem={setSelectedTableItem}
+                        setOperation={setOperation}
+                    />
+                </div>
+            )}
+        </>
     );
 }

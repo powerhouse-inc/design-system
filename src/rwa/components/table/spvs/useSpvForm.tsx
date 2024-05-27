@@ -1,21 +1,34 @@
-import { useMemo } from 'react';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { RealWorldAssetsState } from '@/rwa/types';
+import { useCallback, useMemo } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { RWATableTextInput } from '../../inputs';
-import { RealWorldAssetsState, SPVFormInputs } from '../types';
+import { Operation, SPVFormInputs } from '../types';
 
 type Props = {
-    defaultValues: SPVFormInputs;
+    item?: SPVFormInputs | undefined;
     state: RealWorldAssetsState;
-    operation: 'create' | 'view' | 'edit';
-    onSubmitForm: (data: FieldValues) => void;
+    operation: Operation;
+    onSubmitCreate: (data: SPVFormInputs) => void;
+    onSubmitEdit?: (data: SPVFormInputs) => void;
+    onSubmitDelete?: (itemId: string) => void;
 };
 
 export function useSpvForm(props: Props) {
-    const { defaultValues, onSubmitForm, operation } = props;
+    const { item, onSubmitCreate, onSubmitEdit, onSubmitDelete, operation } =
+        props;
 
-    const onSubmit: SubmitHandler<SPVFormInputs> = data => {
-        onSubmitForm(data);
+    const createDefaultValues = {
+        name: null,
     };
+
+    const editDefaultValues = item
+        ? {
+              name: item.name,
+          }
+        : createDefaultValues;
+
+    const defaultValues =
+        operation === 'create' ? createDefaultValues : editDefaultValues;
 
     const {
         register,
@@ -26,6 +39,20 @@ export function useSpvForm(props: Props) {
     } = useForm<SPVFormInputs>({
         defaultValues,
     });
+
+    const onSubmit: SubmitHandler<SPVFormInputs> = useCallback(
+        data => {
+            if (!operation || operation === 'view') return;
+            const formActions = {
+                create: onSubmitCreate,
+                edit: onSubmitEdit,
+                delete: onSubmitDelete,
+            };
+            const onSubmitForm = formActions[operation];
+            onSubmitForm?.(data);
+        },
+        [onSubmitCreate, onSubmitDelete, onSubmitEdit, operation],
+    );
 
     const submit = handleSubmit(onSubmit);
 
@@ -56,10 +83,9 @@ export function useSpvForm(props: Props) {
             submit,
             reset,
             register,
-            onSubmitForm,
             control,
             inputs,
             formState: { errors },
         };
-    }, [submit, reset, register, onSubmitForm, control, inputs, errors]);
+    }, [submit, reset, register, control, inputs, errors]);
 }

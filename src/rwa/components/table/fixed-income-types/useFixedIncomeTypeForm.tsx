@@ -1,21 +1,34 @@
-import { useMemo } from 'react';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { RealWorldAssetsState } from '@/rwa/types';
+import { useCallback, useMemo } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { RWATableTextInput } from '../../inputs';
-import { FixedIncomeTypeFormInputs, RealWorldAssetsState } from '../types';
+import { FixedIncomeTypeFormInputs, Operation } from '../types';
 
 type Props = {
-    defaultValues: FixedIncomeTypeFormInputs;
+    item?: FixedIncomeTypeFormInputs | undefined;
     state: RealWorldAssetsState;
-    operation: 'create' | 'view' | 'edit';
-    onSubmitForm: (data: FieldValues) => void;
+    operation: Operation;
+    onSubmitCreate: (data: FixedIncomeTypeFormInputs) => void;
+    onSubmitEdit?: (data: FixedIncomeTypeFormInputs) => void;
+    onSubmitDelete?: (itemId: string) => void;
 };
 
 export function useFixedIncomeTypeForm(props: Props) {
-    const { defaultValues, onSubmitForm, operation } = props;
+    const { item, onSubmitCreate, onSubmitEdit, onSubmitDelete, operation } =
+        props;
 
-    const onSubmit: SubmitHandler<FixedIncomeTypeFormInputs> = data => {
-        onSubmitForm(data);
+    const createDefaultValues = {
+        name: null,
     };
+
+    const editDefaultValues = item
+        ? {
+              name: item.name,
+          }
+        : createDefaultValues;
+
+    const defaultValues =
+        operation === 'create' ? createDefaultValues : editDefaultValues;
 
     const {
         register,
@@ -26,6 +39,20 @@ export function useFixedIncomeTypeForm(props: Props) {
     } = useForm<FixedIncomeTypeFormInputs>({
         defaultValues,
     });
+
+    const onSubmit: SubmitHandler<FixedIncomeTypeFormInputs> = useCallback(
+        data => {
+            if (!operation || operation === 'view') return;
+            const formActions = {
+                create: onSubmitCreate,
+                edit: onSubmitEdit,
+                delete: onSubmitDelete,
+            };
+            const onSubmitForm = formActions[operation];
+            onSubmitForm?.(data);
+        },
+        [onSubmitCreate, onSubmitDelete, onSubmitEdit, operation],
+    );
 
     const submit = handleSubmit(onSubmit);
 
@@ -56,10 +83,9 @@ export function useFixedIncomeTypeForm(props: Props) {
             submit,
             reset,
             register,
-            onSubmitForm,
             control,
             inputs,
             formState: { errors },
         };
-    }, [submit, reset, register, onSubmitForm, control, inputs, errors]);
+    }, [submit, reset, register, control, inputs, errors]);
 }

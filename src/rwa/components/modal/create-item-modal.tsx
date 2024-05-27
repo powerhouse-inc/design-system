@@ -1,21 +1,19 @@
 import { Icon, Modal } from '@/powerhouse';
+import { RealWorldAssetsState } from '@/rwa/types';
 import { ComponentPropsWithoutRef } from 'react';
 import { FieldValues, UseFormReset } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
-import { RealWorldAssetsState } from '../table';
 import { ModalFormInputs } from './modal-form-inputs';
 
 export type RWACreateItemModalProps = ComponentPropsWithoutRef<typeof Modal> & {
     state: RealWorldAssetsState;
     open: boolean;
     itemName: string;
-    defaultValues: FieldValues;
     inputs: {
         label: string;
         Input: () => string | JSX.Element;
     }[];
     onOpenChange: (open: boolean) => void;
-    onSubmitForm: (data: FieldValues) => void;
     submit: (e?: React.BaseSyntheticEvent | undefined) => Promise<void>;
     reset: UseFormReset<FieldValues>;
 };
@@ -25,7 +23,6 @@ export const RWACreateItemModal = (props: RWACreateItemModalProps) => {
         itemName,
         open,
         state,
-        defaultValues,
         inputs,
         onOpenChange,
         reset,

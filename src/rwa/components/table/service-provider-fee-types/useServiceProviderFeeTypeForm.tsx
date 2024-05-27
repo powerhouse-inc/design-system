@@ -1,25 +1,48 @@
-import { Account } from '@/rwa/types';
+import { Account, RealWorldAssetsState } from '@/rwa/types';
 import { useCallback, useMemo, useState } from 'react';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { RWATableSelect, RWATableTextInput } from '../../inputs';
-import {
-    RealWorldAssetsState,
-    ServiceProviderFeeTypeFormInputs,
-} from '../types';
+import { Operation, ServiceProviderFeeTypeFormInputs } from '../types';
 
 type Props = {
-    defaultValues: ServiceProviderFeeTypeFormInputs;
+    item?: ServiceProviderFeeTypeFormInputs | undefined;
     state: RealWorldAssetsState;
-    operation: 'create' | 'view' | 'edit';
-    onSubmitForm: (data: FieldValues) => void;
+    operation: Operation;
+    onSubmitCreate: (data: ServiceProviderFeeTypeFormInputs) => void;
+    onSubmitEdit?: (data: ServiceProviderFeeTypeFormInputs) => void;
+    onSubmitDelete?: (itemId: string) => void;
 };
 
 export function useServiceProviderFeeTypeForm(props: Props) {
     const [showCreateAccountModal, setShowCreateAccountModal] = useState(false);
 
-    const { state, defaultValues, onSubmitForm, operation } = props;
+    const {
+        item,
+        state,
+        onSubmitCreate,
+        onSubmitEdit,
+        onSubmitDelete,
+        operation,
+    } = props;
 
     const { accounts } = state;
+
+    const createDefaultValues = {
+        name: null,
+        feeType: null,
+        accountId: accounts[0]?.id ?? null,
+    };
+
+    const editDefaultValues = item
+        ? {
+              name: item.name,
+              feeType: item.feeType,
+              accountId: item.accountId,
+          }
+        : createDefaultValues;
+
+    const defaultValues =
+        operation === 'create' ? createDefaultValues : editDefaultValues;
 
     const {
         handleSubmit,
@@ -35,9 +58,16 @@ export function useServiceProviderFeeTypeForm(props: Props) {
     const onSubmit: SubmitHandler<ServiceProviderFeeTypeFormInputs> =
         useCallback(
             data => {
-                onSubmitForm(data);
+                if (!operation || operation === 'view') return;
+                const formActions = {
+                    create: onSubmitCreate,
+                    edit: onSubmitEdit,
+                    delete: onSubmitDelete,
+                };
+                const onSubmitForm = formActions[operation];
+                onSubmitForm?.(data);
             },
-            [onSubmitForm],
+            [onSubmitCreate, onSubmitDelete, onSubmitEdit, operation],
         );
 
     function makeAccountLabel(account: Account) {

@@ -1,29 +1,44 @@
 import {
-    FixedIncomeTypeDetailsProps,
+    FixedIncomeType,
+    FixedIncomeTypeFormInputs,
     ItemDetails,
+    ItemDetailsProps,
     getFixedIncomeAssets,
 } from '@/rwa';
+import { memo } from 'react';
 import { FormInputs } from '../../inputs/form-inputs';
 import { useFixedIncomeTypeForm } from './useFixedIncomeTypeForm';
 
-export function FixedIncomeTypeDetails(props: FixedIncomeTypeDetailsProps) {
-    const { onCancel, onSubmitForm, item, operation, state } = props;
+export type FixedIncomeTypeDetailsProps = Omit<
+    ItemDetailsProps<FixedIncomeType, FixedIncomeTypeFormInputs>,
+    'reset' | 'submit' | 'formInputs'
+>;
+
+export function _FixedIncomeTypeDetails(props: FixedIncomeTypeDetailsProps) {
+    const {
+        state,
+        tableItem,
+        operation,
+        onSubmitCreate,
+        onSubmitEdit,
+        onSubmitDelete,
+    } = props;
 
     const assets = getFixedIncomeAssets(state);
 
     const { submit, reset, inputs } = useFixedIncomeTypeForm({
-        defaultValues: {
-            name: item?.name,
-        },
+        item: tableItem,
         state,
         operation,
-        onSubmitForm,
+        onSubmitCreate,
+        onSubmitEdit,
+        onSubmitDelete,
     });
 
     const formInputs = () => <FormInputs inputs={inputs} />;
 
     const dependentAssets = assets.filter(
-        asset => asset.fixedIncomeTypeId === item?.id,
+        asset => asset.fixedIncomeTypeId === tableItem?.id,
     );
 
     const dependentItemsList = dependentAssets.map(asset => (
@@ -40,8 +55,9 @@ export function FixedIncomeTypeDetails(props: FixedIncomeTypeDetailsProps) {
         dependentItemProps,
         submit,
         reset,
-        onCancel,
     };
 
     return <ItemDetails {...props} {...formProps} />;
 }
+
+export const FixedIncomeTypeDetails = memo(_FixedIncomeTypeDetails);

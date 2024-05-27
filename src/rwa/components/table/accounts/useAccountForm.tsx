@@ -1,21 +1,36 @@
-import { useMemo } from 'react';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { RealWorldAssetsState } from '@/rwa/types';
+import { useCallback, useMemo } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { RWATableTextInput } from '../../inputs';
-import { AccountFormInputs, RealWorldAssetsState } from '../types';
+import { AccountFormInputs, Operation } from '../types';
 
 type Props = {
-    defaultValues: AccountFormInputs;
+    item?: AccountFormInputs | undefined;
     state: RealWorldAssetsState;
-    operation: 'create' | 'view' | 'edit';
-    onSubmitForm: (data: FieldValues) => void;
+    operation: Operation;
+    onSubmitCreate: (data: AccountFormInputs) => void;
+    onSubmitEdit?: (data: AccountFormInputs) => void;
+    onSubmitDelete?: (itemId: string) => void;
 };
 
 export function useAccountForm(props: Props) {
-    const { defaultValues, onSubmitForm, operation } = props;
+    const { item, onSubmitCreate, onSubmitEdit, onSubmitDelete, operation } =
+        props;
 
-    const onSubmit: SubmitHandler<AccountFormInputs> = data => {
-        onSubmitForm(data);
+    const createDefaultValues = {
+        label: null,
+        reference: null,
     };
+
+    const editDefaultValues = item
+        ? {
+              label: item.label,
+              reference: item.reference,
+          }
+        : createDefaultValues;
+
+    const defaultValues =
+        operation === 'create' ? createDefaultValues : editDefaultValues;
 
     const {
         register,
@@ -26,6 +41,20 @@ export function useAccountForm(props: Props) {
     } = useForm<AccountFormInputs>({
         defaultValues,
     });
+
+    const onSubmit: SubmitHandler<AccountFormInputs> = useCallback(
+        data => {
+            if (!operation || operation === 'view') return;
+            const formActions = {
+                create: onSubmitCreate,
+                edit: onSubmitEdit,
+                delete: onSubmitDelete,
+            };
+            const onSubmitForm = formActions[operation];
+            onSubmitForm?.(data);
+        },
+        [onSubmitCreate, onSubmitDelete, onSubmitEdit, operation],
+    );
 
     const submit = handleSubmit(onSubmit);
 
@@ -81,10 +110,9 @@ export function useAccountForm(props: Props) {
             submit,
             reset,
             register,
-            onSubmitForm,
             control,
             inputs,
             formState: { errors },
         };
-    }, [submit, reset, register, onSubmitForm, control, inputs, errors]);
+    }, [submit, reset, register, control, inputs, errors]);
 }

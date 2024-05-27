@@ -1,45 +1,81 @@
 import { DateTimeLocalInput } from '@/connect';
-import { FixedIncome } from '@/rwa/types';
+import { FixedIncome, RealWorldAssetsState } from '@/rwa/types';
+import { convertToDateTimeLocalFormat } from '@/rwa/utils';
 import { useCallback, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { RWATableSelect, RWATableTextInput } from '../../inputs';
-import { AssetFormInputs, RealWorldAssetsState } from '../types';
+import { AssetFormInputs, Operation } from '../types';
 import { handleTableDatum } from '../utils';
 
 type Props = {
     item?: FixedIncome | undefined;
-    defaultValues: AssetFormInputs;
     state: RealWorldAssetsState;
-    onSubmitForm: (data: AssetFormInputs) => void;
-    operation: 'create' | 'view' | 'edit';
+    operation: Operation;
+    onSubmitCreate: (data: AssetFormInputs) => void;
+    onSubmitEdit?: (data: AssetFormInputs) => void;
+    onSubmitDelete?: (itemId: string) => void;
 };
 
 export function useAssetForm(props: Props) {
     const [showCreateFixedIncomeTypeModal, setShowCreateFixedIncomeTypeModal] =
         useState(false);
     const [showCreateSpvModal, setShowCreateSpvModal] = useState(false);
-    const { item, state, defaultValues, onSubmitForm, operation } = props;
+    const {
+        item,
+        state,
+        onSubmitCreate,
+        onSubmitEdit,
+        onSubmitDelete,
+        operation,
+    } = props;
 
     const { fixedIncomeTypes, spvs } = state;
 
-    const useFormReturn = useForm<AssetFormInputs>({
-        mode: 'onBlur',
-        defaultValues,
-    });
+    const createDefaultValues = {
+        fixedIncomeTypeId: fixedIncomeTypes[0]?.id ?? null,
+        spvId: spvs[0]?.id ?? null,
+        name: null,
+        maturity: convertToDateTimeLocalFormat(new Date()),
+        ISIN: null,
+        CUSIP: null,
+        coupon: null,
+    };
 
-    const {
-        handleSubmit,
-        register,
-        reset,
-        control,
-        formState: { errors },
-    } = useFormReturn;
+    const editDefaultValues = item
+        ? {
+              fixedIncomeTypeId: item.fixedIncomeTypeId,
+              spvId: item.spvId,
+              name: item.name,
+              maturity: convertToDateTimeLocalFormat(item.maturity),
+              ISIN: item.ISIN,
+              CUSIP: item.CUSIP,
+              coupon: item.coupon,
+          }
+        : createDefaultValues;
+
+    const defaultValues =
+        operation === 'create' ? createDefaultValues : editDefaultValues;
+
+    const { handleSubmit, register, reset, control, formState } =
+        useForm<AssetFormInputs>({
+            mode: 'onBlur',
+            defaultValues,
+        });
+
+    const { errors } = formState;
 
     const onSubmit: SubmitHandler<AssetFormInputs> = useCallback(
         data => {
-            onSubmitForm(data);
+            if (!operation || operation === 'view') return;
+            const formActions = {
+                create: onSubmitCreate,
+                edit: onSubmitEdit,
+                delete: onSubmitDelete,
+            };
+            const onSubmitForm = formActions[operation];
+            onSubmitForm?.(data);
         },
-        [onSubmitForm],
+        [onSubmitCreate, onSubmitDelete, onSubmitEdit, operation],
     );
 
     const derivedInputsToDisplay = useMemo(
@@ -230,7 +266,7 @@ export function useAssetForm(props: Props) {
             register,
             control,
             inputs,
-            formState: { errors },
+            formState,
             showCreateFixedIncomeTypeModal,
             setShowCreateFixedIncomeTypeModal,
             showCreateSpvModal,
@@ -242,7 +278,7 @@ export function useAssetForm(props: Props) {
         register,
         control,
         inputs,
-        errors,
+        formState,
         showCreateFixedIncomeTypeModal,
         showCreateSpvModal,
     ]);
