@@ -2,40 +2,30 @@ import {
     GroupTransactionType,
     Item,
     Operation,
-    RealWorldAssetsState,
     TableItem,
+    TableWrapperProps,
 } from '@/rwa';
-import { ComponentType, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { FieldValues, UseFormReturn } from 'react-hook-form';
 
 export type ItemDetailsFormProps<
     TFieldValues extends FieldValues = FieldValues,
-> = Pick<UseFormReturn<TFieldValues>, 'reset'> & {
-    submit: (e?: React.BaseSyntheticEvent | undefined) => Promise<void>;
-    onSubmitDelete: (itemId: string) => void;
-};
+> = Pick<UseFormReturn<TFieldValues>, 'reset'>;
 
 export type ItemDetailsProps<
     TItem extends Item,
     TFieldValues extends FieldValues,
-> = ItemDetailsFormProps<TFieldValues> & {
-    state: RealWorldAssetsState;
+> = TableWrapperProps<TFieldValues> & {
     tableItem: TableItem<TItem> | undefined;
     itemName: string;
     operation: Operation;
-    isAllowedToCreateDocuments: boolean;
-    isAllowedToEditDocuments: boolean;
     isAllowedToDeleteItem?: boolean;
     hasDependentItems?: boolean;
-    formInputs: ComponentType;
     dependentItemProps?: {
         dependentItemName: string;
         dependentItemList: ReactNode[];
     };
     className?: string;
-    onSubmitCreate: (data: TFieldValues) => void;
-    onSubmitEdit: (data: TFieldValues) => void;
-    onSubmitDelete: (itemId: string) => void;
     setOperation: (operation: Operation) => void;
     setSelectedTableItem: <TSelectedTableItem extends TableItem<TItem>>(
         tableItem: TSelectedTableItem | undefined,

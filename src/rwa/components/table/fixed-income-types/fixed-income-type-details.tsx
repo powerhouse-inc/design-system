@@ -9,12 +9,9 @@ import {
 } from '@/rwa';
 import { memo } from 'react';
 
-export type FixedIncomeTypeDetailsProps = Omit<
-    ItemDetailsProps<FixedIncomeType, FixedIncomeTypeFormInputs>,
-    'reset' | 'submit' | 'formInputs'
->;
-
-export function _FixedIncomeTypeDetails(props: FixedIncomeTypeDetailsProps) {
+export function _FixedIncomeTypeDetails(
+    props: ItemDetailsProps<FixedIncomeType, FixedIncomeTypeFormInputs>,
+) {
     const {
         state,
         tableItem,

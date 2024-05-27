@@ -1,6 +1,12 @@
 import { Icon } from '@/powerhouse';
-import { Item, ItemDetailsProps, RWAButton, RWADeleteItemModal } from '@/rwa';
-import { useState } from 'react';
+import {
+    Item,
+    ItemDetailsFormProps,
+    ItemDetailsProps,
+    RWAButton,
+    RWADeleteItemModal,
+} from '@/rwa';
+import { ComponentType, useState } from 'react';
 import { FieldValues } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 
@@ -27,7 +33,13 @@ import { twMerge } from 'tailwind-merge';
 export function ItemDetails<
     TItem extends Item,
     TFieldValues extends FieldValues = FieldValues,
->(props: ItemDetailsProps<TItem, TFieldValues>) {
+>(
+    props: ItemDetailsProps<TItem, TFieldValues> &
+        ItemDetailsFormProps<TFieldValues> & {
+            submit: (e?: React.BaseSyntheticEvent | undefined) => Promise<void>;
+            formInputs: ComponentType;
+        },
+) {
     const {
         tableItem,
         itemName,

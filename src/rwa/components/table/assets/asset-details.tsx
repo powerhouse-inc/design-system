@@ -13,10 +13,7 @@ import {
 } from '@/rwa';
 import { memo } from 'react';
 
-type AssetDetailsProps = Omit<
-    ItemDetailsProps<FixedIncome, AssetFormInputs>,
-    'reset' | 'submit' | 'formInputs'
-> & {
+type AssetDetailsProps = ItemDetailsProps<FixedIncome, AssetFormInputs> & {
     onSubmitCreateFixedIncomeType: (data: FixedIncomeTypeFormInputs) => void;
     onSubmitCreateSpv: (data: SPVFormInputs) => void;
 };

@@ -11,12 +11,9 @@ import {
 } from '@/rwa';
 import { memo } from 'react';
 
-export type ServiceProviderFeeTypeDetailsProps = Omit<
-    ItemDetailsProps<
-        ServiceProviderFeeTypeTableItem,
-        ServiceProviderFeeTypeFormInputs
-    >,
-    'reset' | 'submit' | 'formInputs'
+export type ServiceProviderFeeTypeDetailsProps = ItemDetailsProps<
+    ServiceProviderFeeTypeTableItem,
+    ServiceProviderFeeTypeFormInputs
 > & {
     onSubmitCreateAccount: (data: AccountFormInputs) => void;
 };

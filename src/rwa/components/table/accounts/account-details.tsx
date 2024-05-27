@@ -8,12 +8,9 @@ import {
 } from '@/rwa';
 import { memo } from 'react';
 
-export type AccountDetailsProps = Omit<
-    ItemDetailsProps<Account, AccountFormInputs>,
-    'reset' | 'submit' | 'formInputs'
->;
-
-export function _AccountDetails(props: AccountDetailsProps) {
+export function _AccountDetails(
+    props: ItemDetailsProps<Account, AccountFormInputs>,
+) {
     const {
         state,
         tableItem,

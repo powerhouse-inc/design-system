@@ -8,12 +8,7 @@ import {
     useSpvForm,
 } from '@/rwa';
 
-export type SPVDetailsProps = Omit<
-    ItemDetailsProps<SPV, SPVFormInputs>,
-    'reset' | 'submit' | 'formInputs'
->;
-
-export function SPVDetails(props: SPVDetailsProps) {
+export function SPVDetails(props: ItemDetailsProps<SPV, SPVFormInputs>) {
     const {
         state,
         tableItem,
