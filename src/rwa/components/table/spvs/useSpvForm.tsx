@@ -1,22 +1,8 @@
-import {
-    Operation,
-    RWATableTextInput,
-    RealWorldAssetsState,
-    SPVFormInputs,
-} from '@/rwa';
+import { FormHookProps, RWATableTextInput, SPV, SPVFormInputs } from '@/rwa';
 import { useCallback, useMemo } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-type Props = {
-    item?: SPVFormInputs | undefined;
-    state: RealWorldAssetsState;
-    operation: Operation;
-    onSubmitCreate: (data: SPVFormInputs) => void;
-    onSubmitEdit?: (data: SPVFormInputs) => void;
-    onSubmitDelete?: (itemId: string) => void;
-};
-
-export function useSpvForm(props: Props) {
+export function useSpvForm(props: FormHookProps<SPV, SPVFormInputs>) {
     const { item, onSubmitCreate, onSubmitEdit, onSubmitDelete, operation } =
         props;
 

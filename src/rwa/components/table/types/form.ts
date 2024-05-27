@@ -2,6 +2,7 @@ import {
     GroupTransactionType,
     Item,
     Operation,
+    RealWorldAssetsState,
     TableItem,
     TableWrapperProps,
 } from '@/rwa';
@@ -75,4 +76,16 @@ export type SPVFormInputs = {
 
 export type FixedIncomeTypeFormInputs = {
     name?: string | null;
+};
+
+export type FormHookProps<
+    TItem extends Item,
+    TFieldValues extends FieldValues,
+> = {
+    item?: TItem | undefined;
+    state: RealWorldAssetsState;
+    operation: Operation;
+    onSubmitCreate: (data: TFieldValues) => void;
+    onSubmitEdit?: (data: TFieldValues) => void;
+    onSubmitDelete?: (itemId: string) => void;
 };

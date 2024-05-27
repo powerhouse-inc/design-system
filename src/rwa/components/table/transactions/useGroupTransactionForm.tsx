@@ -1,13 +1,12 @@
 import { DateTimeLocalInput } from '@/connect';
 import {
     FEES_PAYMENT,
+    FormHookProps,
     FormattedNumber,
     GroupTransactionFormInputs,
     GroupTransactionsTableItem,
-    Operation,
     RWANumberInput,
     RWATableSelect,
-    RealWorldAssetsState,
     allGroupTransactionTypes,
     assetGroupTransactions,
     calculateCashBalanceChange,
@@ -49,16 +48,12 @@ function UnitPrice(props: {
     );
 }
 
-type Props = {
-    item?: GroupTransactionsTableItem | undefined;
-    state: RealWorldAssetsState;
-    operation: Operation;
-    onSubmitCreate: (data: GroupTransactionFormInputs) => void;
-    onSubmitEdit: (data: GroupTransactionFormInputs) => void;
-    onSubmitDelete: (itemId: string) => void;
-};
-
-export function useGroupTransactionForm(props: Props) {
+export function useGroupTransactionForm(
+    props: FormHookProps<
+        GroupTransactionsTableItem,
+        GroupTransactionFormInputs
+    >,
+) {
     const [showCreateAssetModal, setShowCreateAssetModal] = useState(false);
     const [
         showCreateServiceProviderFeeTypeModal,
@@ -158,7 +153,7 @@ export function useGroupTransactionForm(props: Props) {
             };
             const onSubmitForm = formActions[operation];
 
-            onSubmitForm({
+            onSubmitForm?.({
                 type,
                 entryTime,
                 cashAmount,

@@ -2,26 +2,18 @@ import { DateTimeLocalInput } from '@/connect';
 import {
     AssetFormInputs,
     FixedIncome,
-    Operation,
+    FormHookProps,
     RWATableSelect,
     RWATableTextInput,
-    RealWorldAssetsState,
     convertToDateTimeLocalFormat,
     handleTableDatum,
 } from '@/rwa';
 import { useCallback, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-type Props = {
-    item?: FixedIncome | undefined;
-    state: RealWorldAssetsState;
-    operation: Operation;
-    onSubmitCreate: (data: AssetFormInputs) => void;
-    onSubmitEdit?: (data: AssetFormInputs) => void;
-    onSubmitDelete?: (itemId: string) => void;
-};
-
-export function useAssetForm(props: Props) {
+export function useAssetForm(
+    props: FormHookProps<FixedIncome, AssetFormInputs>,
+) {
     const [showCreateFixedIncomeTypeModal, setShowCreateFixedIncomeTypeModal] =
         useState(false);
     const [showCreateSpvModal, setShowCreateSpvModal] = useState(false);

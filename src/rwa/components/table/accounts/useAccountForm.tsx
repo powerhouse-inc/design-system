@@ -1,22 +1,15 @@
 import {
+    Account,
     AccountFormInputs,
-    Operation,
+    FormHookProps,
     RWATableTextInput,
-    RealWorldAssetsState,
 } from '@/rwa';
 import { useCallback, useMemo } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-type Props = {
-    item?: AccountFormInputs | undefined;
-    state: RealWorldAssetsState;
-    operation: Operation;
-    onSubmitCreate: (data: AccountFormInputs) => void;
-    onSubmitEdit?: (data: AccountFormInputs) => void;
-    onSubmitDelete?: (itemId: string) => void;
-};
-
-export function useAccountForm(props: Props) {
+export function useAccountForm(
+    props: FormHookProps<Account, AccountFormInputs>,
+) {
     const { item, onSubmitCreate, onSubmitEdit, onSubmitDelete, operation } =
         props;
 

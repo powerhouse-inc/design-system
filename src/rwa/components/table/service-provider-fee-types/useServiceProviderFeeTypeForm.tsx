@@ -1,24 +1,20 @@
 import {
     Account,
-    Operation,
+    FormHookProps,
     RWATableSelect,
     RWATableTextInput,
-    RealWorldAssetsState,
+    ServiceProviderFeeType,
     ServiceProviderFeeTypeFormInputs,
 } from '@/rwa';
 import { useCallback, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-type Props = {
-    item?: ServiceProviderFeeTypeFormInputs | undefined;
-    state: RealWorldAssetsState;
-    operation: Operation;
-    onSubmitCreate: (data: ServiceProviderFeeTypeFormInputs) => void;
-    onSubmitEdit?: (data: ServiceProviderFeeTypeFormInputs) => void;
-    onSubmitDelete?: (itemId: string) => void;
-};
-
-export function useServiceProviderFeeTypeForm(props: Props) {
+export function useServiceProviderFeeTypeForm(
+    props: FormHookProps<
+        ServiceProviderFeeType,
+        ServiceProviderFeeTypeFormInputs
+    >,
+) {
     const [showCreateAccountModal, setShowCreateAccountModal] = useState(false);
 
     const {

@@ -1,22 +1,15 @@
 import {
+    FixedIncomeType,
     FixedIncomeTypeFormInputs,
-    Operation,
+    FormHookProps,
     RWATableTextInput,
-    RealWorldAssetsState,
 } from '@/rwa';
 import { useCallback, useMemo } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-type Props = {
-    item?: FixedIncomeTypeFormInputs | undefined;
-    state: RealWorldAssetsState;
-    operation: Operation;
-    onSubmitCreate: (data: FixedIncomeTypeFormInputs) => void;
-    onSubmitEdit?: (data: FixedIncomeTypeFormInputs) => void;
-    onSubmitDelete?: (itemId: string) => void;
-};
-
-export function useFixedIncomeTypeForm(props: Props) {
+export function useFixedIncomeTypeForm(
+    props: FormHookProps<FixedIncomeType, FixedIncomeTypeFormInputs>,
+) {
     const { item, onSubmitCreate, onSubmitEdit, onSubmitDelete, operation } =
         props;
 
