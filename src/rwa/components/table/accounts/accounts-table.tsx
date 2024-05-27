@@ -1,15 +1,16 @@
 import { Icon } from '@/powerhouse';
-import { Account, Table } from '@/rwa';
-import { useMemo, useState } from 'react';
-import { useDocumentOperationState } from '../hooks/useDocumentOperationState';
 import {
+    Account,
+    AccountDetails,
     AccountFormInputs,
     ItemData,
+    Table,
     TableItem,
     TableWrapperProps,
-} from '../types';
-import { makeTableData } from '../utils';
-import { AccountDetails } from './account-details';
+    makeTableData,
+    useDocumentOperationState,
+} from '@/rwa';
+import { useMemo, useState } from 'react';
 
 const columns = [
     { key: 'label' as const, label: 'Label', allowSorting: true },
