@@ -59,7 +59,7 @@ export const Empty: Story = {
                     },
                 });
             },
-            args.simulateBackgroundUpdates ? 3000 : 0,
+            args.simulateBackgroundUpdates ? 3000 : null,
         );
 
         const onSubmitEdit: AssetsTableProps['onSubmitEdit'] = useCallback(
