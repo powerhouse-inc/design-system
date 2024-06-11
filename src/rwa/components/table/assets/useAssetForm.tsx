@@ -202,6 +202,11 @@ export function useAssetForm(
                                 setShowCreateFixedIncomeTypeModal(true),
                             label: 'Create Fixed Income Type',
                         }}
+                        required="Asset type is required"
+                        aria-invalid={
+                            errors.fixedIncomeTypeId ? 'true' : 'false'
+                        }
+                        errorMessage={errors.fixedIncomeTypeId?.message}
                     />
                 ),
             },
@@ -221,6 +226,9 @@ export function useAssetForm(
                             onClick: () => setShowCreateSpvModal(true),
                             label: 'Create SPV',
                         }}
+                        required="SPV is required"
+                        aria-invalid={errors.spvId ? 'true' : 'false'}
+                        errorMessage={errors.spvId?.message}
                     />
                 ),
             },
@@ -232,6 +240,7 @@ export function useAssetForm(
             errors.CUSIP,
             errors.ISIN,
             errors.name,
+            errors.fixedIncomeTypeId,
             fixedIncomeTypes,
             item?.CUSIP,
             item?.ISIN,

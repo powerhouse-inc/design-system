@@ -71,7 +71,7 @@ export function FeeTransactionsTable(props: Props) {
                                         <td className="w-52"></td>
                                         <td className="w-96">
                                             <RWATableSelect
-                                                required
+                                                required="Service provider is required"
                                                 control={props.control}
                                                 name={`fees.${index}.serviceProviderFeeTypeId`}
                                                 disabled={props.isViewOnly}
@@ -85,6 +85,12 @@ export function FeeTransactionsTable(props: Props) {
                                                         ),
                                                     label: 'Add Service Provider',
                                                 }}
+                                                aria-invalid={
+                                                    props.errors.fees?.[index]
+                                                        ?.serviceProviderFeeTypeId
+                                                        ? 'true'
+                                                        : 'false'
+                                                }
                                             />
                                         </td>
                                         <td className="w-52">
@@ -98,8 +104,7 @@ export function FeeTransactionsTable(props: Props) {
                                                 currency="USD"
                                                 aria-invalid={
                                                     props.errors.fees?.[index]
-                                                        ?.amount?.type ===
-                                                    'required'
+                                                        ?.amount
                                                         ? 'true'
                                                         : 'false'
                                                 }

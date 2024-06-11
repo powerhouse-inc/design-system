@@ -111,6 +111,9 @@ export function useServiceProviderFeeTypeForm(
                             onClick: () => setShowCreateAccountModal(true),
                             label: 'Create Account',
                         }}
+                        required="Account is required"
+                        aria-invalid={errors.accountId ? 'true' : 'false'}
+                        errorMessage={errors.accountId?.message}
                     />
                 ),
             },

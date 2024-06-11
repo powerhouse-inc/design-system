@@ -161,11 +161,13 @@ export function useGroupTransactionForm(
             label: 'Transaction Type',
             Input: () => (
                 <RWATableSelect
-                    required
                     control={control}
                     name="type"
                     disabled={operation === 'view'}
                     options={transactionTypeOptions}
+                    required="Transaction type is required"
+                    aria-invalid={errors.type ? 'true' : 'false'}
+                    errorMessage={errors.type?.message}
                 />
             ),
         },
@@ -187,7 +189,6 @@ export function useGroupTransactionForm(
                   Input: () => (
                       <RWATableSelect
                           control={control}
-                          required
                           name="fixedIncomeId"
                           disabled={operation === 'view'}
                           options={fixedIncomeOptions}
@@ -195,6 +196,9 @@ export function useGroupTransactionForm(
                               onClick: () => setShowCreateAssetModal(true),
                               label: 'Create Asset',
                           }}
+                          required="Asset name is required"
+                          aria-invalid={errors.type ? 'true' : 'false'}
+                          errorMessage={errors.type?.message}
                       />
                   ),
               }
