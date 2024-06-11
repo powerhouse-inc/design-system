@@ -111,6 +111,7 @@ export function useAssetForm(
                         aria-invalid={errors.name ? 'true' : 'false'}
                         errorMessage={errors.name?.message}
                         placeholder="E.g. My Asset"
+                        inputClassName="text-left"
                     />
                 ),
             },
