@@ -38,6 +38,7 @@ const columns = [
         label: 'Purchase Price',
         allowSorting: true,
         isNumberColumn: true,
+        decimalScale: 6,
     },
     {
         key: 'purchaseProceeds' as const,

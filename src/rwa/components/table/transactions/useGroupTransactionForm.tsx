@@ -36,7 +36,7 @@ function UnitPrice(props: {
         <div className={twMerge('mt-1 w-fit', !props.isViewOnly && 'ml-auto')}>
             <span className="text-gray-600">Unit Price</span>{' '}
             <span className="text-gray-900">
-                <FormattedNumber value={unitPrice} />
+                <FormattedNumber value={unitPrice} decimalScale={6} />
             </span>
         </div>
     );

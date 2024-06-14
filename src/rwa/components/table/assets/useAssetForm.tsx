@@ -78,7 +78,7 @@ export function useAssetForm(
                       {
                           label: 'Purchase Price',
                           Input: () => (
-                              <>{handleTableDatum(item?.purchasePrice)}</>
+                              <>{handleTableDatum(item?.purchasePrice, 6)}</>
                           ),
                       },
                       {
@@ -235,17 +235,18 @@ export function useAssetForm(
             ...derivedInputsToDisplay,
         ],
         [
-            control,
             derivedInputsToDisplay,
+            register,
+            operation,
+            errors.name,
             errors.CUSIP,
             errors.ISIN,
-            errors.name,
             errors.fixedIncomeTypeId,
-            fixedIncomeTypes,
+            errors.spvId,
             item?.CUSIP,
             item?.ISIN,
-            operation,
-            register,
+            control,
+            fixedIncomeTypes,
             spvs,
         ],
     );

@@ -120,6 +120,7 @@ export function Table<
                                         ) ??
                                             handleTableDatum(
                                                 tableItem[column.key],
+                                                column.decimalScale,
                                             )}
                                     </RWATableCell>
                                 )}

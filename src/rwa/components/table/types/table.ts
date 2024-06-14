@@ -34,6 +34,7 @@ export interface TableColumn<
     allowSorting?: boolean;
     isSpecialColumn?: boolean; // Used to identify index or more details columns
     isNumberColumn?: boolean; // Used to right-align numbers
+    decimalScale?: number; // Used to format numbers
 }
 
 export type TableBaseProps<
