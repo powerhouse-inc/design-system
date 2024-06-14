@@ -1,6 +1,5 @@
 import { DateTimeLocalInput } from '@/connect';
 import {
-    FEES_PAYMENT,
     FormHookProps,
     FormattedNumber,
     GroupTransactionFormInputs,
@@ -9,9 +8,9 @@ import {
     RWATableSelect,
     allGroupTransactionTypes,
     assetGroupTransactions,
-    calculateCashBalanceChange,
     calculateUnitPrice,
     convertToDateTimeLocalFormat,
+    feesTransactions,
     getFixedIncomeAssets,
     groupTransactionTypeLabels,
     makeFixedIncomeOptionLabel,
@@ -63,6 +62,8 @@ export function useGroupTransactionForm(
         operation,
     } = props;
 
+    const { serviceProviderFeeTypes, accounts } = state;
+
     const fixedIncomes = useMemo(() => getFixedIncomeAssets(state), [state]);
 
     const transactionTypeOptions = allGroupTransactionTypes.map(type => ({
@@ -80,6 +81,7 @@ export function useGroupTransactionForm(
         cashAmount: null,
         fixedIncomeId: fixedIncomes[0]?.id ?? null,
         fixedIncomeAmount: null,
+        serviceProviderFeeTypeId: serviceProviderFeeTypes[0]?.id ?? null,
         fees: null,
     };
 
@@ -90,6 +92,7 @@ export function useGroupTransactionForm(
               cashAmount: item.cashTransaction?.amount ?? null,
               fixedIncomeId: fixedIncomes[0]?.id ?? null,
               fixedIncomeAmount: item.fixedIncomeTransaction?.amount ?? null,
+              serviceProviderFeeTypeId: item.serviceProviderFeeTypeId ?? null,
               fees: item.fees,
           }
         : createDefaultValues;
@@ -106,10 +109,9 @@ export function useGroupTransactionForm(
 
     const type = useWatch({ control, name: 'type' });
 
-    const isAssetTransaction = assetGroupTransactions.includes(
-        type ?? allGroupTransactionTypes[0],
-    );
-    const canHaveTransactionFees = type !== FEES_PAYMENT;
+    const isAssetTransaction = !!type && assetGroupTransactions.includes(type);
+    const isFeesTransaction = !!type && feesTransactions.includes(type);
+    const canHaveTransactionFees = !isFeesTransaction;
 
     function customSubmitHandler(data: GroupTransactionFormInputs) {
         if (!operation || operation === 'view') return;
@@ -117,19 +119,11 @@ export function useGroupTransactionForm(
         const entryTime = data.entryTime;
         const cashAmount = data.cashAmount;
         const fixedIncomeId = isAssetTransaction ? data.fixedIncomeId : null;
+        const serviceProviderFeeTypeId = data.serviceProviderFeeTypeId ?? null;
         const fixedIncomeAmount = isAssetTransaction
             ? data.fixedIncomeAmount
             : null;
         const fees = canHaveTransactionFees ? data.fees : null;
-        const cashBalanceChange = calculateCashBalanceChange(
-            data.type,
-            data.cashAmount,
-            data.fees,
-        );
-        const unitPrice = calculateUnitPrice(
-            data.cashAmount,
-            data.fixedIncomeAmount,
-        );
         const formActions = {
             create: onSubmitCreate,
             edit: onSubmitEdit,
@@ -143,9 +137,8 @@ export function useGroupTransactionForm(
             cashAmount,
             fixedIncomeId,
             fixedIncomeAmount,
+            serviceProviderFeeTypeId,
             fees,
-            cashBalanceChange,
-            unitPrice,
         });
     }
 
@@ -155,6 +148,15 @@ export function useGroupTransactionForm(
         control,
         name: 'fees',
     });
+
+    const serviceProviderFeeTypeOptions = useMemo(
+        () =>
+            serviceProviderFeeTypes.map(spft => ({
+                label: `${spft.name} — ${spft.feeType} — ${accounts.find(account => account.id === spft.accountId)?.reference}`,
+                value: spft.id,
+            })),
+        [serviceProviderFeeTypes, accounts],
+    );
 
     const inputs = [
         {
@@ -183,6 +185,27 @@ export function useGroupTransactionForm(
                 />
             ),
         },
+        isFeesTransaction
+            ? {
+                  label: 'Service Provider',
+                  Input: () => (
+                      <RWATableSelect
+                          required
+                          control={control}
+                          name="serviceProviderFeeTypeId"
+                          disabled={operation === 'view'}
+                          options={serviceProviderFeeTypeOptions}
+                          addItemButtonProps={{
+                              onClick: () =>
+                                  setShowCreateServiceProviderFeeTypeModal(
+                                      true,
+                                  ),
+                              label: 'Add Service Provider',
+                          }}
+                      />
+                  ),
+              }
+            : null,
         isAssetTransaction
             ? {
                   label: 'Asset name',
@@ -264,6 +287,7 @@ export function useGroupTransactionForm(
             control,
             inputs,
             formState,
+            serviceProviderFeeTypeOptions,
             showCreateAssetModal,
             setShowCreateAssetModal,
             showCreateServiceProviderFeeTypeModal,
@@ -281,6 +305,7 @@ export function useGroupTransactionForm(
         control,
         inputs,
         formState,
+        serviceProviderFeeTypeOptions,
         showCreateAssetModal,
         showCreateServiceProviderFeeTypeModal,
         canHaveTransactionFees,

@@ -1,3 +1,24 @@
+# [1.0.0-alpha.121](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.120...v1.0.0-alpha.121) (2024-06-13)
+
+
+### Features
+
+* add type field and service provider input ([#304](https://github.com/powerhouse-inc/design-system/issues/304)) ([2281ddc](https://github.com/powerhouse-inc/design-system/commit/2281ddc0aab0601124672dfc3b10f809a283ab19))
+
+# [1.0.0-alpha.120](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.119...v1.0.0-alpha.120) (2024-06-13)
+
+
+### Features
+
+* add income transaction types ([#303](https://github.com/powerhouse-inc/design-system/issues/303)) ([028c18f](https://github.com/powerhouse-inc/design-system/commit/028c18f026034459701fa4f98a28232cc9f9b972))
+
+# [1.0.0-alpha.119](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.118...v1.0.0-alpha.119) (2024-06-11)
+
+
+### Features
+
+* use checkmark icon for success sync status in folders and files ([284977c](https://github.com/powerhouse-inc/design-system/commit/284977c22436da9e032ca08a006ca8d89baf58d3))
+
 # [1.0.0-alpha.118](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.117...v1.0.0-alpha.118) (2024-06-10)
 
 
