@@ -56,6 +56,7 @@ export type TableBaseProps<
     specialFirstRow?: (
         columns: TableColumn<TItem, TTableData>[],
     ) => JSX.Element;
+    specialLastRow?: (columns: TableColumn<TItem, TTableData>[]) => JSX.Element;
 };
 
 export type TableProps<
@@ -74,6 +75,7 @@ export type TableProps<
     specialFirstRow?: (
         columns: TableColumn<TItem, TTableData>[],
     ) => JSX.Element;
+    specialLastRow?: (columns: TableColumn<TItem, TTableData>[]) => JSX.Element;
 };
 
 export type TableWrapperProps<TFormInputs extends FieldValues> = {

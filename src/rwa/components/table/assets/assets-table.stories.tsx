@@ -153,3 +153,24 @@ export const WithDataAllowedToCreateDocuments: Story = {
         isAllowedToEditDocuments: true,
     },
 };
+
+export const WithManyItems: Story = {
+    ...WithDataAllowedToCreateDocuments,
+    args: {
+        ...WithDataAllowedToCreateDocuments.args,
+        state: {
+            ...mockStateInitial,
+            portfolio: [
+                mockCashAsset,
+                ...mockFixedIncomes,
+                ...Array.from({ length: 100 }, (_, i) => ({
+                    ...mockFixedIncomes[0],
+                    id: `fixed-income-${i + 1}`,
+                })),
+            ],
+            fixedIncomeTypes: mockFixedIncomeTypes,
+            spvs: mockSPVs,
+            transactions: mockGroupTransactions,
+        },
+    },
+};
