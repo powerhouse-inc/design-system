@@ -36,6 +36,7 @@ export function useServiceProviderFeeTypeForm(
 
     const editDefaultValues = item
         ? {
+              id: item.id,
               name: item.name,
               feeType: item.feeType,
               accountId: item.accountId,

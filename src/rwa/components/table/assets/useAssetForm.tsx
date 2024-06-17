@@ -40,6 +40,7 @@ export function useAssetForm(
 
     const editDefaultValues = item
         ? {
+              id: item.id,
               fixedIncomeTypeId: item.fixedIncomeTypeId,
               spvId: item.spvId,
               name: item.name,

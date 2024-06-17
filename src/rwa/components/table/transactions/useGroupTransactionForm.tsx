@@ -89,6 +89,7 @@ export function useGroupTransactionForm(
 
     const editDefaultValues = item
         ? {
+              id: item.id,
               type: item.type,
               entryTime: convertToDateTimeLocalFormat(item.entryTime),
               cashAmount: item.cashTransaction?.amount ?? null,
@@ -118,6 +119,7 @@ export function useGroupTransactionForm(
 
     function customSubmitHandler(data: GroupTransactionFormInputs) {
         if (!operation || operation === 'view') return;
+        const id = data.id;
         const type = data.type;
         const entryTime = data.entryTime;
         const cashAmount = data.cashAmount;
@@ -136,6 +138,7 @@ export function useGroupTransactionForm(
         const onSubmitForm = formActions[operation];
 
         onSubmitForm?.({
+            id,
             type,
             entryTime,
             cashAmount,
