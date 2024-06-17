@@ -50,6 +50,12 @@ const columns = [
         isNumberColumn: true,
     },
     {
+        key: 'totalFees' as const,
+        label: 'Total Fees ($)',
+        allowSorting: true,
+        isNumberColumn: true,
+    },
+    {
         key: 'cashBalanceChange' as const,
         label: 'Cash Balance Change ($)',
         allowSorting: true,
@@ -88,6 +94,8 @@ export function makeGroupTransactionsTableItems(
             transaction.cashTransaction?.amount,
             cashTransactionSign,
         );
+        const totalFees =
+            transaction.fees?.reduce((acc, fee) => acc + fee.amount, 0) ?? 0;
         const cashBalanceChange = transaction.cashBalanceChange;
 
         return {
@@ -99,6 +107,7 @@ export function makeGroupTransactionsTableItems(
             asset,
             quantity,
             cashAmount,
+            totalFees,
             cashBalanceChange,
         };
     });

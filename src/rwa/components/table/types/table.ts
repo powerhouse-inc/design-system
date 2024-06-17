@@ -92,6 +92,7 @@ export type GroupTransactionsTableItem = GroupTransaction & {
     asset: string | undefined;
     quantity: number | undefined;
     cashAmount: number | undefined;
+    totalFees: number;
     cashBalanceChange: number;
 };
 
