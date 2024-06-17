@@ -6,6 +6,7 @@ import {
     GroupTransactionsTableItem,
     RWANumberInput,
     RWATableSelect,
+    RWATableTextInput,
     allGroupTransactionTypes,
     assetGroupTransactions,
     calculateUnitPrice,
@@ -83,6 +84,7 @@ export function useGroupTransactionForm(
         fixedIncomeAmount: null,
         serviceProviderFeeTypeId: serviceProviderFeeTypes[0]?.id ?? null,
         fees: null,
+        txRef: null,
     };
 
     const editDefaultValues = item
@@ -93,7 +95,8 @@ export function useGroupTransactionForm(
               fixedIncomeId: fixedIncomes[0]?.id ?? null,
               fixedIncomeAmount: item.fixedIncomeTransaction?.amount ?? null,
               serviceProviderFeeTypeId: item.serviceProviderFeeTypeId ?? null,
-              fees: item.fees,
+              fees: item.fees ?? null,
+              txRef: item.txRef ?? null,
           }
         : createDefaultValues;
 
@@ -123,6 +126,7 @@ export function useGroupTransactionForm(
         const fixedIncomeAmount = isAssetTransaction
             ? data.fixedIncomeAmount
             : null;
+        const txRef = data.txRef ?? null;
         const fees = canHaveTransactionFees ? data.fees : null;
         const formActions = {
             create: onSubmitCreate,
@@ -139,6 +143,7 @@ export function useGroupTransactionForm(
             fixedIncomeAmount,
             serviceProviderFeeTypeId,
             fees,
+            txRef,
         });
     }
 
@@ -271,6 +276,19 @@ export function useGroupTransactionForm(
                         />
                     )}
                 </>
+            ),
+        },
+        {
+            label: 'Transaction reference',
+            Input: () => (
+                <RWATableTextInput
+                    {...register('txRef', {
+                        disabled: operation === 'view',
+                    })}
+                    aria-invalid={errors.txRef ? 'true' : 'false'}
+                    errorMessage={errors.txRef?.message}
+                    placeholder="E.g. 0x123..."
+                />
             ),
         },
     ].filter(Boolean);
