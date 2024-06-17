@@ -126,7 +126,7 @@ export function Table<
                                 )}
                             {column.key === 'moreDetails' && (
                                 <MoreDetailsCell
-                                    isSelected
+                                    isSelected={isSelected}
                                     onClick={() => {
                                         if (isSelected) {
                                             setOperation(null);
