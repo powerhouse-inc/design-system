@@ -82,7 +82,7 @@ export function useGroupTransactionForm(
         cashAmount: null,
         fixedIncomeId: fixedIncomes[0]?.id ?? null,
         fixedIncomeAmount: null,
-        serviceProviderFeeTypeId: serviceProviderFeeTypes[0]?.id ?? null,
+        serviceProviderFeeTypeId: null,
         fees: null,
         txRef: null,
     };
@@ -198,7 +198,6 @@ export function useGroupTransactionForm(
                   label: 'Service Provider',
                   Input: () => (
                       <RWATableSelect
-                          required
                           control={control}
                           name="serviceProviderFeeTypeId"
                           disabled={operation === 'view'}
