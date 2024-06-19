@@ -93,7 +93,7 @@ export function useGroupTransactionForm(
               type: item.type,
               entryTime: convertToDateTimeLocalFormat(item.entryTime),
               cashAmount: item.cashTransaction?.amount ?? null,
-              fixedIncomeId: fixedIncomes[0]?.id ?? null,
+              fixedIncomeId: item.fixedIncomeTransaction?.assetId ?? null,
               fixedIncomeAmount: item.fixedIncomeTransaction?.amount ?? null,
               serviceProviderFeeTypeId: item.serviceProviderFeeTypeId ?? null,
               fees: item.fees ?? null,
