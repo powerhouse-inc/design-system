@@ -43,8 +43,6 @@ export function useTableHeight(props: Props) {
             const tableTop = tableContainerRect.top;
             const calculatedHeight = rowBottom - tableTop;
 
-            console.log({ rowBottom, tableTop, calculatedHeight });
-
             setMaxHeight(`${calculatedHeight}px`);
         }
     }, [
