@@ -4,6 +4,7 @@ import {
     FixedIncome,
     FixedIncomeTypeFormInputs,
     RWATableCell,
+    RWATableRow,
     SPVFormInputs,
     Table,
     TableItem,
@@ -17,7 +18,6 @@ import {
 } from '@/rwa';
 import { Fragment, useMemo, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { RWATableRow } from '../base/table-row';
 import { sumTotalForProperty } from './utils';
 
 const columns = [
