@@ -175,7 +175,7 @@ export function useGroupTransactionForm(
                     name="type"
                     disabled={operation === 'view'}
                     options={transactionTypeOptions}
-                    required="Transaction type is required"
+                    rules={{ required: 'Transaction type is required' }}
                     aria-invalid={errors.type ? 'true' : 'false'}
                     errorMessage={errors.type?.message}
                 />
@@ -226,7 +226,7 @@ export function useGroupTransactionForm(
                               onClick: () => setShowCreateAssetModal(true),
                               label: 'Create Asset',
                           }}
-                          required="Asset name is required"
+                          rules={{ required: 'Asset name is required' }}
                           aria-invalid={errors.type ? 'true' : 'false'}
                           errorMessage={errors.type?.message}
                       />
@@ -239,13 +239,18 @@ export function useGroupTransactionForm(
                   Input: () => (
                       <RWANumberInput
                           name="fixedIncomeAmount"
-                          requiredErrorMessage="Quantity is required"
+                          rules={{
+                              required: 'Quantity is required',
+                              validate: {
+                                  positive: value =>
+                                      (!!value && Number(value) > 0) ||
+                                      'Asset proceeds must be greater than zero',
+                              },
+                          }}
                           disabled={operation === 'view'}
                           control={control}
                           aria-invalid={
-                              errors.fixedIncomeAmount?.type === 'required'
-                                  ? 'true'
-                                  : 'false'
+                              errors.fixedIncomeAmount ? 'true' : 'false'
                           }
                           errorMessage={errors.fixedIncomeAmount?.message}
                           placeholder="E.g. 1,000.00"
@@ -259,15 +264,18 @@ export function useGroupTransactionForm(
                 <>
                     <RWANumberInput
                         name="cashAmount"
-                        requiredErrorMessage="Asset proceeds is required"
+                        rules={{
+                            required: 'Asset proceeds is required',
+                            validate: {
+                                positive: value =>
+                                    (!!value && Number(value) > 0) ||
+                                    'Asset proceeds must be greater than zero',
+                            },
+                        }}
                         currency="USD"
                         disabled={operation === 'view'}
                         control={control}
-                        aria-invalid={
-                            errors.cashAmount?.type === 'required'
-                                ? 'true'
-                                : 'false'
-                        }
+                        aria-invalid={errors.cashAmount ? 'true' : 'false'}
                         errorMessage={errors.cashAmount?.message}
                         placeholder="E.g. $1,000.00"
                     />
