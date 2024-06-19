@@ -59,7 +59,6 @@ export function useTableHeight(props: Props) {
 
     useEffect(() => {
         const handleScroll = () => {
-            console.log('scroll');
             updateTableHeight();
         };
 
