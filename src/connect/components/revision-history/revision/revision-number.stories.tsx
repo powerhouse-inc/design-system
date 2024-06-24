@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { RevisionNumber } from './revision-number';
 
 const meta = {
-    title: 'Connect/Components/RevisionNumber History/RevisionNumber',
+    title: 'Connect/Components/Revision History/Revision/Revision Number',
     component: RevisionNumber,
 } satisfies Meta<typeof RevisionNumber>;
 
