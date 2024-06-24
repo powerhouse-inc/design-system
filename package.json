@@ -126,6 +126,7 @@
     "react-number-format": "^5.3.4",
     "react-select": "^5.8.0",
     "react-toastify": "^10.0.4",
-    "react-tooltip": "^5.27.0"
+    "react-tooltip": "^5.27.0",
+    "viem": "^2.16.1"
   }
 }
