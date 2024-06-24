@@ -1,3 +1,3 @@
-export function shortenEthAddress(address: string) {
-    return `${address.slice(0, 6)}...${address.slice(-4)}`;
+export function formatEthAddress(address: string) {
+    return `${address.slice(0, 7)}...${address.slice(-5)}`;
 }

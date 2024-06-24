@@ -1,18 +1,23 @@
 import ImgPowerhouse from '@/assets/powerhouse-rounded.png';
 import { useENSInfo } from '@/connect/hooks';
-import { useState } from 'react';
+import { CSSProperties, useState } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
 
 type Props = {
     address: `0x${string}`;
     chainId?: number;
+    size?: CSSProperties['width'];
 };
 export function ENSAvatar(props: Props) {
-    const { address, chainId } = props;
+    const { address, chainId = 1, size = '14px' } = props;
     const { info } = useENSInfo(address, chainId);
     const avatarUrl = info?.avatarUrl;
     const [loadingImage, setLoadingImage] = useState(Boolean(avatarUrl));
     const [imageError, setImageError] = useState(false);
+    const style = {
+        width: size,
+        height: size,
+    };
 
     function getImage() {
         if (!avatarUrl || imageError) {
@@ -23,9 +28,10 @@ export function ENSAvatar(props: Props) {
             <>
                 <div
                     className={twJoin(
-                        'size-10 flex-none animate-pulse rounded-full bg-gray-400 fade-out',
+                        'flex-none rounded-full bg-gray-400',
                         !loadingImage && 'hidden',
                     )}
+                    style={style}
                 ></div>
                 <SidebarImage src={avatarUrl} alt="ENS avatar" />
             </>
@@ -38,8 +44,9 @@ export function ENSAvatar(props: Props) {
         return (
             <img
                 {...props}
+                style={style}
                 className={twMerge(
-                    'size-10 flex-none rounded-full object-contain transition-opacity duration-1000 animate-in fade-in',
+                    'flex-none rounded-full object-contain',
                     loadingImage && 'hidden',
                 )}
                 onLoad={() => setLoadingImage(false)}
