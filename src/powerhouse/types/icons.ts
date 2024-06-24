@@ -5,6 +5,7 @@ export type IconName =
     | 'bar-chart'
     | 'base-arrow-left'
     | 'base-arrow-right'
+    | 'braces'
     | 'brick-globe'
     | 'briefcase'
     | 'calendar'

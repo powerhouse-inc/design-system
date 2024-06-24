@@ -15,5 +15,14 @@ export const Default: Story = {
         revisionNumber: 1,
         eventId: '123',
         stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
+        operationName: 'APPROVE_BUDGET',
+        operationInput: {
+            id: 'eByxUvWzZtNOPbdH8JZIZI/beoO-',
+            reference: 'OC303687',
+            label: 'Account 1',
+            nested: {
+                example: 'nested',
+            },
+        },
     },
 };

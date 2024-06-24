@@ -1,14 +1,16 @@
 import { Tooltip } from '@/connect';
 import { Icon } from '@/powerhouse';
+import { useId } from 'react';
 import { useCopyToClipboard } from 'usehooks-ts';
 
-type Props = {
+export type RevisionNumberProps = {
     revisionNumber: number;
     eventId: string;
     stateHash: string;
 };
-export function RevisionNumber(props: Props) {
+export function RevisionNumber(props: RevisionNumberProps) {
     const { revisionNumber, eventId, stateHash } = props;
+    const tooltipId = useId().replace(/:/g, '');
 
     const [, copy] = useCopyToClipboard();
 
@@ -23,14 +25,14 @@ export function RevisionNumber(props: Props) {
     return (
         <span className="flex items-center gap-2 text-xs text-gray-600">
             Revision {revisionNumber}.
-            <a id="revision-number-tooltip">
+            <a id={tooltipId}>
                 <Icon
                     name="ellipsis"
                     size={14}
                     className="cursor-pointer text-slate-100"
                 />
             </a>
-            <Tooltip anchorSelect="#revision-number-tooltip">
+            <Tooltip anchorSelect={`#${tooltipId}`}>
                 <button
                     onClick={handleCopy(stateHash)}
                     className="flex items-center gap-1"

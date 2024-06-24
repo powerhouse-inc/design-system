@@ -1,17 +1,16 @@
-import { ComponentPropsWithoutRef } from 'react';
 import { Address } from './address';
 import { Errors } from './errors';
-import { Operation } from './operation';
-import { RevisionNumber } from './revision-number';
+import { Operation, OperationProps } from './operation';
+import { RevisionNumber, RevisionNumberProps } from './revision-number';
 import { Signature } from './signature';
 import { Timestamp } from './timestamp';
 
-type Props = ComponentPropsWithoutRef<typeof RevisionNumber>;
+type Props = RevisionNumberProps & OperationProps;
 export function Revision(props: Props) {
     return (
         <article>
             <RevisionNumber {...props} />
-            <Operation />
+            <Operation {...props} />
             <Address />
             <Timestamp />
             <Signature />
