@@ -20,6 +20,7 @@ export type IconName =
     | 'collapse'
     | 'connect'
     | 'drive'
+    | 'ellipsis'
     | 'error'
     | 'files-earmark'
     | 'folder-close'

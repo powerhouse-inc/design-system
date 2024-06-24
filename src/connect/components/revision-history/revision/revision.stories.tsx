@@ -10,4 +10,10 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+    args: {
+        revisionNumber: 1,
+        eventId: '123',
+        stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
+    },
+};

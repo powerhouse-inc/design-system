@@ -35,6 +35,9 @@ dependencies:
   react-toastify:
     specifier: ^10.0.4
     version: 10.0.4(react-dom@18.2.0)(react@18.2.0)
+  react-tooltip:
+    specifier: ^5.27.0
+    version: 5.27.0(react-dom@18.2.0)(react@18.2.0)
 
 devDependencies:
   '@commitlint/cli':
@@ -6518,6 +6521,7 @@ packages:
   /are-we-there-yet@3.0.1:
     resolution: {integrity: sha512-QZW4EDmGwlYur0Yyf/b2uGucHQMa8aFUP7eu9ddR73vvhFyt4V0Vl3QHPcTNJ8l6qYOBdxgXdnBXQrHilfRQBg==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
+    deprecated: This package is no longer supported.
     requiresBuild: true
     dependencies:
       delegates: 1.0.0
@@ -7195,6 +7199,10 @@ packages:
     dependencies:
       consola: 3.2.3
     dev: true
+
+  /classnames@2.5.1:
+    resolution: {integrity: sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==}
+    dev: false
 
   /clean-stack@2.2.0:
     resolution: {integrity: sha512-4diC9HaTE+KRAMWhDhrGOECgWZxoevMc5TlkObMqNSsVU62PYzXZ/SMTjzyGAFF1YusgxGcSWTEXBhp0CPwQ1A==}
@@ -9120,6 +9128,7 @@ packages:
   /gauge@4.0.4:
     resolution: {integrity: sha512-f9m+BEN5jkg6a0fZjleidjN51VE1X+mPFQ2DJ0uv1V39oCLCbsGe6yjbBnp7eK7z/+GAon99a3nHuqbuuthyPg==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
+    deprecated: This package is no longer supported.
     requiresBuild: true
     dependencies:
       aproba: 2.0.0
@@ -11392,6 +11401,7 @@ packages:
   /npmlog@6.0.2:
     resolution: {integrity: sha512-/vBvz5Jfr9dT/aFWd0FIRf+T/Q2WBsLENygUaFUqstqsycmZAP/t5BvFJTK0viFmSUxiUKTUplWy5vt+rvKIxg==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
+    deprecated: This package is no longer supported.
     requiresBuild: true
     dependencies:
       are-we-there-yet: 3.0.1
@@ -12580,6 +12590,18 @@ packages:
       react-dom: '>=16'
     dependencies:
       clsx: 2.1.0
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /react-tooltip@5.27.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-JXROcdfCEbCqkAkh8LyTSP3guQ0dG53iY2E2o4fw3D8clKzziMpE6QG6CclDaHELEKTzpMSeAOsdtg0ahoQosw==}
+    peerDependencies:
+      react: '>=16.14.0'
+      react-dom: '>=16.14.0'
+    dependencies:
+      '@floating-ui/dom': 1.6.5
+      classnames: 2.5.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
