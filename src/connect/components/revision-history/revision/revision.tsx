@@ -1,14 +1,16 @@
 import { Address, AddressProps } from './address';
-import { Errors } from './errors';
+import { Errors, ErrorsProps } from './errors';
 import { Operation, OperationProps } from './operation';
 import { RevisionNumber, RevisionNumberProps } from './revision-number';
-import { Signature } from './signature';
+import { Signature, SignatureProps } from './signature';
 import { Timestamp, TimestampProps } from './timestamp';
 
 type Props = RevisionNumberProps &
     OperationProps &
     AddressProps &
-    TimestampProps;
+    TimestampProps &
+    SignatureProps &
+    ErrorsProps;
 export function Revision(props: Props) {
     return (
         <article>
@@ -16,8 +18,8 @@ export function Revision(props: Props) {
             <Operation {...props} />
             <Address {...props} />
             <Timestamp {...props} />
-            <Signature />
-            <Errors />
+            <Signature {...props} />
+            <Errors {...props} />
         </article>
     );
 }

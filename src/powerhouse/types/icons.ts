@@ -23,6 +23,7 @@ export type IconName =
     | 'drive'
     | 'ellipsis'
     | 'error'
+    | 'exclamation'
     | 'files-earmark'
     | 'folder-close'
     | 'folder-open'
