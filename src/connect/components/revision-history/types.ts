@@ -1,7 +1,9 @@
+export type Scope = 'global' | 'local';
+
 export type Operation = {
     type: string;
     input: Record<string, any>;
-    scope: 'global' | 'local';
+    scope: Scope;
     index: number;
     timestamp: string;
     hash: string;

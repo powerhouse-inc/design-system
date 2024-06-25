@@ -1,8 +1,9 @@
 import { Select } from '../../select';
+import { Scope as TScope } from '../types';
 
 type Props = {
-    value: 'global' | 'local';
-    onChange: (value: string) => void;
+    value: TScope;
+    onChange: (value: TScope) => void;
 };
 export function Scope(props: Props) {
     const { value, onChange } = props;

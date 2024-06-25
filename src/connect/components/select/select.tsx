@@ -1,8 +1,8 @@
-import { Icon } from '@/powerhouse';
-import { ForwardedRef, forwardRef, useState } from 'react';
+import { Icon, fixedForwardRef } from '@/powerhouse';
+import { ForwardedRef, useState } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
 
-export type SelectItem<TValue extends string = string> = {
+export type SelectItem<TValue extends string> = {
     value: TValue;
     displayValue?: React.ReactNode;
     description?: React.ReactNode;
@@ -10,28 +10,28 @@ export type SelectItem<TValue extends string = string> = {
     disabled?: boolean;
 };
 
-export type SelectProps<TValue extends string = string> = {
+export type SelectProps<TValue extends string> = {
     items: readonly SelectItem<TValue>[];
-    value: string;
+    value: TValue;
     id: string;
-    onChange: (value: string) => void;
+    onChange: (value: TValue) => void;
     containerClassName?: string;
     menuClassName?: string;
     itemClassName?: string;
 };
 
-export const Select = forwardRef(function Select(
-    props: SelectProps,
+export const Select = fixedForwardRef(function Select<TValue extends string>(
+    props: SelectProps<TValue>,
     ref: ForwardedRef<HTMLDivElement>,
 ) {
     const [showItems, setShowItems] = useState(false);
     const selectedItem = getItemByValue(props.value) ?? props.items[0];
-    function onItemClick(item: SelectItem) {
+    function onItemClick(item: SelectItem<TValue>) {
         if (item.disabled) return;
         props.onChange(item.value);
         setShowItems(false);
     }
-    function getItemByValue(value: string) {
+    function getItemByValue(value: TValue) {
         return props.items.find(item => item.value === value);
     }
 
@@ -84,8 +84,11 @@ export const Select = forwardRef(function Select(
     );
 });
 
-function ItemContainer(
-    props: SelectItem & { onItemClick?: () => void; className?: string },
+function ItemContainer<TValue extends string>(
+    props: SelectItem<TValue> & {
+        onItemClick?: () => void;
+        className?: string;
+    },
 ) {
     const className = twMerge(
         props.disabled ? 'cursor-not-allowed text-gray-500' : 'text-gray-800',

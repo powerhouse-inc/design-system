@@ -54,6 +54,7 @@ export type IconName =
     | 'syncing'
     | 'trash'
     | 'trash-fill'
+    | 'variant-arrow-left'
     | 'vertical-dots'
     | 'warning-fill'
     | 'xmark'
