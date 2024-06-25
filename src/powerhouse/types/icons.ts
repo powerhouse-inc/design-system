@@ -33,6 +33,7 @@ export type IconName =
     | 'globe'
     | 'hdd'
     | 'info-square'
+    | 'link'
     | 'lock'
     | 'm'
     | 'pencil'
