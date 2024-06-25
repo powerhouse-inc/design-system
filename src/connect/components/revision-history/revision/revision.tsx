@@ -5,13 +5,13 @@ import { RevisionNumber, RevisionNumberProps } from './revision-number';
 import { Signature, SignatureProps } from './signature';
 import { Timestamp, TimestampProps } from './timestamp';
 
-type Props = RevisionNumberProps &
+export type RevisionProps = RevisionNumberProps &
     OperationProps &
     AddressProps &
     TimestampProps &
     SignatureProps &
     ErrorsProps;
-export function Revision(props: Props) {
+export function Revision(props: RevisionProps) {
     return (
         <article className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-2">
             <div className="flex items-center gap-2">
