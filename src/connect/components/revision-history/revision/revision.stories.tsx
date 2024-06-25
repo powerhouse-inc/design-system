@@ -15,7 +15,7 @@ export const Verified: Story = {
         revisionNumber: 1,
         eventId: '123',
         stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
-        operationName: 'APPROVE_BUDGET',
+        operationType: 'APPROVE_BUDGET',
         operationInput: {
             id: 'eByxUvWzZtNOPbdH8JZIZI/beoO-',
             reference: 'OC303687',
@@ -51,7 +51,7 @@ export const PartiallyVerified: Story = {
         revisionNumber: 1,
         eventId: '123',
         stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
-        operationName: 'APPROVE_BUDGET',
+        operationType: 'APPROVE_BUDGET',
         operationInput: {
             id: 'eByxUvWzZtNOPbdH8JZIZI/beoO-',
             reference: 'OC303687',
@@ -87,7 +87,7 @@ export const NotVerified: Story = {
         revisionNumber: 1,
         eventId: '123',
         stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
-        operationName: 'APPROVE_BUDGET',
+        operationType: 'APPROVE_BUDGET',
         operationInput: {
             id: 'eByxUvWzZtNOPbdH8JZIZI/beoO-',
             reference: 'OC303687',

@@ -1,11 +1,12 @@
 import { Icon } from '@/powerhouse';
 import { format } from 'date-fns';
-import { Revision, RevisionProps } from '../revision';
-import { Skip, SkipProps } from '../skip';
+import { Revision } from '../revision';
+import { Skip } from '../skip';
+import { Revision as TRevision, Skip as TSkip } from '../types';
 
 export type RevisionsOnDateProps = {
     date: string;
-    revisionsAndSkips: (RevisionProps | SkipProps)[];
+    revisionsAndSkips: (TRevision | TSkip)[];
 };
 
 export function RevisionsOnDate(props: RevisionsOnDateProps) {

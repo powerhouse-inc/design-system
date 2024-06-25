@@ -18,7 +18,7 @@ export const Default: Story = {
                 revisionNumber: 1,
                 eventId: '123',
                 stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
-                operationName: 'APPROVE_BUDGET',
+                operationType: 'APPROVE_BUDGET',
                 operationInput: {
                     id: 'eByxUvWzZtNOPbdH8JZIZI/beoO-',
                     reference: 'OC303687',
@@ -53,7 +53,7 @@ export const Default: Story = {
                 revisionNumber: 2,
                 eventId: '123',
                 stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
-                operationName: 'APPROVE_BUDGET',
+                operationType: 'APPROVE_BUDGET',
                 operationInput: {
                     id: 'eByxUvWzZtNOPbdH8JZIZI/beoO-',
                     reference: 'OC303687',
@@ -88,7 +88,7 @@ export const Default: Story = {
                 revisionNumber: 3,
                 eventId: '123',
                 stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
-                operationName: 'APPROVE_BUDGET',
+                operationType: 'APPROVE_BUDGET',
                 operationInput: {
                     id: 'eByxUvWzZtNOPbdH8JZIZI/beoO-',
                     reference: 'OC303687',
@@ -127,7 +127,7 @@ export const Default: Story = {
                 revisionNumber: 6,
                 eventId: '123',
                 stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
-                operationName: 'APPROVE_BUDGET',
+                operationType: 'APPROVE_BUDGET',
                 operationInput: {
                     id: 'eByxUvWzZtNOPbdH8JZIZI/beoO-',
                     reference: 'OC303687',
@@ -162,7 +162,7 @@ export const Default: Story = {
                 revisionNumber: 7,
                 eventId: '123',
                 stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
-                operationName: 'APPROVE_BUDGET',
+                operationType: 'APPROVE_BUDGET',
                 operationInput: {
                     id: 'eByxUvWzZtNOPbdH8JZIZI/beoO-',
                     reference: 'OC303687',
@@ -197,7 +197,7 @@ export const Default: Story = {
                 revisionNumber: 8,
                 eventId: '123',
                 stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
-                operationName: 'APPROVE_BUDGET',
+                operationType: 'APPROVE_BUDGET',
                 operationInput: {
                     id: 'eByxUvWzZtNOPbdH8JZIZI/beoO-',
                     reference: 'OC303687',
