@@ -25,7 +25,7 @@ export type Signature = {
 };
 
 export type Revision = {
-    revisionNumber: number;
+    operationIndex: number;
     eventId: string;
     stateHash: string;
     operationType: string;

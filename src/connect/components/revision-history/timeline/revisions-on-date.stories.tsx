@@ -15,7 +15,7 @@ export const Default: Story = {
         date: '2024-06-13T14:39:12.936Z',
         revisionsAndSkips: [
             {
-                revisionNumber: 1,
+                operationIndex: 1,
                 eventId: '123',
                 stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
                 operationType: 'APPROVE_BUDGET',
@@ -50,7 +50,7 @@ export const Default: Story = {
                 errors: [],
             },
             {
-                revisionNumber: 2,
+                operationIndex: 2,
                 eventId: '123',
                 stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
                 operationType: 'APPROVE_BUDGET',
@@ -85,7 +85,7 @@ export const Default: Story = {
                 errors: ['Data mismatch detected'],
             },
             {
-                revisionNumber: 3,
+                operationIndex: 3,
                 eventId: '123',
                 stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
                 operationType: 'APPROVE_BUDGET',
@@ -124,7 +124,7 @@ export const Default: Story = {
                 skipCount: 1,
             },
             {
-                revisionNumber: 6,
+                operationIndex: 6,
                 eventId: '123',
                 stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
                 operationType: 'APPROVE_BUDGET',
@@ -159,7 +159,7 @@ export const Default: Story = {
                 errors: [],
             },
             {
-                revisionNumber: 7,
+                operationIndex: 7,
                 eventId: '123',
                 stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
                 operationType: 'APPROVE_BUDGET',
@@ -194,7 +194,7 @@ export const Default: Story = {
                 errors: ['Data mismatch detected'],
             },
             {
-                revisionNumber: 8,
+                operationIndex: 8,
                 eventId: '123',
                 stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
                 operationType: 'APPROVE_BUDGET',

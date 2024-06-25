@@ -12,7 +12,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Verified: Story = {
     args: {
-        revisionNumber: 1,
+        operationIndex: 0,
         eventId: '123',
         stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
         operationType: 'APPROVE_BUDGET',
@@ -48,7 +48,7 @@ export const Verified: Story = {
 
 export const PartiallyVerified: Story = {
     args: {
-        revisionNumber: 1,
+        operationIndex: 0,
         eventId: '123',
         stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
         operationType: 'APPROVE_BUDGET',
@@ -84,7 +84,7 @@ export const PartiallyVerified: Story = {
 
 export const NotVerified: Story = {
     args: {
-        revisionNumber: 1,
+        operationIndex: 0,
         eventId: '123',
         stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
         operationType: 'APPROVE_BUDGET',
