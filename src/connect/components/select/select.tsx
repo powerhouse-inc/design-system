@@ -1,5 +1,5 @@
 import { Icon, fixedForwardRef } from '@/powerhouse';
-import { ForwardedRef, useState } from 'react';
+import { CSSProperties, ForwardedRef, useState } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
 
 export type SelectItem<TValue extends string> = {
@@ -18,45 +18,62 @@ export type SelectProps<TValue extends string> = {
     containerClassName?: string;
     menuClassName?: string;
     itemClassName?: string;
+    borderRadius?: CSSProperties['borderRadius'];
+    absolutePositionMenu?: boolean;
 };
 
 export const Select = fixedForwardRef(function Select<TValue extends string>(
     props: SelectProps<TValue>,
     ref: ForwardedRef<HTMLDivElement>,
 ) {
+    const {
+        items,
+        value,
+        id,
+        onChange,
+        containerClassName,
+        menuClassName,
+        itemClassName,
+        absolutePositionMenu = false,
+        borderRadius = '12px',
+    } = props;
     const [showItems, setShowItems] = useState(false);
-    const selectedItem = getItemByValue(props.value) ?? props.items[0];
+    const selectedItem = getItemByValue(value) ?? items[0];
     function onItemClick(item: SelectItem<TValue>) {
         if (item.disabled) return;
-        props.onChange(item.value);
+        onChange(item.value);
         setShowItems(false);
     }
     function getItemByValue(value: TValue) {
-        return props.items.find(item => item.value === value);
+        return items.find(item => item.value === value);
     }
 
-    const itemsToShow = props.items.filter(item => item.value !== props.value);
+    const itemsToShow = items.filter(item => item.value !== value);
 
     return (
         <div
             className={twMerge(
-                'rounded-xl bg-gray-100',
-                props.containerClassName,
+                'bg-gray-100 transition-[border-radius]',
+                absolutePositionMenu && 'relative',
+                containerClassName,
             )}
             ref={ref}
+            style={{
+                borderRadius: showItems
+                    ? `${borderRadius} ${borderRadius} 0 0`
+                    : borderRadius,
+            }}
+            data-open={showItems}
         >
             <div
                 onClick={() => setShowItems(!showItems)}
-                id={props.id}
+                id={id}
                 className={twMerge(
-                    'flex min-w-[360px] cursor-pointer items-center justify-between  pr-3 text-gray-800 outline-none',
-                    props.menuClassName,
+                    'flex min-w-[360px] cursor-pointer items-center justify-between pr-3 text-gray-800 outline-none',
+                    menuClassName,
                 )}
             >
-                <ItemContainer
-                    {...selectedItem}
-                    className={props.itemClassName}
-                />
+                <ItemContainer {...selectedItem} className={itemClassName} />
                 <Icon
                     name="chevron-down"
                     className={twJoin(
@@ -66,9 +83,13 @@ export const Select = fixedForwardRef(function Select<TValue extends string>(
                 />
             </div>
             <div
+                style={{
+                    borderRadius: `0 0 ${borderRadius} ${borderRadius}`,
+                }}
                 className={twMerge(
-                    'max-h-0 overflow-hidden transition-[max-height] duration-300 ease-in-out',
+                    'max-h-0 w-full overflow-hidden bg-inherit transition-[max-height] ease-in-out',
                     showItems && 'max-h-screen',
+                    absolutePositionMenu && 'absolute',
                 )}
             >
                 {itemsToShow.map(item => (
@@ -76,7 +97,7 @@ export const Select = fixedForwardRef(function Select<TValue extends string>(
                         key={item.value}
                         {...item}
                         onItemClick={() => onItemClick(item)}
-                        className={props.itemClassName}
+                        className={itemClassName}
                     />
                 ))}
             </div>
@@ -90,19 +111,31 @@ function ItemContainer<TValue extends string>(
         className?: string;
     },
 ) {
-    const className = twMerge(
-        props.disabled ? 'cursor-not-allowed text-gray-500' : 'text-gray-800',
-        'flex h-full cursor-pointer items-center gap-2 py-3 pl-3 text-start outline-none last:rounded-b-xl',
-        props.className,
-    );
+    const {
+        className,
+        disabled,
+        onItemClick,
+        icon,
+        displayValue,
+        value,
+        description,
+    } = props;
+
     return (
-        <div className={className} onClick={props.onItemClick}>
-            {props.icon}
+        <div
+            className={twMerge(
+                disabled ? 'cursor-not-allowed text-gray-500' : 'text-gray-800',
+                'flex size-full cursor-pointer items-center gap-2 bg-inherit py-3 pl-3 text-start outline-none',
+                className,
+            )}
+            onClick={onItemClick}
+        >
+            {icon}
             <div>
                 <p className="capitalize text-inherit">
-                    {props.displayValue ?? props.value.toLowerCase()}
+                    {displayValue ?? value.toLowerCase()}
                 </p>
-                <p className="text-xs text-inherit">{props.description}</p>
+                <p className="text-xs text-inherit">{description}</p>
             </div>
         </div>
     );

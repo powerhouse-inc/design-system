@@ -21,6 +21,7 @@ export function Scope(props: Props) {
             containerClassName="bg-slate-50 text-gray-500 rounded-lg w-fit"
             menuClassName="min-w-0 text-gray-500"
             itemClassName="py-1 text-gray-500 grid grid-cols-[auto,auto] gap-1"
+            absolutePositionMenu
         />
     );
 }
