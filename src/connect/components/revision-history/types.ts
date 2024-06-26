@@ -48,9 +48,9 @@ export type Revision = {
     stateHash: string;
     operationType: string;
     operationInput: Record<string, any>;
-    address: `0x${string}`;
-    chainId: number;
+    address: `0x${string}` | undefined;
+    chainId: number | undefined;
     timestamp: number | string;
-    signatures: Signature[];
+    signatures: Signature[] | undefined;
     errors: string[] | undefined;
 };

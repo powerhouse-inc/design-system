@@ -42,6 +42,8 @@ export const mockOperations = [
     mockOperation,
     mockOperation,
     mockOperation,
+    { ...mockOperation, context: undefined },
+    mockOperation,
     {
         ...mockOperation,
         timestamp: '2024-06-14T14:39:12.936Z',
