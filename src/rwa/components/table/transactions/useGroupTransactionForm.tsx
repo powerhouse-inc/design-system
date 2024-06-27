@@ -17,6 +17,7 @@ import {
     makeFixedIncomeOptionLabel,
 } from '@/rwa';
 
+import { getIsTransaction } from '@/services/viem';
 import {
     ComponentPropsWithRef,
     ForwardedRef,
@@ -44,6 +45,7 @@ const TransactionReference = forwardRef(function TransactionReference(
     const maybeShortedValue = shouldShortenValue
         ? `${value.slice(0, maxLength)}...`
         : value;
+    const isTransaction = getIsTransaction(value);
 
     if (disabled)
         return (
@@ -52,7 +54,19 @@ const TransactionReference = forwardRef(function TransactionReference(
                     {maybeShortedValue}
                 </a>
                 {shouldShortenValue && (
-                    <Tooltip anchorSelect={`#${tooltipId}`}>{value}</Tooltip>
+                    <Tooltip anchorSelect={`#${tooltipId}`}>
+                        <p>{value}</p>
+                        {isTransaction && (
+                            <p className="mt-2 text-center">
+                                <a
+                                    className="text-blue-900 underline"
+                                    href={`https://etherscan.io/tx/${value}`}
+                                >
+                                    View on Etherscan
+                                </a>
+                            </p>
+                        )}
+                    </Tooltip>
                 )}
             </span>
         );
