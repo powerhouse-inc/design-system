@@ -5,7 +5,7 @@ import {
     Signature,
     SignatureArray,
     Skip,
-} from '../types';
+} from './types';
 
 export function makeRows(operations: Operation[]) {
     const revisionsAndSkips: (Revision | Skip | Day)[] = [];

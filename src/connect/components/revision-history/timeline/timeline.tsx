@@ -4,7 +4,7 @@ import { Revision } from '../revision';
 import { Skip } from '../skip';
 import { Operation, Scope } from '../types';
 import { makeRows } from '../utils';
-import { Day } from './revisions-on-date';
+import { Day } from './day';
 
 export type TimelineProps = {
     localOperations: Operation[];
