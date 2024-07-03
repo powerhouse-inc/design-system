@@ -15,6 +15,8 @@ export const Default: Story = {
         date: '2024-06-13T14:39:12.936Z',
         revisionsAndSkips: [
             {
+                type: 'revision',
+                height: 46,
                 operationIndex: 1,
                 eventId: '123',
                 stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
@@ -51,6 +53,8 @@ export const Default: Story = {
                 errors: [],
             },
             {
+                type: 'revision',
+                height: 46,
                 operationIndex: 2,
                 eventId: '123',
                 stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
@@ -87,6 +91,8 @@ export const Default: Story = {
                 errors: ['Data mismatch detected'],
             },
             {
+                type: 'revision',
+                height: 46,
                 operationIndex: 3,
                 eventId: '123',
                 stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
@@ -123,6 +129,8 @@ export const Default: Story = {
                 errors: ['Data mismatch detected'],
             },
             {
+                type: 'revision',
+                height: 46,
                 operationIndex: 6,
                 eventId: '123',
                 stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
@@ -159,6 +167,8 @@ export const Default: Story = {
                 errors: [],
             },
             {
+                type: 'revision',
+                height: 46,
                 operationIndex: 7,
                 eventId: '123',
                 stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
@@ -195,6 +205,8 @@ export const Default: Story = {
                 errors: ['Data mismatch detected'],
             },
             {
+                type: 'revision',
+                height: 46,
                 operationIndex: 8,
                 eventId: '123',
                 stateHash: 'wH041NamJQq3AHgk8tD/suXDDI=',
