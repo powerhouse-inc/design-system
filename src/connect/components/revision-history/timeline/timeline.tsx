@@ -31,8 +31,7 @@ export function Timeline(props: TimelineProps) {
     const rowVirtualizer = useVirtualizer({
         count: rows.length,
         getScrollElement: () => parentRef.current,
-        estimateSize: () => 46,
-        overscan: 5,
+        estimateSize: i => allRows[i].height,
         gap: 8,
     });
 
