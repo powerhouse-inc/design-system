@@ -1,5 +1,5 @@
+import { Tooltip } from '@/connect';
 import { Icon } from '@/powerhouse';
-import { Tooltip } from '../../tooltip/tooltip';
 
 export type OperationProps = {
     operationType: string;

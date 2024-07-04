@@ -1,8 +1,6 @@
-import { formatEthAddress } from '@/connect/utils';
+import { ENSAvatar, formatEthAddress, Tooltip } from '@/connect';
 import { Icon } from '@/powerhouse';
 import { useCopyToClipboard } from 'usehooks-ts';
-import { ENSAvatar } from '../../ens-avatar';
-import { Tooltip } from '../../tooltip';
 
 export type AddressProps = {
     address: `0x${string}` | undefined;

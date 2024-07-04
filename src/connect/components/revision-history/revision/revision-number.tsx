@@ -1,6 +1,6 @@
+import { Tooltip } from '@/connect';
 import { Icon } from '@/powerhouse';
 import { useCopyToClipboard } from 'usehooks-ts';
-import { Tooltip } from '../../tooltip';
 
 export type RevisionNumberProps = {
     operationIndex: number;
