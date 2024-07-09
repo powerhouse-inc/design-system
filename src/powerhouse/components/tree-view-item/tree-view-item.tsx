@@ -1,5 +1,5 @@
 import { DivProps } from '@/powerhouse';
-import { twMerge } from 'tailwind-merge';
+import { twJoin, twMerge } from 'tailwind-merge';
 import { Icon, TreeViewInput, TreeViewInputProps } from '..';
 
 export type TreeViewItemProps = DivProps &
@@ -17,6 +17,7 @@ export type TreeViewItemProps = DivProps &
         topIndicator?: React.ReactNode;
         bottomIndicator?: React.ReactNode;
         syncIcon?: React.ReactNode;
+        hasCaret?: boolean;
     };
 
 export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
@@ -35,6 +36,7 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
         bottomIndicator,
         level = 0,
         itemContainerProps = {},
+        hasCaret = true,
         ...divProps
     } = props;
 
@@ -74,14 +76,18 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                     style={{ paddingLeft: `${levelPadding}px` }}
                 >
                     {mode === 'read' ? (
-                        <div className="relative">
-                            <Icon
-                                name="caret"
-                                className={twMerge(
-                                    open && 'rotate-90',
-                                    'ease pointer-events-none transition delay-75',
-                                )}
-                            />
+                        <div
+                            className={twJoin('relative', !hasCaret && 'pl-4')}
+                        >
+                            {hasCaret && (
+                                <Icon
+                                    name="caret"
+                                    className={twMerge(
+                                        open && 'rotate-90',
+                                        'ease pointer-events-none transition delay-75',
+                                    )}
+                                />
+                            )}
                             {syncIcon}
                         </div>
                     ) : (

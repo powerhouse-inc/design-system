@@ -64,7 +64,7 @@ export const treeItems: Array<TreeItem> = [
         path: 'drive/folder2',
         label: 'Folder 2',
         type: 'FOLDER',
-        syncStatus: MISSING,
+        syncStatus: 'MISSING',
         availableOffline: false,
         expanded: false,
         isSelected: false,

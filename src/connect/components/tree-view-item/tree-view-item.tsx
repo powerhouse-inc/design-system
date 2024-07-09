@@ -10,10 +10,12 @@ import {
     LOCAL_DRIVE,
     PUBLIC_DRIVE,
     TreeItem,
+    UiNode,
     defaultDropdownMenuOptions,
     getIsMouseInsideContainer,
-    useGetDriveParent,
+    useItemsContext,
 } from '@/connect';
+import { driveItem } from '@/connect/hooks/tree-view/mocks';
 import {
     DivProps,
     Icon,
@@ -23,26 +25,20 @@ import {
 } from '@/powerhouse';
 import { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
-import {
-    getIsCloudDrive,
-    getIsDrive,
-    getIsPublicDrive,
-} from '../drive-view/utils';
+import { getIsCloudDrive, getIsPublicDrive } from '../drive-view/utils';
 import { SyncStatusIcon } from '../status-icon';
 
 export type ConnectTreeViewItemProps = {
-    item: TreeItem;
-    children: React.ReactNode;
-    mode?: 'read' | 'write';
-    onClick: MouseEventHandler<HTMLDivElement>;
-    onSubmitInput?: (item: TreeItem) => void;
-    onCancelInput?: (item: TreeItem) => void;
+    uiNode: UiNode;
+    onClick?: MouseEventHandler<HTMLDivElement>;
+    onSubmitInput?: (uiNode: TreeItem) => void;
+    onCancelInput?: (uiNode: TreeItem) => void;
     level?: number;
     divPropsDivProps?: DivProps;
     onDropEvent?: UseDraggableTargetProps<TreeItem>['onDropEvent'];
     onDropActivate?: (dropTargetItem: TreeItem) => void;
     defaultOptions?: ConnectDropdownMenuItem[];
-    onOptionsClick?: (item: TreeItem, option: string) => void;
+    onOptionsClick?: (uiNode: TreeItem, option: string) => void;
     itemContainerProps?: DivProps;
     disableDropBetween?: boolean;
     onDragStart?: UseDraggableTargetProps<TreeItem>['onDragStart'];
@@ -55,11 +51,10 @@ export type ConnectTreeViewItemProps = {
 
 export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
     const {
-        item,
+        uiNode,
         onClick,
         onSubmitInput,
         onCancelInput,
-        children,
         onDragEnd,
         onDragStart,
         onDropEvent,
@@ -75,29 +70,38 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         displaySyncFolderIcons = false,
         ...divProps
     } = props;
-
+    const {
+        selectedNode,
+        selectedDriveNode,
+        setSelectedNode,
+        getIsSelected,
+        getIsExpanded,
+    } = useItemsContext();
+    const [mode, setMode] = useState<'read' | 'write'>('read');
+    const [internalExpandedState, setInternalExpandedState] = useState(false);
     const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
     const [isDriveSettingsModalOpen, setIsDriveSettingsModalOpen] =
         useState(false);
     const [mouseIsWithinItemContainer, setMouseIsWithinItemContainer] =
         useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
-    const getDriveParent = useGetDriveParent();
+    const children = uiNode.kind !== 'file' ? uiNode.children : null;
+    const hasChildren = !!children && children.length > 0;
 
     const { dragProps, dropProps, isDropTarget, isDragging } =
         useDraggableTarget<TreeItem>({
             onDragEnd,
             onDragStart,
-            data: item,
+            data: uiNode,
             onDropEvent,
             onDropActivate: () => {
-                onDropActivate?.(item);
+                onDropActivate?.(uiNode);
             },
         });
 
     const { dropProps: dropDividerProps, isDropTarget: isDropDividerTarget } =
         useDraggableTarget({
-            data: item,
+            data: uiNode,
             onDropEvent,
             dropAfterItem: true,
         });
@@ -110,17 +114,18 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         };
     }, []);
 
-    const driveItem = getDriveParent(item.path);
-    const isSelected = item.isSelected;
-    const isWriteMode = props.mode === 'write';
+    const isSelected = getIsSelected(uiNode);
+    const isExpanded = isSelected
+        ? internalExpandedState
+        : getIsExpanded(uiNode);
+    const isWriteMode = mode === 'write';
     const showDropdownMenuButton = mouseIsWithinItemContainer && !isWriteMode;
-    const isDrive = getIsDrive(item);
-    const isCloudDrive = getIsCloudDrive(item);
+    const isDrive = uiNode.kind === 'drive';
+    const isCloudDrive = isDrive && uiNode.sharingType === 'cloud';
+    const isPublicDrive = isDrive && uiNode.sharingType === 'public';
     const isParentCloudDrive = driveItem ? getIsCloudDrive(driveItem) : false;
     const isParentPublicDrive = driveItem ? getIsPublicDrive(driveItem) : false;
-    const isPublicDrive = getIsPublicDrive(item);
-    const itemOptions =
-        item.options ?? (defaultOptions as ConnectDropdownMenuItem[]);
+    const itemOptions = defaultOptions as ConnectDropdownMenuItem[];
     const dropdownMenuItems = isDrive
         ? [
               {
@@ -172,39 +177,44 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
             setIsDriveSettingsModalOpen(true);
             return;
         }
-        onOptionsClick?.(item, option);
+        onOptionsClick?.(uiNode, option);
     }
 
     const onClickHandler: MouseEventHandler<HTMLDivElement> = event => {
-        if (props.mode === 'write') return;
-        onClick(event);
+        onClick?.(event);
+        if (mode === 'write') return;
+        if (isSelected) {
+            setInternalExpandedState(prevExpanded => !prevExpanded);
+            return;
+        }
+        setSelectedNode(uiNode);
     };
 
     function onSubmitHandler(value: string) {
-        onSubmitInput?.({ ...item, label: value });
+        onSubmitInput?.({ ...uiNode, label: value });
     }
 
     const driveSettingsFormSubmitHandler: DriveSettingsFormSubmitHandler =
         data => {
             onOptionsClick?.(
-                { ...item, label: data.driveName },
+                { ...uiNode, label: data.driveName },
                 'rename-drive',
             );
             onOptionsClick?.(
-                { ...item, sharingType: data.sharingType },
+                { ...uiNode, sharingType: data.sharingType },
                 'change-sharing-type',
             );
             onOptionsClick?.(
                 {
-                    ...item,
+                    ...uiNode,
                     availableOffline: data.availableOffline,
                 },
                 'change-availability',
             );
-            if (getIsPublicDrive(item)) {
+            if (getIsPublicDrive(uiNode)) {
                 onOptionsClick?.(
                     {
-                        ...item,
+                        ...uiNode,
                         icon: data.driveIcon,
                     } as DriveTreeItem,
                     'change-icon',
@@ -215,37 +225,52 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         };
 
     function onDeleteDriveHandler() {
-        onOptionsClick?.(item, 'delete-drive');
+        onOptionsClick?.(uiNode, 'delete-drive');
+    }
+
+    function handleClick(uiNode: UiNode) {
+        if (mode === 'write') return;
+        setSelectedNode(uiNode);
+        setInternalExpandedState(prevExpanded => !prevExpanded);
     }
 
     function onCancelHandler() {
-        onCancelInput?.(item);
+        onCancelInput?.(uiNode);
     }
     function getItemIcon() {
-        if (isPublicDrive && item.icon) {
+        return {
+            icon: (
+                <img
+                    src={uiNode.icon}
+                    className="size-7 object-contain"
+                    alt="drive icon"
+                />
+            ),
+        };
+        if (isPublicDrive && uiNode.icon) {
             return {
                 icon: (
                     <img
-                        src={item.icon}
+                        src={uiNode.icon}
                         className="size-7 object-contain"
                         alt="drive icon"
                     />
                 ),
             };
         }
-        switch (item.type) {
+        switch (uiNode.type) {
             case FOLDER:
                 return {
                     icon: (
                         <Icon
                             name="folder-close"
-                            className="text-gray-600 transition-colors group-hover/item:text-gray-900 group-aria-[selected=true]:text-gray-900"
+                            className="text-gray-600 transition-colors group-hover/uiNode:text-gray-900 group-aria-[selected=true]:text-gray-900"
                         />
                     ),
                     expandedIcon: (
                         <Icon
                             name="folder-open"
-                            className="text-gray-600 transition-colors group-hover/item:text-gray-900 group-aria-[selected=true]:text-gray-900"
+                            className="text-gray-600 transition-colors group-hover/uiNode:text-gray-900 group-aria-[selected=true]:text-gray-900"
                         />
                     ),
                 };
@@ -274,7 +299,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         itemContainerClassNameOverrides?: string,
     ) {
         const commonStyles =
-            'group/item rounded-lg py-3 pr-4 transition-colors text-gray-800';
+            'group/uiNode rounded-lg py-3 pr-4 transition-colors text-gray-800';
         const publicDriveHighlightStyles = 'bg-gray-300 text-gray-900';
         const otherHighlightStyles = 'bg-slate-50 text-gray-900';
         const highlightStyles = isChildOfPublicDrive
@@ -312,10 +337,10 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
     function statusIconOrDropdownMenuButton() {
         if (showDropdownMenuButton && isAllowedToCreateDocuments)
             return dropdownMenuButton;
-        if ((isCloudDrive || isPublicDrive) && item.syncStatus) {
+        if ((isCloudDrive || isPublicDrive) && uiNode.syncStatus) {
             return (
                 <SyncStatusIcon
-                    syncStatus={item.syncStatus}
+                    syncStatus={uiNode.syncStatus}
                     className="absolute right-2 top-4"
                 />
             );
@@ -326,11 +351,11 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         !isDrive &&
         displaySyncFolderIcons &&
         (isParentCloudDrive || isParentPublicDrive) &&
-        item.syncStatus ? (
+        uiNode.syncStatus ? (
             <div className="absolute bottom-[-3px] right-[-25px] size-3 rounded-full bg-white">
                 <div className="absolute left-[-2px] top-[-2px]">
                     <SyncStatusIcon
-                        syncStatus={item.syncStatus}
+                        syncStatus={uiNode.syncStatus}
                         overrideSyncIcons={{
                             SUCCESS: 'check-circle-fill',
                         }}
@@ -345,18 +370,36 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                 {...(onDropEvent && { ...dragProps, ...dropProps })}
                 bottomIndicator={!disableDropBetween && bottomIndicator}
                 level={level}
-                onClick={onClickHandler}
+                onClick={e => {
+                    e.stopPropagation();
+                    handleClick(uiNode);
+                }}
                 onSubmitInput={onSubmitHandler}
                 onCancelInput={onCancelHandler}
-                label={item.label}
-                open={item.expanded}
-                syncIcon={syncIcon}
+                label={uiNode.name}
+                open={isExpanded}
+                hasCaret={hasChildren}
                 itemContainerProps={getItemContainerProps()}
                 {...getItemIcon()}
                 {...divProps}
             >
-                {children}
+                {isExpanded &&
+                    hasChildren &&
+                    children.map(uiNode => (
+                        <ConnectTreeViewItem
+                            key={uiNode.id}
+                            {...(onDropEvent && { ...dragProps, ...dropProps })}
+                            uiNode={uiNode}
+                            level={level + 1}
+                            onSubmitInput={onSubmitInput}
+                            onCancelInput={onCancelInput}
+                            itemContainerProps={getItemContainerProps()}
+                            {...getItemIcon()}
+                            {...divProps}
+                        />
+                    ))}
             </TreeViewItem>
+
             {statusIconOrDropdownMenuButton()}
             {isAllowedToCreateDocuments && (
                 <ConnectDropdownMenu
@@ -376,12 +419,12 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
             {isDrive && isAllowedToCreateDocuments && (
                 <DriveSettingsModal
                     formProps={{
-                        driveName: item.label,
+                        driveName: uiNode.label,
                         // todo: make this required for drives
-                        sharingType: item.sharingType ?? 'PUBLIC',
-                        availableOffline: item.availableOffline,
+                        sharingType: uiNode.sharingType ?? 'PUBLIC',
+                        availableOffline: uiNode.availableOffline,
                         location:
-                            item.type === 'LOCAL_DRIVE' ? 'LOCAL' : 'CLOUD',
+                            uiNode.kind === 'LOCAL_DRIVE' ? 'LOCAL' : 'CLOUD',
                         onCancel() {
                             setIsDriveSettingsModalOpen(false);
                         },

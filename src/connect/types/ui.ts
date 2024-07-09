@@ -8,6 +8,7 @@ import {
     treeItemActions,
     treeItemTypes,
 } from '@/connect';
+import { SynchronizationUnit } from 'document-model/document';
 
 export type DriveTypes = typeof driveTypes;
 export type DriveType = DriveTypes[number];
@@ -24,6 +25,34 @@ export type SharingTypes = typeof sharingTypes;
 export type SharingType = SharingTypes[number];
 export type DriveLocations = typeof driveLocations;
 export type DriveLocation = DriveLocations[number];
+
+type FileNode = {
+    id: string;
+    name: string;
+    kind: 'file';
+    documentType: string;
+    parentFolder: string;
+    synchronizationUnits: SynchronizationUnit[];
+};
+
+type FolderNode = {
+    id: string;
+    name: string;
+    kind: 'folder';
+    parentFolder: string;
+    children: (FileNode | FolderNode)[];
+};
+
+type DriveNode = {
+    id: string;
+    name: string;
+    kind: 'drive';
+    type: 'local' | 'cloud' | 'public';
+    sharingType: 'private' | 'public' | 'shared';
+    availableOffline: boolean;
+    parentFolder: null;
+    children: (FileNode | FolderNode)[];
+};
 
 export type BaseTreeItem = {
     id: string;

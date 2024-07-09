@@ -3,7 +3,7 @@ import {
     AddPublicDriveInput,
     AddPublicDriveModal,
     CLOUD_DRIVE,
-    ConnectTreeView,
+    ConnectTreeViewItem,
     ConnectTreeViewItemProps,
     ConnectTreeViewProps,
     CreateDriveModal,
@@ -16,7 +16,7 @@ import {
     PUBLIC_DRIVE,
     SHARED,
     TreeItemType,
-    usePathContent,
+    UiDriveNode,
 } from '@/connect';
 import { Icon } from '@/powerhouse';
 import { useState } from 'react';
@@ -27,10 +27,8 @@ export interface DriveViewProps
         React.HTMLAttributes<HTMLDivElement>,
         'onDragEnd' | 'onDragStart'
     > {
-    type: DriveType;
-    name: string;
+    driveNode: UiDriveNode;
     defaultItemOptions?: ConnectTreeViewItemProps['defaultOptions'];
-    drivePath?: string;
     disableHighlightStyles?: boolean;
 
     isAllowedToCreateDocuments?: boolean;
@@ -62,9 +60,8 @@ const filterDriveByType = (drive: DriveTreeItem, type: DriveType) => {
 
 export function DriveView(props: DriveViewProps) {
     const {
+        driveNode,
         className,
-        type,
-        name,
         onDropEvent,
         onItemClick,
         onSubmitInput,
@@ -75,7 +72,6 @@ export function DriveView(props: DriveViewProps) {
         onDragEnd,
         onCancelInput,
         disableHighlightStyles,
-        drivePath = '/',
         onCreateDrive,
         disableAddDrives,
         isAllowedToCreateDocuments = true,
@@ -84,21 +80,16 @@ export function DriveView(props: DriveViewProps) {
     } = props;
     const [showAddModal, setShowAddModal] = useState(false);
 
-    const drives = usePathContent(drivePath) as DriveTreeItem[];
-
     const allowedTypes: TreeItemType[] = [
         CLOUD_DRIVE,
         FOLDER,
         LOCAL_DRIVE,
         PUBLIC_DRIVE,
     ];
-    const allowedDrives = drives
-        .filter(drive => filterDriveByType(drive, type))
-        .map(drive => drive.path);
 
-    const isPublicDrive = type === PUBLIC_DRIVE;
-    const isCloudDrive = type === CLOUD_DRIVE;
-    const isLocalDrive = type === LOCAL_DRIVE;
+    const isPublicDrive = driveNode.sharingType === 'public';
+    const isCloudDrive = driveNode.sharingType === 'cloud';
+    const isLocalDrive = driveNode.sharingType === 'local';
 
     return (
         <div
@@ -115,7 +106,7 @@ export function DriveView(props: DriveViewProps) {
                 )}
             >
                 <p className="text-sm font-medium leading-6 text-gray-500">
-                    {name}
+                    {driveNode.name}
                 </p>
                 <div className="size-4 text-gray-600">
                     {!disableAddDrives && isAllowedToCreateDocuments && (
@@ -134,8 +125,8 @@ export function DriveView(props: DriveViewProps) {
                 </div>
             </div>
             <>
-                <ConnectTreeView
-                    allowedPaths={allowedDrives}
+                <ConnectTreeViewItem
+                    uiNode={driveNode}
                     disableHighlightStyles={disableHighlightStyles}
                     onDragEnd={onDragEnd}
                     onDragStart={onDragStart}

@@ -1,121 +1,105 @@
 import {
-    BaseTreeItem,
+    driveToBaseItems,
     ItemsContextProvider,
-    SUCCESS,
-    generateMockDriveData,
-    useGetItemByPath,
-    useItemActions,
     useItemsContext,
 } from '@/connect';
+import {
+    makeMockDriveDocument,
+    mockNodes,
+} from '@/connect/utils/mocks/ui-drive-node';
 import { Meta, StoryObj } from '@storybook/react';
-import { useState } from 'react';
-import { BreadcrumbProps, Breadcrumbs, BreadcrumbsProps } from '.';
+import {
+    createContext,
+    ReactNode,
+    useContext,
+    useEffect,
+    useState,
+} from 'react';
+import { Breadcrumbs } from '.';
 
-const treeItems = generateMockDriveData({
-    path: 'drive',
-    label: 'Local Drive',
-    type: 'LOCAL_DRIVE',
-    expanded: false,
-    isSelected: false,
-    availableOffline: false,
-    syncStatus: SUCCESS,
+const MockNodesContext = createContext({
+    nodes: mockNodes,
+    setNodes: (_: typeof mockNodes) => {},
 });
+
+function MockNodesProvider({ children }: { children: ReactNode }) {
+    const [nodes, setNodes] = useState(mockNodes);
+    return (
+        <MockNodesContext.Provider value={{ nodes, setNodes }}>
+            {children}
+        </MockNodesContext.Provider>
+    );
+}
 
 const meta: Meta<typeof Breadcrumbs> = {
     title: 'Connect/Components/Breadcrumbs',
     component: Breadcrumbs,
     decorators: [
         Story => (
-            <ItemsContextProvider items={treeItems}>
+            <MockNodesProvider>
                 <Story />
-            </ItemsContextProvider>
+            </MockNodesProvider>
         ),
+        Story => {
+            const { nodes } = useContext(MockNodesContext);
+            const [driveNodes, setDriveNodes] = useState([
+                driveToBaseItems(makeMockDriveDocument(nodes)),
+            ]);
+
+            useEffect(() => {
+                setDriveNodes([driveToBaseItems(makeMockDriveDocument(nodes))]);
+            }, [nodes]);
+
+            return (
+                <ItemsContextProvider driveNodes={driveNodes}>
+                    <Story />
+                </ItemsContextProvider>
+            );
+        },
     ],
 };
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<{
+    nodes: typeof mockNodes;
+}>;
 
 export const Default: Story = {
     args: {
-        filterPath: '/folder1/folder1.2/folder1.2.1',
+        nodes: mockNodes,
     },
     render: function Wrapper(args) {
-        const [filterPath, setFilterPath] = useState(args.filterPath);
-        const getItemByPath = useGetItemByPath();
-        const actions = useItemActions();
-        const { setBaseItems } = useItemsContext();
+        const { nodes, setNodes } = useContext(MockNodesContext);
+        const { setSelectedNode, selectedNode } = useItemsContext();
 
-        const onItemClickHandler: BreadcrumbProps['onClick'] = (
-            e,
-            selectedPath,
-        ) => {
-            args.onItemClick?.(e, selectedPath);
+        useEffect(() => {
+            setSelectedNode(mockNodes.at(-1));
+        }, []);
 
-            const item = getItemByPath(selectedPath);
-            if (item) actions.setSelectedItem(item.id);
-            setFilterPath(selectedPath);
-        };
+        function onSubmitNewFolder(name: string) {
+            if (!selectedNode) return;
 
-        const onCancelInputHandler: BreadcrumbsProps['onCancelInput'] =
-            basepath => {
-                args.onCancelInput(basepath);
-
-                // delete virtual item if was created previously on this path
-                const item = getItemByPath(`${basepath}/new-folder`);
-                if (item) actions.deleteVirtualItem(item.id);
+            const newFolderNode = {
+                driveId:
+                    selectedNode.kind === 'drive'
+                        ? selectedNode.id
+                        : selectedNode.driveId,
+                id: `new-folder-${Math.floor(Math.random() * 1000)}`,
+                kind: 'folder' as const,
+                name,
+                parentFolder: selectedNode.id,
+                children: [],
             };
 
-        const onSubmitInputHandler: BreadcrumbsProps['onSubmitInput'] = (
-            basepath,
-            label,
-        ) => {
-            args.onSubmitInput(basepath, label);
+            setNodes([...nodes, newFolderNode]);
 
-            const newItem: BaseTreeItem = {
-                id: 'new-item-id',
-                parentFolder: basepath,
-                path: `${basepath}/${label}`,
-                label,
-                type: 'FOLDER',
-                availableOffline: false,
-                syncStatus: SUCCESS,
-            };
-
-            setBaseItems(prev => [...prev, newItem]);
-            actions.setSelectedItem(newItem.id);
-            setFilterPath(newItem.path);
-        };
-
-        const onAddNewItemHandler: BreadcrumbsProps['onAddNewItem'] = (
-            basePath,
-            option,
-        ) => {
-            args.onAddNewItem(basePath, option);
-
-            actions.newVirtualItem({
-                id: 'new-folder',
-                parentFolder: basePath,
-                path: `${basePath}/new-folder`,
-                label: option,
-                type: 'FOLDER',
-                action: 'NEW',
-                availableOffline: false,
-                syncStatus: SUCCESS,
-            });
-        };
+            setSelectedNode(newFolderNode);
+        }
 
         return (
             <div className="bg-white p-10">
-                <Breadcrumbs
-                    {...args}
-                    filterPath={filterPath}
-                    onItemClick={onItemClickHandler}
-                    onAddNewItem={onAddNewItemHandler}
-                    onSubmitInput={onSubmitInputHandler}
-                    onCancelInput={onCancelInputHandler}
-                />
+                <Breadcrumbs {...args} onSubmitNewFolder={onSubmitNewFolder} />
             </div>
         );
     },

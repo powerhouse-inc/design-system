@@ -2,16 +2,17 @@ import {
     ConnectTreeViewItem,
     ConnectTreeViewItemProps,
     TreeItem,
-    TreeItemType,
-    usePathContent,
+    UiNode,
 } from '@/connect';
 import { twMerge } from 'tailwind-merge';
+import { mode } from 'viem/chains';
 
 export interface ConnectTreeViewProps
     extends Omit<
         React.HTMLAttributes<HTMLElement>,
         'onClick' | 'onDragStart' | 'onDragEnd'
     > {
+    uiNode: UiNode;
     onItemClick?: (
         event: React.MouseEvent<HTMLDivElement>,
         item: TreeItem,
@@ -25,10 +26,7 @@ export interface ConnectTreeViewProps
     onDragStart?: ConnectTreeViewItemProps['onDragStart'];
     onDragEnd?: ConnectTreeViewItemProps['onDragEnd'];
     disableHighlightStyles?: boolean;
-    filterPath?: string;
     level?: number;
-    allowedPaths?: string[];
-    allowedTypes?: TreeItemType[];
     isAllowedToCreateDocuments?: boolean;
     isChildOfPublicDrive?: boolean;
     displaySyncFolderIcons?: boolean;
@@ -36,70 +34,63 @@ export interface ConnectTreeViewProps
 
 export function ConnectTreeView(props: ConnectTreeViewProps) {
     const {
+        uiNode,
         onItemClick,
         onDropEvent,
         defaultItemOptions,
         onItemOptionsClick,
         onSubmitInput = () => {},
         onCancelInput = () => {},
-        filterPath,
         level = 0,
-        allowedPaths,
-        allowedTypes,
         isAllowedToCreateDocuments = true,
         isChildOfPublicDrive = false,
         ...elementProps
     } = props;
 
-    const items = usePathContent(filterPath, allowedPaths, allowedTypes);
-
     const { defaultItemOptions: _, ...childrenProps } = props;
 
-    const hasItems = items.length > 0;
+    const children = uiNode.kind !== 'file' ? uiNode.children : null;
+    const hasChildren = children && children.length > 0;
 
     return (
         <div
             className={twMerge(
                 'text-gray-800',
-                level === 0 && hasItems && 'py-2',
+                level === 0 && hasChildren && 'py-2',
             )}
         >
-            {items.map(item => {
-                const mode =
-                    item.action === 'NEW' ||
-                    item.action === 'UPDATE' ||
-                    item.action === 'UPDATE_AND_COPY' ||
-                    item.action === 'UPDATE_AND_MOVE'
-                        ? 'write'
-                        : 'read';
-
-                return (
-                    <ConnectTreeViewItem
-                        mode={mode}
-                        item={item}
-                        level={level}
-                        key={item.id}
-                        onSubmitInput={onSubmitInput}
-                        onCancelInput={onCancelInput}
-                        onDropEvent={onDropEvent}
-                        onOptionsClick={onItemOptionsClick}
-                        defaultOptions={defaultItemOptions}
-                        onClick={e => onItemClick?.(e, item)}
-                        disableDropBetween={level === 0 && !item.expanded}
-                        isAllowedToCreateDocuments={isAllowedToCreateDocuments}
-                        isChildOfPublicDrive={isChildOfPublicDrive}
-                        {...elementProps}
-                    >
-                        {item.expanded && (
-                            <ConnectTreeView
-                                {...childrenProps}
-                                level={level + 1}
-                                filterPath={item.path}
-                            />
-                        )}
-                    </ConnectTreeViewItem>
-                );
-            })}
+            {isExpanded &&
+                hasChildren &&
+                children.map(item => {
+                    return (
+                        <ConnectTreeViewItem
+                            mode={mode}
+                            item={item}
+                            level={level}
+                            key={item.id}
+                            onSubmitInput={onSubmitInput}
+                            onCancelInput={onCancelInput}
+                            onDropEvent={onDropEvent}
+                            onOptionsClick={onItemOptionsClick}
+                            defaultOptions={defaultItemOptions}
+                            onClick={e => onItemClick?.(e, item)}
+                            disableDropBetween={level === 0 && !item.expanded}
+                            isAllowedToCreateDocuments={
+                                isAllowedToCreateDocuments
+                            }
+                            isChildOfPublicDrive={isChildOfPublicDrive}
+                            {...elementProps}
+                        >
+                            {item.expanded && (
+                                <ConnectTreeView
+                                    {...childrenProps}
+                                    level={level + 1}
+                                    filterPath={item.path}
+                                />
+                            )}
+                        </ConnectTreeViewItem>
+                    );
+                })}
         </div>
     );
 }
