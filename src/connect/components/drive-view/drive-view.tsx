@@ -2,17 +2,12 @@ import {
     AddDriveInput,
     AddPublicDriveInput,
     AddPublicDriveModal,
-    CLOUD_DRIVE,
     ConnectTreeViewItem,
     ConnectTreeViewProps,
     CreateDriveModal,
-    FOLDER,
     LOCAL,
-    LOCAL_DRIVE,
     PUBLIC,
-    PUBLIC_DRIVE,
     SHARED,
-    TreeItemType,
     UiDriveNode,
     UiNode,
 } from '@/connect';
@@ -58,13 +53,6 @@ export function DriveView(props: DriveViewProps) {
         ...restProps
     } = props;
     const [showAddModal, setShowAddModal] = useState(false);
-
-    const allowedTypes: TreeItemType[] = [
-        CLOUD_DRIVE,
-        FOLDER,
-        LOCAL_DRIVE,
-        PUBLIC_DRIVE,
-    ];
 
     const isPublicDrive = driveNode.sharingType === 'public';
     const isCloudDrive = driveNode.sharingType === 'cloud';

@@ -360,7 +360,8 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                     <>
                         {mode === 'create' && (
                             <TreeViewItem
-                                label="New Folder"
+                                name="New Folder"
+                                content="New Folder"
                                 isWriteMode={true}
                                 level={level + 1}
                                 icon={

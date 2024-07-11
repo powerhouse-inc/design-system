@@ -1,57 +1,16 @@
-import {
-    ItemsContextProvider,
-    makeDriveNode,
-    useItemsContext,
-} from '@/connect';
-import {
-    makeMockDriveDocument,
-    mockNodes,
-} from '@/connect/utils/mocks/ui-drive-node';
+import { ItemsContextProvider, useItemsContext } from '@/connect';
+import { driveNodes } from '@/connect/hooks/tree-view/mocks';
 import { Meta, StoryObj } from '@storybook/react';
-import {
-    createContext,
-    ReactNode,
-    useContext,
-    useEffect,
-    useState,
-} from 'react';
+import { useEffect } from 'react';
 import { Breadcrumbs } from '.';
-
-const MockNodesContext = createContext({
-    nodes: mockNodes,
-    setNodes: (_: typeof mockNodes) => {},
-});
-
-function MockNodesProvider({ children }: { children: ReactNode }) {
-    const [nodes, setNodes] = useState(mockNodes);
-    return (
-        <MockNodesContext.Provider value={{ nodes, setNodes }}>
-            {children}
-        </MockNodesContext.Provider>
-    );
-}
 
 const meta: Meta<typeof Breadcrumbs> = {
     title: 'Connect/Components/Breadcrumbs',
     component: Breadcrumbs,
     decorators: [
-        Story => (
-            <MockNodesProvider>
-                <Story />
-            </MockNodesProvider>
-        ),
         Story => {
-            const { nodes } = useContext(MockNodesContext);
-            const [driveNodes, setDriveNodes] = useState([
-                makeDriveNode(makeMockDriveDocument(nodes)),
-            ]);
-
-            useEffect(() => {
-                setDriveNodes([makeDriveNode(makeMockDriveDocument(nodes))]);
-            }, [nodes]);
-
             return (
-                <ItemsContextProvider driveNodes={driveNodes}>
+                <ItemsContextProvider>
                     <Story />
                 </ItemsContextProvider>
             );
@@ -61,20 +20,23 @@ const meta: Meta<typeof Breadcrumbs> = {
 
 export default meta;
 
-type Story = StoryObj<{
-    nodes: typeof mockNodes;
-}>;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-    args: {
-        nodes: mockNodes,
-    },
     render: function Wrapper(args) {
-        const { nodes, setNodes } = useContext(MockNodesContext);
-        const { setSelectedNode, selectedNode } = useItemsContext();
+        const {
+            setDriveNodes,
+            setSelectedNode,
+            selectedNode,
+            selectedDriveNode,
+        } = useItemsContext();
 
         useEffect(() => {
-            setSelectedNode(mockNodes.at(-1));
+            setDriveNodes(driveNodes);
+        }, []);
+
+        useEffect(() => {
+            setSelectedNode(driveNodes[0].children[0]);
         }, []);
 
         function onSubmitNewFolder(name: string) {
@@ -92,8 +54,16 @@ export const Default: Story = {
                 children: [],
             };
 
-            setNodes([...nodes, newFolderNode]);
-
+            setDriveNodes([
+                {
+                    ...selectedDriveNode!,
+                    children: [...selectedDriveNode!.children, newFolderNode],
+                    nodeMap: {
+                        ...selectedDriveNode!.nodeMap,
+                        [newFolderNode.id]: newFolderNode,
+                    },
+                },
+            ]);
             setSelectedNode(newFolderNode);
         }
 

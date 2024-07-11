@@ -1,23 +1,32 @@
 import { SyncStatus } from '@/connect';
 import { Maybe, Scalars, SynchronizationUnit } from 'document-model/document';
-import { createContext, FC, ReactNode, useContext, useState } from 'react';
+import {
+    createContext,
+    Dispatch,
+    FC,
+    ReactNode,
+    SetStateAction,
+    useContext,
+    useEffect,
+    useState,
+} from 'react';
 
 export interface TreeItemContext {
-    driveNodes: UiDriveNode[] | null;
     selectedNode: UiNode | null;
     selectedNodePath: UiNode[];
     selectedDriveNode: UiDriveNode | null;
-    setSelectedNode: (node: UiNode | null) => void;
+    setDriveNodes: Dispatch<SetStateAction<UiDriveNode[]>>;
+    setSelectedNode: Dispatch<SetStateAction<UiNode | null>>;
     getIsSelected: (node: UiNode) => boolean;
     getIsExpanded: (node: UiNode) => boolean;
     getSiblings: (node: UiNode) => UiNode[];
 }
 
 const defaultTreeItemContextValue: TreeItemContext = {
-    driveNodes: null,
     selectedNode: null,
     selectedNodePath: [],
     selectedDriveNode: null,
+    setDriveNodes: () => {},
     setSelectedNode: () => {},
     getIsSelected: () => false,
     getIsExpanded: () => false,
@@ -29,36 +38,44 @@ export const ItemsContext = createContext<TreeItemContext>(
 );
 
 export interface ItemsContextProviderProps {
-    driveNodes: UiDriveNode[];
     children: ReactNode;
 }
 
 export const ItemsContextProvider: FC<ItemsContextProviderProps> = ({
     children,
-    driveNodes,
 }) => {
-    const [selectedNode, _setSelectedNode] = useState<UiNode | null>(null);
+    const [driveNodes, setDriveNodes] = useState<UiDriveNode[]>([]);
+    const [selectedNode, setSelectedNode] = useState<UiNode | null>(null);
     const [selectedNodePath, setSelectedNodePath] = useState<UiNode[]>([]);
-    const selectedDriveNode = getSelectedDriveNode();
+    const [selectedDriveNode, setSelectedDriveNode] =
+        useState<UiDriveNode | null>(null);
 
-    function setSelectedNode(node: UiNode | null) {
-        if (node === null) {
-            _setSelectedNode(null);
+    useEffect(() => {
+        function getSelectedDriveNode() {
+            if (!selectedNode) return null;
+
+            if (selectedNode.kind === 'drive') return selectedNode;
+
+            return driveNodes.find(d => d.id === selectedNode.driveId) ?? null;
+        }
+
+        setSelectedDriveNode(getSelectedDriveNode());
+
+        if (selectedNode === null) {
             setSelectedNodePath([]);
             return;
         }
 
-        _setSelectedNode(node);
-
-        if (node.kind === 'drive') {
-            setSelectedNodePath([node]);
+        if (selectedNode.kind === 'drive') {
+            setSelectedNodePath([selectedNode]);
             return;
         }
 
         const newSelectedNodePath: UiNode[] = [];
-        const driveNode = driveNodes.find(d => d.id === node.driveId);
 
-        let current: UiNode | undefined = node;
+        const driveNode = driveNodes.find(d => d.id === selectedNode.driveId);
+
+        let current: UiNode | undefined = selectedNode;
 
         while (current) {
             newSelectedNodePath.push(current);
@@ -71,7 +88,7 @@ export const ItemsContextProvider: FC<ItemsContextProviderProps> = ({
         }
 
         setSelectedNodePath(newSelectedNodePath.reverse());
-    }
+    }, [selectedNode, driveNodes]);
 
     function getIsSelected(node: UiNode) {
         return selectedNode === node;
@@ -100,21 +117,13 @@ export const ItemsContextProvider: FC<ItemsContextProviderProps> = ({
         return parent?.children ?? [];
     }
 
-    function getSelectedDriveNode() {
-        if (!selectedNode) return null;
-
-        if (selectedNode.kind === 'drive') return selectedNode;
-
-        return driveNodes.find(d => d.id === selectedNode.driveId) ?? null;
-    }
-
     return (
         <ItemsContext.Provider
             value={{
-                driveNodes,
                 selectedNode,
                 selectedNodePath,
                 selectedDriveNode,
+                setDriveNodes,
                 setSelectedNode,
                 getIsSelected,
                 getIsExpanded,

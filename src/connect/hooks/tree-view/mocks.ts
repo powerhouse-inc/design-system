@@ -1,94 +1,34 @@
-import { MISSING, TreeItem } from '@/connect';
+import { makeDriveNode } from '@/connect/context';
+import { makeMockDriveDocument } from '@/connect/utils/mocks/ui-drive-node';
 
-export const driveItem: TreeItem = {
-    id: 'drive',
-    path: 'drive',
-    parentFolder: null,
-    label: 'Local Drive',
-    type: 'LOCAL_DRIVE',
-    expanded: false,
-    isSelected: false,
-    syncStatus: 'SUCCESS',
-    availableOffline: false,
-};
+export const localDrive = makeDriveNode(
+    makeMockDriveDocument({
+        global: {
+            id: 'local-drive',
+            name: 'Local drive',
+        },
+        local: { sharingType: 'local', availableOffline: false },
+    }),
+);
 
-export const treeItems: Array<TreeItem> = [
-    driveItem,
-    {
-        id: 'folder1',
-        parentFolder: null,
-        path: 'drive/folder1',
-        label: 'Folder 1',
-        type: 'FOLDER',
-        syncStatus: 'SYNCING',
-        availableOffline: false,
-        expanded: false,
-        isSelected: false,
-    },
-    {
-        id: 'folder1.1',
-        parentFolder: 'folder1',
-        path: 'drive/folder1/folder1.1',
-        label: 'Folder 1.1',
-        type: 'FOLDER',
-        syncStatus: 'SYNCING',
-        availableOffline: false,
-        expanded: false,
-        isSelected: false,
-    },
-    {
-        id: 'folder1.2',
-        parentFolder: 'folder1',
-        path: 'drive/folder1/folder1.2',
-        label: 'Folder 1.2',
-        type: 'FOLDER',
-        syncStatus: 'SYNCING',
-        availableOffline: true,
-        expanded: false,
-        isSelected: false,
-    },
-    {
-        id: 'folder1.2.1',
-        parentFolder: 'folder1.2',
-        path: 'drive/folder1/folder1.2/folder1.2.1',
-        label: 'Folder 1.2.1',
-        type: 'FOLDER',
-        syncStatus: 'SYNCING',
-        availableOffline: true,
-        expanded: false,
-        isSelected: false,
-    },
-    {
-        id: 'folder2',
-        parentFolder: null,
-        path: 'drive/folder2',
-        label: 'Folder 2',
-        type: 'FOLDER',
-        syncStatus: 'MISSING',
-        availableOffline: false,
-        expanded: false,
-        isSelected: false,
-    },
-    {
-        id: 'folder2.1',
-        parentFolder: 'folder2',
-        path: 'drive/folder2/folder2.1',
-        label: 'Folder 2.1',
-        type: 'FOLDER',
-        syncStatus: 'SUCCESS',
-        availableOffline: true,
-        expanded: false,
-        isSelected: false,
-    },
-    {
-        id: 'folder3',
-        parentFolder: null,
-        path: 'drive/folder3',
-        label: 'Folder 3',
-        type: 'FOLDER',
-        syncStatus: 'SUCCESS',
-        availableOffline: false,
-        expanded: false,
-        isSelected: false,
-    },
-];
+export const publicDrive = makeDriveNode(
+    makeMockDriveDocument({
+        global: {
+            id: 'public-drive',
+            name: 'Public drive',
+        },
+        local: { sharingType: 'public', availableOffline: true },
+    }),
+);
+
+export const cloudDrive = makeDriveNode(
+    makeMockDriveDocument({
+        global: {
+            id: 'cloud-drive',
+            name: 'Cloud drive',
+        },
+        local: { sharingType: 'cloud', availableOffline: true },
+    }),
+);
+
+export const driveNodes = [localDrive, publicDrive, cloudDrive];

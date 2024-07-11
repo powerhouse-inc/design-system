@@ -1,47 +1,15 @@
-import { defaultDropdownMenuOptions } from '@/connect';
-import { makeMockDriveDocument } from '@/connect/utils/mocks/ui-drive-node';
+import {
+    cloudDrive,
+    localDrive,
+    publicDrive,
+} from '@/connect/hooks/tree-view/mocks';
 import type { Meta, StoryObj } from '@storybook/react';
+import { useEffect } from 'react';
 import {
     ItemsContextProvider,
-    makeDriveNode,
+    useItemsContext,
 } from '../../context/ItemsContext';
 import { DriveView } from './drive-view';
-
-const filteredDriveOptions = defaultDropdownMenuOptions.filter(
-    option => option.id !== 'delete',
-);
-
-const localDrive = makeDriveNode(
-    makeMockDriveDocument({
-        global: {
-            id: 'local-drive',
-            name: 'Local drive',
-        },
-        local: { sharingType: 'local', availableOffline: false },
-    }),
-);
-
-const publicDrive = makeDriveNode(
-    makeMockDriveDocument({
-        global: {
-            id: 'public-drive',
-            name: 'Public drive',
-        },
-        local: { sharingType: 'public', availableOffline: true },
-    }),
-);
-
-const cloudDrive = makeDriveNode(
-    makeMockDriveDocument({
-        global: {
-            id: 'cloud-drive',
-            name: 'Cloud drive',
-        },
-        local: { sharingType: 'cloud', availableOffline: true },
-    }),
-);
-
-const driveNodes = [localDrive, publicDrive, cloudDrive];
 
 const meta: Meta<typeof DriveView> = {
     title: 'Connect/Components/DriveView',
@@ -51,7 +19,7 @@ const meta: Meta<typeof DriveView> = {
     },
     decorators: [
         Story => (
-            <ItemsContextProvider driveNodes={driveNodes}>
+            <ItemsContextProvider>
                 <div className="w-[420px] bg-gray-50 p-10">
                     <Story />
                 </div>
@@ -63,19 +31,32 @@ const meta: Meta<typeof DriveView> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const Template: Story = {
+    render: function Wrapper(args) {
+        const { setDriveNodes } = useItemsContext();
+        useEffect(() => {
+            setDriveNodes([args.driveNode]);
+        }, []);
+        return <DriveView {...args} />;
+    },
+};
+
 export const Public: Story = {
+    ...Template,
     args: {
         driveNode: publicDrive,
     },
 };
 
 export const Cloud: Story = {
+    ...Template,
     args: {
         driveNode: cloudDrive,
     },
 };
 
 export const Local: Story = {
+    ...Template,
     args: {
         driveNode: localDrive,
     },
