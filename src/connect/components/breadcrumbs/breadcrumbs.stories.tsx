@@ -1,6 +1,6 @@
 import {
-    driveToBaseItems,
     ItemsContextProvider,
+    makeDriveNode,
     useItemsContext,
 } from '@/connect';
 import {
@@ -43,11 +43,11 @@ const meta: Meta<typeof Breadcrumbs> = {
         Story => {
             const { nodes } = useContext(MockNodesContext);
             const [driveNodes, setDriveNodes] = useState([
-                driveToBaseItems(makeMockDriveDocument(nodes)),
+                makeDriveNode(makeMockDriveDocument(nodes)),
             ]);
 
             useEffect(() => {
-                setDriveNodes([driveToBaseItems(makeMockDriveDocument(nodes))]);
+                setDriveNodes([makeDriveNode(makeMockDriveDocument(nodes))]);
             }, [nodes]);
 
             return (

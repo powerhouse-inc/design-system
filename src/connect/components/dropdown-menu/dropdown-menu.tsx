@@ -4,8 +4,9 @@ import { twMerge } from 'tailwind-merge';
 
 export interface ConnectDropdownMenuItem {
     id: string;
-    icon?: React.JSX.Element;
     label: string;
+    handler: () => void;
+    icon?: React.JSX.Element;
     className?: string;
 }
 

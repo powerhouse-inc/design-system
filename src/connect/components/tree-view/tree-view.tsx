@@ -1,7 +1,6 @@
 import {
     ConnectTreeViewItem,
     ConnectTreeViewItemProps,
-    TreeItem,
     UiNode,
 } from '@/connect';
 import { twMerge } from 'tailwind-merge';
@@ -15,13 +14,9 @@ export interface ConnectTreeViewProps
     uiNode: UiNode;
     onItemClick?: (
         event: React.MouseEvent<HTMLDivElement>,
-        item: TreeItem,
+        item: UiNode,
     ) => void;
-    onItemOptionsClick?: ConnectTreeViewItemProps['onOptionsClick'];
     onDropEvent?: ConnectTreeViewItemProps['onDropEvent'];
-    defaultItemOptions?: ConnectTreeViewItemProps['defaultOptions'];
-    onSubmitInput?: ConnectTreeViewItemProps['onSubmitInput'];
-    onCancelInput?: ConnectTreeViewItemProps['onCancelInput'];
     onDropActivate?: ConnectTreeViewItemProps['onDropActivate'];
     onDragStart?: ConnectTreeViewItemProps['onDragStart'];
     onDragEnd?: ConnectTreeViewItemProps['onDragEnd'];

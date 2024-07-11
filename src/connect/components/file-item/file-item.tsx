@@ -23,7 +23,7 @@ import React, { useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { SyncStatusIcon } from '../status-icon';
 
-const iconMap = {
+export const iconMap = {
     legal: LegalImg,
     global: GlobalImg,
     profile: ProfileImg,

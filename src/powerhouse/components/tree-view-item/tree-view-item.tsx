@@ -4,8 +4,9 @@ import { Icon, TreeViewInput, TreeViewInputProps } from '..';
 
 export type TreeViewItemProps = DivProps &
     Partial<TreeViewInputProps> & {
-        label: string;
-        mode?: 'read' | 'write';
+        name: string;
+        content: JSX.Element;
+        isWriteMode?: boolean;
         children?: React.ReactNode;
         open?: boolean;
         onOptionsClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
@@ -23,8 +24,9 @@ export type TreeViewItemProps = DivProps &
 export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
     const {
         open,
-        label,
-        mode = 'read',
+        name,
+        content,
+        isWriteMode,
         onClick,
         onSubmitInput,
         onCancelInput,
@@ -49,12 +51,12 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
     const levelPadding = level * 10;
 
     const inputProps = {
-        defaultValue: label,
+        defaultValue: name,
         onSubmitInput,
         onCancelInput,
     };
 
-    const content = mode === 'read' ? label : <TreeViewInput {...inputProps} />;
+    const _content = isWriteMode ? <TreeViewInput {...inputProps} /> : content;
 
     return (
         <div {...divProps}>
@@ -75,7 +77,9 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                     className="flex w-full cursor-pointer items-center"
                     style={{ paddingLeft: `${levelPadding}px` }}
                 >
-                    {mode === 'read' ? (
+                    {isWriteMode ? (
+                        <span className="inline-block size-6" />
+                    ) : (
                         <div
                             className={twJoin('relative', !hasCaret && 'pl-4')}
                         >
@@ -90,8 +94,6 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                             )}
                             {syncIcon}
                         </div>
-                    ) : (
-                        <span className="inline-block size-6" />
                     )}
                     {icon && (
                         <span className="pointer-events-none mr-2">
@@ -99,7 +101,7 @@ export const TreeViewItem: React.FC<TreeViewItemProps> = props => {
                         </span>
                     )}
                     <div className="w-full cursor-pointer truncate">
-                        {content}
+                        {_content}
                     </div>
                 </div>
                 {bottomIndicator && (

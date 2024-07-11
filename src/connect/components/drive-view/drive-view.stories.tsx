@@ -2,8 +2,8 @@ import { defaultDropdownMenuOptions } from '@/connect';
 import { makeMockDriveDocument } from '@/connect/utils/mocks/ui-drive-node';
 import type { Meta, StoryObj } from '@storybook/react';
 import {
-    driveToBaseItems,
     ItemsContextProvider,
+    makeDriveNode,
 } from '../../context/ItemsContext';
 import { DriveView } from './drive-view';
 
@@ -11,7 +11,7 @@ const filteredDriveOptions = defaultDropdownMenuOptions.filter(
     option => option.id !== 'delete',
 );
 
-const localDrive = driveToBaseItems(
+const localDrive = makeDriveNode(
     makeMockDriveDocument({
         global: {
             id: 'local-drive',
@@ -21,7 +21,7 @@ const localDrive = driveToBaseItems(
     }),
 );
 
-const publicDrive = driveToBaseItems(
+const publicDrive = makeDriveNode(
     makeMockDriveDocument({
         global: {
             id: 'public-drive',
@@ -31,7 +31,7 @@ const publicDrive = driveToBaseItems(
     }),
 );
 
-const cloudDrive = driveToBaseItems(
+const cloudDrive = makeDriveNode(
     makeMockDriveDocument({
         global: {
             id: 'cloud-drive',

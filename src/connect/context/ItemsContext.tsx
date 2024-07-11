@@ -137,7 +137,7 @@ export type FileNode = {
     kind: Scalars['String']['output'];
     name: Scalars['String']['output'];
     parentFolder: Maybe<Scalars['String']['output']>;
-    synchronizationUnits: Array<SynchronizationUnit>;
+    synchronizationUnits: SynchronizationUnit[];
 };
 
 export type FolderNode = {
@@ -154,7 +154,7 @@ export type UiFileNode = {
     documentType: string;
     parentFolder: string;
     driveId: string;
-    syncStatus: SyncStatus;
+    syncStatus: SyncStatus | undefined;
 };
 
 export type UiFolderNode = {
@@ -175,9 +175,10 @@ export type UiDriveNode = {
     id: string;
     name: string;
     parentFolder: null;
+    driveId: string;
     children: UiNode[];
     nodeMap: Record<string, UiNode>;
-    syncStatus: SyncStatus;
+    syncStatus: SyncStatus | undefined;
     sharingType: SharingType;
     availableOffline: boolean;
     icon: string | null;
@@ -198,7 +199,20 @@ export type DocumentDriveDocument = {
     };
 };
 
-export function driveToBaseItems(drive: DocumentDriveDocument) {
+function getSyncStatus(
+    syncId: string,
+    type: 'local' | 'cloud' | 'public',
+): SyncStatus | undefined {
+    if (type === 'local') return;
+    try {
+        return 'SUCCESS';
+    } catch (error) {
+        console.error(error);
+        return 'ERROR';
+    }
+}
+
+export function makeDriveNode(drive: DocumentDriveDocument) {
     const { id, name, icon } = drive.state.global;
     const { sharingType, availableOffline } = drive.state.local;
     const driveNode: UiDriveNode = {
@@ -208,25 +222,27 @@ export function driveToBaseItems(drive: DocumentDriveDocument) {
         children: [],
         nodeMap: {},
         sharingType,
-        syncStatus: 'SUCCESS',
+        syncStatus: getSyncStatus(id, sharingType),
         availableOffline,
         icon,
         parentFolder: null,
+        driveId: id,
     };
 
-    const _nodes = drive.state.global.nodes;
-
-    const nodes: (UiFileNode | UiFolderNode)[] = _nodes.map(n => {
+    const nodes = drive.state.global.nodes.map(n => {
         const node = {
             ...n,
             driveId: id,
             parentFolder: n.parentFolder || id,
         };
 
-        if (node.kind === 'file') {
+        if (node.kind === 'file' && 'synchronizationUnits' in node) {
             return {
                 ...node,
-                syncStatus: 'SUCCESS',
+                syncStatus: getSyncStatus(
+                    node.synchronizationUnits[0].syncId,
+                    sharingType,
+                ),
             } as UiFileNode;
         }
 

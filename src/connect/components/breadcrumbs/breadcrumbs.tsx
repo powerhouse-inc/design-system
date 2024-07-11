@@ -15,17 +15,21 @@ export type BreadcrumbsProps = DivProps & {
 export function Breadcrumbs(props: BreadcrumbsProps) {
     const { onSubmitNewFolder } = props;
     const { selectedNodePath } = useItemsContext();
-    const [isAddingNewItem, setIsAddingNewItem] = useState(false);
+    const [isAddingNewItem, setIsAddingNewFolder] = useState(false);
 
     const { isAllowedToCreateDocuments = true } = props;
 
     function onAddNew() {
-        setIsAddingNewItem(true);
+        setIsAddingNewFolder(true);
     }
 
     function onSubmit(name: string) {
         onSubmitNewFolder(name);
-        setIsAddingNewItem(false);
+        setIsAddingNewFolder(false);
+    }
+
+    function onCancel() {
+        setIsAddingNewFolder(false);
     }
 
     return (
@@ -45,7 +49,7 @@ export function Breadcrumbs(props: BreadcrumbsProps) {
                                 defaultValue="New Folder"
                                 placeholder="New Folder"
                                 onSubmit={onSubmit}
-                                onCancel={() => setIsAddingNewItem(false)}
+                                onCancel={onCancel}
                             />
                         ) : (
                             <button

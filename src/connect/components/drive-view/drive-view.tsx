@@ -4,11 +4,8 @@ import {
     AddPublicDriveModal,
     CLOUD_DRIVE,
     ConnectTreeViewItem,
-    ConnectTreeViewItemProps,
     ConnectTreeViewProps,
     CreateDriveModal,
-    DriveTreeItem,
-    DriveType,
     FOLDER,
     LOCAL,
     LOCAL_DRIVE,
@@ -17,6 +14,7 @@ import {
     SHARED,
     TreeItemType,
     UiDriveNode,
+    UiNode,
 } from '@/connect';
 import { Icon } from '@/powerhouse';
 import { useState } from 'react';
@@ -28,15 +26,14 @@ export interface DriveViewProps
         'onDragEnd' | 'onDragStart'
     > {
     driveNode: UiDriveNode;
-    defaultItemOptions?: ConnectTreeViewItemProps['defaultOptions'];
     disableHighlightStyles?: boolean;
 
     isAllowedToCreateDocuments?: boolean;
     onDropEvent?: ConnectTreeViewProps['onDropEvent'];
-    onItemClick?: ConnectTreeViewProps['onItemClick'];
-    onSubmitInput?: ConnectTreeViewProps['onSubmitInput'];
-    onCancelInput?: ConnectTreeViewProps['onCancelInput'];
-    onItemOptionsClick?: ConnectTreeViewProps['onItemOptionsClick'];
+    onItemClick?: (
+        event: React.MouseEvent<HTMLDivElement>,
+        item: UiNode,
+    ) => void;
     onDropActivate?: ConnectTreeViewProps['onDropActivate'];
     onDragStart?: ConnectTreeViewProps['onDragStart'];
     onDragEnd?: ConnectTreeViewProps['onDragEnd'];
@@ -45,32 +42,14 @@ export interface DriveViewProps
     displaySyncFolderIcons?: boolean;
 }
 
-const filterDriveByType = (drive: DriveTreeItem, type: DriveType) => {
-    switch (type) {
-        case 'PUBLIC_DRIVE':
-            return drive.type === 'PUBLIC_DRIVE';
-        case 'LOCAL_DRIVE':
-            return drive.type === 'LOCAL_DRIVE';
-        case 'CLOUD_DRIVE':
-            return drive.type === 'CLOUD_DRIVE';
-        default:
-            return false;
-    }
-};
-
 export function DriveView(props: DriveViewProps) {
     const {
         driveNode,
         className,
         onDropEvent,
-        onItemClick,
-        onSubmitInput,
-        onItemOptionsClick,
-        defaultItemOptions,
         onDropActivate,
         onDragStart,
         onDragEnd,
-        onCancelInput,
         disableHighlightStyles,
         onCreateDrive,
         disableAddDrives,
@@ -94,7 +73,7 @@ export function DriveView(props: DriveViewProps) {
     return (
         <div
             className={twMerge(
-                'border-y border-gray-100 pl-4 pr-1 first-of-type:border-b-0 last-of-type:border-t-0',
+                'border-y border-gray-100 pb-2 pl-4 pr-1 first-of-type:border-b-0 last-of-type:border-t-0',
                 isPublicDrive && 'bg-gray-100 ',
                 className,
             )}
@@ -131,13 +110,7 @@ export function DriveView(props: DriveViewProps) {
                     onDragEnd={onDragEnd}
                     onDragStart={onDragStart}
                     onDropEvent={onDropEvent}
-                    onItemClick={onItemClick}
                     onDropActivate={onDropActivate}
-                    onCancelInput={onCancelInput}
-                    onSubmitInput={onSubmitInput}
-                    onItemOptionsClick={onItemOptionsClick}
-                    defaultItemOptions={defaultItemOptions}
-                    allowedTypes={allowedTypes}
                     isAllowedToCreateDocuments={isAllowedToCreateDocuments}
                     isChildOfPublicDrive={isPublicDrive}
                     displaySyncFolderIcons={displaySyncFolderIcons}

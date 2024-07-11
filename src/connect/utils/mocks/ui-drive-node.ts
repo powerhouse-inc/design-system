@@ -7,11 +7,11 @@ export const mockNodes: (
 ) => (FileNode | FolderNode)[] = driveId => [
     {
         kind: 'file',
-        documentType: 'makerdao/rwa-portfolio',
+        documentType: 'rwaReport',
         id: 'file-1',
         name: 'Mock file in drive',
         parentFolder: driveId,
-        synchronizationUnits: [],
+        synchronizationUnits: [{ syncId: '1' }],
     },
     {
         kind: 'folder',
@@ -27,19 +27,19 @@ export const mockNodes: (
     },
     {
         kind: 'file',
-        documentType: 'makerdao/rwa-portfolio',
+        documentType: 'template',
         id: 'folder-1-file-1',
         name: 'Mock file in folder 1',
         parentFolder: 'folder-1',
-        synchronizationUnits: [],
+        synchronizationUnits: [{ syncId: '1' }],
     },
     {
         kind: 'file',
-        documentType: 'makerdao/rwa-portfolio',
+        documentType: 'global',
         id: 'folder-2-file-2',
         name: 'Mock file in folder 2',
         parentFolder: 'folder-2',
-        synchronizationUnits: [],
+        synchronizationUnits: [{ syncId: '1' }],
     },
     {
         kind: 'folder',
@@ -55,19 +55,19 @@ export const mockNodes: (
     },
     {
         kind: 'file',
-        documentType: 'makerdao/rwa-portfolio',
+        documentType: 'legal',
         id: 'folder-1-folder-1-file-1',
         name: 'Mock file in folder 1 folder 1',
         parentFolder: 'folder-1-folder-1',
-        synchronizationUnits: [],
+        synchronizationUnits: [{ syncId: '1' }],
     },
     {
         kind: 'file',
-        documentType: 'makerdao/rwa-portfolio',
+        documentType: 'budget',
         id: 'folder-2-folder-1-file-1',
         name: 'Mock file in folder 2 folder 1',
         parentFolder: 'folder-2',
-        synchronizationUnits: [],
+        synchronizationUnits: [{ syncId: '1' }],
     },
     {
         kind: 'folder',
@@ -84,7 +84,7 @@ export const mockNodes: (
 ];
 
 export function makeMockDriveDocument(state?: {
-    global?: Record<string, any>;
+    global?: { id?: string } & Record<string, any>;
     local?: Record<string, any>;
 }) {
     const mockDocumentDriveDocument: DocumentDriveDocument = {
@@ -92,7 +92,7 @@ export function makeMockDriveDocument(state?: {
             global: {
                 id: state?.global?.id ?? mockDriveId,
                 name: 'Mock Drive',
-                icon: 'mock-icon',
+                icon: '',
                 nodes: mockNodes(state?.global?.id ?? mockDriveId),
                 ...state?.global,
             },
