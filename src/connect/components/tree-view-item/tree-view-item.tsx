@@ -2,11 +2,16 @@ import {
     CLOUD,
     ConnectDropdownMenu,
     DRIVE,
+    DUPLICATE,
     DriveSettingsModal,
     FILE,
     FOLDER,
     LOCAL,
+    NEW_FOLDER,
+    NodeDropdownMenuOption,
+    NodeType,
     PUBLIC,
+    RENAME,
     SharingType,
     UiDriveNode,
     UiNode,
@@ -19,14 +24,20 @@ import {
     UseDraggableTargetProps,
     useDraggableTarget,
 } from '@/powerhouse';
-import { MouseEventHandler, useEffect, useRef, useState } from 'react';
+import {
+    MouseEventHandler,
+    ReactNode,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
 import { SyncStatusIcon } from '../status-icon';
 
 export type ConnectTreeViewItemProps = {
     uiNode: UiNode;
-    isContainerHighlighted: boolean;
     level?: number;
+    allowedDropdownMenuOptions: Record<NodeType, NodeDropdownMenuOption[]>;
     disableDropBetween?: boolean;
     disableHighlightStyles?: boolean;
     isAllowedToCreateDocuments?: boolean;
@@ -55,7 +66,7 @@ export type ConnectTreeViewItemProps = {
 export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
     const {
         uiNode,
-        isContainerHighlighted,
+        allowedDropdownMenuOptions,
         level = 0,
         disableDropBetween = false,
         disableHighlightStyles = false,
@@ -118,29 +129,35 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         }
     }, [isSelected]);
 
-    const dropdownMenuItems = [
+    const dropdownMenuOptionsMap: Record<
+        NodeDropdownMenuOption,
         {
-            id: 'duplicate',
+            label: ReactNode;
+            icon: React.JSX.Element;
+            handler: () => void;
+            className?: string;
+        }
+    > = {
+        [DUPLICATE]: {
             label: 'Duplicate',
             icon: <Icon name="files-earmark" />,
             handler: () => onDuplicateNode(uiNode),
         },
-        {
-            id: 'new-folder',
+        [NEW_FOLDER]: {
             label: 'New Folder',
             icon: <Icon name="folder-plus" />,
             handler: () => {
+                setSelectedNode(uiNode);
+                setInternalExpandedState(true);
                 setMode('create');
             },
         },
-        {
-            id: 'rename',
+        [RENAME]: {
             label: 'Rename',
             icon: <Icon name="pencil" />,
             handler: () => setMode('write'),
         },
-        {
-            id: 'delete',
+        DELETE: {
             label: 'Delete',
             icon: <Icon name="trash" />,
             className: 'text-red-900',
@@ -152,13 +169,21 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                 }
             },
         },
-        {
-            id: 'settings',
+        SETTINGS: {
             label: 'Settings',
             icon: <Icon name="gear" />,
             handler: () => setIsDriveSettingsModalOpen(true),
         },
-    ];
+    } as const;
+
+    const dropdownMenuOptions = Object.entries(dropdownMenuOptionsMap)
+        .map(([id, option]) => ({
+            id: id as NodeDropdownMenuOption,
+            ...option,
+        }))
+        .filter(option =>
+            allowedDropdownMenuOptions[uiNode.kind].includes(option.id),
+        );
 
     const dropdownMenuButton = (
         <button
@@ -210,9 +235,9 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         setIsDropdownMenuOpen(!isDropdownMenuOpen);
     }
 
-    function onItemClick(itemId: string) {
-        const item = dropdownMenuItems.find(item => item.id === itemId);
-        item?.handler();
+    function onItemClick(itemId: NodeDropdownMenuOption) {
+        const item = dropdownMenuOptionsMap[itemId];
+        item.handler();
         setIsDropdownMenuOpen(false);
     }
 
@@ -324,7 +349,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         }
     }
 
-    const content = (
+    const itemContent = (
         <div
             ref={containerRef}
             className="group/node flex items-center justify-between"
@@ -336,7 +361,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                     isOpen={isDropdownMenuOpen}
                     onOpenChange={onDropdownMenuOpenChange}
                     onItemClick={onItemClick}
-                    items={dropdownMenuItems}
+                    items={dropdownMenuOptions}
                     menuClassName="bg-white cursor-pointer"
                     menuItemClassName="hover:bg-slate-50 px-2"
                     popoverProps={{
@@ -359,7 +384,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                 onSubmitInput={onSubmitHandler}
                 onCancelInput={onCancelHandler}
                 name={uiNode.name}
-                content={content}
+                itemContent={itemContent}
                 open={isExpanded}
                 hasCaret={hasChildren}
                 isWriteMode={mode === 'write'}
@@ -373,7 +398,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                         {mode === 'create' && (
                             <TreeViewItem
                                 name="New Folder"
-                                content="New Folder"
+                                itemContent="New Folder"
                                 isWriteMode={true}
                                 level={level + 1}
                                 icon={

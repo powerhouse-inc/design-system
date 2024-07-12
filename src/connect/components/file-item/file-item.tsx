@@ -3,7 +3,6 @@ import {
     ConnectDropdownMenuProps,
     FileItemIconType,
     TreeItem,
-    defaultDropdownMenuOptions,
     iconMap,
 } from '@/connect';
 import {
@@ -144,7 +143,7 @@ export const FileItem: React.FC<FileItemProps> = ({
                     onOpenChange={() =>
                         setIsDropdownMenuOpen(!isDropdownMenuOpen)
                     }
-                    items={itemOptions || [...defaultDropdownMenuOptions]}
+                    items={itemOptions}
                     menuClassName="bg-white cursor-pointer"
                     menuItemClassName="hover:bg-slate-50 px-2"
                     onItemClick={onOptionsClick}

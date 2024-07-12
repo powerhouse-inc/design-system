@@ -5,6 +5,7 @@ import {
     DriveLocation,
     FormInput,
     Label,
+    LOCAL,
     LocationInfo,
     SharingType,
     SharingTypeFormInput,
@@ -40,7 +41,7 @@ export function CreateDriveForm(props: CreateDriveFormProps) {
         formState: { errors },
     } = useForm<Inputs>({
         defaultValues: {
-            sharingType: 'PRIVATE',
+            sharingType: LOCAL,
             availableOffline: false,
             location: props.location,
         },

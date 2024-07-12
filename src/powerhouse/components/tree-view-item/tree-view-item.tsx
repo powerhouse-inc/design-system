@@ -6,7 +6,7 @@ import { Icon, TreeViewInput, TreeViewInputProps } from '..';
 export type TreeViewItemProps = DivProps &
     Partial<TreeViewInputProps> & {
         name: string;
-        content: ReactNode;
+        itemContent: ReactNode;
         isWriteMode?: boolean;
         children?: ReactNode;
         open?: boolean;
@@ -26,7 +26,7 @@ export const TreeViewItem: FC<TreeViewItemProps> = props => {
     const {
         open,
         name,
-        content,
+        itemContent,
         isWriteMode,
         onClick,
         onSubmitInput,
@@ -57,7 +57,13 @@ export const TreeViewItem: FC<TreeViewItemProps> = props => {
         onCancelInput,
     };
 
-    const _content = isWriteMode ? <TreeViewInput {...inputProps} /> : content;
+    const content = isWriteMode ? (
+        <div className="py-2">
+            <TreeViewInput {...inputProps} />
+        </div>
+    ) : (
+        itemContent
+    );
 
     return (
         <div {...divProps}>
@@ -102,7 +108,7 @@ export const TreeViewItem: FC<TreeViewItemProps> = props => {
                         </span>
                     )}
                     <div className="w-full cursor-pointer truncate">
-                        {_content}
+                        {content}
                     </div>
                 </div>
                 {bottomIndicator && (

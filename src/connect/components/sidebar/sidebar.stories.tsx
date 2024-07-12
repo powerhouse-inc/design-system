@@ -1,5 +1,17 @@
 import connectLogo from '@/assets/connect.png';
-import { CLOUD, LOCAL, PUBLIC } from '@/connect/constants';
+import {
+    CLOUD,
+    DELETE,
+    DRIVE,
+    DUPLICATE,
+    FILE,
+    FOLDER,
+    LOCAL,
+    NEW_FOLDER,
+    PUBLIC,
+    RENAME,
+    SETTINGS,
+} from '@/connect/constants';
 import {
     ItemsContextProvider,
     UiDriveNode,
@@ -7,7 +19,7 @@ import {
     useItemsContext,
 } from '@/connect/context/ItemsContext';
 import { mockDriveNodes } from '@/connect/hooks/tree-view/mocks';
-import { SharingType } from '@/connect/types';
+import { NodeDropdownMenuOption, NodeType, SharingType } from '@/connect/types';
 import { DropItem } from '@/powerhouse';
 import { useEffect } from '@storybook/preview-api';
 import type { Meta, StoryObj } from '@storybook/react';
@@ -53,6 +65,15 @@ export const Expanded: Story = {
         useEffect(() => {
             setDriveNodes(args.driveNodes ?? []);
         }, []);
+
+        const allowedDropdownMenuOptions: Record<
+            NodeType,
+            NodeDropdownMenuOption[]
+        > = {
+            [DRIVE]: [NEW_FOLDER, RENAME, DELETE, SETTINGS],
+            [FOLDER]: [NEW_FOLDER, RENAME, DELETE, DUPLICATE],
+            [FILE]: [RENAME, DELETE, DUPLICATE],
+        };
 
         const nodeHandlers = {
             onCreateFolder: (name: string, uiNode: UiNode) => {},
@@ -110,31 +131,34 @@ export const Expanded: Story = {
                 }
             >
                 <DriveView
+                    {...nodeHandlers}
                     driveNodes={driveNodesByType[PUBLIC]}
                     label="Public Drives"
                     sharingType={PUBLIC}
-                    {...nodeHandlers}
                     disableAddDrives={false}
                     isAllowedToCreateDocuments
                     displaySyncFolderIcons
+                    allowedDropdownMenuOptions={allowedDropdownMenuOptions}
                 />
                 <DriveView
+                    {...nodeHandlers}
                     driveNodes={driveNodesByType[CLOUD]}
                     label="Secure Cloud Drives"
                     sharingType={CLOUD}
-                    {...nodeHandlers}
                     disableAddDrives={false}
                     isAllowedToCreateDocuments
                     displaySyncFolderIcons
+                    allowedDropdownMenuOptions={allowedDropdownMenuOptions}
                 />
                 <DriveView
+                    {...nodeHandlers}
                     driveNodes={driveNodesByType[LOCAL]}
                     label="My Local Drives"
                     sharingType={LOCAL}
-                    {...nodeHandlers}
                     disableAddDrives={false}
                     isAllowedToCreateDocuments
                     displaySyncFolderIcons
+                    allowedDropdownMenuOptions={allowedDropdownMenuOptions}
                 />
             </ConnectSidebar>
         );

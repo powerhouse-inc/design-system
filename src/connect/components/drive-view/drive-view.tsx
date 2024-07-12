@@ -5,6 +5,8 @@ import {
     ConnectTreeViewItem,
     CreateDriveModal,
     LOCAL,
+    NodeDropdownMenuOption,
+    NodeType,
     SharingType,
     UiDriveNode,
     UiNode,
@@ -23,8 +25,8 @@ export interface DriveViewProps
     label: ReactNode;
     sharingType: SharingType;
     disableHighlightStyles?: boolean;
-
     isAllowedToCreateDocuments: boolean;
+    allowedDropdownMenuOptions: Record<NodeType, NodeDropdownMenuOption[]>;
     onCreateFolder: (name: string, uiNode: UiNode) => void;
     onCreateDrive: (drive: AddDriveInput | AddPublicDriveInput) => void;
     onRenameNode: (name: string, uiNode: UiNode) => void;
@@ -100,7 +102,6 @@ export function DriveView(props: DriveViewProps) {
                         {...props}
                         key={driveNode.id}
                         uiNode={driveNode}
-                        isContainerHighlighted={isContainerHighlighted}
                     />
                 ))}
             </>

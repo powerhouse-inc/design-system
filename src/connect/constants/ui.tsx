@@ -14,9 +14,7 @@ export const FOLDER = 'FOLDER';
 export const FILE = 'FILE';
 
 export const driveTypes = [PUBLIC_DRIVE, LOCAL_DRIVE, CLOUD_DRIVE] as const;
-
-export const treeItemTypes = [...driveTypes, FOLDER, FILE] as const;
-
+export const nodeTypes = [DRIVE, FOLDER, FILE] as const;
 export const UPDATE = 'UPDATE';
 export const NEW = 'NEW';
 export const UPDATE_AND_MOVE = 'UPDATE_AND_MOVE';
@@ -53,28 +51,19 @@ export const sharingTypeOptions = [
         disabled: true,
     },
 ] as const;
-export const defaultDropdownMenuOptions = [
-    {
-        id: 'duplicate',
-        label: 'Duplicate',
-        icon: <Icon name="files-earmark" />,
-    },
-    {
-        id: 'new-folder',
-        label: 'New Folder',
-        icon: <Icon name="folder-plus" />,
-    },
-    {
-        id: 'rename',
-        label: 'Rename',
-        icon: <Icon name="pencil" />,
-    },
-    {
-        id: 'delete',
-        label: 'Delete',
-        icon: <Icon name="trash" />,
-        className: 'text-red-900',
-    },
+
+export const DUPLICATE = 'DUPLICATE';
+export const NEW_FOLDER = 'NEW_FOLDER';
+export const RENAME = 'RENAME';
+export const DELETE = 'DELETE';
+export const SETTINGS = 'SETTINGS';
+
+export const nodeDropdownMenuOptions = [
+    DUPLICATE,
+    NEW_FOLDER,
+    RENAME,
+    DELETE,
+    SETTINGS,
 ] as const;
 
 export const locationInfoByLocation = {

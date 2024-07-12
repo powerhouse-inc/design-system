@@ -140,7 +140,7 @@ export const FolderItem: React.FC<FolderItemProps> = ({
                     onOpenChange={() =>
                         setIsDropdownMenuOpen(!isDropdownMenuOpen)
                     }
-                    items={itemOptions || [...defaultDropdownMenuOptions]}
+                    items={itemOptions || []}
                     menuClassName="bg-white cursor-pointer"
                     menuItemClassName="hover:bg-slate-50 px-2"
                     onItemClick={onOptionsClick}

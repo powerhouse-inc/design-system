@@ -1,4 +1,10 @@
-import { ItemsContextProvider, useItemsContext } from '@/connect';
+import {
+    DRIVE,
+    FOLDER,
+    ItemsContextProvider,
+    UiFolderNode,
+    useItemsContext,
+} from '@/connect';
 import { mockDriveNodes } from '@/connect/hooks/tree-view/mocks';
 import { Meta, StoryObj } from '@storybook/react';
 import { useEffect } from 'react';
@@ -42,13 +48,13 @@ export const Default: Story = {
         function onSubmitNewFolder(name: string) {
             if (!selectedNode) return;
 
-            const newFolderNode = {
+            const newFolderNode: UiFolderNode = {
                 driveId:
-                    selectedNode.kind === 'drive'
+                    selectedNode.kind === DRIVE
                         ? selectedNode.id
                         : selectedNode.driveId,
                 id: `new-folder-${Math.floor(Math.random() * 1000)}`,
-                kind: 'folder' as const,
+                kind: FOLDER,
                 name,
                 parentFolder: selectedNode.id,
                 children: [],
