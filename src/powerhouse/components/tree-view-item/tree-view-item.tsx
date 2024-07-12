@@ -66,7 +66,7 @@ export const TreeViewItem: FC<TreeViewItemProps> = props => {
                 onClick={onClick}
                 style={containerStyle}
                 className={twMerge(
-                    'cursor-pointer select-none bg-transparent pl-1 focus:outline-none',
+                    'cursor-pointer select-none bg-transparent px-1 focus:outline-none',
                     containerClassName,
                 )}
                 {...containerProps}

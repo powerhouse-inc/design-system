@@ -1,7 +1,7 @@
 import {
-    cloudDrive,
-    localDrive,
-    publicDrive,
+    mockCloudDrive,
+    mockLocalDrive,
+    mockPublicDrive,
 } from '@/connect/hooks/tree-view/mocks';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useEffect } from 'react';
@@ -35,7 +35,7 @@ const Template: Story = {
     render: function Wrapper(args) {
         const { setDriveNodes } = useItemsContext();
         useEffect(() => {
-            setDriveNodes([args.driveNode]);
+            setDriveNodes(args.driveNodes);
         }, []);
         return <DriveView {...args} />;
     },
@@ -44,21 +44,24 @@ const Template: Story = {
 export const Public: Story = {
     ...Template,
     args: {
-        driveNode: publicDrive,
+        label: 'Public Drives',
+        driveNodes: [mockPublicDrive],
     },
 };
 
 export const Cloud: Story = {
     ...Template,
     args: {
-        driveNode: cloudDrive,
+        label: 'Cloud Drives',
+        driveNodes: [mockCloudDrive],
     },
 };
 
 export const Local: Story = {
     ...Template,
     args: {
-        driveNode: localDrive,
+        label: 'Local Drives',
+        driveNodes: [mockLocalDrive],
     },
 };
 

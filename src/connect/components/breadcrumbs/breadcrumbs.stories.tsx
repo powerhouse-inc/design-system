@@ -1,5 +1,5 @@
 import { ItemsContextProvider, useItemsContext } from '@/connect';
-import { driveNodes } from '@/connect/hooks/tree-view/mocks';
+import { mockDriveNodes } from '@/connect/hooks/tree-view/mocks';
 import { Meta, StoryObj } from '@storybook/react';
 import { useEffect } from 'react';
 import { Breadcrumbs } from '.';
@@ -32,11 +32,11 @@ export const Default: Story = {
         } = useItemsContext();
 
         useEffect(() => {
-            setDriveNodes(driveNodes);
+            setDriveNodes(mockDriveNodes);
         }, []);
 
         useEffect(() => {
-            setSelectedNode(driveNodes[0].children[0]);
+            setSelectedNode(mockDriveNodes[0].children[0]);
         }, []);
 
         function onSubmitNewFolder(name: string) {

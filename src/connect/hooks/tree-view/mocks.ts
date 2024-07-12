@@ -1,34 +1,35 @@
+import { CLOUD, LOCAL, PUBLIC } from '@/connect/constants';
 import { makeDriveNode } from '@/connect/context';
 import { makeMockDriveDocument } from '@/connect/utils/mocks/ui-drive-node';
 
-export const localDrive = makeDriveNode(
+export const mockLocalDrive = makeDriveNode(
     makeMockDriveDocument({
         global: {
             id: 'local-drive',
             name: 'Local drive',
         },
-        local: { sharingType: 'local', availableOffline: false },
+        local: { sharingType: LOCAL, availableOffline: false },
     }),
 );
 
-export const publicDrive = makeDriveNode(
+export const mockPublicDrive = makeDriveNode(
     makeMockDriveDocument({
         global: {
             id: 'public-drive',
             name: 'Public drive',
         },
-        local: { sharingType: 'public', availableOffline: true },
+        local: { sharingType: PUBLIC, availableOffline: true },
     }),
 );
 
-export const cloudDrive = makeDriveNode(
+export const mockCloudDrive = makeDriveNode(
     makeMockDriveDocument({
         global: {
             id: 'cloud-drive',
             name: 'Cloud drive',
         },
-        local: { sharingType: 'cloud', availableOffline: true },
+        local: { sharingType: CLOUD, availableOffline: true },
     }),
 );
 
-export const driveNodes = [localDrive, publicDrive, cloudDrive];
+export const mockDriveNodes = [mockLocalDrive, mockPublicDrive, mockCloudDrive];

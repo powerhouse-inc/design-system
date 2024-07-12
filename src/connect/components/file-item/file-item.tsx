@@ -1,15 +1,10 @@
-import BudgetImg from '@/assets/icons/budget.png';
-import GlobalImg from '@/assets/icons/global.png';
-import LegalImg from '@/assets/icons/legal.png';
-import ProfileImg from '@/assets/icons/profile.png';
-import RWAReportImg from '@/assets/icons/rwa-report.png';
-import TemplateImg from '@/assets/icons/template.png';
-
 import {
     ConnectDropdownMenu,
     ConnectDropdownMenuProps,
+    FileItemIconType,
     TreeItem,
     defaultDropdownMenuOptions,
+    iconMap,
 } from '@/connect';
 import {
     DivProps,
@@ -22,17 +17,6 @@ import {
 import React, { useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { SyncStatusIcon } from '../status-icon';
-
-export const iconMap = {
-    legal: LegalImg,
-    global: GlobalImg,
-    profile: ProfileImg,
-    budget: BudgetImg,
-    template: TemplateImg,
-    rwaReport: RWAReportImg,
-};
-
-export type FileItemIconType = keyof typeof iconMap;
 
 export interface FileItemProps
     extends Omit<DivProps, 'onDragStart' | 'onDragEnd'> {

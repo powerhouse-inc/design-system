@@ -3,16 +3,15 @@ import {
     AddPublicDriveInput,
     AddPublicDriveModal,
     ConnectTreeViewItem,
-    ConnectTreeViewProps,
     CreateDriveModal,
     LOCAL,
-    PUBLIC,
-    SHARED,
+    SharingType,
     UiDriveNode,
     UiNode,
+    useItemsContext,
 } from '@/connect';
-import { Icon } from '@/powerhouse';
-import { useState } from 'react';
+import { Icon, UseDraggableTargetProps } from '@/powerhouse';
+import { ReactNode, useState } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
 
 export interface DriveViewProps
@@ -20,52 +19,59 @@ export interface DriveViewProps
         React.HTMLAttributes<HTMLDivElement>,
         'onDragEnd' | 'onDragStart'
     > {
-    driveNode: UiDriveNode;
+    driveNodes: UiDriveNode[];
+    label: ReactNode;
+    sharingType: SharingType;
     disableHighlightStyles?: boolean;
 
-    isAllowedToCreateDocuments?: boolean;
-    onDropEvent?: ConnectTreeViewProps['onDropEvent'];
-    onItemClick?: (
-        event: React.MouseEvent<HTMLDivElement>,
-        item: UiNode,
+    isAllowedToCreateDocuments: boolean;
+    onCreateFolder: (name: string, uiNode: UiNode) => void;
+    onCreateDrive: (drive: AddDriveInput | AddPublicDriveInput) => void;
+    onRenameNode: (name: string, uiNode: UiNode) => void;
+    onDuplicateNode: (uiNode: UiNode) => void;
+    onDeleteNode: (uiNode: UiNode) => void;
+    onDeleteDrive: (uiNode: UiNode) => void;
+    onRenameDrive: (uiDriveNode: UiDriveNode, newName: string) => void;
+    onChangeSharingType: (
+        uiDriveNode: UiDriveNode,
+        newSharingType: SharingType,
     ) => void;
-    onDropActivate?: ConnectTreeViewProps['onDropActivate'];
-    onDragStart?: ConnectTreeViewProps['onDragStart'];
-    onDragEnd?: ConnectTreeViewProps['onDragEnd'];
-    onCreateDrive?: (drive: AddDriveInput | AddPublicDriveInput) => void;
-    disableAddDrives?: boolean;
-    displaySyncFolderIcons?: boolean;
+    onChangeAvailableOffline: (
+        uiDriveNode: UiDriveNode,
+        newAvailableOffline: boolean,
+    ) => void;
+    onDropEvent: UseDraggableTargetProps<UiNode>['onDropEvent'];
+    onDropActivate: (dropTargetItem: UiNode) => void;
+    onDragStart: UseDraggableTargetProps<UiNode>['onDragStart'];
+    onDragEnd: UseDraggableTargetProps<UiNode>['onDragEnd'];
+    disableAddDrives: boolean;
+    displaySyncFolderIcons: boolean;
 }
 
 export function DriveView(props: DriveViewProps) {
     const {
-        driveNode,
+        label,
+        sharingType,
+        driveNodes,
         className,
-        onDropEvent,
-        onDropActivate,
-        onDragStart,
-        onDragEnd,
-        disableHighlightStyles,
         onCreateDrive,
         disableAddDrives,
         isAllowedToCreateDocuments = true,
-        displaySyncFolderIcons = false,
-        ...restProps
     } = props;
+    const { selectedDriveNode } = useItemsContext();
     const [showAddModal, setShowAddModal] = useState(false);
-
-    const isPublicDrive = driveNode.sharingType === 'public';
-    const isCloudDrive = driveNode.sharingType === 'cloud';
-    const isLocalDrive = driveNode.sharingType === 'local';
+    const hasDriveNodes = driveNodes.length > 0;
+    const isContainerHighlighted =
+        selectedDriveNode?.sharingType === sharingType;
 
     return (
         <div
             className={twMerge(
-                'border-y border-gray-100 pb-2 pl-4 pr-1 first-of-type:border-b-0 last-of-type:border-t-0',
-                isPublicDrive && 'bg-gray-100 ',
+                'border-y border-gray-100 pl-4 pr-1 first-of-type:border-b-0 last-of-type:border-t-0',
+                hasDriveNodes && 'pb-2',
+                isContainerHighlighted && 'bg-gray-100',
                 className,
             )}
-            {...restProps}
         >
             <div
                 className={twJoin(
@@ -73,7 +79,7 @@ export function DriveView(props: DriveViewProps) {
                 )}
             >
                 <p className="text-sm font-medium leading-6 text-gray-500">
-                    {driveNode.name}
+                    {label}
                 </p>
                 <div className="size-4 text-gray-600">
                     {!disableAddDrives && isAllowedToCreateDocuments && (
@@ -86,25 +92,19 @@ export function DriveView(props: DriveViewProps) {
                             <Icon name="plus-circle" size={16} />
                         </button>
                     )}
-                    {/* <button className="transition hover:text-gray-800">
-                        <Icon name="gear" size={16} />
-                    </button> */}
                 </div>
             </div>
             <>
-                <ConnectTreeViewItem
-                    uiNode={driveNode}
-                    disableHighlightStyles={disableHighlightStyles}
-                    onDragEnd={onDragEnd}
-                    onDragStart={onDragStart}
-                    onDropEvent={onDropEvent}
-                    onDropActivate={onDropActivate}
-                    isAllowedToCreateDocuments={isAllowedToCreateDocuments}
-                    isChildOfPublicDrive={isPublicDrive}
-                    displaySyncFolderIcons={displaySyncFolderIcons}
-                />
+                {driveNodes.map(driveNode => (
+                    <ConnectTreeViewItem
+                        {...props}
+                        key={driveNode.id}
+                        uiNode={driveNode}
+                        isContainerHighlighted={isContainerHighlighted}
+                    />
+                ))}
             </>
-            {isLocalDrive && isAllowedToCreateDocuments && (
+            {sharingType === LOCAL && isAllowedToCreateDocuments && (
                 <CreateDriveModal
                     modalProps={{
                         open: showAddModal,
@@ -113,23 +113,23 @@ export function DriveView(props: DriveViewProps) {
                     formProps={{
                         location: LOCAL,
                         onSubmit: data => {
-                            onCreateDrive?.(data);
+                            onCreateDrive(data);
                             setShowAddModal(false);
                         },
                         onCancel: () => setShowAddModal(false),
                     }}
                 />
             )}
-            {(isPublicDrive || isCloudDrive) && isAllowedToCreateDocuments && (
+            {sharingType !== LOCAL && isAllowedToCreateDocuments && (
                 <AddPublicDriveModal
                     modalProps={{
                         open: showAddModal,
                         onOpenChange: setShowAddModal,
                     }}
                     formProps={{
-                        sharingType: isPublicDrive ? PUBLIC : SHARED,
+                        sharingType,
                         onSubmit: data => {
-                            onCreateDrive?.(data);
+                            onCreateDrive(data);
                             setShowAddModal(false);
                         },
                         onCancel: () => setShowAddModal(false),

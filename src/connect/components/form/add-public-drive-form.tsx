@@ -1,12 +1,15 @@
 import {
     AddDriveInput,
     AvailableOfflineToggle,
+    CLOUD,
     Disclosure,
     Divider,
     DriveName,
     FormInput,
     Label,
     LocationInfo,
+    PUBLIC,
+    SWITCHBOARD,
 } from '@/connect';
 import { Button, Icon } from '@/powerhouse';
 import { requestPublicDrive } from 'document-drive/utils/graphql';
@@ -17,8 +20,8 @@ import { useDebounceValue } from 'usehooks-ts';
 interface PublicDriveDetails extends AddDriveInput {
     id: string;
     driveName: string;
-    sharingType: 'PUBLIC' | 'SHARED';
-    location: 'SWITCHBOARD';
+    sharingType: typeof PUBLIC | typeof CLOUD;
+    location: typeof SWITCHBOARD;
     availableOffline: boolean;
 }
 
@@ -29,13 +32,13 @@ type Inputs = {
 export type AddPublicDriveInput = PublicDriveDetails & { url: string };
 
 type AddPublicDriveFormProps = {
-    sharingType?: 'PUBLIC' | 'SHARED';
+    sharingType: typeof PUBLIC | typeof CLOUD;
     onSubmit: (data: AddPublicDriveInput) => void;
     onCancel: () => void;
 };
 
 export function AddPublicDriveForm(props: AddPublicDriveFormProps) {
-    const { sharingType = 'PUBLIC' } = props;
+    const { sharingType = PUBLIC } = props;
     const [publicDriveDetails, setPublicDriveDetails] =
         useState<PublicDriveDetails>();
     const [showLocationSettings, setShowLocationSettings] = useState(false);
@@ -68,7 +71,7 @@ export function AddPublicDriveForm(props: AddPublicDriveFormProps) {
                     id,
                     driveName: name,
                     sharingType,
-                    location: 'SWITCHBOARD',
+                    location: SWITCHBOARD,
                     availableOffline: true,
                 });
                 setValue('availableOffline', true);
@@ -107,7 +110,7 @@ export function AddPublicDriveForm(props: AddPublicDriveFormProps) {
                             setShowLocationSettings(!showLocationSettings)
                         }
                     >
-                        <LocationInfo location="SWITCHBOARD" />
+                        <LocationInfo location={SWITCHBOARD} />
                         <AvailableOfflineToggle
                             {...register('availableOffline')}
                         />

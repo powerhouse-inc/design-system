@@ -1,4 +1,12 @@
-import { SyncStatus } from '@/connect';
+import {
+    DocumentType,
+    DRIVE,
+    FILE,
+    FOLDER,
+    LOCAL,
+    SharingType,
+    SyncStatus,
+} from '@/connect';
 import { Maybe, Scalars, SynchronizationUnit } from 'document-model/document';
 import {
     createContext,
@@ -12,6 +20,7 @@ import {
 } from 'react';
 
 export interface TreeItemContext {
+    driveNodes: UiDriveNode[];
     selectedNode: UiNode | null;
     selectedNodePath: UiNode[];
     selectedDriveNode: UiDriveNode | null;
@@ -23,6 +32,7 @@ export interface TreeItemContext {
 }
 
 const defaultTreeItemContextValue: TreeItemContext = {
+    driveNodes: [],
     selectedNode: null,
     selectedNodePath: [],
     selectedDriveNode: null,
@@ -54,7 +64,7 @@ export const ItemsContextProvider: FC<ItemsContextProviderProps> = ({
         function getSelectedDriveNode() {
             if (!selectedNode) return null;
 
-            if (selectedNode.kind === 'drive') return selectedNode;
+            if (selectedNode.kind === DRIVE) return selectedNode;
 
             return driveNodes.find(d => d.id === selectedNode.driveId) ?? null;
         }
@@ -66,7 +76,7 @@ export const ItemsContextProvider: FC<ItemsContextProviderProps> = ({
             return;
         }
 
-        if (selectedNode.kind === 'drive') {
+        if (selectedNode.kind === DRIVE) {
             setSelectedNodePath([selectedNode]);
             return;
         }
@@ -95,12 +105,12 @@ export const ItemsContextProvider: FC<ItemsContextProviderProps> = ({
     }
 
     function getIsExpanded(node: UiNode) {
-        if (node.kind === 'file') return false;
+        if (node.kind === FILE) return false;
         return selectedNodePath.includes(node);
     }
 
     function getSiblings(node: UiNode) {
-        if (node.kind === 'drive') {
+        if (node.kind === DRIVE) {
             return [];
         }
 
@@ -108,7 +118,7 @@ export const ItemsContextProvider: FC<ItemsContextProviderProps> = ({
 
         const parent = driveNode?.nodeMap[node.parentFolder];
 
-        if (parent?.kind === 'file') {
+        if (parent?.kind === FILE) {
             throw new Error(
                 `Parent node ${node.parentFolder} is a file, not a folder`,
             );
@@ -120,6 +130,7 @@ export const ItemsContextProvider: FC<ItemsContextProviderProps> = ({
     return (
         <ItemsContext.Provider
             value={{
+                driveNodes,
                 selectedNode,
                 selectedNodePath,
                 selectedDriveNode,
@@ -157,17 +168,17 @@ export type FolderNode = {
 };
 
 export type UiFileNode = {
-    kind: 'file';
+    kind: typeof FILE;
     id: string;
     name: string;
-    documentType: string;
+    documentType: DocumentType;
     parentFolder: string;
     driveId: string;
     syncStatus: SyncStatus | undefined;
 };
 
 export type UiFolderNode = {
-    kind: 'folder';
+    kind: typeof FOLDER;
     id: string;
     name: string;
     parentFolder: string;
@@ -175,12 +186,10 @@ export type UiFolderNode = {
     children: UiNode[];
 };
 
-type SharingType = 'local' | 'public' | 'cloud';
-
 export type UiNode = UiDriveNode | UiFileNode | UiFolderNode;
 
 export type UiDriveNode = {
-    kind: 'drive';
+    kind: typeof DRIVE;
     id: string;
     name: string;
     parentFolder: null;
@@ -210,9 +219,9 @@ export type DocumentDriveDocument = {
 
 function getSyncStatus(
     syncId: string,
-    type: 'local' | 'cloud' | 'public',
+    type: SharingType,
 ): SyncStatus | undefined {
-    if (type === 'local') return;
+    if (type === LOCAL) return;
     try {
         return 'SUCCESS';
     } catch (error) {
@@ -227,7 +236,7 @@ export function makeDriveNode(drive: DocumentDriveDocument) {
     const driveNode: UiDriveNode = {
         id,
         name,
-        kind: 'drive',
+        kind: DRIVE,
         children: [],
         nodeMap: {},
         sharingType,
@@ -245,7 +254,7 @@ export function makeDriveNode(drive: DocumentDriveDocument) {
             parentFolder: n.parentFolder || id,
         };
 
-        if (node.kind === 'file' && 'synchronizationUnits' in node) {
+        if (node.kind === FILE && 'synchronizationUnits' in node) {
             return {
                 ...node,
                 syncStatus: getSyncStatus(
@@ -271,7 +280,7 @@ export function makeDriveNode(drive: DocumentDriveDocument) {
             continue;
         }
         const parent = driveNode.nodeMap[node.parentFolder];
-        if (parent.kind === 'file') {
+        if (parent.kind === FILE) {
             throw new Error(
                 `Parent node ${node.parentFolder} is a file, not a folder`,
             );

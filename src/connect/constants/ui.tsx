@@ -1,7 +1,15 @@
+import BudgetImg from '@/assets/icons/budget.png';
+import GlobalImg from '@/assets/icons/global.png';
+import LegalImg from '@/assets/icons/legal.png';
+import ProfileImg from '@/assets/icons/profile.png';
+import MakerdaoRWAPortfolioImg from '@/assets/icons/rwa-report.png';
+import TemplateImg from '@/assets/icons/template.png';
 import { Icon } from '@/powerhouse';
+
 export const PUBLIC_DRIVE = 'PUBLIC_DRIVE';
 export const LOCAL_DRIVE = 'LOCAL_DRIVE';
 export const CLOUD_DRIVE = 'CLOUD_DRIVE';
+export const DRIVE = 'DRIVE';
 export const FOLDER = 'FOLDER';
 export const FILE = 'FILE';
 
@@ -21,12 +29,30 @@ export const treeItemActions = [
     UPDATE_AND_COPY,
 ] as const;
 
+export const SWITCHBOARD = 'SWITCHBOARD';
 export const LOCAL = 'LOCAL';
 export const CLOUD = 'CLOUD';
-export const SWITCHBOARD = 'SWITCHBOARD';
-
+export const PUBLIC = 'PUBLIC';
+export const sharingTypes = [LOCAL, CLOUD, PUBLIC] as const;
 export const driveLocations = [LOCAL, CLOUD, SWITCHBOARD] as const;
-
+export const sharingTypeOptions = [
+    {
+        value: LOCAL,
+        icon: <Icon name="lock" />,
+        description: 'Only available to you',
+    },
+    {
+        value: CLOUD,
+        icon: <Icon name="people" />,
+        description: 'Only available to people in this drive',
+    },
+    {
+        value: PUBLIC,
+        icon: <Icon name="globe" />,
+        description: 'Available to everyone',
+        disabled: true,
+    },
+] as const;
 export const defaultDropdownMenuOptions = [
     {
         id: 'duplicate',
@@ -48,31 +74,6 @@ export const defaultDropdownMenuOptions = [
         label: 'Delete',
         icon: <Icon name="trash" />,
         className: 'text-red-900',
-    },
-] as const;
-
-export const PRIVATE = 'PRIVATE';
-export const SHARED = 'SHARED';
-export const PUBLIC = 'PUBLIC';
-
-export const sharingTypes = [PRIVATE, SHARED, PUBLIC] as const;
-
-export const sharingTypeOptions = [
-    {
-        value: PRIVATE,
-        icon: <Icon name="lock" />,
-        description: 'Only available to you',
-    },
-    {
-        value: SHARED,
-        icon: <Icon name="people" />,
-        description: 'Only available to people in this drive',
-    },
-    {
-        value: PUBLIC,
-        icon: <Icon name="globe" />,
-        description: 'Available to everyone',
-        disabled: true,
     },
 ] as const;
 
@@ -107,3 +108,25 @@ export const syncStatuses = [
     MISSING,
     ERROR,
 ] as const;
+
+export const documentTypes = [
+    'legal',
+    'global',
+    'profile',
+    'budget',
+    'template',
+    'makerdao/rwa-portfolio',
+] as const;
+
+export type DocumentType = (typeof documentTypes)[number];
+
+export const iconMap: Record<DocumentType, string> = {
+    legal: LegalImg,
+    global: GlobalImg,
+    profile: ProfileImg,
+    budget: BudgetImg,
+    template: TemplateImg,
+    'makerdao/rwa-portfolio': MakerdaoRWAPortfolioImg,
+};
+
+export type FileItemIconType = keyof typeof iconMap;
