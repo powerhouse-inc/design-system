@@ -2,36 +2,34 @@ import {
     AvailableOfflineToggle,
     Disclosure,
     Divider,
-    DriveLocation,
     FormInput,
     Label,
     LOCAL,
     LocationInfo,
     SharingType,
     SharingTypeFormInput,
+    SWITCHBOARD,
 } from '@/connect';
 import { Button, Icon } from '@/powerhouse';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 export type Inputs = {
-    driveName: string;
+    name: string;
     sharingType: SharingType;
     availableOffline: boolean;
-    location: DriveLocation;
 };
 
-type CreateDriveFormProps = {
-    location: DriveLocation;
+type AddLocalDriveFormProps = {
     onSubmit: CreateDriveFormSubmitHandler;
     onCancel: () => void;
 };
 
 type CreateDriveFormSubmitHandler = SubmitHandler<Inputs>;
 
-export type AddDriveInput = Inputs;
+export type AddLocalDriveInput = Inputs;
 
-export function CreateDriveForm(props: CreateDriveFormProps) {
+export function AddLocalDriveForm(props: AddLocalDriveFormProps) {
     const [showLocationSettings, setShowLocationSettings] = useState(false);
     const [showUpload, setShowUpload] = useState(false);
     const {
@@ -43,7 +41,6 @@ export function CreateDriveForm(props: CreateDriveFormProps) {
         defaultValues: {
             sharingType: LOCAL,
             availableOffline: false,
-            location: props.location,
         },
     });
 
@@ -51,10 +48,10 @@ export function CreateDriveForm(props: CreateDriveFormProps) {
         <form onSubmit={handleSubmit(props.onSubmit)}>
             <Label htmlFor="driveName">Drive Name</Label>
             <FormInput
-                {...register('driveName', {
+                {...register('name', {
                     required: 'Drive name is required',
                 })}
-                errorMessage={errors.driveName?.message}
+                errorMessage={errors.name?.message}
                 icon={<Icon name="drive" />}
                 placeholder="Drive name"
             />
@@ -86,7 +83,7 @@ export function CreateDriveForm(props: CreateDriveFormProps) {
                     setShowLocationSettings(!showLocationSettings)
                 }
             >
-                <LocationInfo location={props.location} />
+                <LocationInfo location={SWITCHBOARD} />
                 <AvailableOfflineToggle {...register('availableOffline')} />
             </Disclosure>
             <Divider className="my-3" />

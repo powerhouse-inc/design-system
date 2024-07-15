@@ -408,15 +408,12 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
             {isDrive && isAllowedToCreateDocuments && (
                 <DriveSettingsModal
                     uiDriveNode={uiNode}
-                    handleCancel={() => setIsDriveSettingsModalOpen(false)}
                     handleDeleteDrive={handleDeleteDrive}
                     handleRenameDrive={handleRenameDrive}
                     handleChangeSharingType={handleChangeSharingType}
                     handleChangeAvailableOffline={handleChangeAvailableOffline}
-                    modalProps={{
-                        open: isDriveSettingsModalOpen,
-                        onOpenChange: setIsDriveSettingsModalOpen,
-                    }}
+                    open={isDriveSettingsModalOpen}
+                    onOpenChange={setIsDriveSettingsModalOpen}
                 />
             )}
         </>

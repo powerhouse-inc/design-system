@@ -1,9 +1,9 @@
 import {
-    AddDriveInput,
+    AddLocalDriveInput,
+    AddLocalDriveModal,
     AddPublicDriveInput,
     AddPublicDriveModal,
     ConnectTreeView,
-    CreateDriveModal,
     LOCAL,
     NodeDropdownMenuOption,
     NodeType,
@@ -24,11 +24,11 @@ export interface DriveViewProps
     driveNodes: UiDriveNode[];
     label: ReactNode;
     sharingType: SharingType;
-    disableHighlightStyles?: boolean;
     isAllowedToCreateDocuments: boolean;
     allowedDropdownMenuOptions: Record<NodeType, NodeDropdownMenuOption[]>;
+    disableHighlightStyles?: boolean;
     onCreateFolder: (name: string, uiNode: UiNode) => void;
-    onCreateDrive: (drive: AddDriveInput | AddPublicDriveInput) => void;
+    onCreateDrive: (drive: AddLocalDriveInput | AddPublicDriveInput) => void;
     onRenameNode: (name: string, uiNode: UiNode) => void;
     onDuplicateNode: (uiNode: UiNode) => void;
     onDeleteNode: (uiNode: UiNode) => void;
@@ -96,31 +96,13 @@ export function DriveView(props: DriveViewProps) {
                     )}
                 </div>
             </div>
-            <>
-                {driveNodes.map(driveNode => (
-                    <ConnectTreeView
-                        {...props}
-                        key={driveNode.id}
-                        uiNode={driveNode}
-                    />
-                ))}
-            </>
-            {sharingType === LOCAL && isAllowedToCreateDocuments && (
-                <CreateDriveModal
-                    modalProps={{
-                        open: showAddModal,
-                        onOpenChange: setShowAddModal,
-                    }}
-                    formProps={{
-                        location: LOCAL,
-                        onSubmit: data => {
-                            onCreateDrive(data);
-                            setShowAddModal(false);
-                        },
-                        onCancel: () => setShowAddModal(false),
-                    }}
+            {driveNodes.map(driveNode => (
+                <ConnectTreeView
+                    {...props}
+                    key={driveNode.id}
+                    uiNode={driveNode}
                 />
-            )}
+            ))}
             {sharingType !== LOCAL && isAllowedToCreateDocuments && (
                 <AddPublicDriveModal
                     modalProps={{

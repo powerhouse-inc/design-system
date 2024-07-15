@@ -13,7 +13,8 @@ type ModalProps = ComponentPropsWithoutRef<typeof Modal>;
 
 export type DriveSettingsModalProps = {
     uiDriveNode: UiDriveNode;
-    handleCancel: () => void;
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
     handleDeleteDrive: () => void;
     handleRenameDrive: (newName: string) => void;
     handleChangeSharingType: (newSharingType: SharingType) => void;
@@ -24,7 +25,8 @@ export type DriveSettingsModalProps = {
 export function DriveSettingsModal(props: DriveSettingsModalProps) {
     const {
         uiDriveNode,
-        handleCancel,
+        open,
+        onOpenChange,
         handleDeleteDrive,
         handleRenameDrive,
         handleChangeSharingType,
@@ -45,9 +47,15 @@ export function DriveSettingsModal(props: DriveSettingsModalProps) {
         }
     };
 
+    function handleCancel() {
+        onOpenChange(false);
+    }
+
     return (
         <Modal
             {...modalProps}
+            open={open}
+            onOpenChange={onOpenChange}
             contentProps={{
                 className: 'rounded-2xl',
             }}

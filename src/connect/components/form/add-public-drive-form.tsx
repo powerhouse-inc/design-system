@@ -1,5 +1,5 @@
 import {
-    AddDriveInput,
+    AddLocalDriveInput,
     AvailableOfflineToggle,
     CLOUD,
     Disclosure,
@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDebounceValue } from 'usehooks-ts';
 
-interface PublicDriveDetails extends AddDriveInput {
+interface PublicDriveDetails extends AddLocalDriveInput {
     id: string;
     driveName: string;
     sharingType: typeof PUBLIC | typeof CLOUD;

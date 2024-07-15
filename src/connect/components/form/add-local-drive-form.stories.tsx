@@ -1,10 +1,10 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { CreateDriveForm } from './create-drive-form';
+import { AddLocalDriveForm } from './add-local-drive-form';
 
 const meta = {
     title: 'Connect/Components/Create Local Drive Form',
-    component: CreateDriveForm,
-} satisfies Meta<typeof CreateDriveForm>;
+    component: AddLocalDriveForm,
+} satisfies Meta<typeof AddLocalDriveForm>;
 
 export default meta;
 
@@ -29,5 +29,5 @@ const Template: Story = {
 
 export const Default: Story = {
     ...Template,
-    render: args => <CreateDriveForm {...args} />,
+    render: args => <AddLocalDriveForm {...args} />,
 };

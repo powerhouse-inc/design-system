@@ -26,7 +26,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ComponentPropsWithoutRef, useState } from 'react';
 import { DragEndEvent, DragStartEvent, DropEvent } from 'react-aria';
 import {
-    AddDriveInput,
+    AddLocalDriveInput,
     AddPublicDriveInput,
     ConnectSidebar,
     DriveView,
@@ -77,7 +77,9 @@ export const Expanded: Story = {
 
         const nodeHandlers = {
             onCreateFolder: (name: string, uiNode: UiNode) => {},
-            onCreateDrive: (drive: AddDriveInput | AddPublicDriveInput) => {},
+            onCreateDrive: (
+                drive: AddLocalDriveInput | AddPublicDriveInput,
+            ) => {},
             onRenameNode: (name: string, uiNode: UiNode) => {},
             onDuplicateNode: (uiNode: UiNode) => {},
             onDeleteNode: (uiNode: UiNode) => {},

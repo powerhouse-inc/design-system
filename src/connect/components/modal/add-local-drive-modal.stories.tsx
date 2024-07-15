@@ -1,11 +1,11 @@
 import { useArgs } from '@storybook/preview-api';
 import { Meta, StoryObj } from '@storybook/react';
-import { CreateDriveModal } from './create-drive-modal';
+import { AddLocalDriveModal } from './add-local-drive-modal';
 
 const meta = {
     title: 'Connect/Components/Create Drive Modal',
-    component: CreateDriveModal,
-} satisfies Meta<typeof CreateDriveModal>;
+    component: AddLocalDriveModal,
+} satisfies Meta<typeof AddLocalDriveModal>;
 
 export default meta;
 
@@ -41,7 +41,7 @@ export const Default: Story = {
                 >
                     Open Modal
                 </button>
-                <CreateDriveModal
+                <AddLocalDriveModal
                     {...args}
                     modalProps={{
                         ...args.modalProps,
