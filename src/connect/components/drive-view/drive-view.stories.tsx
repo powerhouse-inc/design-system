@@ -1,4 +1,15 @@
 import {
+    DELETE,
+    DRIVE,
+    DUPLICATE,
+    FILE,
+    FOLDER,
+    NEW_FOLDER,
+    RENAME,
+    SETTINGS,
+} from '@/connect/constants';
+import { NodeDropdownMenuOption, NodeType } from '@/connect/types';
+import {
     mockCloudDrive,
     mockLocalDrive,
     mockPublicDrive,
@@ -31,7 +42,16 @@ const meta: Meta<typeof DriveView> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const allowedDropdownMenuOptions: Record<NodeType, NodeDropdownMenuOption[]> = {
+    [DRIVE]: [NEW_FOLDER, RENAME, DELETE, SETTINGS],
+    [FOLDER]: [NEW_FOLDER, RENAME, DELETE, DUPLICATE],
+    [FILE]: [RENAME, DELETE, DUPLICATE],
+};
+
 const Template: Story = {
+    args: {
+        allowedDropdownMenuOptions,
+    },
     render: function Wrapper(args) {
         const { setDriveNodes } = useItemsContext();
         useEffect(() => {

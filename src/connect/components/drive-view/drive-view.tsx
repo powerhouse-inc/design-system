@@ -2,7 +2,7 @@ import {
     AddDriveInput,
     AddPublicDriveInput,
     AddPublicDriveModal,
-    ConnectTreeViewItem,
+    ConnectTreeView,
     CreateDriveModal,
     LOCAL,
     NodeDropdownMenuOption,
@@ -98,7 +98,7 @@ export function DriveView(props: DriveViewProps) {
             </div>
             <>
                 {driveNodes.map(driveNode => (
-                    <ConnectTreeViewItem
+                    <ConnectTreeView
                         {...props}
                         key={driveNode.id}
                         uiNode={driveNode}

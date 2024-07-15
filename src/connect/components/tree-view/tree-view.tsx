@@ -34,7 +34,7 @@ import { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
 import { SyncStatusIcon } from '../status-icon';
 
-export type ConnectTreeViewItemProps = {
+export type ConnectTreeViewProps = {
     uiNode: UiNode;
     allowedDropdownMenuOptions: Record<NodeType, NodeDropdownMenuOption[]>;
     isAllowedToCreateDocuments: boolean;
@@ -63,7 +63,7 @@ export type ConnectTreeViewItemProps = {
     onClick?: MouseEventHandler<HTMLDivElement>;
 };
 
-export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
+export function ConnectTreeView(props: ConnectTreeViewProps) {
     const {
         uiNode,
         allowedDropdownMenuOptions,
@@ -393,7 +393,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                         )}
                         {hasChildren &&
                             children.map(uiNode => (
-                                <ConnectTreeViewItem
+                                <ConnectTreeView
                                     {...props}
                                     key={uiNode.id}
                                     uiNode={uiNode}
