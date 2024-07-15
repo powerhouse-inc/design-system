@@ -1,4 +1,4 @@
-import { UiNode, useItemsContext } from '@/connect';
+import { UiNode, useUiNodesContext } from '@/connect';
 import { DivProps, Icon } from '@/powerhouse';
 import { useState } from 'react';
 import { AddNewItemInput } from './add-new-item-input';
@@ -14,7 +14,7 @@ export type BreadcrumbsProps = DivProps & {
  */
 export function Breadcrumbs(props: BreadcrumbsProps) {
     const { onSubmitNewFolder } = props;
-    const { selectedNodePath } = useItemsContext();
+    const { selectedNodePath } = useUiNodesContext();
     const [isAddingNewItem, setIsAddingNewFolder] = useState(false);
 
     const { isAllowedToCreateDocuments = true } = props;
@@ -75,7 +75,7 @@ export type BreadcrumbProps = {
 
 export function Breadcrumb(props: BreadcrumbProps) {
     const { node } = props;
-    const { setSelectedNode } = useItemsContext();
+    const { setSelectedNode } = useUiNodesContext();
 
     return (
         <>

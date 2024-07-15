@@ -10,7 +10,7 @@ import {
     SharingType,
     UiDriveNode,
     UiNode,
-    useItemsContext,
+    useUiNodesContext,
 } from '@/connect';
 import { Icon, UseDraggableTargetProps } from '@/powerhouse';
 import { ReactNode, useState } from 'react';
@@ -60,7 +60,7 @@ export function DriveView(props: DriveViewProps) {
         disableAddDrives,
         isAllowedToCreateDocuments = true,
     } = props;
-    const { selectedDriveNode } = useItemsContext();
+    const { selectedDriveNode } = useUiNodesContext();
     const [showAddModal, setShowAddModal] = useState(false);
     const hasDriveNodes = driveNodes.length > 0;
     const isContainerHighlighted =

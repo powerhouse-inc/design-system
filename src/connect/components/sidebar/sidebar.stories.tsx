@@ -1,5 +1,11 @@
 import connectLogo from '@/assets/connect.png';
 import {
+    UiDriveNode,
+    UiNode,
+    UiNodesContextProvider,
+    useUiNodesContext,
+} from '@/connect';
+import {
     CLOUD,
     DELETE,
     DRIVE,
@@ -12,12 +18,6 @@ import {
     RENAME,
     SETTINGS,
 } from '@/connect/constants';
-import {
-    ItemsContextProvider,
-    UiDriveNode,
-    UiNode,
-    useItemsContext,
-} from '@/connect/context/ItemsContext';
 import { NodeDropdownMenuOption, NodeType, SharingType } from '@/connect/types';
 import { mockDriveNodes } from '@/connect/utils';
 import { DropItem } from '@/powerhouse';
@@ -51,16 +51,16 @@ const user = {
 export const Expanded: Story = {
     decorators: [
         Story => (
-            <ItemsContextProvider>
+            <UiNodesContextProvider>
                 <div className="relative h-screen">
                     <Story />
                 </div>
-            </ItemsContextProvider>
+            </UiNodesContextProvider>
         ),
     ],
     render: function Wrapper(args) {
         const [collapsed, setCollapsed] = useState(args.collapsed);
-        const { driveNodes, setDriveNodes } = useItemsContext();
+        const { driveNodes, setDriveNodes } = useUiNodesContext();
 
         useEffect(() => {
             setDriveNodes(args.driveNodes ?? []);

@@ -1,11 +1,11 @@
 import {
     DRIVE,
     FOLDER,
-    ItemsContextProvider,
     mockDriveNodes,
     SUCCESS,
     UiFolderNode,
-    useItemsContext,
+    UiNodesContextProvider,
+    useUiNodesContext,
 } from '@/connect';
 import { Meta, StoryObj } from '@storybook/react';
 import { useEffect } from 'react';
@@ -17,9 +17,9 @@ const meta: Meta<typeof Breadcrumbs> = {
     decorators: [
         Story => {
             return (
-                <ItemsContextProvider>
+                <UiNodesContextProvider>
                     <Story />
-                </ItemsContextProvider>
+                </UiNodesContextProvider>
             );
         },
     ],
@@ -36,7 +36,7 @@ export const Default: Story = {
             setSelectedNode,
             selectedNode,
             selectedDriveNode,
-        } = useItemsContext();
+        } = useUiNodesContext();
 
         useEffect(() => {
             setDriveNodes(mockDriveNodes);

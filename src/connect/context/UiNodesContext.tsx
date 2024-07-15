@@ -45,15 +45,15 @@ const defaultTreeItemContextValue: TreeItemContext = {
     getSiblings: () => [],
 };
 
-export const ItemsContext = createContext<TreeItemContext>(
+export const UiNodesContext = createContext<TreeItemContext>(
     defaultTreeItemContextValue,
 );
 
-export interface ItemsContextProviderProps {
+export interface UiNodesContextProviderProps {
     children: ReactNode;
 }
 
-export const ItemsContextProvider: FC<ItemsContextProviderProps> = ({
+export const UiNodesContextProvider: FC<UiNodesContextProviderProps> = ({
     children,
 }) => {
     const [driveNodes, setDriveNodes] = useState<UiDriveNode[]>([]);
@@ -130,7 +130,7 @@ export const ItemsContextProvider: FC<ItemsContextProviderProps> = ({
     }
 
     return (
-        <ItemsContext.Provider
+        <UiNodesContext.Provider
             value={{
                 driveNodes,
                 selectedNode,
@@ -144,12 +144,12 @@ export const ItemsContextProvider: FC<ItemsContextProviderProps> = ({
             }}
         >
             {children}
-        </ItemsContext.Provider>
+        </UiNodesContext.Provider>
     );
 };
 
-export const useItemsContext = () => {
-    const contextValue = useContext(ItemsContext);
+export const useUiNodesContext = () => {
+    const contextValue = useContext(UiNodesContext);
     return contextValue;
 };
 

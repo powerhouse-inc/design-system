@@ -17,9 +17,9 @@ import {
 import type { Meta, StoryObj } from '@storybook/react';
 import { useEffect } from 'react';
 import {
-    ItemsContextProvider,
-    useItemsContext,
-} from '../../context/ItemsContext';
+    UiNodesContextProvider,
+    useUiNodesContext,
+} from '../../context/UiNodesContext';
 import { DriveView } from './drive-view';
 
 const meta: Meta<typeof DriveView> = {
@@ -30,11 +30,11 @@ const meta: Meta<typeof DriveView> = {
     },
     decorators: [
         Story => (
-            <ItemsContextProvider>
+            <UiNodesContextProvider>
                 <div className="w-[420px] bg-gray-50 p-10">
                     <Story />
                 </div>
-            </ItemsContextProvider>
+            </UiNodesContextProvider>
         ),
     ],
 };
@@ -53,7 +53,7 @@ const Template: Story = {
         allowedDropdownMenuOptions,
     },
     render: function Wrapper(args) {
-        const { setDriveNodes } = useItemsContext();
+        const { setDriveNodes } = useUiNodesContext();
         useEffect(() => {
             setDriveNodes(args.driveNodes);
         }, []);

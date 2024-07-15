@@ -21,7 +21,7 @@ import {
     UiNode,
     WRITE,
     iconMap,
-    useItemsContext,
+    useUiNodesContext,
 } from '@/connect';
 import { dropdownMenuOptionsMap } from '@/connect/utils/dropdown-menu-options';
 import {
@@ -86,7 +86,8 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
         onDropEvent,
         onDropActivate,
     } = props;
-    const { setSelectedNode, getIsSelected, getIsExpanded } = useItemsContext();
+    const { setSelectedNode, getIsSelected, getIsExpanded } =
+        useUiNodesContext();
     const [mode, setMode] = useState<
         typeof READ | typeof WRITE | typeof CREATE
     >(READ);

@@ -8,7 +8,7 @@ import {
     RENAME,
     UiFileNode,
     UiNode,
-    useItemsContext,
+    useUiNodesContext,
     WRITE,
 } from '@/connect';
 import { dropdownMenuOptionsMap } from '@/connect/utils/dropdown-menu-options';
@@ -52,7 +52,7 @@ export const FileItem: React.FC<FileItemProps> = ({
     const containerRef = useRef(null);
     const [mode, setMode] = useState<typeof READ | typeof WRITE>(READ);
     const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
-    const { selectedNodePath } = useItemsContext();
+    const { selectedNodePath } = useUiNodesContext();
 
     const { dragProps } = useDraggableTarget({
         data: uiFileNode,
