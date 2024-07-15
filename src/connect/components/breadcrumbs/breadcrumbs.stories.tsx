@@ -3,6 +3,7 @@ import {
     FOLDER,
     ItemsContextProvider,
     mockDriveNodes,
+    SUCCESS,
     UiFolderNode,
     useItemsContext,
 } from '@/connect';
@@ -57,6 +58,7 @@ export const Default: Story = {
                 kind: FOLDER,
                 name,
                 parentFolder: selectedNode.id,
+                syncStatus: SUCCESS,
                 children: [],
             };
 

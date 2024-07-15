@@ -21,7 +21,7 @@ type Story = StoryObj<typeof meta>;
 
 const Template: Story = {
     args: {
-        label: 'Local Device',
+        name: 'Local Device',
         icon: folderCloseIcon,
         expandedIcon: folderOpenIcon,
     },
@@ -30,7 +30,6 @@ export const ReadMode: Story = {
     ...Template,
     args: {
         ...Template.args,
-        mode: 'read',
     },
 };
 
@@ -48,7 +47,6 @@ export const WriteMode: Story = {
     ...Template,
     args: {
         ...Template.args,
-        mode: 'write',
     },
 };
 

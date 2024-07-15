@@ -1,3 +1,4 @@
+import { PUBLIC } from '@/connect/constants';
 import { Meta, StoryObj } from '@storybook/react';
 import { AddPublicDriveForm } from './add-public-drive-form';
 
@@ -15,6 +16,7 @@ const Template: Story = {
         onSubmit: data => {
             console.log(data);
         },
+        sharingType: PUBLIC,
         onCancel: () => {},
     },
     decorators: [
