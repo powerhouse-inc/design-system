@@ -1,10 +1,7 @@
 import {
     AddLocalDriveInput,
-    AddLocalDriveModal,
-    AddPublicDriveInput,
-    AddPublicDriveModal,
+    AddRemoteDriveInput,
     ConnectTreeView,
-    LOCAL,
     NodeDropdownMenuOption,
     NodeType,
     SharingType,
@@ -28,7 +25,7 @@ export interface DriveViewProps
     allowedDropdownMenuOptions: Record<NodeType, NodeDropdownMenuOption[]>;
     disableHighlightStyles?: boolean;
     onCreateFolder: (name: string, uiNode: UiNode) => void;
-    onCreateDrive: (drive: AddLocalDriveInput | AddPublicDriveInput) => void;
+    onCreateDrive: (drive: AddLocalDriveInput | AddRemoteDriveInput) => void;
     onRenameNode: (name: string, uiNode: UiNode) => void;
     onDuplicateNode: (uiNode: UiNode) => void;
     onDeleteNode: (uiNode: UiNode) => void;
@@ -103,22 +100,6 @@ export function DriveView(props: DriveViewProps) {
                     uiNode={driveNode}
                 />
             ))}
-            {sharingType !== LOCAL && isAllowedToCreateDocuments && (
-                <AddPublicDriveModal
-                    modalProps={{
-                        open: showAddModal,
-                        onOpenChange: setShowAddModal,
-                    }}
-                    formProps={{
-                        sharingType,
-                        onSubmit: data => {
-                            onCreateDrive(data);
-                            setShowAddModal(false);
-                        },
-                        onCancel: () => setShowAddModal(false),
-                    }}
-                />
-            )}
         </div>
     );
 }

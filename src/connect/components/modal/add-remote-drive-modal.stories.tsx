@@ -1,12 +1,12 @@
 import { PUBLIC } from '@/connect/constants';
 import { useArgs } from '@storybook/preview-api';
 import { Meta, StoryObj } from '@storybook/react';
-import { AddPublicDriveModal } from './add-public-drive-modal';
+import { AddRemoteDriveModal } from './add-remote-drive-modal';
 
 const meta = {
-    title: 'Connect/Components/Add Public Drive Modal',
-    component: AddPublicDriveModal,
-} satisfies Meta<typeof AddPublicDriveModal>;
+    title: 'Connect/Components/Add Remote Drive Modal',
+    component: AddRemoteDriveModal,
+} satisfies Meta<typeof AddRemoteDriveModal>;
 
 export default meta;
 
@@ -42,7 +42,7 @@ export const Default: Story = {
                 >
                     Open Modal
                 </button>
-                <AddPublicDriveModal
+                <AddRemoteDriveModal
                     {...args}
                     modalProps={{
                         ...args.modalProps,

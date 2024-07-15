@@ -27,7 +27,7 @@ import { ComponentPropsWithoutRef, useState } from 'react';
 import { DragEndEvent, DragStartEvent, DropEvent } from 'react-aria';
 import {
     AddLocalDriveInput,
-    AddPublicDriveInput,
+    AddRemoteDriveInput,
     ConnectSidebar,
     DriveView,
 } from '..';
@@ -78,7 +78,7 @@ export const Expanded: Story = {
         const nodeHandlers = {
             onCreateFolder: (name: string, uiNode: UiNode) => {},
             onCreateDrive: (
-                drive: AddLocalDriveInput | AddPublicDriveInput,
+                drive: AddLocalDriveInput | AddRemoteDriveInput,
             ) => {},
             onRenameNode: (name: string, uiNode: UiNode) => {},
             onDuplicateNode: (uiNode: UiNode) => {},

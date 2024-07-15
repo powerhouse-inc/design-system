@@ -1,11 +1,11 @@
 import { PUBLIC } from '@/connect/constants';
 import { Meta, StoryObj } from '@storybook/react';
-import { AddPublicDriveForm } from './add-public-drive-form';
+import { AddRemoteDriveForm } from './add-remote-drive-form';
 
 const meta = {
     title: 'Connect/Components/Add Public Drive Form',
-    component: AddPublicDriveForm,
-} satisfies Meta<typeof AddPublicDriveForm>;
+    component: AddRemoteDriveForm,
+} satisfies Meta<typeof AddRemoteDriveForm>;
 
 export default meta;
 
@@ -30,5 +30,5 @@ const Template: Story = {
 
 export const Default: Story = {
     ...Template,
-    render: args => <AddPublicDriveForm {...args} />,
+    render: args => <AddRemoteDriveForm {...args} />,
 };

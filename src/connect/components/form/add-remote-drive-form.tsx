@@ -1,7 +1,5 @@
 import {
-    AddLocalDriveInput,
     AvailableOfflineToggle,
-    CLOUD,
     Disclosure,
     Divider,
     DriveName,
@@ -9,6 +7,7 @@ import {
     Label,
     LocationInfo,
     PUBLIC,
+    SharingType,
     SWITCHBOARD,
 } from '@/connect';
 import { Button, Icon } from '@/powerhouse';
@@ -17,10 +16,10 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDebounceValue } from 'usehooks-ts';
 
-interface PublicDriveDetails extends AddLocalDriveInput {
+interface RemoteDriveDetails {
     id: string;
-    driveName: string;
-    sharingType: typeof PUBLIC | typeof CLOUD;
+    name: string;
+    sharingType: SharingType;
     location: typeof SWITCHBOARD;
     availableOffline: boolean;
 }
@@ -29,18 +28,18 @@ type Inputs = {
     availableOffline: boolean;
 };
 
-export type AddPublicDriveInput = PublicDriveDetails & { url: string };
+export type AddRemoteDriveInput = RemoteDriveDetails & { url: string };
 
 type AddPublicDriveFormProps = {
-    sharingType: typeof PUBLIC | typeof CLOUD;
-    onSubmit: (data: AddPublicDriveInput) => void;
+    sharingType: SharingType;
+    onSubmit: (data: AddRemoteDriveInput) => void;
     onCancel: () => void;
 };
 
-export function AddPublicDriveForm(props: AddPublicDriveFormProps) {
+export function AddRemoteDriveForm(props: AddPublicDriveFormProps) {
     const { sharingType = PUBLIC } = props;
-    const [publicDriveDetails, setPublicDriveDetails] =
-        useState<PublicDriveDetails>();
+    const [remoteDriveDetails, setPublicDriveDetails] =
+        useState<RemoteDriveDetails>();
     const [showLocationSettings, setShowLocationSettings] = useState(false);
     const [isUrlValid, setIsUrlValid] = useState(true);
     const [hasConfirmedUrl, setHasConfirmedUrl] = useState(false);
@@ -51,7 +50,7 @@ export function AddPublicDriveForm(props: AddPublicDriveFormProps) {
     const { register, handleSubmit, setValue } = useForm<Inputs>({
         mode: 'onBlur',
         defaultValues: {
-            availableOffline: publicDriveDetails?.availableOffline ?? false,
+            availableOffline: remoteDriveDetails?.availableOffline ?? false,
         },
     });
 
@@ -69,7 +68,7 @@ export function AddPublicDriveForm(props: AddPublicDriveFormProps) {
                 const { id, name } = await requestPublicDrive(debouncedUrl);
                 setPublicDriveDetails({
                     id,
-                    driveName: name,
+                    name,
                     sharingType,
                     location: SWITCHBOARD,
                     availableOffline: true,
@@ -86,9 +85,9 @@ export function AddPublicDriveForm(props: AddPublicDriveFormProps) {
     }, [debouncedUrl, setValue, sharingType]);
 
     function onSubmit({ availableOffline }: Inputs) {
-        if (!publicDriveDetails) return;
+        if (!remoteDriveDetails) return;
         props.onSubmit({
-            ...publicDriveDetails,
+            ...remoteDriveDetails,
             availableOffline,
             url: debouncedUrl,
         });
@@ -100,7 +99,7 @@ export function AddPublicDriveForm(props: AddPublicDriveFormProps) {
             {hasConfirmedUrl ? (
                 <>
                     <DriveName
-                        driveName={publicDriveDetails?.driveName ?? 'New drive'}
+                        driveName={remoteDriveDetails?.name ?? 'New drive'}
                     />
                     <Divider className="my-3" />
                     <Disclosure
