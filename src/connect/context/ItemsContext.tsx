@@ -1,10 +1,12 @@
 import {
     DocumentType,
     DRIVE,
+    ERROR,
     FILE,
     FOLDER,
     LOCAL,
     SharingType,
+    SUCCESS,
     SyncStatus,
 } from '@/connect';
 import { Maybe, Scalars, SynchronizationUnit } from 'document-model/document';
@@ -175,6 +177,7 @@ export type UiFileNode = {
     parentFolder: string;
     driveId: string;
     syncStatus: SyncStatus | undefined;
+    synchronizationUnits: SynchronizationUnit[];
 };
 
 export type UiFolderNode = {
@@ -224,10 +227,10 @@ function getSyncStatus(
 ): SyncStatus | undefined {
     if (type === LOCAL) return;
     try {
-        return 'SUCCESS';
+        return SUCCESS;
     } catch (error) {
         console.error(error);
-        return 'ERROR';
+        return ERROR;
     }
 }
 
@@ -255,22 +258,20 @@ export function makeDriveNode(drive: DocumentDriveDocument) {
             ...n,
             driveId: id,
             parentFolder: n.parentFolder || id,
+            syncStatus: driveSyncStatus,
         };
 
-        if (node.kind === FILE && 'synchronizationUnits' in node) {
-            return {
-                ...node,
-                syncStatus: getSyncStatus(
-                    node.synchronizationUnits[0].syncId,
-                    sharingType,
-                ),
-            } as UiFileNode;
+        if (node.kind === DRIVE) {
+            throw new Error('Drive nodes should not be nested');
+        }
+
+        if (node.kind === FILE) {
+            return node as UiFileNode;
         }
 
         return {
             ...node,
             children: [],
-            syncStatus: driveSyncStatus,
         } as UiFolderNode;
     });
 
@@ -279,17 +280,30 @@ export function makeDriveNode(drive: DocumentDriveDocument) {
     }
 
     for (const node of nodes) {
+        if (node.kind === FILE) {
+            node.syncStatus = getSyncStatus(
+                node.synchronizationUnits[0].syncId,
+                sharingType,
+            );
+        }
+
         if (node.parentFolder === id) {
             driveNode.children.push(node);
             continue;
         }
         const parent = driveNode.nodeMap[node.parentFolder];
+
         if (parent.kind === FILE) {
             throw new Error(
                 `Parent node ${node.parentFolder} is a file, not a folder`,
             );
         }
+
         parent.children.push(node);
+
+        if (node.syncStatus !== SUCCESS) {
+            parent.syncStatus = node.syncStatus;
+        }
     }
 
     return driveNode;

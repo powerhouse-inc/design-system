@@ -1,4 +1,11 @@
-import { CLOUD, FILE, FOLDER, LOCAL, PUBLIC } from '@/connect/constants';
+import {
+    CLOUD,
+    FILE,
+    FOLDER,
+    LOCAL,
+    PUBLIC,
+    SUCCESS,
+} from '@/connect/constants';
 import {
     DocumentDriveDocument,
     FileNode,
@@ -17,7 +24,8 @@ export const mockUiFileNode: UiFileNode = {
     name: 'Mock file in drive',
     parentFolder: mockDriveId,
     driveId: mockDriveId,
-    syncStatus: 'SUCCESS',
+    syncStatus: SUCCESS,
+    synchronizationUnits: [{ syncId: '1', scope: 'global', branch: 'main' }],
 };
 
 export const mockUiFolderNode: UiFolderNode = {
@@ -26,7 +34,7 @@ export const mockUiFolderNode: UiFolderNode = {
     name: 'Mock folder in drive',
     parentFolder: mockDriveId,
     driveId: mockDriveId,
-    syncStatus: 'SUCCESS',
+    syncStatus: SUCCESS,
     children: [],
 };
 
