@@ -6,14 +6,14 @@ import {
     PUBLIC,
     SUCCESS,
 } from '@/connect/constants';
+import { makeDriveNode } from '@/connect/context';
 import {
     DocumentDriveDocument,
     FileNode,
     FolderNode,
-    makeDriveNode,
     UiFileNode,
     UiFolderNode,
-} from '@/connect/context';
+} from '@/connect/types';
 
 const mockDriveId = 'mock-drive-id';
 

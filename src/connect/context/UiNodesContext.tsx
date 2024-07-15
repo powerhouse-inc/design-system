@@ -1,15 +1,17 @@
 import {
-    DocumentType,
+    DocumentDriveDocument,
     DRIVE,
     ERROR,
     FILE,
-    FOLDER,
     LOCAL,
     SharingType,
     SUCCESS,
     SyncStatus,
+    UiDriveNode,
+    UiFileNode,
+    UiFolderNode,
+    UiNode,
 } from '@/connect';
-import { Maybe, Scalars, SynchronizationUnit } from 'document-model/document';
 import {
     createContext,
     Dispatch,
@@ -151,74 +153,6 @@ export const UiNodesContextProvider: FC<UiNodesContextProviderProps> = ({
 export const useUiNodesContext = () => {
     const contextValue = useContext(UiNodesContext);
     return contextValue;
-};
-
-export type FileNode = {
-    documentType: Scalars['String']['output'];
-    id: Scalars['String']['output'];
-    kind: Scalars['String']['output'];
-    name: Scalars['String']['output'];
-    parentFolder: Maybe<Scalars['String']['output']>;
-    synchronizationUnits: SynchronizationUnit[];
-};
-
-export type FolderNode = {
-    id: Scalars['String']['output'];
-    kind: Scalars['String']['output'];
-    name: Scalars['String']['output'];
-    parentFolder: Maybe<Scalars['String']['output']>;
-};
-
-export type UiFileNode = {
-    kind: typeof FILE;
-    id: string;
-    name: string;
-    documentType: DocumentType;
-    parentFolder: string;
-    driveId: string;
-    syncStatus: SyncStatus | undefined;
-    synchronizationUnits: SynchronizationUnit[];
-};
-
-export type UiFolderNode = {
-    kind: typeof FOLDER;
-    id: string;
-    name: string;
-    parentFolder: string;
-    driveId: string;
-    children: UiNode[];
-    syncStatus: SyncStatus | undefined;
-};
-
-export type UiNode = UiDriveNode | UiFileNode | UiFolderNode;
-
-export type UiDriveNode = {
-    kind: typeof DRIVE;
-    id: string;
-    name: string;
-    parentFolder: null;
-    driveId: string;
-    children: UiNode[];
-    nodeMap: Record<string, UiNode>;
-    syncStatus: SyncStatus | undefined;
-    sharingType: SharingType;
-    availableOffline: boolean;
-    icon: string | null;
-};
-
-export type DocumentDriveDocument = {
-    state: {
-        global: {
-            id: string;
-            name: string;
-            icon: string;
-            nodes: (FileNode | FolderNode)[];
-        };
-        local: {
-            sharingType: SharingType;
-            availableOffline: boolean;
-        };
-    };
 };
 
 function getSyncStatus(
