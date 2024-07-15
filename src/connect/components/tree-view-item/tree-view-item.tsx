@@ -1,6 +1,8 @@
 import {
     CLOUD,
+    CREATE,
     ConnectDropdownMenu,
+    DELETE,
     DRIVE,
     DUPLICATE,
     DriveSettingsModal,
@@ -11,26 +13,24 @@ import {
     NodeDropdownMenuOption,
     NodeType,
     PUBLIC,
+    READ,
     RENAME,
+    SETTINGS,
     SharingType,
     UiDriveNode,
     UiNode,
+    WRITE,
     iconMap,
     useItemsContext,
 } from '@/connect';
+import { dropdownMenuOptionsMap } from '@/connect/utils/dropdown-menu-options';
 import {
     Icon,
     TreeViewItem,
     UseDraggableTargetProps,
     useDraggableTarget,
 } from '@/powerhouse';
-import {
-    MouseEventHandler,
-    ReactNode,
-    useEffect,
-    useRef,
-    useState,
-} from 'react';
+import { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
 import { SyncStatusIcon } from '../status-icon';
 
@@ -87,7 +87,9 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         onDropActivate,
     } = props;
     const { setSelectedNode, getIsSelected, getIsExpanded } = useItemsContext();
-    const [mode, setMode] = useState<'read' | 'write' | 'create'>('read');
+    const [mode, setMode] = useState<
+        typeof READ | typeof WRITE | typeof CREATE
+    >(READ);
     const [internalExpandedState, setInternalExpandedState] = useState(false);
     const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
     const [isDriveSettingsModalOpen, setIsDriveSettingsModalOpen] =
@@ -129,57 +131,28 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         }
     }, [isSelected]);
 
-    const dropdownMenuOptionsMap: Record<
-        NodeDropdownMenuOption,
-        {
-            label: ReactNode;
-            icon: React.JSX.Element;
-            handler: () => void;
-            className?: string;
-        }
-    > = {
-        [DUPLICATE]: {
-            label: 'Duplicate',
-            icon: <Icon name="files-earmark" />,
-            handler: () => onDuplicateNode(uiNode),
+    const dropdownMenuHandlers: Record<NodeDropdownMenuOption, () => void> = {
+        [DUPLICATE]: () => onDuplicateNode(uiNode),
+        [NEW_FOLDER]: () => {
+            setSelectedNode(uiNode);
+            setInternalExpandedState(true);
+            setMode(CREATE);
         },
-        [NEW_FOLDER]: {
-            label: 'New Folder',
-            icon: <Icon name="folder-plus" />,
-            handler: () => {
-                setSelectedNode(uiNode);
-                setInternalExpandedState(true);
-                setMode('create');
-            },
+        [RENAME]: () => setMode(WRITE),
+        [DELETE]: () => {
+            if (uiNode.kind === DRIVE) {
+                onDeleteDrive(uiNode);
+            } else {
+                onDeleteNode(uiNode);
+            }
         },
-        [RENAME]: {
-            label: 'Rename',
-            icon: <Icon name="pencil" />,
-            handler: () => setMode('write'),
-        },
-        DELETE: {
-            label: 'Delete',
-            icon: <Icon name="trash" />,
-            className: 'text-red-900',
-            handler: () => {
-                if (uiNode.kind === DRIVE) {
-                    onDeleteDrive(uiNode);
-                } else {
-                    onDeleteNode(uiNode);
-                }
-            },
-        },
-        SETTINGS: {
-            label: 'Settings',
-            icon: <Icon name="gear" />,
-            handler: () => setIsDriveSettingsModalOpen(true),
-        },
+        [SETTINGS]: () => setIsDriveSettingsModalOpen(true),
     } as const;
 
     const dropdownMenuOptions = Object.entries(dropdownMenuOptionsMap)
         .map(([id, option]) => ({
-            id: id as NodeDropdownMenuOption,
             ...option,
+            id: id as NodeDropdownMenuOption,
         }))
         .filter(option =>
             allowedDropdownMenuOptions[uiNode.kind].includes(option.id),
@@ -236,30 +209,30 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
     }
 
     function onItemClick(itemId: NodeDropdownMenuOption) {
-        const item = dropdownMenuOptionsMap[itemId];
-        item.handler();
+        const handler = dropdownMenuHandlers[itemId];
+        handler();
         setIsDropdownMenuOpen(false);
     }
 
     function onSubmitHandler(value: string) {
-        if (mode === 'create') {
+        if (mode === CREATE) {
             onCreateFolder(value, uiNode);
         } else {
             onRenameNode(value, uiNode);
         }
-        setMode('read');
+        setMode(READ);
     }
 
     const handleClick: MouseEventHandler<HTMLDivElement> = event => {
         event.stopPropagation();
         onClick?.(event);
-        if (mode === 'write') return;
+        if (mode === WRITE) return;
         setSelectedNode(uiNode);
         setInternalExpandedState(prevExpanded => !prevExpanded);
     };
 
     function onCancelHandler() {
-        setMode('read');
+        setMode(READ);
     }
     function getItemIcon() {
         if (isPublicDrive && uiNode.icon) {
@@ -321,7 +294,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         if (isDropTarget) return true;
         if (disableHighlightStyles) return false;
         if (isDragging) return false;
-        if (mode === 'write' || mode === 'create') return true;
+        if (mode === WRITE || mode === CREATE) return true;
         if (isDropdownMenuOpen) return true;
         if (isSelected) return true;
         return false;
@@ -387,7 +360,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
                 itemContent={itemContent}
                 open={isExpanded}
                 hasCaret={hasChildren}
-                isWriteMode={mode === 'write'}
+                isWriteMode={mode === WRITE}
                 itemContainerProps={{
                     className: getItemContainerClassName(),
                 }}
@@ -395,7 +368,7 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
             >
                 {isExpanded && (
                     <>
-                        {mode === 'create' && (
+                        {mode === CREATE && (
                             <TreeViewItem
                                 name="New Folder"
                                 itemContent="New Folder"

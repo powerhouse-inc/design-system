@@ -2,7 +2,6 @@ import {
     ConnectDropdownMenu,
     ConnectDropdownMenuProps,
     FileItemIconType,
-    TreeItem,
     iconMap,
 } from '@/connect';
 import {

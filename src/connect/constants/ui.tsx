@@ -57,6 +57,9 @@ export const NEW_FOLDER = 'NEW_FOLDER';
 export const RENAME = 'RENAME';
 export const DELETE = 'DELETE';
 export const SETTINGS = 'SETTINGS';
+export const CREATE = 'CREATE';
+export const WRITE = 'WRITE';
+export const READ = 'READ';
 
 export const nodeDropdownMenuOptions = [
     DUPLICATE,
