@@ -13,14 +13,9 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
     args: {
-        formProps: {
-            location: 'CLOUD',
-            onSubmit() {},
-            onCancel() {},
-        },
-        modalProps: {
-            open: true,
-        },
+        open: true,
+        onSubmit() {},
+        onOpenChange() {},
     },
     render: function Wrapper(args) {
         const [, setArgs] = useArgs<typeof args>();
@@ -32,10 +27,7 @@ export const Default: Story = {
                     onClick={() => {
                         setArgs({
                             ...args,
-                            modalProps: {
-                                ...args.modalProps,
-                                open: true,
-                            },
+                            open: true,
                         });
                     }}
                 >
@@ -48,23 +40,7 @@ export const Default: Story = {
                         onOpenChange: open => {
                             setArgs({
                                 ...args,
-                                modalProps: {
-                                    ...args.modalProps,
-                                    open,
-                                },
-                            });
-                        },
-                    }}
-                    formProps={{
-                        ...args.formProps,
-                        onSubmit: data => {
-                            console.log(data);
-                            setArgs({
-                                ...args,
-                                formProps: {
-                                    ...args.formProps,
-                                    ...data,
-                                },
+                                open,
                             });
                         },
                     }}

@@ -5,7 +5,6 @@ import {
     DELETE,
     DRIVE,
     DUPLICATE,
-    DriveSettingsModal,
     FILE,
     FOLDER,
     LOCAL,
@@ -16,7 +15,6 @@ import {
     READ,
     RENAME,
     SETTINGS,
-    SharingType,
     UiDriveNode,
     UiNode,
     WRITE,
@@ -42,6 +40,7 @@ export type ConnectTreeViewProps = {
     disableDropBetween?: boolean;
     disableHighlightStyles?: boolean;
     displaySyncFolderIcons?: boolean;
+    showDriveSettingsModal: (uiDriveNode: UiDriveNode) => void;
     onDropActivate: (dropTargetItem: UiNode) => void;
     onDropEvent: UseDraggableTargetProps<UiNode>['onDropEvent'];
     onDragStart: UseDraggableTargetProps<UiNode>['onDragStart'];
@@ -50,16 +49,6 @@ export type ConnectTreeViewProps = {
     onRenameNode: (name: string, uiNode: UiNode) => void;
     onDuplicateNode: (uiNode: UiNode) => void;
     onDeleteNode: (uiNode: UiNode) => void;
-    onDeleteDrive: (uiNode: UiNode) => void;
-    onRenameDrive: (uiDriveNode: UiDriveNode, newName: string) => void;
-    onChangeSharingType: (
-        uiDriveNode: UiDriveNode,
-        newSharingType: SharingType,
-    ) => void;
-    onChangeAvailableOffline: (
-        uiDriveNode: UiDriveNode,
-        newAvailableOffline: boolean,
-    ) => void;
     onClick?: MouseEventHandler<HTMLDivElement>;
 };
 
@@ -76,15 +65,12 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
         onCreateFolder,
         onRenameNode,
         onDuplicateNode,
-        onDeleteDrive,
         onDeleteNode,
-        onRenameDrive,
-        onChangeSharingType,
-        onChangeAvailableOffline,
         onDragEnd,
         onDragStart,
         onDropEvent,
         onDropActivate,
+        showDriveSettingsModal,
     } = props;
     const { setSelectedNode, getIsSelected, getIsExpanded } =
         useUiNodesContext();
@@ -93,8 +79,6 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
     >(READ);
     const [internalExpandedState, setInternalExpandedState] = useState(false);
     const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
-    const [isDriveSettingsModalOpen, setIsDriveSettingsModalOpen] =
-        useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
     const children = uiNode.kind !== FILE ? uiNode.children : null;
     const hasChildren = !!children && children.length > 0;
@@ -144,12 +128,16 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
         [RENAME]: () => setMode(WRITE),
         [DELETE]: () => {
             if (uiNode.kind === DRIVE) {
-                onDeleteDrive(uiNode);
+                showDriveSettingsModal(uiNode);
             } else {
                 onDeleteNode(uiNode);
             }
         },
-        [SETTINGS]: () => setIsDriveSettingsModalOpen(true),
+        [SETTINGS]: () => {
+            if (uiNode.kind === DRIVE) {
+                showDriveSettingsModal(uiNode);
+            }
+        },
     } as const;
 
     const allowedDropdownMenuOptionsForKind =
@@ -189,26 +177,6 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
             />
         </div>
     );
-
-    function handleDeleteDrive() {
-        if (uiNode.kind !== DRIVE) return;
-        onDeleteDrive(uiNode);
-    }
-
-    function handleRenameDrive(newName: string) {
-        if (uiNode.kind !== DRIVE) return;
-        onRenameDrive(uiNode, newName);
-    }
-
-    function handleChangeSharingType(newSharingType: SharingType) {
-        if (uiNode.kind !== DRIVE) return;
-        onChangeSharingType(uiNode, newSharingType);
-    }
-
-    function handleChangeAvailableOffline(newAvailableOffline: boolean) {
-        if (uiNode.kind !== DRIVE) return;
-        onChangeAvailableOffline(uiNode, newAvailableOffline);
-    }
 
     function onDropdownMenuOpenChange() {
         setIsDropdownMenuOpen(!isDropdownMenuOpen);
@@ -405,17 +373,6 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
                     </>
                 )}
             </TreeViewItem>
-            {isDrive && isAllowedToCreateDocuments && (
-                <DriveSettingsModal
-                    uiDriveNode={uiNode}
-                    handleDeleteDrive={handleDeleteDrive}
-                    handleRenameDrive={handleRenameDrive}
-                    handleChangeSharingType={handleChangeSharingType}
-                    handleChangeAvailableOffline={handleChangeAvailableOffline}
-                    open={isDriveSettingsModalOpen}
-                    onOpenChange={setIsDriveSettingsModalOpen}
-                />
-            )}
         </>
     );
 }

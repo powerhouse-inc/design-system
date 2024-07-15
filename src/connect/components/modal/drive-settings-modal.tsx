@@ -15,10 +15,16 @@ export type DriveSettingsModalProps = {
     uiDriveNode: UiDriveNode;
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    handleDeleteDrive: () => void;
-    handleRenameDrive: (newName: string) => void;
-    handleChangeSharingType: (newSharingType: SharingType) => void;
-    handleChangeAvailableOffline: (newAvailableOffline: boolean) => void;
+    onRenameDrive: (uiDriveNode: UiDriveNode, newName: string) => void;
+    onDeleteDrive: (uiDriveNode: UiDriveNode) => void;
+    onChangeSharingType: (
+        uiDriveNode: UiDriveNode,
+        newSharingType: SharingType,
+    ) => void;
+    onChangeAvailableOffline: (
+        uiDriveNode: UiDriveNode,
+        newAvailableOffline: boolean,
+    ) => void;
     modalProps?: ModalProps;
     containerProps?: DivProps;
 };
@@ -27,25 +33,31 @@ export function DriveSettingsModal(props: DriveSettingsModalProps) {
         uiDriveNode,
         open,
         onOpenChange,
-        handleDeleteDrive,
-        handleRenameDrive,
-        handleChangeSharingType,
-        handleChangeAvailableOffline,
+        onDeleteDrive,
+        onRenameDrive,
+        onChangeSharingType,
+        onChangeAvailableOffline,
         modalProps,
         containerProps,
     } = props;
 
     const onSubmit: DriveSettingsFormSubmitHandler = data => {
         if (data.name !== uiDriveNode.name) {
-            handleRenameDrive(data.name);
+            onRenameDrive(uiDriveNode, data.name);
         }
         if (data.sharingType !== uiDriveNode.sharingType) {
-            handleChangeSharingType(data.sharingType);
+            onChangeSharingType(uiDriveNode, data.sharingType);
         }
         if (data.availableOffline !== uiDriveNode.availableOffline) {
-            handleChangeAvailableOffline(data.availableOffline);
+            onChangeAvailableOffline(uiDriveNode, data.availableOffline);
         }
+        onOpenChange(false);
     };
+
+    function handleDeleteDrive() {
+        onDeleteDrive(uiDriveNode);
+        onOpenChange(false);
+    }
 
     function handleCancel() {
         onOpenChange(false);

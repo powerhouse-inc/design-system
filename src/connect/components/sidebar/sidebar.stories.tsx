@@ -25,12 +25,7 @@ import { useEffect } from '@storybook/preview-api';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ComponentPropsWithoutRef, useState } from 'react';
 import { DragEndEvent, DragStartEvent, DropEvent } from 'react-aria';
-import {
-    AddLocalDriveInput,
-    AddRemoteDriveInput,
-    ConnectSidebar,
-    DriveView,
-} from '..';
+import { ConnectSidebar, DriveView } from '..';
 
 type Args = ComponentPropsWithoutRef<typeof ConnectSidebar> & {
     driveNodes?: UiDriveNode[];
@@ -70,16 +65,13 @@ export const Expanded: Story = {
             NodeType,
             NodeDropdownMenuOption[]
         > = {
-            [DRIVE]: [NEW_FOLDER, RENAME, DELETE, SETTINGS],
+            [DRIVE]: [NEW_FOLDER, RENAME, SETTINGS],
             [FOLDER]: [NEW_FOLDER, RENAME, DELETE, DUPLICATE],
             [FILE]: [RENAME, DELETE, DUPLICATE],
         };
 
         const nodeHandlers = {
             onCreateFolder: (name: string, uiNode: UiNode) => {},
-            onCreateDrive: (
-                drive: AddLocalDriveInput | AddRemoteDriveInput,
-            ) => {},
             onRenameNode: (name: string, uiNode: UiNode) => {},
             onDuplicateNode: (uiNode: UiNode) => {},
             onDeleteNode: (uiNode: UiNode) => {},
@@ -101,6 +93,8 @@ export const Expanded: Story = {
             onDropActivate: (dropTargetItem: UiNode) => {},
             onDragStart: (dragItem: UiNode, event: DragStartEvent) => {},
             onDragEnd: (dragItem: UiNode, event: DragEndEvent) => {},
+            showAddDriveModal: () => {},
+            showDriveSettingsModal: (uiDriveNode: UiDriveNode) => {},
         };
 
         const driveNodesByType = driveNodes.reduce<

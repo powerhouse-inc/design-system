@@ -15,14 +15,12 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
     args: {
         uiDriveNode: mockLocalDrive,
-        handleChangeAvailableOffline() {},
-        handleRenameDrive() {},
-        handleChangeSharingType() {},
-        handleDeleteDrive() {},
-        handleCancel() {},
-        modalProps: {
-            open: true,
-        },
+        onChangeAvailableOffline() {},
+        onRenameDrive() {},
+        onChangeSharingType() {},
+        onDeleteDrive() {},
+        onOpenChange() {},
+        open: true,
     },
     render: function Wrapper(args) {
         const [, setArgs] = useArgs<typeof args>();

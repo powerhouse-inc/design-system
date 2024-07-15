@@ -16,7 +16,6 @@ const Template: Story = {
             console.log(data);
         },
         onCancel: () => {},
-        location: 'CLOUD',
     },
     decorators: [
         Story => (

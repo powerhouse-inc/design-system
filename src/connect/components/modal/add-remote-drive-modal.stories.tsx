@@ -1,4 +1,4 @@
-import { PUBLIC } from '@/connect/constants';
+import { LOCAL } from '@/connect/constants';
 import { useArgs } from '@storybook/preview-api';
 import { Meta, StoryObj } from '@storybook/react';
 import { AddRemoteDriveModal } from './add-remote-drive-modal';
@@ -14,14 +14,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
     args: {
-        formProps: {
-            sharingType: PUBLIC,
-            onSubmit() {},
-            onCancel() {},
-        },
-        modalProps: {
-            open: true,
-        },
+        open: true,
+        onSubmit() {},
+        onOpenChange() {},
+        sharingType: LOCAL,
     },
     render: function Wrapper(args) {
         const [, setArgs] = useArgs<typeof args>();
@@ -42,34 +38,7 @@ export const Default: Story = {
                 >
                     Open Modal
                 </button>
-                <AddRemoteDriveModal
-                    {...args}
-                    modalProps={{
-                        ...args.modalProps,
-                        onOpenChange: open => {
-                            setArgs({
-                                ...args,
-                                modalProps: {
-                                    ...args.modalProps,
-                                    open,
-                                },
-                            });
-                        },
-                    }}
-                    formProps={{
-                        ...args.formProps,
-                        onSubmit: data => {
-                            console.log(data);
-                            setArgs({
-                                ...args,
-                                formProps: {
-                                    ...args.formProps,
-                                    ...data,
-                                },
-                            });
-                        },
-                    }}
-                />
+                <AddRemoteDriveModal {...args} />
             </div>
         );
     },

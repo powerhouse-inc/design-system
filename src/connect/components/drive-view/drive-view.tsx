@@ -1,6 +1,4 @@
 import {
-    AddLocalDriveInput,
-    AddRemoteDriveInput,
     ConnectTreeView,
     NodeDropdownMenuOption,
     NodeType,
@@ -10,7 +8,7 @@ import {
     useUiNodesContext,
 } from '@/connect';
 import { Icon, UseDraggableTargetProps } from '@/powerhouse';
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
 
 export interface DriveViewProps
@@ -24,21 +22,12 @@ export interface DriveViewProps
     isAllowedToCreateDocuments: boolean;
     allowedDropdownMenuOptions: Record<NodeType, NodeDropdownMenuOption[]>;
     disableHighlightStyles?: boolean;
+    showAddDriveModal: () => void;
+    showDriveSettingsModal: (uiDriveNode: UiDriveNode) => void;
     onCreateFolder: (name: string, uiNode: UiNode) => void;
-    onCreateDrive: (drive: AddLocalDriveInput | AddRemoteDriveInput) => void;
     onRenameNode: (name: string, uiNode: UiNode) => void;
     onDuplicateNode: (uiNode: UiNode) => void;
     onDeleteNode: (uiNode: UiNode) => void;
-    onDeleteDrive: (uiNode: UiNode) => void;
-    onRenameDrive: (uiDriveNode: UiDriveNode, newName: string) => void;
-    onChangeSharingType: (
-        uiDriveNode: UiDriveNode,
-        newSharingType: SharingType,
-    ) => void;
-    onChangeAvailableOffline: (
-        uiDriveNode: UiDriveNode,
-        newAvailableOffline: boolean,
-    ) => void;
     onDropEvent: UseDraggableTargetProps<UiNode>['onDropEvent'];
     onDropActivate: (dropTargetItem: UiNode) => void;
     onDragStart: UseDraggableTargetProps<UiNode>['onDragStart'];
@@ -53,12 +42,11 @@ export function DriveView(props: DriveViewProps) {
         sharingType,
         driveNodes,
         className,
-        onCreateDrive,
+        showAddDriveModal,
         disableAddDrives,
         isAllowedToCreateDocuments = true,
     } = props;
     const { selectedDriveNode } = useUiNodesContext();
-    const [showAddModal, setShowAddModal] = useState(false);
     const hasDriveNodes = driveNodes.length > 0;
     const isContainerHighlighted =
         selectedDriveNode?.sharingType === sharingType;
@@ -83,7 +71,7 @@ export function DriveView(props: DriveViewProps) {
                 <div className="size-4 text-gray-600">
                     {!disableAddDrives && isAllowedToCreateDocuments && (
                         <button
-                            onClick={() => setShowAddModal(true)}
+                            onClick={showAddDriveModal}
                             className={twMerge(
                                 'mr-2 transition hover:text-gray-800',
                             )}
