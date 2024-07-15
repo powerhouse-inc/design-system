@@ -184,6 +184,7 @@ export type UiFolderNode = {
     parentFolder: string;
     driveId: string;
     children: UiNode[];
+    syncStatus: SyncStatus | undefined;
 };
 
 export type UiNode = UiDriveNode | UiFileNode | UiFolderNode;
@@ -233,6 +234,8 @@ function getSyncStatus(
 export function makeDriveNode(drive: DocumentDriveDocument) {
     const { id, name, icon } = drive.state.global;
     const { sharingType, availableOffline } = drive.state.local;
+    const driveSyncStatus = getSyncStatus(id, sharingType);
+
     const driveNode: UiDriveNode = {
         id,
         name,
@@ -240,7 +243,7 @@ export function makeDriveNode(drive: DocumentDriveDocument) {
         children: [],
         nodeMap: {},
         sharingType,
-        syncStatus: getSyncStatus(id, sharingType),
+        syncStatus: driveSyncStatus,
         availableOffline,
         icon,
         parentFolder: null,
@@ -267,6 +270,7 @@ export function makeDriveNode(drive: DocumentDriveDocument) {
         return {
             ...node,
             children: [],
+            syncStatus: driveSyncStatus,
         } as UiFolderNode;
     });
 

@@ -5,6 +5,7 @@ import {
     FolderNode,
     makeDriveNode,
     UiFileNode,
+    UiFolderNode,
 } from '@/connect/context';
 
 const mockDriveId = 'mock-drive-id';
@@ -17,6 +18,16 @@ export const mockUiFileNode: UiFileNode = {
     parentFolder: mockDriveId,
     driveId: mockDriveId,
     syncStatus: 'SUCCESS',
+};
+
+export const mockUiFolderNode: UiFolderNode = {
+    kind: FOLDER,
+    id: 'folder-1',
+    name: 'Mock folder in drive',
+    parentFolder: mockDriveId,
+    driveId: mockDriveId,
+    syncStatus: 'SUCCESS',
+    children: [],
 };
 
 export const mockNodes: (

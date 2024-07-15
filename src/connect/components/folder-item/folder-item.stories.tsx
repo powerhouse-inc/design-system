@@ -1,20 +1,11 @@
+import { DELETE, DUPLICATE, RENAME } from '@/connect/constants';
+import { mockUiFolderNode } from '@/connect/utils';
 import { Meta, StoryObj } from '@storybook/react';
 import { FolderItem } from './folder-item';
 
 const meta: Meta<typeof FolderItem> = {
     title: 'Connect/Components/FolderItem',
     component: FolderItem,
-    argTypes: {
-        onClick: { action: 'onClick' },
-        onOptionsClick: { action: 'onOptionsClick' },
-        title: { control: 'text' },
-        mode: { control: { type: 'select', options: ['read', 'write'] } },
-        onDragStart: { action: 'onDragStart' },
-        onDragEnd: { action: 'onDragEnd' },
-        onDropEvent: { action: 'onDropEvent' },
-        item: { control: { type: 'object' } },
-        displaySyncIcon: { control: { type: 'boolean' } },
-    },
     decorators: [
         Story => (
             <div className="w-[500px] bg-white p-10">
@@ -30,25 +21,10 @@ type Story = StoryObj<typeof meta>;
 
 export const ReadMode: Story = {
     args: {
-        title: 'Chronicle Labs Chronicle Labs Chronicle Labs Chronicle Labs Chronicle Labs Chronicle Labs',
+        uiFolderNode: mockUiFolderNode,
         displaySyncIcon: true,
-        item: {
-            id: '1',
-            parentFolder: null,
-            label: 'Test Folder',
-            availableOffline: false,
-            path: '',
-            type: 'FOLDER',
-            syncStatus: 'SYNCING',
-        },
-    },
-};
-
-export const WriteMode: Story = {
-    ...ReadMode,
-    args: {
-        ...ReadMode.args,
-        mode: 'write',
+        isAllowedToCreateDocuments: true,
+        allowedDropdownMenuOptions: [RENAME, DELETE, DUPLICATE],
     },
 };
 

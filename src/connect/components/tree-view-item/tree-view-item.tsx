@@ -151,13 +151,16 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         [SETTINGS]: () => setIsDriveSettingsModalOpen(true),
     } as const;
 
+    const allowedDropdownMenuOptionsForKind =
+        allowedDropdownMenuOptions[uiNode.kind];
+
     const dropdownMenuOptions = Object.entries(dropdownMenuOptionsMap)
         .map(([id, option]) => ({
             ...option,
             id: id as NodeDropdownMenuOption,
         }))
         .filter(option =>
-            allowedDropdownMenuOptions[uiNode.kind].includes(option.id),
+            allowedDropdownMenuOptionsForKind.includes(option.id),
         );
 
     const dropdownMenuButton = (
