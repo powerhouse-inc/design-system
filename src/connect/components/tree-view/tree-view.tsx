@@ -5,11 +5,13 @@ import {
     DELETE,
     DRIVE,
     DUPLICATE,
+    DragAndDropHandlers,
     FILE,
     FOLDER,
     LOCAL,
     NEW_FOLDER,
     NodeDropdownMenuOption,
+    NodeHandlers,
     NodeType,
     PUBLIC,
     READ,
@@ -22,35 +24,23 @@ import {
     useUiNodesContext,
 } from '@/connect';
 import { dropdownMenuOptionsMap } from '@/connect/utils/dropdown-menu-options';
-import {
-    Icon,
-    TreeViewItem,
-    UseDraggableTargetProps,
-    useDraggableTarget,
-} from '@/powerhouse';
+import { Icon, TreeViewItem, useDraggableTarget } from '@/powerhouse';
 import { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
 import { SyncStatusIcon } from '../status-icon';
 
-export type ConnectTreeViewProps = {
-    uiNode: UiNode;
-    allowedDropdownMenuOptions: Record<NodeType, NodeDropdownMenuOption[]>;
-    isAllowedToCreateDocuments: boolean;
-    level?: number;
-    disableDropBetween?: boolean;
-    disableHighlightStyles?: boolean;
-    displaySyncFolderIcons?: boolean;
-    showDriveSettingsModal: (uiDriveNode: UiDriveNode) => void;
-    onDropActivate: (dropTargetItem: UiNode) => void;
-    onDropEvent: UseDraggableTargetProps<UiNode>['onDropEvent'];
-    onDragStart: UseDraggableTargetProps<UiNode>['onDragStart'];
-    onDragEnd: UseDraggableTargetProps<UiNode>['onDragEnd'];
-    onCreateFolder: (name: string, uiNode: UiNode) => void;
-    onRenameNode: (name: string, uiNode: UiNode) => void;
-    onDuplicateNode: (uiNode: UiNode) => void;
-    onDeleteNode: (uiNode: UiNode) => void;
-    onClick?: MouseEventHandler<HTMLDivElement>;
-};
+export type ConnectTreeViewProps = NodeHandlers &
+    DragAndDropHandlers & {
+        uiNode: UiNode;
+        allowedDropdownMenuOptions: Record<NodeType, NodeDropdownMenuOption[]>;
+        isAllowedToCreateDocuments: boolean;
+        level?: number;
+        disableDropBetween?: boolean;
+        disableHighlightStyles?: boolean;
+        displaySyncFolderIcons?: boolean;
+        showDriveSettingsModal: (uiDriveNode: UiDriveNode) => void;
+        onClick?: MouseEventHandler<HTMLDivElement>;
+    };
 
 export function ConnectTreeView(props: ConnectTreeViewProps) {
     const {

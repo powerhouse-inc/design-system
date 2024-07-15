@@ -9,6 +9,7 @@ import {
     sharingTypes,
     syncStatuses,
 } from '@/connect';
+import { UseDraggableTargetProps } from '@/powerhouse';
 import { Maybe, Scalars, SynchronizationUnit } from 'document-model/document';
 
 export type SharingTypes = typeof sharingTypes;
@@ -92,4 +93,18 @@ export type DocumentDriveDocument = {
             availableOffline: boolean;
         };
     };
+};
+
+export type DragAndDropHandlers = {
+    onDropActivate: (dropTargetItem: UiNode) => void;
+    onDropEvent: UseDraggableTargetProps<UiNode>['onDropEvent'];
+    onDragStart: UseDraggableTargetProps<UiNode>['onDragStart'];
+    onDragEnd: UseDraggableTargetProps<UiNode>['onDragEnd'];
+};
+
+export type NodeHandlers = {
+    onCreateFolder: (name: string, uiNode: UiNode) => void;
+    onRenameNode: (name: string, uiNode: UiNode) => void;
+    onDuplicateNode: (uiNode: UiNode) => void;
+    onDeleteNode: (uiNode: UiNode) => void;
 };

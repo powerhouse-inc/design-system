@@ -1,45 +1,36 @@
 import {
     ConnectTreeView,
+    DragAndDropHandlers,
     NodeDropdownMenuOption,
+    NodeHandlers,
     NodeType,
     SharingType,
     UiDriveNode,
-    UiNode,
     useUiNodesContext,
 } from '@/connect';
-import { Icon, UseDraggableTargetProps } from '@/powerhouse';
+import { Icon } from '@/powerhouse';
 import { ReactNode } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
 
-export interface DriveViewProps
-    extends Omit<
-        React.HTMLAttributes<HTMLDivElement>,
-        'onDragEnd' | 'onDragStart'
-    > {
-    driveNodes: UiDriveNode[];
-    label: ReactNode;
-    sharingType: SharingType;
-    isAllowedToCreateDocuments: boolean;
-    allowedDropdownMenuOptions: Record<NodeType, NodeDropdownMenuOption[]>;
-    disableHighlightStyles?: boolean;
-    showAddDriveModal: () => void;
-    showDriveSettingsModal: (uiDriveNode: UiDriveNode) => void;
-    onCreateFolder: (name: string, uiNode: UiNode) => void;
-    onRenameNode: (name: string, uiNode: UiNode) => void;
-    onDuplicateNode: (uiNode: UiNode) => void;
-    onDeleteNode: (uiNode: UiNode) => void;
-    onDropEvent: UseDraggableTargetProps<UiNode>['onDropEvent'];
-    onDropActivate: (dropTargetItem: UiNode) => void;
-    onDragStart: UseDraggableTargetProps<UiNode>['onDragStart'];
-    onDragEnd: UseDraggableTargetProps<UiNode>['onDragEnd'];
-    disableAddDrives: boolean;
-    displaySyncFolderIcons: boolean;
-}
+export type DriveViewProps = NodeHandlers &
+    DragAndDropHandlers & {
+        driveNodes: UiDriveNode[];
+        label: ReactNode;
+        groupSharingType: SharingType;
+        isAllowedToCreateDocuments: boolean;
+        allowedDropdownMenuOptions: Record<NodeType, NodeDropdownMenuOption[]>;
+        disableAddDrives: boolean;
+        displaySyncFolderIcons: boolean;
+        disableHighlightStyles?: boolean;
+        className?: string;
+        showAddDriveModal: () => void;
+        showDriveSettingsModal: (uiDriveNode: UiDriveNode) => void;
+    };
 
 export function DriveView(props: DriveViewProps) {
     const {
         label,
-        sharingType,
+        groupSharingType,
         driveNodes,
         className,
         showAddDriveModal,
@@ -49,7 +40,7 @@ export function DriveView(props: DriveViewProps) {
     const { selectedDriveNode } = useUiNodesContext();
     const hasDriveNodes = driveNodes.length > 0;
     const isContainerHighlighted =
-        selectedDriveNode?.sharingType === sharingType;
+        selectedDriveNode?.sharingType === groupSharingType;
 
     return (
         <div

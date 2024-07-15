@@ -130,7 +130,7 @@ export const Expanded: Story = {
                     {...nodeHandlers}
                     driveNodes={driveNodesByType[PUBLIC]}
                     label="Public Drives"
-                    sharingType={PUBLIC}
+                    groupSharingType={PUBLIC}
                     disableAddDrives={false}
                     isAllowedToCreateDocuments
                     displaySyncFolderIcons
@@ -140,7 +140,7 @@ export const Expanded: Story = {
                     {...nodeHandlers}
                     driveNodes={driveNodesByType[CLOUD]}
                     label="Secure Cloud Drives"
-                    sharingType={CLOUD}
+                    groupSharingType={CLOUD}
                     disableAddDrives={false}
                     isAllowedToCreateDocuments
                     displaySyncFolderIcons
@@ -150,7 +150,7 @@ export const Expanded: Story = {
                     {...nodeHandlers}
                     driveNodes={driveNodesByType[LOCAL]}
                     label="My Local Drives"
-                    sharingType={LOCAL}
+                    groupSharingType={LOCAL}
                     disableAddDrives={false}
                     isAllowedToCreateDocuments
                     displaySyncFolderIcons
