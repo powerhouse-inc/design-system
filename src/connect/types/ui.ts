@@ -1,5 +1,4 @@
 import {
-    defaultDropdownMenuOptions,
     driveLocations,
     nodeDropdownMenuOptions,
     nodeTypes,
@@ -42,8 +41,6 @@ type DriveNode = {
     parentFolder: null;
     children: (FileNode | FolderNode)[];
 };
-
-export type DefaultOptionId = (typeof defaultDropdownMenuOptions)[number]['id'];
 
 export type SyncStatuses = typeof syncStatuses;
 

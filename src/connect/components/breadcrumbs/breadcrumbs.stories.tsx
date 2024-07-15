@@ -2,10 +2,10 @@ import {
     DRIVE,
     FOLDER,
     ItemsContextProvider,
+    mockDriveNodes,
     UiFolderNode,
     useItemsContext,
 } from '@/connect';
-import { mockDriveNodes } from '@/connect/hooks/tree-view/mocks';
 import { Meta, StoryObj } from '@storybook/react';
 import { useEffect } from 'react';
 import { Breadcrumbs } from '.';

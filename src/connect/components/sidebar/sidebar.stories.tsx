@@ -18,8 +18,8 @@ import {
     UiNode,
     useItemsContext,
 } from '@/connect/context/ItemsContext';
-import { mockDriveNodes } from '@/connect/hooks/tree-view/mocks';
 import { NodeDropdownMenuOption, NodeType, SharingType } from '@/connect/types';
+import { mockDriveNodes } from '@/connect/utils';
 import { DropItem } from '@/powerhouse';
 import { useEffect } from '@storybook/preview-api';
 import type { Meta, StoryObj } from '@storybook/react';

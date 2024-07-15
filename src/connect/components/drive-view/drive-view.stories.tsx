@@ -2,7 +2,7 @@ import {
     mockCloudDrive,
     mockLocalDrive,
     mockPublicDrive,
-} from '@/connect/hooks/tree-view/mocks';
+} from '@/connect/utils';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useEffect } from 'react';
 import {
