@@ -36,14 +36,14 @@ import { SyncStatusIcon } from '../status-icon';
 
 export type ConnectTreeViewItemProps = {
     uiNode: UiNode;
-    level?: number;
     allowedDropdownMenuOptions: Record<NodeType, NodeDropdownMenuOption[]>;
+    isAllowedToCreateDocuments: boolean;
+    level?: number;
     disableDropBetween?: boolean;
     disableHighlightStyles?: boolean;
-    isAllowedToCreateDocuments?: boolean;
     displaySyncFolderIcons?: boolean;
-    onDropEvent: UseDraggableTargetProps<UiNode>['onDropEvent'];
     onDropActivate: (dropTargetItem: UiNode) => void;
+    onDropEvent: UseDraggableTargetProps<UiNode>['onDropEvent'];
     onDragStart: UseDraggableTargetProps<UiNode>['onDragStart'];
     onDragEnd: UseDraggableTargetProps<UiNode>['onDragEnd'];
     onCreateFolder: (name: string, uiNode: UiNode) => void;
@@ -131,7 +131,9 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
         }
     }, [isSelected]);
 
-    const dropdownMenuHandlers: Record<NodeDropdownMenuOption, () => void> = {
+    const dropdownMenuHandlers: Partial<
+        Record<NodeDropdownMenuOption, () => void>
+    > = {
         [DUPLICATE]: () => onDuplicateNode(uiNode),
         [NEW_FOLDER]: () => {
             setSelectedNode(uiNode);
@@ -210,6 +212,10 @@ export function ConnectTreeViewItem(props: ConnectTreeViewItemProps) {
 
     function onItemClick(itemId: NodeDropdownMenuOption) {
         const handler = dropdownMenuHandlers[itemId];
+        if (!handler) {
+            console.error(`No handler found for dropdown menu item: ${itemId}`);
+            return;
+        }
         handler();
         setIsDropdownMenuOpen(false);
     }

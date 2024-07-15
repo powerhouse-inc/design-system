@@ -4,9 +4,20 @@ import {
     FileNode,
     FolderNode,
     makeDriveNode,
+    UiFileNode,
 } from '@/connect/context';
 
 const mockDriveId = 'mock-drive-id';
+
+export const mockUiFileNode: UiFileNode = {
+    kind: FILE,
+    documentType: 'makerdao/rwa-portfolio',
+    id: 'file-1',
+    name: 'Mock file in drive',
+    parentFolder: mockDriveId,
+    driveId: mockDriveId,
+    syncStatus: 'SUCCESS',
+};
 
 export const mockNodes: (
     driveId: string,

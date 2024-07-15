@@ -1,86 +1,122 @@
 import {
     ConnectDropdownMenu,
-    ConnectDropdownMenuProps,
-    FileItemIconType,
+    DELETE,
+    DUPLICATE,
     iconMap,
+    NodeDropdownMenuOption,
+    READ,
+    RENAME,
+    UiFileNode,
+    UiNode,
+    useItemsContext,
+    WRITE,
 } from '@/connect';
+import { dropdownMenuOptionsMap } from '@/connect/utils/dropdown-menu-options';
 import {
-    DivProps,
     Icon,
     TreeViewInput,
-    TreeViewInputProps,
-    UseDraggableTargetProps,
     useDraggableTarget,
+    UseDraggableTargetProps,
 } from '@/powerhouse';
-import React, { useRef, useState } from 'react';
+import React, { ReactNode, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { SyncStatusIcon } from '../status-icon';
 
-export interface FileItemProps
-    extends Omit<DivProps, 'onDragStart' | 'onDragEnd'> {
-    title: string;
-    subTitle?: string;
-    mode?: 'write' | 'read';
-    icon?: FileItemIconType;
-    customIcon?: React.ReactNode;
-    itemOptions?: ConnectDropdownMenuProps['items'];
-    isAllowedToCreateDocuments?: boolean;
-    onOptionsClick: ConnectDropdownMenuProps['onItemClick'];
-    onSubmitInput?: TreeViewInputProps['onSubmitInput'];
-    onCancelInput?: TreeViewInputProps['onCancelInput'];
-    item: TreeItem;
-    onDragStart?: UseDraggableTargetProps<TreeItem>['onDragStart'];
-    onDragEnd?: UseDraggableTargetProps<TreeItem>['onDragEnd'];
-    displaySyncIcon?: boolean;
+export interface FileItemProps {
+    uiFileNode: UiFileNode;
+    allowedDropdownMenuOptions: NodeDropdownMenuOption[];
+    isAllowedToCreateDocuments: boolean;
+    displaySyncIcon: boolean;
+    customIcon?: ReactNode;
+    className?: string;
+    onRenameNode: (name: string, uiNode: UiNode) => void;
+    onDuplicateNode: (uiNode: UiNode) => void;
+    onDeleteNode: (uiNode: UiNode) => void;
+    onDragStart: UseDraggableTargetProps<UiNode>['onDragStart'];
+    onDragEnd: UseDraggableTargetProps<UiNode>['onDragEnd'];
 }
 
 export const FileItem: React.FC<FileItemProps> = ({
-    title,
-    subTitle,
+    uiFileNode,
+    allowedDropdownMenuOptions,
+    isAllowedToCreateDocuments,
+    displaySyncIcon,
     customIcon,
-    itemOptions,
-    onOptionsClick,
-    mode = 'read',
-    icon = 'global',
-    item,
-    isAllowedToCreateDocuments = true,
+    className,
+    onRenameNode,
+    onDuplicateNode,
+    onDeleteNode,
     onDragEnd,
     onDragStart,
-    onCancelInput = () => {},
-    onSubmitInput = () => {},
-    displaySyncIcon = false,
-    ...divProps
 }) => {
     const containerRef = useRef(null);
+    const [mode, setMode] = useState<typeof READ | typeof WRITE>(READ);
     const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
+    const { selectedNodePath } = useItemsContext();
 
     const { dragProps } = useDraggableTarget({
-        data: item,
+        data: uiFileNode,
         onDragEnd,
         onDragStart,
     });
 
-    const isReadMode = mode === 'read';
+    const isReadMode = mode === READ;
 
     const containerStyles = twMerge(
         'group flex h-12 cursor-pointer select-none items-center rounded-lg bg-gray-200 px-2 text-gray-600 hover:text-gray-800',
-        divProps.className,
+        className,
     );
+
+    const dropdownMenuHandlers: Partial<
+        Record<NodeDropdownMenuOption, () => void>
+    > = {
+        [DUPLICATE]: () => onDuplicateNode(uiFileNode),
+        [RENAME]: () => setMode(WRITE),
+        [DELETE]: () => onDeleteNode(uiFileNode),
+    } as const;
+
+    const dropdownMenuOptions = Object.entries(dropdownMenuOptionsMap)
+        .map(([id, option]) => ({
+            ...option,
+            id: id as NodeDropdownMenuOption,
+        }))
+        .filter(option => allowedDropdownMenuOptions.includes(option.id));
+
+    function onSubmitInput(name: string) {
+        onRenameNode(name, uiFileNode);
+        setMode(READ);
+    }
+
+    function onCancelInput() {
+        setMode(READ);
+    }
+
+    function onItemClick(itemId: NodeDropdownMenuOption) {
+        const handler = dropdownMenuHandlers[itemId];
+        if (!handler) {
+            console.error(`No handler found for dropdown menu item: ${itemId}`);
+            return;
+        }
+        handler();
+        setIsDropdownMenuOpen(false);
+    }
+
+    const icon = iconMap[uiFileNode.documentType];
 
     const iconNode = customIcon || (
         <div className="relative">
             <img
-                src={iconMap[icon]}
+                src={icon}
                 alt="file icon"
                 className="max-w-none"
                 width={32}
                 height={34}
             />
-            {isReadMode && displaySyncIcon && item.syncStatus && (
+            {isReadMode && displaySyncIcon && uiFileNode.syncStatus && (
                 <div className="absolute bottom-[-2px] right-0 size-3 rounded-full bg-white">
                     <div className="absolute left-[-2px] top-[-2px]">
                         <SyncStatusIcon
-                            syncStatus={item.syncStatus}
+                            syncStatus={uiFileNode.syncStatus}
                             overrideSyncIcons={{ SUCCESS: 'check-circle-fill' }}
                         />
                     </div>
@@ -92,16 +128,16 @@ export const FileItem: React.FC<FileItemProps> = ({
     const content = isReadMode ? (
         <>
             <div className="max-h-6 truncate text-sm font-medium group-hover:text-gray-800">
-                {title}
+                {uiFileNode.name}
             </div>
             <div className="max-h-6 truncate text-xs font-medium text-gray-600 group-hover:text-gray-800">
-                {subTitle}
+                {selectedNodePath.map(node => node.name).join(' / ')}
             </div>
         </>
     ) : (
         <TreeViewInput
             className="ml-3 flex-1 font-medium"
-            defaultValue={title}
+            defaultValue={uiFileNode.name}
             onCancelInput={onCancelInput}
             onSubmitInput={onSubmitInput}
         />
@@ -109,7 +145,7 @@ export const FileItem: React.FC<FileItemProps> = ({
 
     return (
         <div className="relative" ref={containerRef}>
-            <div {...dragProps} {...divProps} className={containerStyles}>
+            <div {...dragProps} className={containerStyles}>
                 <div className="relative flex flex-1 flex-row items-center overflow-hidden">
                     <div className="mr-1.5">{iconNode}</div>
                     <div
@@ -142,10 +178,10 @@ export const FileItem: React.FC<FileItemProps> = ({
                     onOpenChange={() =>
                         setIsDropdownMenuOpen(!isDropdownMenuOpen)
                     }
-                    items={itemOptions}
+                    items={dropdownMenuOptions}
                     menuClassName="bg-white cursor-pointer"
                     menuItemClassName="hover:bg-slate-50 px-2"
-                    onItemClick={onOptionsClick}
+                    onItemClick={onItemClick}
                     popoverProps={{
                         triggerRef: containerRef,
                         placement: 'bottom end',
