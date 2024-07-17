@@ -56,6 +56,7 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
         onRenameNode,
         onDuplicateNode,
         onDeleteNode,
+        onDeleteDrive,
         onDragEnd,
         onDragStart,
         onDropEvent,
@@ -128,15 +129,14 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
         [RENAME]: () => setMode(WRITE),
         [DELETE]: () => {
             if (uiNode.kind === DRIVE) {
-                showDriveSettingsModal(uiNode);
+                onDeleteDrive(uiNode);
             } else {
                 onDeleteNode(uiNode);
             }
         },
         [SETTINGS]: () => {
-            if (uiNode.kind === DRIVE) {
-                showDriveSettingsModal(uiNode);
-            }
+            if (uiNode.kind !== DRIVE) return;
+            showDriveSettingsModal(uiNode);
         },
     } as const;
 
@@ -306,7 +306,7 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
     const itemContent = (
         <div
             ref={containerRef}
-            className="group/node flex items-center justify-between"
+            className="group/node flex w-full items-center justify-between"
         >
             {uiNode.name}
             {statusIconOrDropdownMenuButton()}
@@ -328,8 +328,6 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
         </div>
     );
 
-    console.log('sanity');
-
     return (
         <>
             <TreeViewItem
@@ -348,7 +346,7 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
                     className: getItemContainerClassName(),
                 }}
                 {...getItemIcon()}
-            ></TreeViewItem>
+            />
             {
                 <div
                     className={twMerge(
@@ -356,10 +354,20 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
                         isExpanded && 'max-h-screen',
                     )}
                 >
+                    {children?.map(uiNode => (
+                        <ConnectTreeView
+                            {...props}
+                            key={uiNode.id}
+                            uiNode={uiNode}
+                            level={level + 1}
+                            {...getItemIcon()}
+                        />
+                    ))}
                     {mode === CREATE && (
                         <TreeViewItem
                             name="New Folder"
                             itemContent="New Folder"
+                            hasCaret={false}
                             isWriteMode={true}
                             level={level + 1}
                             icon={
@@ -372,15 +380,6 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
                             onCancelInput={onCancelHandler}
                         />
                     )}
-                    {children?.map(uiNode => (
-                        <ConnectTreeView
-                            {...props}
-                            key={uiNode.id}
-                            uiNode={uiNode}
-                            level={level + 1}
-                            {...getItemIcon()}
-                        />
-                    ))}
                 </div>
             }
         </>

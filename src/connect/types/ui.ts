@@ -46,6 +46,7 @@ export type UiDriveNode = {
     kind: typeof DRIVE;
     id: string;
     name: string;
+    slug: string | null;
     parentFolder: null;
     driveId: string;
     children: UiNode[];
@@ -85,6 +86,7 @@ export type DocumentDriveDocument = {
         global: {
             id: string;
             name: string;
+            slug: string | null | undefined;
             icon: string;
             nodes: (FileNode | FolderNode)[];
         };
@@ -106,7 +108,8 @@ export type NodeHandlers = {
     onAddFolder: (name: string, uiNode: UiNode) => void;
     onRenameNode: (name: string, uiNode: UiNode) => void;
     onDuplicateNode: (uiNode: UiNode) => void;
-    onDeleteNode: (uiNode: UiNode) => void;
+    onDeleteNode: (uiNode: UiFileNode | UiFolderNode) => void;
+    onDeleteDrive: (uiNode: UiDriveNode) => void;
 };
 
 export type AllowedDropdownMenuOptions = {

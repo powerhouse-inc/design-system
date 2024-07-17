@@ -127,6 +127,7 @@ export function makeMockDriveDocument(state?: {
         state: {
             global: {
                 id: state?.global?.id ?? mockDriveId,
+                slug: 'mock-drive',
                 name: 'Mock Drive',
                 icon: '',
                 nodes: mockNodes(state?.global?.id ?? mockDriveId),

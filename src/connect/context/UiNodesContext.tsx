@@ -32,8 +32,9 @@ export interface TreeItemContext {
     selectedDriveNode: UiDriveNode | null;
     selectedParentNode: UiDriveNode | UiFolderNode | null;
     setDriveNodes: Dispatch<SetStateAction<UiDriveNode[]>>;
-    setSelectedNode: (node: UiNode) => void;
+    setSelectedNode: (node: UiNode | null) => void;
     getNodeById: (id: string) => UiNode | null;
+    getParentNode: (uiNode: UiNode) => UiNode | null;
     getIsSelected: (node: UiNode) => boolean;
     getIsExpanded: (node: UiNode) => boolean;
     getSiblings: (node: UiNode) => UiNode[];
@@ -48,6 +49,7 @@ const defaultTreeItemContextValue: TreeItemContext = {
     setDriveNodes: () => {},
     setSelectedNode: () => {},
     getNodeById: () => null,
+    getParentNode: () => null,
     getIsSelected: () => false,
     getIsExpanded: () => false,
     getSiblings: () => [],
@@ -108,7 +110,7 @@ export const UiNodesContextProvider: FC<UiNodesContextProviderProps> = ({
         [],
     );
 
-    const getParentNode = useCallback(
+    const _getParentNode = useCallback(
         (node: UiNode, driveNodes: UiDriveNode[] | null) => {
             if (!driveNodes?.length || node.kind === DRIVE) return null;
 
@@ -127,20 +129,27 @@ export const UiNodesContextProvider: FC<UiNodesContextProviderProps> = ({
         [_getNodeById],
     );
 
+    const getParentNode = useCallback(
+        (uiNode: UiNode) => {
+            return _getParentNode(uiNode, driveNodes);
+        },
+        [_getParentNode, driveNodes],
+    );
+
     const getSelectedParentNode = useCallback(
         (selectedNode: UiNode | null, driveNodes: UiDriveNode[] | null) => {
             if (!selectedNode || !driveNodes?.length) return null;
 
             if (selectedNode.kind === FILE)
-                return getParentNode(selectedNode, driveNodes);
+                return _getParentNode(selectedNode, driveNodes);
 
             return selectedNode;
         },
-        [getParentNode],
+        [_getParentNode],
     );
 
     const setSelectedNode = useCallback(
-        (uiNode: UiNode) => {
+        (uiNode: UiNode | null) => {
             _setSelectedNode(uiNode);
             setSelectedDriveNode(getSelectedDriveNode(uiNode, driveNodes));
             setSelectedParentNode(getSelectedParentNode(uiNode, driveNodes));
@@ -231,6 +240,7 @@ export const UiNodesContextProvider: FC<UiNodesContextProviderProps> = ({
             selectedDriveNode,
             selectedParentNode,
             getNodeById,
+            getParentNode,
             setDriveNodes,
             setSelectedNode,
             getIsSelected,
@@ -244,6 +254,7 @@ export const UiNodesContextProvider: FC<UiNodesContextProviderProps> = ({
             selectedDriveNode,
             selectedParentNode,
             getNodeById,
+            getParentNode,
             setSelectedNode,
             getIsSelected,
             getIsExpanded,
@@ -277,13 +288,14 @@ function getSyncStatus(
 }
 
 export function makeDriveNode(drive: DocumentDriveDocument) {
-    const { id, name, icon } = drive.state.global;
+    const { id, name, icon, slug } = drive.state.global;
     const { sharingType, availableOffline } = drive.state.local;
     const driveSyncStatus = getSyncStatus(id, sharingType);
 
     const driveNode: UiDriveNode = {
         id,
         name,
+        slug: slug || null,
         kind: DRIVE,
         children: [],
         nodeMap: {},

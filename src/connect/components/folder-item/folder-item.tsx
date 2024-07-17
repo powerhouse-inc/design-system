@@ -8,6 +8,7 @@ import {
     READ,
     RENAME,
     UiFolderNode,
+    useUiNodesContext,
     WRITE,
 } from '@/connect';
 import { dropdownMenuOptionsMap } from '@/connect/utils/dropdown-menu-options';
@@ -41,6 +42,7 @@ export const FolderItem: React.FC<FolderItemProps> = ({
 }) => {
     const [mode, setMode] = useState<typeof READ | typeof WRITE>(READ);
     const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
+    const { setSelectedNode } = useUiNodesContext();
     const { dropProps, dragProps, isDropTarget } = useDraggableTarget({
         data: uiFolderNode,
         onDragEnd,
@@ -58,6 +60,10 @@ export const FolderItem: React.FC<FolderItemProps> = ({
 
     function onSubmitInput(name: string) {
         onRenameNode(name, uiFolderNode);
+    }
+
+    function onClick() {
+        setSelectedNode(uiFolderNode);
     }
 
     const dropdownMenuHandlers: Partial<
@@ -113,7 +119,7 @@ export const FolderItem: React.FC<FolderItemProps> = ({
     );
 
     return (
-        <div className="relative min-w-64" ref={containerRef}>
+        <div onClick={onClick} className="relative min-w-64" ref={containerRef}>
             <div {...dropProps} {...dragProps} className={containerStyles}>
                 <div className="flex items-center overflow-hidden">
                     <div className="p-1">

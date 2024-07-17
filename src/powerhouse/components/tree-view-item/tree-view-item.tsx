@@ -1,6 +1,6 @@
 import { DivProps } from '@/powerhouse';
 import { FC, MouseEvent, ReactNode } from 'react';
-import { twJoin, twMerge } from 'tailwind-merge';
+import { twMerge } from 'tailwind-merge';
 import { Icon, TreeViewInput, TreeViewInputProps } from '..';
 
 export type TreeViewItemProps = DivProps &
@@ -40,7 +40,6 @@ export const TreeViewItem: FC<TreeViewItemProps> = props => {
         level = 0,
         itemContainerProps = {},
         hasCaret = true,
-        ...divProps
     } = props;
 
     const {
@@ -49,7 +48,7 @@ export const TreeViewItem: FC<TreeViewItemProps> = props => {
         ...containerProps
     } = itemContainerProps;
 
-    const levelPadding = level * 8;
+    const levelPadding = level * 10;
 
     const inputProps = {
         defaultValue: name,
@@ -66,7 +65,7 @@ export const TreeViewItem: FC<TreeViewItemProps> = props => {
     );
 
     return (
-        <div {...divProps}>
+        <>
             <div
                 role="button"
                 onClick={onClick}
@@ -84,30 +83,24 @@ export const TreeViewItem: FC<TreeViewItemProps> = props => {
                     className="flex w-full cursor-pointer items-center"
                     style={{ paddingLeft: `${levelPadding}px` }}
                 >
-                    {isWriteMode ? (
-                        <span className="inline-block size-6" />
-                    ) : (
-                        <div
-                            className={twJoin('relative', !hasCaret && 'pl-4')}
-                        >
-                            {hasCaret && (
-                                <Icon
-                                    name="caret"
-                                    className={twMerge(
-                                        open && 'rotate-90',
-                                        'ease pointer-events-none transition delay-75',
-                                    )}
-                                />
+                    {hasCaret ? (
+                        <Icon
+                            name="caret"
+                            className={twMerge(
+                                open && 'rotate-90',
+                                'ease pointer-events-none transition delay-75',
                             )}
-                            {syncIcon}
-                        </div>
+                        />
+                    ) : (
+                        <div className="w-6" />
                     )}
-                    {icon && (
-                        <span className="pointer-events-none mr-2">
-                            {open ? expandedIcon || icon : icon}
-                        </span>
-                    )}
-                    <div className="w-full cursor-pointer truncate">
+                    {syncIcon}
+                    <div className="grid w-full cursor-pointer grid-cols-[auto,1fr] items-center gap-2 truncate">
+                        {icon && (
+                            <div className="pointer-events-none w-6">
+                                {open ? expandedIcon || icon : icon}
+                            </div>
+                        )}
                         {content}
                     </div>
                 </div>
@@ -120,6 +113,6 @@ export const TreeViewItem: FC<TreeViewItemProps> = props => {
             {children && (
                 <div className={twMerge(!open && 'hidden')}>{children}</div>
             )}
-        </div>
+        </>
     );
 };

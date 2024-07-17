@@ -44,7 +44,7 @@ export const FileItem: React.FC<FileItemProps> = ({
     const containerRef = useRef(null);
     const [mode, setMode] = useState<typeof READ | typeof WRITE>(READ);
     const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
-    const { selectedNodePath } = useUiNodesContext();
+    const { setSelectedNode, selectedNodePath } = useUiNodesContext();
 
     const { dragProps } = useDraggableTarget({
         data: uiFileNode,
@@ -81,6 +81,10 @@ export const FileItem: React.FC<FileItemProps> = ({
 
     function onCancelInput() {
         setMode(READ);
+    }
+
+    function onClick() {
+        setSelectedNode(uiFileNode);
     }
 
     function onItemClick(itemId: NodeDropdownMenuOption) {
@@ -136,7 +140,7 @@ export const FileItem: React.FC<FileItemProps> = ({
     );
 
     return (
-        <div className="relative min-w-64" ref={containerRef}>
+        <div onClick={onClick} className="relative min-w-64" ref={containerRef}>
             <div {...dragProps} className={containerStyles}>
                 <div className="relative flex flex-1 flex-row items-center">
                     <div className="mr-1.5">{iconNode}</div>
