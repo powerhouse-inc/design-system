@@ -97,7 +97,7 @@ export const TreeViewItem: FC<TreeViewItemProps> = props => {
                     {syncIcon}
                     <div className="grid w-full cursor-pointer grid-cols-[auto,1fr] items-center gap-2 truncate">
                         {icon && (
-                            <div className="pointer-events-none w-6">
+                            <div className="pointer-events-none w-5">
                                 {open ? expandedIcon || icon : icon}
                             </div>
                         )}

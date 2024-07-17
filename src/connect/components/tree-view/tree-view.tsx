@@ -221,7 +221,7 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
                 icon: (
                     <img
                         src={uiNode.icon}
-                        className="size-7 object-contain"
+                        className="size-6 object-contain"
                         alt="drive icon"
                     />
                 ),
@@ -237,6 +237,7 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
                                 'text-gray-600 transition-colors group-hover/node:text-gray-900',
                                 isSelected && 'text-gray-900',
                             )}
+                            size={20}
                         />
                     ),
                     expandedIcon: (
@@ -246,6 +247,7 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
                                 'text-gray-600 transition-colors group-hover/node:text-gray-900',
                                 isSelected && 'text-gray-900',
                             )}
+                            size={22}
                         />
                     ),
                 };
