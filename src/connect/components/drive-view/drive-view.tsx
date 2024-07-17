@@ -1,9 +1,8 @@
 import {
+    AllowedDropdownMenuOptions,
     ConnectTreeView,
     DragAndDropHandlers,
-    NodeDropdownMenuOption,
     NodeHandlers,
-    NodeType,
     SharingType,
     UiDriveNode,
     useUiNodesContext,
@@ -18,12 +17,12 @@ export type DriveViewProps = NodeHandlers &
         label: ReactNode;
         groupSharingType: SharingType;
         isAllowedToCreateDocuments: boolean;
-        allowedDropdownMenuOptions: Record<NodeType, NodeDropdownMenuOption[]>;
+        allowedDropdownMenuOptions: AllowedDropdownMenuOptions;
         disableAddDrives: boolean;
         displaySyncFolderIcons: boolean;
         disableHighlightStyles?: boolean;
         className?: string;
-        showAddDriveModal: () => void;
+        showAddDriveModal: (groupSharingType: SharingType) => void;
         showDriveSettingsModal: (uiDriveNode: UiDriveNode) => void;
     };
 
@@ -33,14 +32,18 @@ export function DriveView(props: DriveViewProps) {
         groupSharingType,
         driveNodes,
         className,
-        showAddDriveModal,
         disableAddDrives,
-        isAllowedToCreateDocuments = true,
+        isAllowedToCreateDocuments,
+        showAddDriveModal,
     } = props;
     const { selectedDriveNode } = useUiNodesContext();
     const hasDriveNodes = driveNodes.length > 0;
     const isContainerHighlighted =
         selectedDriveNode?.sharingType === groupSharingType;
+
+    function onShowAddDriveModal() {
+        showAddDriveModal(groupSharingType);
+    }
 
     return (
         <div
@@ -62,7 +65,7 @@ export function DriveView(props: DriveViewProps) {
                 <div className="size-4 text-gray-600">
                     {!disableAddDrives && isAllowedToCreateDocuments && (
                         <button
-                            onClick={showAddDriveModal}
+                            onClick={onShowAddDriveModal}
                             className={twMerge(
                                 'mr-2 transition hover:text-gray-800',
                             )}

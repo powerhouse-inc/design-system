@@ -1,40 +1,32 @@
 import {
     ConnectDropdownMenu,
     DELETE,
+    DragAndDropHandlers,
     DUPLICATE,
     iconMap,
     NodeDropdownMenuOption,
+    NodeHandlers,
     READ,
     RENAME,
     UiFileNode,
-    UiNode,
     useUiNodesContext,
     WRITE,
 } from '@/connect';
 import { dropdownMenuOptionsMap } from '@/connect/utils/dropdown-menu-options';
-import {
-    Icon,
-    TreeViewInput,
-    useDraggableTarget,
-    UseDraggableTargetProps,
-} from '@/powerhouse';
+import { Icon, TreeViewInput, useDraggableTarget } from '@/powerhouse';
 import React, { ReactNode, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { SyncStatusIcon } from '../status-icon';
 
-export interface FileItemProps {
-    uiFileNode: UiFileNode;
-    allowedDropdownMenuOptions: NodeDropdownMenuOption[];
-    isAllowedToCreateDocuments: boolean;
-    displaySyncIcon: boolean;
-    customIcon?: ReactNode;
-    className?: string;
-    onRenameNode: (name: string, uiNode: UiNode) => void;
-    onDuplicateNode: (uiNode: UiNode) => void;
-    onDeleteNode: (uiNode: UiNode) => void;
-    onDragStart: UseDraggableTargetProps<UiNode>['onDragStart'];
-    onDragEnd: UseDraggableTargetProps<UiNode>['onDragEnd'];
-}
+export type FileItemProps = DragAndDropHandlers &
+    NodeHandlers & {
+        uiFileNode: UiFileNode;
+        allowedDropdownMenuOptions: NodeDropdownMenuOption[];
+        isAllowedToCreateDocuments: boolean;
+        displaySyncIcon: boolean;
+        customIcon?: ReactNode;
+        className?: string;
+    };
 
 export const FileItem: React.FC<FileItemProps> = ({
     uiFileNode,
@@ -144,9 +136,9 @@ export const FileItem: React.FC<FileItemProps> = ({
     );
 
     return (
-        <div className="relative" ref={containerRef}>
+        <div className="relative min-w-64" ref={containerRef}>
             <div {...dragProps} className={containerStyles}>
-                <div className="relative flex flex-1 flex-row items-center overflow-hidden">
+                <div className="relative flex flex-1 flex-row items-center">
                     <div className="mr-1.5">{iconNode}</div>
                     <div
                         className={twMerge(
@@ -158,18 +150,15 @@ export const FileItem: React.FC<FileItemProps> = ({
                     </div>
                 </div>
                 {isReadMode && isAllowedToCreateDocuments && (
-                    <div
+                    <button
+                        className="invisible ml-auto group-hover:visible"
                         onClick={e => {
                             e.stopPropagation();
                             setIsDropdownMenuOpen(true);
                         }}
                     >
-                        <Icon
-                            name="vertical-dots"
-                            className="hidden group-hover:inline-block"
-                            size={24}
-                        />
-                    </div>
+                        <Icon name="vertical-dots" />
+                    </button>
                 )}
             </div>
             {isAllowedToCreateDocuments && (

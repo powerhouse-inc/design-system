@@ -1,10 +1,10 @@
 import { UiNode, useUiNodesContext } from '@/connect';
-import { DivProps, Icon } from '@/powerhouse';
+import { Icon } from '@/powerhouse';
 import { useState } from 'react';
 import { AddNewItemInput } from './add-new-item-input';
 
-export type BreadcrumbsProps = DivProps & {
-    isAllowedToCreateDocuments?: boolean;
+export type BreadcrumbsProps = {
+    isAllowedToCreateDocuments: boolean;
     onSubmitNewFolder: (name: string) => void;
 };
 
@@ -17,7 +17,7 @@ export function Breadcrumbs(props: BreadcrumbsProps) {
     const { selectedNodePath } = useUiNodesContext();
     const [isAddingNewItem, setIsAddingNewFolder] = useState(false);
 
-    const { isAllowedToCreateDocuments = true } = props;
+    const { isAllowedToCreateDocuments } = props;
 
     function onAddNew() {
         setIsAddingNewFolder(true);

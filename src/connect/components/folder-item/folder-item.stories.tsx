@@ -6,13 +6,6 @@ import { FolderItem } from './folder-item';
 const meta: Meta<typeof FolderItem> = {
     title: 'Connect/Components/FolderItem',
     component: FolderItem,
-    decorators: [
-        Story => (
-            <div className="w-[500px] bg-white p-10">
-                <Story />
-            </div>
-        ),
-    ],
 };
 
 export default meta;
@@ -25,6 +18,20 @@ export const ReadMode: Story = {
         displaySyncIcon: true,
         isAllowedToCreateDocuments: true,
         allowedDropdownMenuOptions: [RENAME, DELETE, DUPLICATE],
+    },
+    render: function Wrapper(args) {
+        const folderNodes = Array.from({ length: 100 }).map((_, index) => ({
+            ...args.uiFolderNode,
+            id: `folder-${index}`,
+            name: `Folder ${index}`,
+        }));
+        return (
+            <div className="flex flex-wrap gap-2">
+                {folderNodes.map(node => (
+                    <FolderItem key={node.id} {...args} uiFolderNode={node} />
+                ))}
+            </div>
+        );
     },
 };
 

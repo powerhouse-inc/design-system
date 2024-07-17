@@ -49,7 +49,7 @@ export const TreeViewItem: FC<TreeViewItemProps> = props => {
         ...containerProps
     } = itemContainerProps;
 
-    const levelPadding = level * 10;
+    const levelPadding = level * 8;
 
     const inputProps = {
         defaultValue: name,

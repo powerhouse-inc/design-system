@@ -1,11 +1,13 @@
 import {
+    CLOUD,
     DocumentType,
     DRIVE,
     driveLocations,
     FILE,
     FOLDER,
+    LOCAL,
     nodeDropdownMenuOptions,
-    nodeTypes,
+    PUBLIC,
     sharingTypes,
     syncStatuses,
 } from '@/connect';
@@ -13,8 +15,6 @@ import { UseDraggableTargetProps } from '@/powerhouse';
 import { Maybe, Scalars, SynchronizationUnit } from 'document-model/document';
 
 export type SharingTypes = typeof sharingTypes;
-export type NodeTypes = typeof nodeTypes;
-export type NodeType = NodeTypes[number];
 export type SharingType = SharingTypes[number];
 export type DriveLocations = typeof driveLocations;
 export type DriveLocation = DriveLocations[number];
@@ -103,8 +103,18 @@ export type DragAndDropHandlers = {
 };
 
 export type NodeHandlers = {
-    onCreateFolder: (name: string, uiNode: UiNode) => void;
+    onAddFolder: (name: string, uiNode: UiNode) => void;
     onRenameNode: (name: string, uiNode: UiNode) => void;
     onDuplicateNode: (uiNode: UiNode) => void;
     onDeleteNode: (uiNode: UiNode) => void;
+};
+
+export type AllowedDropdownMenuOptions = {
+    [FILE]: NodeDropdownMenuOption[];
+    [FOLDER]: NodeDropdownMenuOption[];
+    [DRIVE]: {
+        [LOCAL]: NodeDropdownMenuOption[];
+        [CLOUD]: NodeDropdownMenuOption[];
+        [PUBLIC]: NodeDropdownMenuOption[];
+    };
 };

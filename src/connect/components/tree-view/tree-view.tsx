@@ -1,4 +1,5 @@
 import {
+    AllowedDropdownMenuOptions,
     CLOUD,
     CREATE,
     ConnectDropdownMenu,
@@ -12,7 +13,6 @@ import {
     NEW_FOLDER,
     NodeDropdownMenuOption,
     NodeHandlers,
-    NodeType,
     PUBLIC,
     READ,
     RENAME,
@@ -32,7 +32,7 @@ import { SyncStatusIcon } from '../status-icon';
 export type ConnectTreeViewProps = NodeHandlers &
     DragAndDropHandlers & {
         uiNode: UiNode;
-        allowedDropdownMenuOptions: Record<NodeType, NodeDropdownMenuOption[]>;
+        allowedDropdownMenuOptions: AllowedDropdownMenuOptions;
         isAllowedToCreateDocuments: boolean;
         level?: number;
         disableDropBetween?: boolean;
@@ -52,7 +52,7 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
         isAllowedToCreateDocuments = true,
         displaySyncFolderIcons = false,
         onClick,
-        onCreateFolder,
+        onAddFolder,
         onRenameNode,
         onDuplicateNode,
         onDeleteNode,
@@ -92,19 +92,29 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
         });
 
     const isSelected = getIsSelected(uiNode);
+    const isInExpandedNodePath = getIsExpanded(uiNode);
+
+    useEffect(() => {
+        if (!isSelected && !isInExpandedNodePath) {
+            setInternalExpandedState(false);
+            return;
+        }
+        if (!isSelected && isInExpandedNodePath) {
+            setInternalExpandedState(true);
+            return;
+        }
+        if (isSelected) {
+            setInternalExpandedState(true);
+        }
+    }, [isInExpandedNodePath, isSelected]);
+
     const isExpanded = isSelected
         ? internalExpandedState
-        : getIsExpanded(uiNode);
+        : isInExpandedNodePath;
 
     const isDrive = uiNode.kind === DRIVE;
     const isCloudDrive = isDrive && uiNode.sharingType === CLOUD;
     const isPublicDrive = isDrive && uiNode.sharingType === PUBLIC;
-
-    useEffect(() => {
-        if (!isSelected) {
-            setInternalExpandedState(false);
-        }
-    }, [isSelected]);
 
     const dropdownMenuHandlers: Partial<
         Record<NodeDropdownMenuOption, () => void>
@@ -131,7 +141,9 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
     } as const;
 
     const allowedDropdownMenuOptionsForKind =
-        allowedDropdownMenuOptions[uiNode.kind];
+        uiNode.kind === DRIVE
+            ? allowedDropdownMenuOptions[DRIVE][uiNode.sharingType]
+            : allowedDropdownMenuOptions[uiNode.kind];
 
     const dropdownMenuOptions = Object.entries(dropdownMenuOptionsMap)
         .map(([id, option]) => ({
@@ -184,7 +196,8 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
 
     function onSubmitHandler(value: string) {
         if (mode === CREATE) {
-            onCreateFolder(value, uiNode);
+            onAddFolder(value, uiNode);
+            setSelectedNode(uiNode);
         } else {
             onRenameNode(value, uiNode);
         }
@@ -315,6 +328,8 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
         </div>
     );
 
+    console.log('sanity');
+
     return (
         <>
             <TreeViewItem
@@ -333,36 +348,41 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
                     className: getItemContainerClassName(),
                 }}
                 {...getItemIcon()}
-            >
-                {isExpanded && (
-                    <>
-                        {mode === CREATE && (
-                            <TreeViewItem
-                                name="New Folder"
-                                itemContent="New Folder"
-                                isWriteMode={true}
-                                level={level + 1}
-                                icon={
-                                    <Icon
-                                        name="folder-close"
-                                        className="text-gray-600 transition-colors group-hover:text-gray-900 group-aria-[selected=true]:text-gray-900"
-                                    />
-                                }
-                            />
-                        )}
-                        {hasChildren &&
-                            children.map(uiNode => (
-                                <ConnectTreeView
-                                    {...props}
-                                    key={uiNode.id}
-                                    uiNode={uiNode}
-                                    level={level + 1}
-                                    {...getItemIcon()}
+            ></TreeViewItem>
+            {
+                <div
+                    className={twMerge(
+                        'max-h-0 overflow-hidden transition-[max-height] duration-300 ease-in-out',
+                        isExpanded && 'max-h-screen',
+                    )}
+                >
+                    {mode === CREATE && (
+                        <TreeViewItem
+                            name="New Folder"
+                            itemContent="New Folder"
+                            isWriteMode={true}
+                            level={level + 1}
+                            icon={
+                                <Icon
+                                    name="folder-close"
+                                    className="text-gray-600 transition-colors group-hover:text-gray-900 group-aria-[selected=true]:text-gray-900"
                                 />
-                            ))}
-                    </>
-                )}
-            </TreeViewItem>
+                            }
+                            onSubmitInput={onSubmitHandler}
+                            onCancelInput={onCancelHandler}
+                        />
+                    )}
+                    {children?.map(uiNode => (
+                        <ConnectTreeView
+                            {...props}
+                            key={uiNode.id}
+                            uiNode={uiNode}
+                            level={level + 1}
+                            {...getItemIcon()}
+                        />
+                    ))}
+                </div>
+            }
         </>
     );
 }

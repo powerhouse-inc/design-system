@@ -18,8 +18,10 @@ import {
     FC,
     ReactNode,
     SetStateAction,
+    useCallback,
     useContext,
     useEffect,
+    useMemo,
     useState,
 } from 'react';
 
@@ -28,8 +30,10 @@ export interface TreeItemContext {
     selectedNode: UiNode | null;
     selectedNodePath: UiNode[];
     selectedDriveNode: UiDriveNode | null;
+    selectedParentNode: UiDriveNode | UiFolderNode | null;
     setDriveNodes: Dispatch<SetStateAction<UiDriveNode[]>>;
-    setSelectedNode: Dispatch<SetStateAction<UiNode | null>>;
+    setSelectedNode: (node: UiNode) => void;
+    getNodeById: (id: string) => UiNode | null;
     getIsSelected: (node: UiNode) => boolean;
     getIsExpanded: (node: UiNode) => boolean;
     getSiblings: (node: UiNode) => UiNode[];
@@ -40,8 +44,10 @@ const defaultTreeItemContextValue: TreeItemContext = {
     selectedNode: null,
     selectedNodePath: [],
     selectedDriveNode: null,
+    selectedParentNode: null,
     setDriveNodes: () => {},
     setSelectedNode: () => {},
+    getNodeById: () => null,
     getIsSelected: () => false,
     getIsExpanded: () => false,
     getSiblings: () => [],
@@ -59,92 +65,194 @@ export const UiNodesContextProvider: FC<UiNodesContextProviderProps> = ({
     children,
 }) => {
     const [driveNodes, setDriveNodes] = useState<UiDriveNode[]>([]);
-    const [selectedNode, setSelectedNode] = useState<UiNode | null>(null);
+    const [selectedNode, _setSelectedNode] = useState<UiNode | null>(null);
     const [selectedNodePath, setSelectedNodePath] = useState<UiNode[]>([]);
     const [selectedDriveNode, setSelectedDriveNode] =
         useState<UiDriveNode | null>(null);
+    const [selectedParentNode, setSelectedParentNode] = useState<
+        UiDriveNode | UiFolderNode | null
+    >(null);
 
-    useEffect(() => {
-        function getSelectedDriveNode() {
-            if (!selectedNode) return null;
+    const _getNodeById = useCallback(
+        (id: string, driveNodes: UiDriveNode[] | null) => {
+            if (!driveNodes?.length) return null;
+
+            for (const driveNode of driveNodes) {
+                if (driveNode.id === id) return driveNode;
+
+                const node = driveNode.nodeMap[id];
+
+                if (node) return node;
+            }
+
+            return null;
+        },
+        [],
+    );
+
+    const getNodeById = useCallback(
+        (id: string) => {
+            return _getNodeById(id, driveNodes);
+        },
+        [_getNodeById, driveNodes],
+    );
+
+    const getSelectedDriveNode = useCallback(
+        (selectedNode: UiNode | null, driveNodes: UiDriveNode[] | null) => {
+            if (!selectedNode || !driveNodes?.length) return null;
 
             if (selectedNode.kind === DRIVE) return selectedNode;
 
             return driveNodes.find(d => d.id === selectedNode.driveId) ?? null;
-        }
+        },
+        [],
+    );
 
-        setSelectedDriveNode(getSelectedDriveNode());
+    const getParentNode = useCallback(
+        (node: UiNode, driveNodes: UiDriveNode[] | null) => {
+            if (!driveNodes?.length || node.kind === DRIVE) return null;
 
-        if (selectedNode === null) {
-            setSelectedNodePath([]);
-            return;
-        }
+            const parentNode = _getNodeById(node.parentFolder, driveNodes);
 
-        if (selectedNode.kind === DRIVE) {
-            setSelectedNodePath([selectedNode]);
-            return;
-        }
+            if (!parentNode) return null;
 
-        const newSelectedNodePath: UiNode[] = [];
+            if (parentNode.kind === FILE) {
+                throw new Error(
+                    `Parent node ${node.parentFolder} is a file, not a folder`,
+                );
+            }
 
-        const driveNode = driveNodes.find(d => d.id === selectedNode.driveId);
+            return parentNode;
+        },
+        [_getNodeById],
+    );
 
-        let current: UiNode | undefined = selectedNode;
+    const getSelectedParentNode = useCallback(
+        (selectedNode: UiNode | null, driveNodes: UiDriveNode[] | null) => {
+            if (!selectedNode || !driveNodes?.length) return null;
 
-        while (current) {
-            newSelectedNodePath.push(current);
-            current =
-                current.parentFolder === driveNode?.id
-                    ? driveNode
-                    : current.parentFolder
-                      ? driveNode?.nodeMap[current.parentFolder]
-                      : undefined;
-        }
+            if (selectedNode.kind === FILE)
+                return getParentNode(selectedNode, driveNodes);
 
-        setSelectedNodePath(newSelectedNodePath.reverse());
-    }, [selectedNode, driveNodes]);
+            return selectedNode;
+        },
+        [getParentNode],
+    );
 
-    function getIsSelected(node: UiNode) {
-        return selectedNode === node;
-    }
+    const setSelectedNode = useCallback(
+        (uiNode: UiNode) => {
+            _setSelectedNode(uiNode);
+            setSelectedDriveNode(getSelectedDriveNode(uiNode, driveNodes));
+            setSelectedParentNode(getSelectedParentNode(uiNode, driveNodes));
+            if (!selectedNode) {
+                setSelectedNodePath([]);
+                return;
+            }
 
-    function getIsExpanded(node: UiNode) {
-        if (node.kind === FILE) return false;
-        return selectedNodePath.includes(node);
-    }
+            if (selectedNode.kind === DRIVE) {
+                setSelectedNodePath([selectedNode]);
+                return;
+            }
 
-    function getSiblings(node: UiNode) {
-        if (node.kind === DRIVE) {
-            return [];
-        }
+            const newSelectedNodePath: UiNode[] = [];
 
-        const driveNode = driveNodes.find(d => d.id === node.driveId);
-
-        const parent = driveNode?.nodeMap[node.parentFolder];
-
-        if (parent?.kind === FILE) {
-            throw new Error(
-                `Parent node ${node.parentFolder} is a file, not a folder`,
+            const driveNode = driveNodes.find(
+                d => d.id === selectedNode.driveId,
             );
-        }
 
-        return parent?.children ?? [];
-    }
+            let current: UiNode | undefined = selectedNode;
+
+            while (current) {
+                newSelectedNodePath.push(current);
+                current =
+                    current.parentFolder === driveNode?.id
+                        ? driveNode
+                        : current.parentFolder
+                          ? driveNode?.nodeMap[current.parentFolder]
+                          : undefined;
+            }
+
+            setSelectedNodePath(newSelectedNodePath.reverse());
+        },
+        [driveNodes, getSelectedDriveNode, getSelectedParentNode, selectedNode],
+    );
+
+    const getIsSelected = useCallback(
+        (node: UiNode) => {
+            return selectedNode === node;
+        },
+        [selectedNode],
+    );
+
+    const getIsExpanded = useCallback(
+        (node: UiNode) => {
+            if (node.kind === FILE) return false;
+            return selectedNodePath.includes(node);
+        },
+        [selectedNodePath],
+    );
+
+    const getSiblings = useCallback(
+        (node: UiNode) => {
+            if (node.kind === DRIVE) {
+                return [];
+            }
+
+            const driveNode = driveNodes.find(d => d.id === node.driveId);
+
+            const parent = driveNode?.nodeMap[node.parentFolder];
+
+            if (parent?.kind === FILE) {
+                throw new Error(
+                    `Parent node ${node.parentFolder} is a file, not a folder`,
+                );
+            }
+
+            return parent?.children ?? [];
+        },
+        [driveNodes],
+    );
+
+    useEffect(() => {
+        if (!selectedNode) return;
+
+        const updatedSelectedNode = _getNodeById(selectedNode.id, driveNodes);
+
+        if (updatedSelectedNode) {
+            setSelectedNode(updatedSelectedNode);
+        }
+    }, [driveNodes, _getNodeById, selectedNode, setSelectedNode]);
+
+    const value = useMemo(
+        () => ({
+            driveNodes,
+            selectedNode,
+            selectedNodePath,
+            selectedDriveNode,
+            selectedParentNode,
+            getNodeById,
+            setDriveNodes,
+            setSelectedNode,
+            getIsSelected,
+            getIsExpanded,
+            getSiblings,
+        }),
+        [
+            driveNodes,
+            selectedNode,
+            selectedNodePath,
+            selectedDriveNode,
+            selectedParentNode,
+            getNodeById,
+            setSelectedNode,
+            getIsSelected,
+            getIsExpanded,
+            getSiblings,
+        ],
+    );
 
     return (
-        <UiNodesContext.Provider
-            value={{
-                driveNodes,
-                selectedNode,
-                selectedNodePath,
-                selectedDriveNode,
-                setDriveNodes,
-                setSelectedNode,
-                getIsSelected,
-                getIsExpanded,
-                getSiblings,
-            }}
-        >
+        <UiNodesContext.Provider value={value}>
             {children}
         </UiNodesContext.Provider>
     );

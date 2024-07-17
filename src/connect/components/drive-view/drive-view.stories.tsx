@@ -1,14 +1,14 @@
 import {
-    DELETE,
+    CLOUD,
+    defaultDriveOptions,
+    defaultFileOptions,
+    defaultFolderOptions,
     DRIVE,
-    DUPLICATE,
     FILE,
     FOLDER,
-    NEW_FOLDER,
-    RENAME,
-    SETTINGS,
+    LOCAL,
+    PUBLIC,
 } from '@/connect/constants';
-import { NodeDropdownMenuOption, NodeType } from '@/connect/types';
 import {
     mockCloudDrive,
     mockLocalDrive,
@@ -42,10 +42,14 @@ const meta: Meta<typeof DriveView> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const allowedDropdownMenuOptions: Record<NodeType, NodeDropdownMenuOption[]> = {
-    [DRIVE]: [NEW_FOLDER, RENAME, DELETE, SETTINGS],
-    [FOLDER]: [NEW_FOLDER, RENAME, DELETE, DUPLICATE],
-    [FILE]: [RENAME, DELETE, DUPLICATE],
+const allowedDropdownMenuOptions = {
+    [FILE]: defaultFileOptions,
+    [FOLDER]: defaultFolderOptions,
+    [DRIVE]: {
+        [LOCAL]: defaultDriveOptions,
+        [CLOUD]: defaultDriveOptions,
+        [PUBLIC]: defaultDriveOptions,
+    },
 };
 
 const Template: Story = {

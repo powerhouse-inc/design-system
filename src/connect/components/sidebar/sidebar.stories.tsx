@@ -7,18 +7,16 @@ import {
 } from '@/connect';
 import {
     CLOUD,
-    DELETE,
+    defaultDriveOptions,
+    defaultFileOptions,
+    defaultFolderOptions,
     DRIVE,
-    DUPLICATE,
     FILE,
     FOLDER,
     LOCAL,
-    NEW_FOLDER,
     PUBLIC,
-    RENAME,
-    SETTINGS,
 } from '@/connect/constants';
-import { NodeDropdownMenuOption, NodeType, SharingType } from '@/connect/types';
+import { SharingType } from '@/connect/types';
 import { mockDriveNodes } from '@/connect/utils';
 import { DropItem } from '@/powerhouse';
 import { useEffect } from '@storybook/preview-api';
@@ -61,17 +59,18 @@ export const Expanded: Story = {
             setDriveNodes(args.driveNodes ?? []);
         }, []);
 
-        const allowedDropdownMenuOptions: Record<
-            NodeType,
-            NodeDropdownMenuOption[]
-        > = {
-            [DRIVE]: [NEW_FOLDER, RENAME, SETTINGS],
-            [FOLDER]: [NEW_FOLDER, RENAME, DELETE, DUPLICATE],
-            [FILE]: [RENAME, DELETE, DUPLICATE],
+        const allowedDropdownMenuOptions = {
+            [FILE]: defaultFileOptions,
+            [FOLDER]: defaultFolderOptions,
+            [DRIVE]: {
+                [LOCAL]: defaultDriveOptions,
+                [CLOUD]: defaultDriveOptions,
+                [PUBLIC]: defaultDriveOptions,
+            },
         };
 
         const nodeHandlers = {
-            onCreateFolder: (name: string, uiNode: UiNode) => {},
+            onAddFolder: (name: string, uiNode: UiNode) => {},
             onRenameNode: (name: string, uiNode: UiNode) => {},
             onDuplicateNode: (uiNode: UiNode) => {},
             onDeleteNode: (uiNode: UiNode) => {},

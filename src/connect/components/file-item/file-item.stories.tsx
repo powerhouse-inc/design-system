@@ -26,6 +26,20 @@ export const Default: Story = {
         isAllowedToCreateDocuments: true,
         allowedDropdownMenuOptions: [RENAME, DELETE, DUPLICATE],
     },
+    render: function Wrapper(args) {
+        const fileNodes = Array.from({ length: 100 }).map((_, index) => ({
+            ...args.uiFileNode,
+            id: `file-${index}`,
+            name: `File ${index}`,
+        }));
+        return (
+            <div className="flex flex-wrap gap-2">
+                {fileNodes.map(node => (
+                    <FileItem key={node.id} {...args} uiFileNode={node} />
+                ))}
+            </div>
+        );
+    },
 };
 
 export const NotAllowedToCreateDocuments: Story = {

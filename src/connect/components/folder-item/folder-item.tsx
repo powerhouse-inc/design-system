@@ -1,40 +1,30 @@
 import {
     ConnectDropdownMenu,
     DELETE,
+    DragAndDropHandlers,
     DUPLICATE,
     NodeDropdownMenuOption,
+    NodeHandlers,
     READ,
     RENAME,
     UiFolderNode,
-    UiNode,
     WRITE,
 } from '@/connect';
 import { dropdownMenuOptionsMap } from '@/connect/utils/dropdown-menu-options';
-import {
-    Icon,
-    UseDraggableTargetProps,
-    useDraggableTarget,
-} from '@/powerhouse';
+import { Icon, useDraggableTarget } from '@/powerhouse';
 import { TreeViewInput } from '@/powerhouse/components/tree-view-input';
 import React, { useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { SyncStatusIcon } from '../status-icon';
 
-type FolderItem = object;
-
-export interface FolderItemProps {
-    uiFolderNode: UiFolderNode;
-    isAllowedToCreateDocuments: boolean;
-    allowedDropdownMenuOptions: NodeDropdownMenuOption[];
-    displaySyncIcon: boolean;
-    className?: string;
-    onRenameNode: (name: string, uiNode: UiNode) => void;
-    onDuplicateNode: (uiNode: UiNode) => void;
-    onDeleteNode: (uiNode: UiNode) => void;
-    onDragStart: UseDraggableTargetProps<UiNode>['onDragStart'];
-    onDragEnd: UseDraggableTargetProps<UiNode>['onDragEnd'];
-    onDropEvent: UseDraggableTargetProps<UiNode>['onDropEvent'];
-}
+export type FolderItemProps = DragAndDropHandlers &
+    NodeHandlers & {
+        uiFolderNode: UiFolderNode;
+        isAllowedToCreateDocuments: boolean;
+        allowedDropdownMenuOptions: NodeDropdownMenuOption[];
+        displaySyncIcon: boolean;
+        className?: string;
+    };
 
 export const FolderItem: React.FC<FolderItemProps> = ({
     uiFolderNode,
@@ -123,9 +113,9 @@ export const FolderItem: React.FC<FolderItemProps> = ({
     );
 
     return (
-        <div className="relative" ref={containerRef}>
+        <div className="relative min-w-64" ref={containerRef}>
             <div {...dropProps} {...dragProps} className={containerStyles}>
-                <div className="relative flex flex-1 flex-row items-center overflow-hidden">
+                <div className="flex items-center overflow-hidden">
                     <div className="p-1">
                         <div className="relative">
                             <Icon name="folder-close" size={24} />
@@ -151,18 +141,15 @@ export const FolderItem: React.FC<FolderItemProps> = ({
                     {content}
                 </div>
                 {isReadMode && isAllowedToCreateDocuments && (
-                    <div
+                    <button
+                        className="invisible ml-auto group-hover:visible"
                         onClick={e => {
                             e.stopPropagation();
                             setIsDropdownMenuOpen(true);
                         }}
                     >
-                        <Icon
-                            name="vertical-dots"
-                            className="hidden group-hover:inline-block"
-                            size={24}
-                        />
-                    </div>
+                        <Icon name="vertical-dots" />
+                    </button>
                 )}
             </div>
             {isAllowedToCreateDocuments && (
