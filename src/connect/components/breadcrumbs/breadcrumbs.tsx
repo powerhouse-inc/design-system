@@ -1,24 +1,21 @@
-import { UiNode } from '@/connect';
+import { NodeProps, TUiNodesContext, UiNode } from '@/connect';
 import { Icon } from '@/powerhouse';
 import { useState } from 'react';
 import { AddNewItemInput } from './add-new-item-input';
 
-export type BreadcrumbsProps = {
-    selectedNodePath: UiNode[];
-    isAllowedToCreateDocuments: boolean;
-    setSelectedNode: (node: UiNode | null) => void;
-    onAddAndSelectNewFolder: (name: string) => Promise<void>;
-};
+export type BreadcrumbsProps = NodeProps & TUiNodesContext;
 
 /**
- * The `Breadcrumbs` component displays the current path (provided by the filterPath prop).
- * It also allows the user to add a new folder to the current path.
+ * The `Breadcrumbs` component displays the current path to the selected node.
+ * It also allows the user to add a new folder as a child of the currently selected parent node.
  */
 export function Breadcrumbs(props: BreadcrumbsProps) {
-    const { selectedNodePath, onAddAndSelectNewFolder } = props;
+    const {
+        selectedNodePath,
+        isAllowedToCreateDocuments,
+        onAddAndSelectNewFolder,
+    } = props;
     const [isAddingNewItem, setIsAddingNewFolder] = useState(false);
-
-    const { isAllowedToCreateDocuments } = props;
 
     function onAddNew() {
         setIsAddingNewFolder(true);
@@ -64,10 +61,8 @@ export function Breadcrumbs(props: BreadcrumbsProps) {
     );
 }
 
-export type BreadcrumbProps = {
+export type BreadcrumbProps = BreadcrumbsProps & {
     node: UiNode;
-    isAllowedToCreateDocuments: boolean;
-    setSelectedNode: (node: UiNode | null) => void;
 };
 
 export function Breadcrumb(props: BreadcrumbProps) {

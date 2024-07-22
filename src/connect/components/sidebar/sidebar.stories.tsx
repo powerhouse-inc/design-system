@@ -54,6 +54,7 @@ export const Expanded: Story = {
 
         const nodeHandlers = {
             onAddFolder: (name: string, uiNode: UiNode) => {},
+            onAddAndSelectNewFolder: (name: string) => Promise.resolve(),
             onRenameNode: (name: string, uiNode: UiNode) => {},
             onDuplicateNode: (uiNode: UiNode) => {},
             onDeleteNode: (uiNode: UiNode) => {},

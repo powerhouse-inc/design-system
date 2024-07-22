@@ -14,7 +14,7 @@ import { Button, Icon } from '@/powerhouse';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-export type Inputs = {
+export type AddLocalDriveInput = {
     name: string;
     sharingType: SharingType;
     availableOffline: boolean;
@@ -25,9 +25,7 @@ type AddLocalDriveFormProps = {
     onCancel: () => void;
 };
 
-type CreateDriveFormSubmitHandler = SubmitHandler<Inputs>;
-
-export type AddLocalDriveInput = Inputs;
+type CreateDriveFormSubmitHandler = SubmitHandler<AddLocalDriveInput>;
 
 export function AddLocalDriveForm(props: AddLocalDriveFormProps) {
     const [showLocationSettings, setShowLocationSettings] = useState(false);
@@ -37,7 +35,7 @@ export function AddLocalDriveForm(props: AddLocalDriveFormProps) {
         handleSubmit,
         control,
         formState: { errors },
-    } = useForm<Inputs>({
+    } = useForm<AddLocalDriveInput>({
         defaultValues: {
             sharingType: LOCAL,
             availableOffline: false,

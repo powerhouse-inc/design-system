@@ -16,13 +16,13 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDebounceValue } from 'usehooks-ts';
 
-interface RemoteDriveDetails {
+type RemoteDriveDetails = {
     id: string;
     name: string;
     sharingType: SharingType;
     location: typeof SWITCHBOARD;
     availableOffline: boolean;
-}
+};
 
 type Inputs = {
     availableOffline: boolean;

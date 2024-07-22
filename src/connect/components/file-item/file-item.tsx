@@ -8,6 +8,7 @@ import {
     FILE,
     iconMap,
     NodeOption,
+    nodeOptionsMap,
     NodeProps,
     READ,
     REMOVE_TRIGGER,
@@ -16,7 +17,6 @@ import {
     UiFileNode,
     WRITE,
 } from '@/connect';
-import { nodeOptionsMap } from '@/connect/utils/node-options';
 import { Icon, TreeViewInput, useDraggableTarget } from '@/powerhouse';
 import React, { ReactNode, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';

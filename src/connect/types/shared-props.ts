@@ -21,6 +21,7 @@ export type NodeProps = {
     isAllowedToCreateDocuments: boolean;
     isRemoteDrive: boolean;
     onAddFolder: (name: string, uiNode: UiNode) => void;
+    onAddAndSelectNewFolder: (name: string) => Promise<void>;
     onRenameNode: (name: string, uiNode: UiNode) => void;
     onDuplicateNode: (uiNode: UiNode) => void;
     onDeleteNode: (uiNode: UiFileNode | UiFolderNode) => void;
