@@ -1,4 +1,8 @@
-import { mockNodeOptions, mockUiFileNode } from '@/connect/utils';
+import {
+    mockNodeOptions,
+    mockUiFileNode,
+    mockUiFolderNode,
+} from '@/connect/utils';
 import { Meta, StoryObj } from '@storybook/react';
 import { FileItem } from './file-item';
 
@@ -24,6 +28,12 @@ export const Default: Story = {
         isRemoteDrive: true,
         isAllowedToCreateDocuments: true,
         nodeOptions: mockNodeOptions,
+        selectedNodePath: [
+            mockUiFolderNode,
+            mockUiFolderNode,
+            mockUiFolderNode,
+            mockUiFileNode,
+        ],
     },
     render: function Wrapper(args) {
         const fileNodes = Array.from({ length: 100 }).map((_, index) => ({

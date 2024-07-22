@@ -101,7 +101,7 @@ export const FolderItem: React.FC<FolderItemProps> = ({
     const content =
         isReadMode || !isAllowedToCreateDocuments ? (
             <>
-                <div className="ml-3 max-h-6 truncate font-medium text-slate-200">
+                <div className="ml-3 max-h-6 max-w-60 truncate font-medium text-slate-200">
                     {uiFolderNode.name}
                 </div>
             </>

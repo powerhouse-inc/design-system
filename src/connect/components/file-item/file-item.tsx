@@ -132,10 +132,10 @@ export const FileItem: React.FC<FileItemProps> = ({
 
     const content = isReadMode ? (
         <>
-            <div className="max-h-6 truncate text-sm font-medium group-hover:text-gray-800">
+            <div className="max-h-6 max-w-60 truncate text-sm font-medium group-hover:text-gray-800">
                 {uiFileNode.name}
             </div>
-            <div className="max-h-6 truncate text-xs font-medium text-gray-600 group-hover:text-gray-800">
+            <div className="max-h-6 max-w-60 truncate text-xs font-medium text-gray-600 group-hover:text-gray-800">
                 {selectedNodePath.map(node => node.name).join(' / ')}
             </div>
         </>
