@@ -1,10 +1,10 @@
 import {
-    DocumentType,
     DRIVE,
     FILE,
     FOLDER,
     SharingType,
     SyncStatus,
+    TDocumentType,
 } from '@/connect';
 import { Maybe, Scalars, SynchronizationUnit } from 'document-model/document';
 
@@ -12,7 +12,7 @@ export type UiFileNode = {
     kind: typeof FILE;
     id: string;
     name: string;
-    documentType: DocumentType;
+    documentType: TDocumentType;
     parentFolder: string;
     driveId: string;
     syncStatus: SyncStatus | undefined;

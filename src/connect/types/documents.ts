@@ -2,4 +2,4 @@ import { documentTypes } from '@/connect';
 
 export type DocumentTypes = typeof documentTypes;
 
-export type DocumentType = DocumentTypes[number];
+export type TDocumentType = DocumentTypes[number];
