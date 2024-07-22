@@ -1,16 +1,18 @@
-import { Icon } from '@/powerhouse';
-import { ReactNode } from 'react';
 import {
     ADD_INVALID_TRIGGER,
     ADD_TRIGGER,
+    DebugNodeOption,
     DELETE,
     DUPLICATE,
     NEW_FOLDER,
+    NodeOption,
+    NormalNodeOption,
     REMOVE_TRIGGER,
     RENAME,
     SETTINGS,
-} from '../constants';
-import { DebugNodeOption, NodeOption, NormalNodeOption } from '../types';
+} from '@/connect';
+import { Icon } from '@/powerhouse';
+import { ReactNode } from 'react';
 
 type OptionMetadata = {
     label: ReactNode;

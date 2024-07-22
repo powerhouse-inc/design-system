@@ -131,14 +131,27 @@ export const FileItem: React.FC<FileItemProps> = ({
     );
 
     const content = isReadMode ? (
-        <>
-            <div className="max-h-6 max-w-60 truncate text-sm font-medium group-hover:text-gray-800">
-                {uiFileNode.name}
+        <div className="flex w-52 items-center justify-between">
+            <div className="mr-2 truncate group-hover:mr-0">
+                <div className="max-h-6 truncate text-sm font-medium group-hover:text-gray-800">
+                    {uiFileNode.name}
+                </div>
+                <div className="max-h-6 truncate text-xs font-medium text-gray-600 group-hover:text-gray-800">
+                    {selectedNodePath.map(node => node.name).join(' / ')}
+                </div>
             </div>
-            <div className="max-h-6 max-w-60 truncate text-xs font-medium text-gray-600 group-hover:text-gray-800">
-                {selectedNodePath.map(node => node.name).join(' / ')}
-            </div>
-        </>
+            {isAllowedToCreateDocuments && (
+                <button
+                    className="ml-auto hidden group-hover:block"
+                    onClick={e => {
+                        e.stopPropagation();
+                        setIsDropdownMenuOpen(true);
+                    }}
+                >
+                    <Icon name="vertical-dots" />
+                </button>
+            )}
+        </div>
     ) : (
         <TreeViewInput
             className="ml-3 flex-1 font-medium"
@@ -149,30 +162,12 @@ export const FileItem: React.FC<FileItemProps> = ({
     );
 
     return (
-        <div onClick={onClick} className="relative min-w-64" ref={containerRef}>
+        <div onClick={onClick} className="relative w-64" ref={containerRef}>
             <div {...dragProps} className={containerStyles}>
                 <div className="relative flex flex-1 flex-row items-center">
                     <div className="mr-1.5">{iconNode}</div>
-                    <div
-                        className={twMerge(
-                            'overflow-hidden text-gray-800',
-                            !isReadMode && 'w-full',
-                        )}
-                    >
-                        {content}
-                    </div>
+                    {content}
                 </div>
-                {isReadMode && isAllowedToCreateDocuments && (
-                    <button
-                        className="invisible ml-auto group-hover:visible"
-                        onClick={e => {
-                            e.stopPropagation();
-                            setIsDropdownMenuOpen(true);
-                        }}
-                    >
-                        <Icon name="vertical-dots" />
-                    </button>
-                )}
             </div>
             {isAllowedToCreateDocuments && (
                 <ConnectDropdownMenu
