@@ -1,13 +1,12 @@
 import {
-    CLOUD,
+    debugNodeOptions,
     DocumentType,
     DRIVE,
     driveLocations,
     FILE,
     FOLDER,
-    LOCAL,
-    nodeDropdownMenuOptions,
-    PUBLIC,
+    nodeOptions,
+    normalNodeOptions,
     sharingTypes,
     syncStatuses,
 } from '@/connect';
@@ -28,6 +27,7 @@ export type UiFileNode = {
     driveId: string;
     syncStatus: SyncStatus | undefined;
     synchronizationUnits: SynchronizationUnit[];
+    sharingType: SharingType;
 };
 
 export type UiFolderNode = {
@@ -38,6 +38,7 @@ export type UiFolderNode = {
     driveId: string;
     children: UiNode[];
     syncStatus: SyncStatus | undefined;
+    sharingType: SharingType;
 };
 
 export type UiNode = UiDriveNode | UiFileNode | UiFolderNode;
@@ -58,12 +59,13 @@ export type UiDriveNode = {
 };
 
 export type SyncStatuses = typeof syncStatuses;
-
 export type SyncStatus = SyncStatuses[number];
-
-export type NodeDropdownMenuOptions = typeof nodeDropdownMenuOptions;
-
-export type NodeDropdownMenuOption = NodeDropdownMenuOptions[number];
+export type NormalNodeOptions = typeof normalNodeOptions;
+export type DebugNodeOptions = typeof debugNodeOptions;
+export type NodeOptions = typeof nodeOptions;
+export type NormalNodeOption = NormalNodeOptions[number];
+export type DebugNodeOption = DebugNodeOptions[number];
+export type NodeOption = NodeOptions[number];
 
 export type FileNode = {
     documentType: Scalars['String']['output'];
@@ -97,27 +99,34 @@ export type DocumentDriveDocument = {
     };
 };
 
-export type DragAndDropHandlers = {
+export type DragAndDropProps = {
+    disableDropBetween: boolean;
+    disableHighlightStyles: boolean;
     onDropActivate: (dropTargetItem: UiNode) => void;
     onDropEvent: UseDraggableTargetProps<UiNode>['onDropEvent'];
     onDragStart: UseDraggableTargetProps<UiNode>['onDragStart'];
     onDragEnd: UseDraggableTargetProps<UiNode>['onDragEnd'];
 };
 
-export type NodeHandlers = {
+export type NodeProps = {
+    nodeOptions: TNodeOptions;
+    isAllowedToCreateDocuments: boolean;
+    isRemoteDrive: boolean;
     onAddFolder: (name: string, uiNode: UiNode) => void;
     onRenameNode: (name: string, uiNode: UiNode) => void;
     onDuplicateNode: (uiNode: UiNode) => void;
     onDeleteNode: (uiNode: UiFileNode | UiFolderNode) => void;
     onDeleteDrive: (uiNode: UiDriveNode) => void;
+    onAddTrigger: (uiNodeDriveId: string) => void;
+    onRemoveTrigger: (uiNodeDriveId: string) => void;
+    onAddInvalidTrigger: (uiNodeDriveId: string) => void;
 };
 
-export type AllowedDropdownMenuOptions = {
-    [FILE]: NodeDropdownMenuOption[];
-    [FOLDER]: NodeDropdownMenuOption[];
-    [DRIVE]: {
-        [LOCAL]: NodeDropdownMenuOption[];
-        [CLOUD]: NodeDropdownMenuOption[];
-        [PUBLIC]: NodeDropdownMenuOption[];
-    };
-};
+export type TNodeOptions = Record<
+    SharingType,
+    {
+        [DRIVE]: NodeOption[];
+        [FOLDER]: NodeOption[];
+        [FILE]: NodeOption[];
+    }
+>;

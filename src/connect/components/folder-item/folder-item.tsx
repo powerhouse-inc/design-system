@@ -1,48 +1,52 @@
 import {
+    ADD_INVALID_TRIGGER,
+    ADD_TRIGGER,
     ConnectDropdownMenu,
     DELETE,
-    DragAndDropHandlers,
+    DragAndDropProps,
     DUPLICATE,
-    NodeDropdownMenuOption,
-    NodeHandlers,
+    FOLDER,
+    NodeOption,
+    nodeOptionsMap,
+    NodeProps,
     READ,
+    REMOVE_TRIGGER,
     RENAME,
+    SyncStatusIcon,
+    TUiNodesContext,
     UiFolderNode,
-    useUiNodesContext,
     WRITE,
 } from '@/connect';
-import { dropdownMenuOptionsMap } from '@/connect/utils/dropdown-menu-options';
-import { Icon, useDraggableTarget } from '@/powerhouse';
-import { TreeViewInput } from '@/powerhouse/components/tree-view-input';
+import { Icon, TreeViewInput, useDraggableTarget } from '@/powerhouse';
 import React, { useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { SyncStatusIcon } from '../status-icon';
 
-export type FolderItemProps = DragAndDropHandlers &
-    NodeHandlers & {
+export type FolderItemProps = TUiNodesContext &
+    DragAndDropProps &
+    NodeProps & {
         uiFolderNode: UiFolderNode;
-        isAllowedToCreateDocuments: boolean;
-        allowedDropdownMenuOptions: NodeDropdownMenuOption[];
-        displaySyncIcon: boolean;
         className?: string;
     };
 
 export const FolderItem: React.FC<FolderItemProps> = ({
     uiFolderNode,
     isAllowedToCreateDocuments,
-    allowedDropdownMenuOptions,
-    displaySyncIcon,
+    nodeOptions,
+    isRemoteDrive,
     className,
+    setSelectedNode,
     onRenameNode,
     onDuplicateNode,
     onDeleteNode,
     onDragEnd,
     onDragStart,
     onDropEvent,
+    onAddTrigger,
+    onRemoveTrigger,
+    onAddInvalidTrigger,
 }) => {
     const [mode, setMode] = useState<typeof READ | typeof WRITE>(READ);
     const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
-    const { setSelectedNode } = useUiNodesContext();
     const { dropProps, dragProps, isDropTarget } = useDraggableTarget({
         data: uiFolderNode,
         onDragEnd,
@@ -66,22 +70,25 @@ export const FolderItem: React.FC<FolderItemProps> = ({
         setSelectedNode(uiFolderNode);
     }
 
-    const dropdownMenuHandlers: Partial<
-        Record<NodeDropdownMenuOption, () => void>
-    > = {
+    const dropdownMenuHandlers: Partial<Record<NodeOption, () => void>> = {
         [DUPLICATE]: () => onDuplicateNode(uiFolderNode),
         [RENAME]: () => setMode(WRITE),
         [DELETE]: () => onDeleteNode(uiFolderNode),
+        [ADD_TRIGGER]: () => onAddTrigger(uiFolderNode.driveId),
+        [REMOVE_TRIGGER]: () => onRemoveTrigger(uiFolderNode.driveId),
+        [ADD_INVALID_TRIGGER]: () => onAddInvalidTrigger(uiFolderNode.driveId),
     } as const;
 
-    const dropdownMenuOptions = Object.entries(dropdownMenuOptionsMap)
+    const nodeOptionsForKind = nodeOptions[uiFolderNode.sharingType][FOLDER];
+
+    const dropdownMenuOptions = Object.entries(nodeOptionsMap)
         .map(([id, option]) => ({
             ...option,
-            id: id as NodeDropdownMenuOption,
+            id: id as NodeOption,
         }))
-        .filter(option => allowedDropdownMenuOptions.includes(option.id));
+        .filter(option => nodeOptionsForKind.includes(option.id));
 
-    function onItemClick(itemId: NodeDropdownMenuOption) {
+    function onItemClick(itemId: NodeOption) {
         const handler = dropdownMenuHandlers[itemId];
         if (!handler) {
             console.error(`No handler found for dropdown menu item: ${itemId}`);
@@ -126,7 +133,7 @@ export const FolderItem: React.FC<FolderItemProps> = ({
                         <div className="relative">
                             <Icon name="folder-close" size={24} />
                             {isReadMode &&
-                                displaySyncIcon &&
+                                isRemoteDrive &&
                                 uiFolderNode.syncStatus && (
                                     <div className="absolute bottom-[-3px] right-[-2px] size-3 rounded-full bg-white">
                                         <div className="absolute left-[-2px] top-[-2px]">

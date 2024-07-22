@@ -14,6 +14,7 @@ export * from './revision-history';
 export * from './search-bar';
 export * from './select';
 export * from './sidebar';
+export * from './status-icon';
 export * from './toast';
 export * from './toggle';
 export * from './tooltip';

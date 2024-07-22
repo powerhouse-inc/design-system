@@ -1,50 +1,56 @@
 import {
+    ADD_INVALID_TRIGGER,
+    ADD_TRIGGER,
     ConnectDropdownMenu,
     DELETE,
-    DragAndDropHandlers,
+    DragAndDropProps,
     DUPLICATE,
+    FILE,
     iconMap,
-    NodeDropdownMenuOption,
-    NodeHandlers,
+    NodeOption,
+    NodeProps,
     READ,
+    REMOVE_TRIGGER,
     RENAME,
+    TUiNodesContext,
     UiFileNode,
-    useUiNodesContext,
     WRITE,
 } from '@/connect';
-import { dropdownMenuOptionsMap } from '@/connect/utils/dropdown-menu-options';
+import { nodeOptionsMap } from '@/connect/utils/node-options';
 import { Icon, TreeViewInput, useDraggableTarget } from '@/powerhouse';
 import React, { ReactNode, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { SyncStatusIcon } from '../status-icon';
 
-export type FileItemProps = DragAndDropHandlers &
-    NodeHandlers & {
+export type FileItemProps = TUiNodesContext &
+    DragAndDropProps &
+    NodeProps & {
         uiFileNode: UiFileNode;
-        allowedDropdownMenuOptions: NodeDropdownMenuOption[];
-        isAllowedToCreateDocuments: boolean;
-        displaySyncIcon: boolean;
         customIcon?: ReactNode;
         className?: string;
     };
 
 export const FileItem: React.FC<FileItemProps> = ({
     uiFileNode,
-    allowedDropdownMenuOptions,
+    selectedNodePath,
+    nodeOptions,
     isAllowedToCreateDocuments,
-    displaySyncIcon,
+    isRemoteDrive,
     customIcon,
     className,
+    setSelectedNode,
     onRenameNode,
     onDuplicateNode,
     onDeleteNode,
     onDragEnd,
     onDragStart,
+    onAddTrigger,
+    onRemoveTrigger,
+    onAddInvalidTrigger,
 }) => {
     const containerRef = useRef(null);
     const [mode, setMode] = useState<typeof READ | typeof WRITE>(READ);
     const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
-    const { setSelectedNode, selectedNodePath } = useUiNodesContext();
 
     const { dragProps } = useDraggableTarget({
         data: uiFileNode,
@@ -59,20 +65,23 @@ export const FileItem: React.FC<FileItemProps> = ({
         className,
     );
 
-    const dropdownMenuHandlers: Partial<
-        Record<NodeDropdownMenuOption, () => void>
-    > = {
+    const dropdownMenuHandlers: Partial<Record<NodeOption, () => void>> = {
         [DUPLICATE]: () => onDuplicateNode(uiFileNode),
         [RENAME]: () => setMode(WRITE),
         [DELETE]: () => onDeleteNode(uiFileNode),
+        [ADD_TRIGGER]: () => onAddTrigger(uiFileNode.driveId),
+        [REMOVE_TRIGGER]: () => onRemoveTrigger(uiFileNode.driveId),
+        [ADD_INVALID_TRIGGER]: () => onAddInvalidTrigger(uiFileNode.driveId),
     } as const;
 
-    const dropdownMenuOptions = Object.entries(dropdownMenuOptionsMap)
+    const nodeOptionsForKind = nodeOptions[uiFileNode.sharingType][FILE];
+
+    const dropdownMenuOptions = Object.entries(nodeOptionsMap)
         .map(([id, option]) => ({
             ...option,
-            id: id as NodeDropdownMenuOption,
+            id: id as NodeOption,
         }))
-        .filter(option => allowedDropdownMenuOptions.includes(option.id));
+        .filter(option => nodeOptionsForKind.includes(option.id));
 
     function onSubmitInput(name: string) {
         onRenameNode(name, uiFileNode);
@@ -87,7 +96,7 @@ export const FileItem: React.FC<FileItemProps> = ({
         setSelectedNode(uiFileNode);
     }
 
-    function onItemClick(itemId: NodeDropdownMenuOption) {
+    function onItemClick(itemId: NodeOption) {
         const handler = dropdownMenuHandlers[itemId];
         if (!handler) {
             console.error(`No handler found for dropdown menu item: ${itemId}`);
@@ -108,7 +117,7 @@ export const FileItem: React.FC<FileItemProps> = ({
                 width={32}
                 height={34}
             />
-            {isReadMode && displaySyncIcon && uiFileNode.syncStatus && (
+            {isReadMode && isRemoteDrive && uiFileNode.syncStatus && (
                 <div className="absolute bottom-[-2px] right-0 size-3 rounded-full bg-white">
                     <div className="absolute left-[-2px] top-[-2px]">
                         <SyncStatusIcon

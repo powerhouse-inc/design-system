@@ -40,6 +40,7 @@ export const TreeViewItem: FC<TreeViewItemProps> = props => {
         level = 0,
         itemContainerProps = {},
         hasCaret = true,
+        ...divProps
     } = props;
 
     const {
@@ -65,7 +66,7 @@ export const TreeViewItem: FC<TreeViewItemProps> = props => {
     );
 
     return (
-        <>
+        <div {...divProps}>
             <div
                 role="button"
                 onClick={onClick}
@@ -104,15 +105,15 @@ export const TreeViewItem: FC<TreeViewItemProps> = props => {
                         {content}
                     </div>
                 </div>
-                {bottomIndicator && (
-                    <div className="absolute bottom-0 w-full">
-                        {bottomIndicator}
-                    </div>
-                )}
             </div>
+            {bottomIndicator && (
+                <div className="absolute bottom-0 w-full">
+                    {bottomIndicator}
+                </div>
+            )}
             {children && (
                 <div className={twMerge(!open && 'hidden')}>{children}</div>
             )}
-        </>
+        </div>
     );
 };

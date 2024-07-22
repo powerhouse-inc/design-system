@@ -1,43 +1,41 @@
 import {
-    AllowedDropdownMenuOptions,
+    ADD_INVALID_TRIGGER,
+    ADD_TRIGGER,
     CLOUD,
     CREATE,
     ConnectDropdownMenu,
     DELETE,
     DRIVE,
     DUPLICATE,
-    DragAndDropHandlers,
+    DragAndDropProps,
     FILE,
     FOLDER,
     LOCAL,
     NEW_FOLDER,
-    NodeDropdownMenuOption,
-    NodeHandlers,
+    NodeOption,
+    NodeProps,
     PUBLIC,
     READ,
+    REMOVE_TRIGGER,
     RENAME,
     SETTINGS,
+    TUiNodesContext,
     UiDriveNode,
     UiNode,
     WRITE,
     iconMap,
-    useUiNodesContext,
 } from '@/connect';
-import { dropdownMenuOptionsMap } from '@/connect/utils/dropdown-menu-options';
+import { nodeOptionsMap } from '@/connect/utils/node-options';
 import { Icon, TreeViewItem, useDraggableTarget } from '@/powerhouse';
-import { MouseEventHandler, useEffect, useRef, useState } from 'react';
+import { MouseEventHandler, useRef, useState } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
 import { SyncStatusIcon } from '../status-icon';
 
-export type ConnectTreeViewProps = NodeHandlers &
-    DragAndDropHandlers & {
+export type ConnectTreeViewProps = TUiNodesContext &
+    NodeProps &
+    DragAndDropProps & {
         uiNode: UiNode;
-        allowedDropdownMenuOptions: AllowedDropdownMenuOptions;
-        isAllowedToCreateDocuments: boolean;
         level?: number;
-        disableDropBetween?: boolean;
-        disableHighlightStyles?: boolean;
-        displaySyncFolderIcons?: boolean;
         showDriveSettingsModal: (uiDriveNode: UiDriveNode) => void;
         onClick?: MouseEventHandler<HTMLDivElement>;
     };
@@ -45,12 +43,14 @@ export type ConnectTreeViewProps = NodeHandlers &
 export function ConnectTreeView(props: ConnectTreeViewProps) {
     const {
         uiNode,
-        allowedDropdownMenuOptions,
+        nodeOptions,
         level = 0,
-        disableDropBetween = false,
-        disableHighlightStyles = false,
-        isAllowedToCreateDocuments = true,
-        displaySyncFolderIcons = false,
+        disableDropBetween,
+        disableHighlightStyles,
+        isAllowedToCreateDocuments,
+        setSelectedNode,
+        getIsExpanded,
+        getIsSelected,
         onClick,
         onAddFolder,
         onRenameNode,
@@ -62,13 +62,16 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
         onDropEvent,
         onDropActivate,
         showDriveSettingsModal,
+        onAddTrigger,
+        onRemoveTrigger,
+        onAddInvalidTrigger,
     } = props;
-    const { setSelectedNode, getIsSelected, getIsExpanded } =
-        useUiNodesContext();
+
     const [mode, setMode] = useState<
         typeof READ | typeof WRITE | typeof CREATE
     >(READ);
-    const [internalExpandedState, setInternalExpandedState] = useState(false);
+    const [touched, setTouched] = useState(false);
+    const [internalExpandedState, setInternalExpandedState] = useState(true);
     const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
     const children = uiNode.kind !== FILE ? uiNode.children : null;
@@ -95,31 +98,13 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
     const isSelected = getIsSelected(uiNode);
     const isInExpandedNodePath = getIsExpanded(uiNode);
 
-    useEffect(() => {
-        if (!isSelected && !isInExpandedNodePath) {
-            setInternalExpandedState(false);
-            return;
-        }
-        if (!isSelected && isInExpandedNodePath) {
-            setInternalExpandedState(true);
-            return;
-        }
-        if (isSelected) {
-            setInternalExpandedState(true);
-        }
-    }, [isInExpandedNodePath, isSelected]);
-
-    const isExpanded = isSelected
-        ? internalExpandedState
-        : isInExpandedNodePath;
+    const isExpanded = touched ? internalExpandedState : isInExpandedNodePath;
 
     const isDrive = uiNode.kind === DRIVE;
     const isCloudDrive = isDrive && uiNode.sharingType === CLOUD;
     const isPublicDrive = isDrive && uiNode.sharingType === PUBLIC;
 
-    const dropdownMenuHandlers: Partial<
-        Record<NodeDropdownMenuOption, () => void>
-    > = {
+    const dropdownMenuHandlers: Partial<Record<NodeOption, () => void>> = {
         [DUPLICATE]: () => onDuplicateNode(uiNode),
         [NEW_FOLDER]: () => {
             setSelectedNode(uiNode);
@@ -138,21 +123,19 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
             if (uiNode.kind !== DRIVE) return;
             showDriveSettingsModal(uiNode);
         },
+        [ADD_TRIGGER]: () => onAddTrigger(uiNode.driveId),
+        [REMOVE_TRIGGER]: () => onRemoveTrigger(uiNode.driveId),
+        [ADD_INVALID_TRIGGER]: () => onAddInvalidTrigger(uiNode.driveId),
     } as const;
 
-    const allowedDropdownMenuOptionsForKind =
-        uiNode.kind === DRIVE
-            ? allowedDropdownMenuOptions[DRIVE][uiNode.sharingType]
-            : allowedDropdownMenuOptions[uiNode.kind];
+    const nodeOptionsForKind = nodeOptions[uiNode.sharingType][uiNode.kind];
 
-    const dropdownMenuOptions = Object.entries(dropdownMenuOptionsMap)
+    const dropdownMenuOptions = Object.entries(nodeOptionsMap)
         .map(([id, option]) => ({
             ...option,
-            id: id as NodeDropdownMenuOption,
+            id: id as NodeOption,
         }))
-        .filter(option =>
-            allowedDropdownMenuOptionsForKind.includes(option.id),
-        );
+        .filter(option => nodeOptionsForKind.includes(option.id));
 
     const dropdownMenuButton = (
         <button
@@ -169,7 +152,7 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
     const bottomIndicator = (
         <div
             {...dropDividerProps}
-            className="absolute -bottom-0.5 z-10 flex h-1 w-full flex-row items-center"
+            className="absolute bottom-0 z-10 flex h-1 w-full items-center"
         >
             <div
                 className={twJoin(
@@ -184,7 +167,7 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
         setIsDropdownMenuOpen(!isDropdownMenuOpen);
     }
 
-    function onItemClick(itemId: NodeDropdownMenuOption) {
+    function onItemClick(itemId: NodeOption) {
         const handler = dropdownMenuHandlers[itemId];
         if (!handler) {
             console.error(`No handler found for dropdown menu item: ${itemId}`);
@@ -207,8 +190,15 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
     const handleClick: MouseEventHandler<HTMLDivElement> = event => {
         event.stopPropagation();
         onClick?.(event);
+
         if (mode === WRITE) return;
+
         setSelectedNode(uiNode);
+
+        if (!touched) {
+            setTouched(true);
+            return;
+        }
         setInternalExpandedState(prevExpanded => !prevExpanded);
     };
 
@@ -257,7 +247,7 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
                         <img
                             src={iconMap[uiNode.documentType]}
                             alt="file icon"
-                            className="size-6 object-contain"
+                            className="size-7 object-contain"
                         />
                     ),
                 };
@@ -346,6 +336,10 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
                 isWriteMode={mode === WRITE}
                 itemContainerProps={{
                     className: getItemContainerClassName(),
+                }}
+                style={{
+                    transform: 'translate(0, 0)',
+                    position: 'relative',
                 }}
                 {...getItemIcon()}
             />

@@ -1,26 +1,21 @@
 import {
-    AllowedDropdownMenuOptions,
     ConnectTreeView,
-    DragAndDropHandlers,
-    NodeHandlers,
+    DragAndDropProps,
+    NodeProps,
     SharingType,
+    TUiNodesContext,
     UiDriveNode,
-    useUiNodesContext,
 } from '@/connect';
 import { Icon } from '@/powerhouse';
 import { ReactNode } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
 
-export type DriveViewProps = NodeHandlers &
-    DragAndDropHandlers & {
-        driveNodes: UiDriveNode[];
+export type DriveViewProps = TUiNodesContext &
+    NodeProps &
+    DragAndDropProps & {
         label: ReactNode;
         groupSharingType: SharingType;
-        isAllowedToCreateDocuments: boolean;
-        allowedDropdownMenuOptions: AllowedDropdownMenuOptions;
         disableAddDrives: boolean;
-        displaySyncFolderIcons: boolean;
-        disableHighlightStyles?: boolean;
         className?: string;
         showAddDriveModal: (groupSharingType: SharingType) => void;
         showDriveSettingsModal: (uiDriveNode: UiDriveNode) => void;
@@ -28,15 +23,15 @@ export type DriveViewProps = NodeHandlers &
 
 export function DriveView(props: DriveViewProps) {
     const {
+        driveNodes,
+        selectedDriveNode,
         label,
         groupSharingType,
-        driveNodes,
         className,
         disableAddDrives,
         isAllowedToCreateDocuments,
         showAddDriveModal,
     } = props;
-    const { selectedDriveNode } = useUiNodesContext();
     const hasDriveNodes = driveNodes.length > 0;
     const isContainerHighlighted =
         selectedDriveNode?.sharingType === groupSharingType;

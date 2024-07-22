@@ -1,5 +1,4 @@
-import { DELETE, DUPLICATE, RENAME } from '@/connect/constants';
-import { mockUiFolderNode } from '@/connect/utils';
+import { mockNodeOptions, mockUiFolderNode } from '@/connect/utils';
 import { Meta, StoryObj } from '@storybook/react';
 import { FolderItem } from './folder-item';
 
@@ -15,9 +14,9 @@ type Story = StoryObj<typeof meta>;
 export const ReadMode: Story = {
     args: {
         uiFolderNode: mockUiFolderNode,
-        displaySyncIcon: true,
+        isRemoteDrive: true,
         isAllowedToCreateDocuments: true,
-        allowedDropdownMenuOptions: [RENAME, DELETE, DUPLICATE],
+        nodeOptions: mockNodeOptions,
     },
     render: function Wrapper(args) {
         const folderNodes = Array.from({ length: 100 }).map((_, index) => ({

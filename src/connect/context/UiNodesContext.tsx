@@ -1,23 +1,8 @@
-import {
-    DocumentDriveDocument,
-    DRIVE,
-    ERROR,
-    FILE,
-    LOCAL,
-    SharingType,
-    SUCCESS,
-    SyncStatus,
-    UiDriveNode,
-    UiFileNode,
-    UiFolderNode,
-    UiNode,
-} from '@/connect';
+import { DRIVE, FILE, UiDriveNode, UiFolderNode, UiNode } from '@/connect';
 import {
     createContext,
-    Dispatch,
     FC,
     ReactNode,
-    SetStateAction,
     useCallback,
     useContext,
     useEffect,
@@ -25,22 +10,22 @@ import {
     useState,
 } from 'react';
 
-export interface TreeItemContext {
+export type TUiNodesContext = {
     driveNodes: UiDriveNode[];
     selectedNode: UiNode | null;
     selectedNodePath: UiNode[];
     selectedDriveNode: UiDriveNode | null;
     selectedParentNode: UiDriveNode | UiFolderNode | null;
-    setDriveNodes: Dispatch<SetStateAction<UiDriveNode[]>>;
+    setDriveNodes: (driveNodes: UiDriveNode[]) => void;
     setSelectedNode: (node: UiNode | null) => void;
     getNodeById: (id: string) => UiNode | null;
     getParentNode: (uiNode: UiNode) => UiNode | null;
     getIsSelected: (node: UiNode) => boolean;
     getIsExpanded: (node: UiNode) => boolean;
     getSiblings: (node: UiNode) => UiNode[];
-}
+};
 
-const defaultTreeItemContextValue: TreeItemContext = {
+const defaultTreeItemContextValue: TUiNodesContext = {
     driveNodes: [],
     selectedNode: null,
     selectedNodePath: [],
@@ -55,7 +40,7 @@ const defaultTreeItemContextValue: TreeItemContext = {
     getSiblings: () => [],
 };
 
-export const UiNodesContext = createContext<TreeItemContext>(
+export const UiNodesContext = createContext<TUiNodesContext>(
     defaultTreeItemContextValue,
 );
 
@@ -273,92 +258,3 @@ export const useUiNodesContext = () => {
     const contextValue = useContext(UiNodesContext);
     return contextValue;
 };
-
-function getSyncStatus(
-    syncId: string,
-    type: SharingType,
-): SyncStatus | undefined {
-    if (type === LOCAL) return;
-    try {
-        return SUCCESS;
-    } catch (error) {
-        console.error(error);
-        return ERROR;
-    }
-}
-
-export function makeDriveNode(drive: DocumentDriveDocument) {
-    const { id, name, icon, slug } = drive.state.global;
-    const { sharingType, availableOffline } = drive.state.local;
-    const driveSyncStatus = getSyncStatus(id, sharingType);
-
-    const driveNode: UiDriveNode = {
-        id,
-        name,
-        slug: slug || null,
-        kind: DRIVE,
-        children: [],
-        nodeMap: {},
-        sharingType,
-        syncStatus: driveSyncStatus,
-        availableOffline,
-        icon,
-        parentFolder: null,
-        driveId: id,
-    };
-
-    const nodes = drive.state.global.nodes.map(n => {
-        const node = {
-            ...n,
-            driveId: id,
-            parentFolder: n.parentFolder || id,
-            syncStatus: driveSyncStatus,
-        };
-
-        if (node.kind === DRIVE) {
-            throw new Error('Drive nodes should not be nested');
-        }
-
-        if (node.kind === FILE) {
-            return node as UiFileNode;
-        }
-
-        return {
-            ...node,
-            children: [],
-        } as UiFolderNode;
-    });
-
-    for (const node of nodes) {
-        driveNode.nodeMap[node.id] = node;
-    }
-
-    for (const node of nodes) {
-        if (node.kind === FILE) {
-            node.syncStatus = getSyncStatus(
-                node.synchronizationUnits[0].syncId,
-                sharingType,
-            );
-        }
-
-        if (node.parentFolder === id) {
-            driveNode.children.push(node);
-            continue;
-        }
-        const parent = driveNode.nodeMap[node.parentFolder];
-
-        if (parent.kind === FILE) {
-            throw new Error(
-                `Parent node ${node.parentFolder} is a file, not a folder`,
-            );
-        }
-
-        parent.children.push(node);
-
-        if (node.syncStatus !== SUCCESS) {
-            parent.syncStatus = node.syncStatus;
-        }
-    }
-
-    return driveNode;
-}

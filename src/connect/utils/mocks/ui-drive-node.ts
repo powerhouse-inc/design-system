@@ -1,16 +1,23 @@
 import {
     CLOUD,
+    defaultDriveOptions,
+    defaultFileOptions,
+    defaultFolderOptions,
+    DRIVE,
+    ERROR,
     FILE,
     FOLDER,
     LOCAL,
     PUBLIC,
     SUCCESS,
 } from '@/connect/constants';
-import { makeDriveNode } from '@/connect/context';
 import {
     DocumentDriveDocument,
     FileNode,
     FolderNode,
+    SharingType,
+    SyncStatus,
+    UiDriveNode,
     UiFileNode,
     UiFolderNode,
 } from '@/connect/types';
@@ -26,6 +33,7 @@ export const mockUiFileNode: UiFileNode = {
     driveId: mockDriveId,
     syncStatus: SUCCESS,
     synchronizationUnits: [{ syncId: '1', scope: 'global', branch: 'main' }],
+    sharingType: LOCAL,
 };
 
 export const mockUiFolderNode: UiFolderNode = {
@@ -36,6 +44,7 @@ export const mockUiFolderNode: UiFolderNode = {
     driveId: mockDriveId,
     syncStatus: SUCCESS,
     children: [],
+    sharingType: LOCAL,
 };
 
 export const mockNodes: (
@@ -174,3 +183,110 @@ export const mockCloudDrive = makeDriveNode(
 );
 
 export const mockDriveNodes = [mockLocalDrive, mockPublicDrive, mockCloudDrive];
+
+export const mockNodeOptions = {
+    [LOCAL]: {
+        [DRIVE]: [...defaultDriveOptions],
+        [FOLDER]: [...defaultFolderOptions],
+        [FILE]: [...defaultFileOptions],
+    },
+    [CLOUD]: {
+        [DRIVE]: [...defaultDriveOptions],
+        [FOLDER]: [...defaultFolderOptions],
+        [FILE]: [...defaultFileOptions],
+    },
+    [PUBLIC]: {
+        [DRIVE]: [...defaultDriveOptions],
+        [FOLDER]: [...defaultFolderOptions],
+        [FILE]: [...defaultFileOptions],
+    },
+};
+function getSyncStatus(
+    syncId: string,
+    type: SharingType,
+): SyncStatus | undefined {
+    if (type === LOCAL) return;
+    try {
+        return SUCCESS;
+    } catch (error) {
+        console.error(error);
+        return ERROR;
+    }
+}
+
+export function makeDriveNode(drive: DocumentDriveDocument) {
+    const { id, name, icon, slug } = drive.state.global;
+    const { sharingType, availableOffline } = drive.state.local;
+    const driveSyncStatus = getSyncStatus(id, sharingType);
+
+    const driveNode: UiDriveNode = {
+        id,
+        name,
+        slug: slug || null,
+        kind: DRIVE,
+        children: [],
+        nodeMap: {},
+        sharingType,
+        syncStatus: driveSyncStatus,
+        availableOffline,
+        icon,
+        parentFolder: null,
+        driveId: id,
+    };
+
+    const nodes = drive.state.global.nodes.map(n => {
+        const node = {
+            ...n,
+            driveId: id,
+            parentFolder: n.parentFolder || id,
+            syncStatus: driveSyncStatus,
+            sharingType,
+        };
+
+        if (node.kind === DRIVE) {
+            throw new Error('Drive nodes should not be nested');
+        }
+
+        if (node.kind === FILE) {
+            return node as UiFileNode;
+        }
+
+        return {
+            ...node,
+            children: [],
+        } as UiFolderNode;
+    });
+
+    for (const node of nodes) {
+        driveNode.nodeMap[node.id] = node;
+    }
+
+    for (const node of nodes) {
+        if (node.kind === FILE) {
+            node.syncStatus = getSyncStatus(
+                node.synchronizationUnits[0].syncId,
+                sharingType,
+            );
+        }
+
+        if (node.parentFolder === id) {
+            driveNode.children.push(node);
+            continue;
+        }
+        const parent = driveNode.nodeMap[node.parentFolder];
+
+        if (parent.kind === FILE) {
+            throw new Error(
+                `Parent node ${node.parentFolder} is a file, not a folder`,
+            );
+        }
+
+        parent.children.push(node);
+
+        if (node.syncStatus !== SUCCESS) {
+            parent.syncStatus = node.syncStatus;
+        }
+    }
+
+    return driveNode;
+}

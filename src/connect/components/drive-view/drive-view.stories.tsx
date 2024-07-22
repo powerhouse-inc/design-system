@@ -1,17 +1,7 @@
 import {
-    CLOUD,
-    defaultDriveOptions,
-    defaultFileOptions,
-    defaultFolderOptions,
-    DRIVE,
-    FILE,
-    FOLDER,
-    LOCAL,
-    PUBLIC,
-} from '@/connect/constants';
-import {
     mockCloudDrive,
     mockLocalDrive,
+    mockNodeOptions,
     mockPublicDrive,
 } from '@/connect/utils';
 import type { Meta, StoryObj } from '@storybook/react';
@@ -42,19 +32,9 @@ const meta: Meta<typeof DriveView> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const allowedDropdownMenuOptions = {
-    [FILE]: defaultFileOptions,
-    [FOLDER]: defaultFolderOptions,
-    [DRIVE]: {
-        [LOCAL]: defaultDriveOptions,
-        [CLOUD]: defaultDriveOptions,
-        [PUBLIC]: defaultDriveOptions,
-    },
-};
-
 const Template: Story = {
     args: {
-        allowedDropdownMenuOptions,
+        nodeOptions: mockNodeOptions,
     },
     render: function Wrapper(args) {
         const { setDriveNodes } = useUiNodesContext();

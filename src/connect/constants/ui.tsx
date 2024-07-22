@@ -5,7 +5,7 @@ import ProfileImg from '@/assets/icons/profile.png';
 import MakerdaoRWAPortfolioImg from '@/assets/icons/rwa-report.png';
 import TemplateImg from '@/assets/icons/template.png';
 import { Icon } from '@/powerhouse';
-import { NodeDropdownMenuOption } from '../types';
+import { NodeOption } from '../types';
 
 export const DRIVE = 'DRIVE';
 export const FOLDER = 'FOLDER';
@@ -55,14 +55,25 @@ export const SETTINGS = 'SETTINGS';
 export const CREATE = 'CREATE';
 export const WRITE = 'WRITE';
 export const READ = 'READ';
+export const REMOVE_TRIGGER = 'REMOVE_TRIGGER';
+export const ADD_TRIGGER = 'ADD_TRIGGER';
+export const ADD_INVALID_TRIGGER = 'ADD_INVALID_TRIGGER';
 
-export const nodeDropdownMenuOptions = [
+export const normalNodeOptions = [
     DUPLICATE,
     NEW_FOLDER,
     RENAME,
     DELETE,
     SETTINGS,
 ] as const;
+
+export const debugNodeOptions = [
+    ADD_TRIGGER,
+    REMOVE_TRIGGER,
+    ADD_INVALID_TRIGGER,
+] as const;
+
+export const nodeOptions = [...normalNodeOptions, ...debugNodeOptions] as const;
 
 export const locationInfoByLocation = {
     CLOUD: {
@@ -118,19 +129,19 @@ export const iconMap: Record<DocumentType, string> = {
 
 export type FileItemIconType = keyof typeof iconMap;
 
-export const defaultDriveOptions: NodeDropdownMenuOption[] = [
+export const defaultDriveOptions: NodeOption[] = [
     NEW_FOLDER,
     RENAME,
     SETTINGS,
 ] as const;
 
-export const defaultFileOptions: NodeDropdownMenuOption[] = [
+export const defaultFileOptions: NodeOption[] = [
     RENAME,
     DELETE,
     DUPLICATE,
 ] as const;
 
-export const defaultFolderOptions: NodeDropdownMenuOption[] = [
+export const defaultFolderOptions: NodeOption[] = [
     NEW_FOLDER,
     RENAME,
     DELETE,

@@ -5,19 +5,9 @@ import {
     UiNodesContextProvider,
     useUiNodesContext,
 } from '@/connect';
-import {
-    CLOUD,
-    defaultDriveOptions,
-    defaultFileOptions,
-    defaultFolderOptions,
-    DRIVE,
-    FILE,
-    FOLDER,
-    LOCAL,
-    PUBLIC,
-} from '@/connect/constants';
+import { CLOUD, LOCAL, PUBLIC } from '@/connect/constants';
 import { SharingType } from '@/connect/types';
-import { mockDriveNodes } from '@/connect/utils';
+import { mockDriveNodes, mockNodeOptions } from '@/connect/utils';
 import { DropItem } from '@/powerhouse';
 import { useEffect } from '@storybook/preview-api';
 import type { Meta, StoryObj } from '@storybook/react';
@@ -53,21 +43,14 @@ export const Expanded: Story = {
     ],
     render: function Wrapper(args) {
         const [collapsed, setCollapsed] = useState(args.collapsed);
-        const { driveNodes, setDriveNodes } = useUiNodesContext();
+        const [disableHighlightStyles, setDisableHighlightStyles] =
+            useState(false);
+        const uiNodesContext = useUiNodesContext();
+        const { driveNodes, setDriveNodes } = uiNodesContext;
 
         useEffect(() => {
             setDriveNodes(args.driveNodes ?? []);
         }, []);
-
-        const allowedDropdownMenuOptions = {
-            [FILE]: defaultFileOptions,
-            [FOLDER]: defaultFolderOptions,
-            [DRIVE]: {
-                [LOCAL]: defaultDriveOptions,
-                [CLOUD]: defaultDriveOptions,
-                [PUBLIC]: defaultDriveOptions,
-            },
-        };
 
         const nodeHandlers = {
             onAddFolder: (name: string, uiNode: UiNode) => {},
@@ -94,6 +77,9 @@ export const Expanded: Story = {
             onDragEnd: (dragItem: UiNode, event: DragEndEvent) => {},
             showAddDriveModal: () => {},
             showDriveSettingsModal: (uiDriveNode: UiDriveNode) => {},
+            onAddTrigger: (uiNodeDriveId: string) => {},
+            onRemoveTrigger: (uiNodeDriveId: string) => {},
+            onAddInvalidTrigger: (uiNodeDriveId: string) => {},
         };
 
         const driveNodesByType = driveNodes.reduce<
@@ -126,34 +112,43 @@ export const Expanded: Story = {
                 }
             >
                 <DriveView
+                    {...uiNodesContext}
                     {...nodeHandlers}
                     driveNodes={driveNodesByType[PUBLIC]}
                     label="Public Drives"
                     groupSharingType={PUBLIC}
                     disableAddDrives={false}
                     isAllowedToCreateDocuments
-                    displaySyncFolderIcons
-                    allowedDropdownMenuOptions={allowedDropdownMenuOptions}
+                    isRemoteDrive
+                    nodeOptions={mockNodeOptions}
+                    disableHighlightStyles={disableHighlightStyles}
+                    disableDropBetween={false}
                 />
                 <DriveView
+                    {...uiNodesContext}
                     {...nodeHandlers}
                     driveNodes={driveNodesByType[CLOUD]}
                     label="Secure Cloud Drives"
                     groupSharingType={CLOUD}
                     disableAddDrives={false}
                     isAllowedToCreateDocuments
-                    displaySyncFolderIcons
-                    allowedDropdownMenuOptions={allowedDropdownMenuOptions}
+                    isRemoteDrive
+                    nodeOptions={mockNodeOptions}
+                    disableDropBetween={false}
+                    disableHighlightStyles={disableHighlightStyles}
                 />
                 <DriveView
+                    {...uiNodesContext}
                     {...nodeHandlers}
                     driveNodes={driveNodesByType[LOCAL]}
                     label="My Local Drives"
                     groupSharingType={LOCAL}
                     disableAddDrives={false}
                     isAllowedToCreateDocuments
-                    displaySyncFolderIcons
-                    allowedDropdownMenuOptions={allowedDropdownMenuOptions}
+                    isRemoteDrive={false}
+                    nodeOptions={mockNodeOptions}
+                    disableDropBetween={false}
+                    disableHighlightStyles={disableHighlightStyles}
                 />
             </ConnectSidebar>
         );

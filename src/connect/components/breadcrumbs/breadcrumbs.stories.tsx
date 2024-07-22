@@ -36,6 +36,7 @@ export const Default: Story = {
             setSelectedNode,
             selectedNode,
             selectedDriveNode,
+            selectedNodePath,
         } = useUiNodesContext();
 
         useEffect(() => {
@@ -46,7 +47,7 @@ export const Default: Story = {
             setSelectedNode(mockDriveNodes[0].children[0]);
         }, []);
 
-        function onSubmitNewFolder(name: string) {
+        async function onAddAndSelectNewFolder(name: string) {
             if (!selectedNode) return;
 
             const newFolderNode: UiFolderNode = {
@@ -60,6 +61,7 @@ export const Default: Story = {
                 parentFolder: selectedNode.id,
                 syncStatus: SUCCESS,
                 children: [],
+                sharingType: selectedNode.sharingType,
             };
 
             setDriveNodes([
@@ -73,11 +75,18 @@ export const Default: Story = {
                 },
             ]);
             setSelectedNode(newFolderNode);
+
+            return Promise.resolve();
         }
 
         return (
             <div className="bg-white p-10">
-                <Breadcrumbs {...args} onSubmitNewFolder={onSubmitNewFolder} />
+                <Breadcrumbs
+                    {...args}
+                    selectedNodePath={selectedNodePath}
+                    setSelectedNode={setSelectedNode}
+                    onAddAndSelectNewFolder={onAddAndSelectNewFolder}
+                />
             </div>
         );
     },
