@@ -164,7 +164,7 @@ export const FileItem: React.FC<FileItemProps> = ({
     return (
         <div onClick={onClick} className="relative w-64" ref={containerRef}>
             <div {...dragProps} className={containerStyles}>
-                <div className="relative flex flex-1 flex-row items-center">
+                <div className="flex items-center">
                     <div className="mr-1.5">{iconNode}</div>
                     {content}
                 </div>
