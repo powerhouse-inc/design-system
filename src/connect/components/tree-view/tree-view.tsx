@@ -24,8 +24,8 @@ import {
     UiNode,
     WRITE,
     iconMap,
+    nodeOptionsMap,
 } from '@/connect';
-import { nodeOptionsMap } from '@/connect/utils/node-options';
 import { Icon, TreeViewItem, useDraggableTarget } from '@/powerhouse';
 import { MouseEventHandler, useRef, useState } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';

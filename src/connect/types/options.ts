@@ -7,6 +7,13 @@ import {
     normalNodeOptions,
     SharingType,
 } from '@/connect';
+import { ReactNode } from 'react';
+
+export type OptionMetadata = {
+    label: ReactNode;
+    icon: React.JSX.Element;
+    className?: string;
+};
 
 export type NormalNodeOptions = typeof normalNodeOptions;
 export type DebugNodeOptions = typeof debugNodeOptions;

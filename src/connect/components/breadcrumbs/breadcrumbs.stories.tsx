@@ -30,6 +30,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+    args: {
+        isAllowedToCreateDocuments: true,
+    },
     render: function Wrapper(args) {
         const {
             setDriveNodes,
