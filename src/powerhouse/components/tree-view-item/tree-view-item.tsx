@@ -1,7 +1,8 @@
+import { NodeInput } from '@/connect/components/node-input/node-input';
 import { DivProps } from '@/powerhouse';
 import { FC, MouseEvent, ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { Icon, TreeViewInput, TreeViewInputProps } from '..';
+import { Icon, TreeViewInputProps } from '..';
 
 export type TreeViewItemProps = DivProps &
     Partial<TreeViewInputProps> & {
@@ -51,15 +52,13 @@ export const TreeViewItem: FC<TreeViewItemProps> = props => {
 
     const levelPadding = level * 10;
 
-    const inputProps = {
-        defaultValue: name,
-        onSubmitInput,
-        onCancelInput,
-    };
-
     const content = isWriteMode ? (
         <div className="py-2">
-            <TreeViewInput {...inputProps} />
+            <NodeInput
+                defaultValue={name}
+                onSubmit={value => onSubmitInput?.(value)}
+                onCancel={() => onCancelInput?.()}
+            />
         </div>
     ) : (
         itemContent
