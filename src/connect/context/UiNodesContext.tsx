@@ -21,7 +21,7 @@ export type TUiNodesContext = {
     getNodeById: (id: string) => UiNode | null;
     getParentNode: (uiNode: UiNode) => UiNode | null;
     getIsSelected: (node: UiNode) => boolean;
-    getIsExpanded: (node: UiNode) => boolean;
+    getIsInSelectedNodePath: (node: UiNode) => boolean;
     getSiblings: (node: UiNode) => UiNode[];
 };
 
@@ -36,7 +36,7 @@ const defaultTreeItemContextValue: TUiNodesContext = {
     getNodeById: () => null,
     getParentNode: () => null,
     getIsSelected: () => false,
-    getIsExpanded: () => false,
+    getIsInSelectedNodePath: () => false,
     getSiblings: () => [],
 };
 
@@ -178,7 +178,7 @@ export const UiNodesContextProvider: FC<UiNodesContextProviderProps> = ({
         [selectedNode],
     );
 
-    const getIsExpanded = useCallback(
+    const getIsInSelectedNodePath = useCallback(
         (node: UiNode) => {
             if (node.kind === FILE) return false;
             return selectedNodePath.includes(node);
@@ -229,7 +229,7 @@ export const UiNodesContextProvider: FC<UiNodesContextProviderProps> = ({
             setDriveNodes,
             setSelectedNode,
             getIsSelected,
-            getIsExpanded,
+            getIsInSelectedNodePath,
             getSiblings,
         }),
         [
@@ -242,7 +242,7 @@ export const UiNodesContextProvider: FC<UiNodesContextProviderProps> = ({
             getParentNode,
             setSelectedNode,
             getIsSelected,
-            getIsExpanded,
+            getIsInSelectedNodePath,
             getSiblings,
         ],
     );

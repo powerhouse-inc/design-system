@@ -49,7 +49,7 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
         disableHighlightStyles,
         isAllowedToCreateDocuments,
         setSelectedNode,
-        getIsExpanded,
+        getIsInSelectedNodePath,
         getIsSelected,
         onClick,
         onAddFolder,
@@ -96,7 +96,7 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
         });
 
     const isSelected = getIsSelected(uiNode);
-    const isInExpandedNodePath = getIsExpanded(uiNode);
+    const isInExpandedNodePath = getIsInSelectedNodePath(uiNode);
 
     const isExpanded = touched ? internalExpandedState : isInExpandedNodePath;
 
@@ -205,6 +205,7 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
     function onCancelHandler() {
         setMode(READ);
     }
+
     function getItemIcon() {
         if (isPublicDrive && uiNode.icon) {
             return {

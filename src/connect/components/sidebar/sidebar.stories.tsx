@@ -46,10 +46,11 @@ export const Expanded: Story = {
         const [disableHighlightStyles, setDisableHighlightStyles] =
             useState(false);
         const uiNodesContext = useUiNodesContext();
-        const { driveNodes, setDriveNodes } = uiNodesContext;
+        const { driveNodes, setDriveNodes, setSelectedNode } = uiNodesContext;
 
         useEffect(() => {
             setDriveNodes(args.driveNodes ?? []);
+            setSelectedNode(args.driveNodes?.[0] ?? null);
         }, []);
 
         const nodeHandlers = {
@@ -74,8 +75,12 @@ export const Expanded: Story = {
                 event: DropEvent,
             ) => {},
             onDropActivate: (dropTargetItem: UiNode) => {},
-            onDragStart: (dragItem: UiNode, event: DragStartEvent) => {},
-            onDragEnd: (dragItem: UiNode, event: DragEndEvent) => {},
+            onDragStart: (dragItem: UiNode, event: DragStartEvent) => {
+                setDisableHighlightStyles(true);
+            },
+            onDragEnd: (dragItem: UiNode, event: DragEndEvent) => {
+                setDisableHighlightStyles(false);
+            },
             showAddDriveModal: () => {},
             showDriveSettingsModal: (uiDriveNode: UiDriveNode) => {},
             onAddTrigger: (uiNodeDriveId: string) => {},

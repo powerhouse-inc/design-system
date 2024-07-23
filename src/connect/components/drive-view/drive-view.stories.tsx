@@ -33,15 +33,19 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const Template: Story = {
-    args: {
-        nodeOptions: mockNodeOptions,
-    },
     render: function Wrapper(args) {
-        const { setDriveNodes } = useUiNodesContext();
+        const uiNodesContext = useUiNodesContext();
+        const { setDriveNodes } = uiNodesContext;
         useEffect(() => {
             setDriveNodes(args.driveNodes);
         }, []);
-        return <DriveView {...args} />;
+        return (
+            <DriveView
+                {...args}
+                {...uiNodesContext}
+                nodeOptions={mockNodeOptions}
+            />
+        );
     },
 };
 

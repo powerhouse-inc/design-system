@@ -54,7 +54,7 @@ export const mockNodes: (
         kind: FILE,
         documentType: 'makerdao/rwa-portfolio',
         id: 'file-1',
-        name: 'Mock file in drive',
+        name: 'Mock file in drive that has a very significantly long name',
         parentFolder: driveId,
         synchronizationUnits: [{ syncId: '1' }],
     },
@@ -182,10 +182,10 @@ export const mockCloudDrive = makeDriveNode(
     }),
 );
 
-export const mockDriveNodes = [mockLocalDrive, mockPublicDrive, mockCloudDrive];
+export const mockDriveNodes = [mockPublicDrive, mockCloudDrive, mockLocalDrive];
 
 export const mockNodeOptions = {
-    [LOCAL]: {
+    [PUBLIC]: {
         [DRIVE]: [...defaultDriveOptions],
         [FOLDER]: [...defaultFolderOptions],
         [FILE]: [...defaultFileOptions],
@@ -195,7 +195,7 @@ export const mockNodeOptions = {
         [FOLDER]: [...defaultFolderOptions],
         [FILE]: [...defaultFileOptions],
     },
-    [PUBLIC]: {
+    [LOCAL]: {
         [DRIVE]: [...defaultDriveOptions],
         [FOLDER]: [...defaultFolderOptions],
         [FILE]: [...defaultFileOptions],
