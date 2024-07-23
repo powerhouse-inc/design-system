@@ -7,4 +7,3 @@ export * from './modal';
 export * from './sidebar';
 export * from './text-input';
 export * from './tree-view-input';
-export * from './tree-view-item';
