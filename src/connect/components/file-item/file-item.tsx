@@ -17,9 +17,10 @@ import {
     UiFileNode,
     WRITE,
 } from '@/connect';
-import { Icon, TreeViewInput, useDraggableTarget } from '@/powerhouse';
+import { Icon, useDraggableTarget } from '@/powerhouse';
 import React, { ReactNode, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
+import { NodeInput } from '../node-input/node-input';
 import { SyncStatusIcon } from '../status-icon';
 
 export type FileItemProps = TUiNodesContext &
@@ -83,12 +84,12 @@ export const FileItem: React.FC<FileItemProps> = ({
         }))
         .filter(option => nodeOptionsForKind.includes(option.id));
 
-    function onSubmitInput(name: string) {
+    function onSubmit(name: string) {
         onRenameNode(name, uiFileNode);
         setMode(READ);
     }
 
-    function onCancelInput() {
+    function onCancel() {
         setMode(READ);
     }
 
@@ -153,11 +154,11 @@ export const FileItem: React.FC<FileItemProps> = ({
             )}
         </div>
     ) : (
-        <TreeViewInput
+        <NodeInput
             className="ml-3 flex-1 font-medium"
             defaultValue={uiFileNode.name}
-            onCancelInput={onCancelInput}
-            onSubmitInput={onSubmitInput}
+            onCancel={onCancel}
+            onSubmit={onSubmit}
         />
     );
 

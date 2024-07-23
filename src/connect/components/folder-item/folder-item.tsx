@@ -17,9 +17,10 @@ import {
     UiFolderNode,
     WRITE,
 } from '@/connect';
-import { Icon, TreeViewInput, useDraggableTarget } from '@/powerhouse';
+import { Icon, useDraggableTarget } from '@/powerhouse';
 import React, { useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
+import { NodeInput } from '../node-input/node-input';
 
 export type FolderItemProps = TUiNodesContext &
     DragAndDropProps &
@@ -58,11 +59,11 @@ export const FolderItem: React.FC<FolderItemProps> = ({
 
     const isReadMode = mode === READ;
 
-    function onCancelInput() {
+    function onCancel() {
         setMode(READ);
     }
 
-    function onSubmitInput(name: string) {
+    function onSubmit(name: string) {
         onRenameNode(name, uiFolderNode);
     }
 
@@ -100,17 +101,15 @@ export const FolderItem: React.FC<FolderItemProps> = ({
 
     const content =
         isReadMode || !isAllowedToCreateDocuments ? (
-            <>
-                <div className="ml-3 max-h-6 max-w-60 truncate font-medium text-slate-200">
-                    {uiFolderNode.name}
-                </div>
-            </>
+            <div className="ml-3 max-h-6 truncate font-medium text-slate-200">
+                {uiFolderNode.name}
+            </div>
         ) : (
-            <TreeViewInput
-                className="ml-3 flex-1 font-medium"
+            <NodeInput
+                className="ml-3 font-medium"
                 defaultValue={uiFolderNode.name}
-                onCancelInput={onCancelInput}
-                onSubmitInput={onSubmitInput}
+                onCancel={onCancel}
+                onSubmit={onSubmit}
             />
         );
 
@@ -126,7 +125,7 @@ export const FolderItem: React.FC<FolderItemProps> = ({
     );
 
     return (
-        <div onClick={onClick} className="relative min-w-64" ref={containerRef}>
+        <div onClick={onClick} className="relative w-64" ref={containerRef}>
             <div {...dropProps} {...dragProps} className={containerStyles}>
                 <div className="flex items-center overflow-hidden">
                     <div className="p-1">
@@ -155,7 +154,7 @@ export const FolderItem: React.FC<FolderItemProps> = ({
                 </div>
                 {isReadMode && isAllowedToCreateDocuments && (
                     <button
-                        className="invisible ml-auto group-hover:visible"
+                        className="hidden group-hover:block"
                         onClick={e => {
                             e.stopPropagation();
                             setIsDropdownMenuOpen(true);

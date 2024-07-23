@@ -22,7 +22,7 @@ export const ReadMode: Story = {
         const folderNodes = Array.from({ length: 100 }).map((_, index) => ({
             ...args.uiFolderNode,
             id: `folder-${index}`,
-            name: `Folder ${index}`,
+            name: `Folder ${index} lorem ipsum dolor sit amet consectetur adipiscing elit`,
         }));
         return (
             <div className="flex flex-wrap gap-2">

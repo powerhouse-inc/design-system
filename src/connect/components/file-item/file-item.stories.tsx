@@ -39,7 +39,7 @@ export const Default: Story = {
         const fileNodes = Array.from({ length: 100 }).map((_, index) => ({
             ...args.uiFileNode,
             id: `file-${index}`,
-            name: `File ${index}`,
+            name: `File ${index} lorem ipsum dolor sit amet consectetur adipiscing elit`,
         }));
         return (
             <div className="flex flex-wrap gap-2">
