@@ -141,34 +141,16 @@ export const UiNodesContextProvider: FC<UiNodesContextProviderProps> = ({
         [_getParentNode],
     );
 
-    /*
-     _setSelectedNode from `useState` is kept internal so that we can instead expose this function, which also manages the selectedDriveNode, selectedParentNode, and selectedNodePath states.
-    */
-    const setSelectedNode = useCallback(
-        (uiNode: UiNode | null) => {
-            _setSelectedNode(uiNode);
-            setSelectedDriveNode(getSelectedDriveNode(uiNode, driveNodes));
-            setSelectedParentNode(getSelectedParentNode(uiNode, driveNodes));
-            if (!selectedNode) {
-                setSelectedNodePath([]);
-                return;
-            }
+    const getPathToNode = useCallback(
+        (uiNode: UiNode, driveNodes: UiDriveNode[]) => {
+            const path: UiNode[] = [];
 
-            if (selectedNode.kind === DRIVE) {
-                setSelectedNodePath([selectedNode]);
-                return;
-            }
+            const driveNode = driveNodes.find(d => d.id === uiNode.driveId);
 
-            const newSelectedNodePath: UiNode[] = [];
-
-            const driveNode = driveNodes.find(
-                d => d.id === selectedNode.driveId,
-            );
-
-            let current: UiNode | undefined = selectedNode;
+            let current: UiNode | undefined = uiNode;
 
             while (current) {
-                newSelectedNodePath.push(current);
+                path.push(current);
                 current =
                     current.parentFolder === driveNode?.id
                         ? driveNode
@@ -177,9 +159,37 @@ export const UiNodesContextProvider: FC<UiNodesContextProviderProps> = ({
                           : undefined;
             }
 
-            setSelectedNodePath(newSelectedNodePath.reverse());
+            return path.reverse();
         },
-        [driveNodes, getSelectedDriveNode, getSelectedParentNode, selectedNode],
+        [],
+    );
+
+    /*
+     _setSelectedNode from `useState` is kept internal so that we can instead expose this function, which also manages the selectedDriveNode, selectedParentNode, and selectedNodePath states.
+    */
+    const setSelectedNode = useCallback(
+        (uiNode: UiNode | null) => {
+            if (!uiNode) return;
+
+            _setSelectedNode(uiNode);
+            setSelectedDriveNode(getSelectedDriveNode(uiNode, driveNodes));
+            setSelectedParentNode(getSelectedParentNode(uiNode, driveNodes));
+
+            if (uiNode.kind === DRIVE) {
+                setSelectedNodePath([uiNode]);
+                return;
+            }
+
+            const newSelectedNodePath = getPathToNode(uiNode, driveNodes);
+
+            setSelectedNodePath(newSelectedNodePath);
+        },
+        [
+            driveNodes,
+            getPathToNode,
+            getSelectedDriveNode,
+            getSelectedParentNode,
+        ],
     );
 
     const getIsSelected = useCallback(
