@@ -60,6 +60,10 @@ export const UiNodesContextProvider: FC<UiNodesContextProviderProps> = ({
         UiDriveNode | UiFolderNode | null
     >(null);
 
+    /*
+        This internal function that uses `driveNodes` as an argument to prevent stale objects being used in the closure.
+        External `getNodeById` for use by other components doesn't need to do this because it is only invoked by external functions, and can therefore omit this argument for convenience.
+     */
     const _getNodeById = useCallback(
         (id: string, driveNodes: UiDriveNode[] | null) => {
             if (!driveNodes?.length) return null;
@@ -95,6 +99,10 @@ export const UiNodesContextProvider: FC<UiNodesContextProviderProps> = ({
         [],
     );
 
+    /*
+        This internal function that uses `driveNodes` as an argument to prevent stale objects being used in the closure.
+        External `getNodeById` for use by other components doesn't need to do this because it is only invoked by external functions, and can therefore omit this argument for convenience.
+     */
     const _getParentNode = useCallback(
         (node: UiNode, driveNodes: UiDriveNode[] | null) => {
             if (!driveNodes?.length || node.kind === DRIVE) return null;
@@ -133,6 +141,9 @@ export const UiNodesContextProvider: FC<UiNodesContextProviderProps> = ({
         [_getParentNode],
     );
 
+    /*
+     _setSelectedNode from `useState` is kept internal so that we can instead expose this function, which also manages the selectedDriveNode, selectedParentNode, and selectedNodePath states.
+    */
     const setSelectedNode = useCallback(
         (uiNode: UiNode | null) => {
             _setSelectedNode(uiNode);
@@ -189,22 +200,17 @@ export const UiNodesContextProvider: FC<UiNodesContextProviderProps> = ({
     const getSiblings = useCallback(
         (node: UiNode) => {
             if (node.kind === DRIVE) {
+                console.warn(
+                    'Drive nodes do not have siblings, as they are top-level nodes',
+                );
                 return [];
             }
 
-            const driveNode = driveNodes.find(d => d.id === node.driveId);
-
-            const parent = driveNode?.nodeMap[node.parentFolder];
-
-            if (parent?.kind === FILE) {
-                throw new Error(
-                    `Parent node ${node.parentFolder} is a file, not a folder`,
-                );
-            }
+            const parent = _getParentNode(node, driveNodes);
 
             return parent?.children ?? [];
         },
-        [driveNodes],
+        [_getParentNode, driveNodes],
     );
 
     useEffect(() => {

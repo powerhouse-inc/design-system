@@ -28,5 +28,4 @@ const Template: Story = {
 
 export const Default: Story = {
     ...Template,
-    render: args => <AddLocalDriveForm {...args} />,
 };

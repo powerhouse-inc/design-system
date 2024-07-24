@@ -4,8 +4,10 @@ import {
     ConnectDropdownMenu,
     DELETE,
     DragAndDropProps,
+    DropdownMenuHandlers,
     DUPLICATE,
     FOLDER,
+    NodeInput,
     NodeOption,
     nodeOptionsMap,
     NodeProps,
@@ -20,7 +22,6 @@ import {
 import { Icon, useDraggableTarget } from '@/powerhouse';
 import React, { useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { NodeInput } from '../node-input/node-input';
 
 export type FolderItemProps = TUiNodesContext &
     DragAndDropProps &
@@ -71,7 +72,7 @@ export const FolderItem: React.FC<FolderItemProps> = ({
         setSelectedNode(uiFolderNode);
     }
 
-    const dropdownMenuHandlers: Partial<Record<NodeOption, () => void>> = {
+    const dropdownMenuHandlers: DropdownMenuHandlers = {
         [DUPLICATE]: () => onDuplicateNode(uiFolderNode),
         [RENAME]: () => setMode(WRITE),
         [DELETE]: () => onDeleteNode(uiFolderNode),

@@ -4,6 +4,7 @@ import {
     ConnectDropdownMenu,
     DELETE,
     DragAndDropProps,
+    DropdownMenuHandlers,
     DUPLICATE,
     FILE,
     iconMap,
@@ -66,7 +67,7 @@ export const FileItem: React.FC<FileItemProps> = ({
         className,
     );
 
-    const dropdownMenuHandlers: Partial<Record<NodeOption, () => void>> = {
+    const dropdownMenuHandlers: DropdownMenuHandlers = {
         [DUPLICATE]: () => onDuplicateNode(uiFileNode),
         [RENAME]: () => setMode(WRITE),
         [DELETE]: () => onDeleteNode(uiFileNode),
@@ -103,7 +104,7 @@ export const FileItem: React.FC<FileItemProps> = ({
             console.error(`No handler found for dropdown menu item: ${itemId}`);
             return;
         }
-        handler();
+        handler(uiFileNode);
         setIsDropdownMenuOpen(false);
     }
 

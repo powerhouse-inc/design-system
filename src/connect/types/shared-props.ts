@@ -7,13 +7,15 @@ import {
 } from '@/connect';
 import { UseDraggableTargetProps } from '@/powerhouse';
 
-export type DragAndDropProps = {
+export type UiNodeDraggableTargetProps = Pick<
+    UseDraggableTargetProps<UiNode>,
+    'onDragStart' | 'onDragEnd' | 'onDropEvent'
+>;
+
+export type DragAndDropProps = UiNodeDraggableTargetProps & {
     disableDropBetween: boolean;
     disableHighlightStyles: boolean;
     onDropActivate: (dropTargetItem: UiNode) => void;
-    onDropEvent: UseDraggableTargetProps<UiNode>['onDropEvent'];
-    onDragStart: UseDraggableTargetProps<UiNode>['onDragStart'];
-    onDragEnd: UseDraggableTargetProps<UiNode>['onDragEnd'];
 };
 
 export type NodeProps = {

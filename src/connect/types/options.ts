@@ -6,6 +6,7 @@ import {
     nodeOptions,
     normalNodeOptions,
     SharingType,
+    UiNode,
 } from '@/connect';
 import { ReactNode } from 'react';
 
@@ -29,4 +30,8 @@ export type TNodeOptions = Record<
         [FOLDER]: NodeOption[];
         [FILE]: NodeOption[];
     }
+>;
+
+export type DropdownMenuHandlers = Partial<
+    Record<NodeOption, (uiNode?: UiNode | null) => void>
 >;

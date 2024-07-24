@@ -5,10 +5,6 @@ import { AddNewItemInput } from './add-new-item-input';
 
 export type BreadcrumbsProps = NodeProps & TUiNodesContext;
 
-/**
- * The `Breadcrumbs` component displays the current path to the selected node.
- * It also allows the user to add a new folder as a child of the currently selected parent node.
- */
 export function Breadcrumbs(props: BreadcrumbsProps) {
     const {
         selectedNodePath,

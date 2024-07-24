@@ -11,7 +11,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const Template: Story = {
+export const Default: Story = {
     args: {
         onSubmit: data => {
             console.log(data);
@@ -27,15 +27,4 @@ const Template: Story = {
             </div>
         ),
     ],
-};
-
-export const Default: Story = {
-    ...Template,
-};
-
-export const WithDriveIcon: Story = {
-    ...Template,
-    args: {
-        ...Template.args,
-    },
 };

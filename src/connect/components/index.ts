@@ -11,6 +11,7 @@ export * from './folder-item';
 export * from './form';
 export * from './form-input';
 export * from './modal';
+export * from './node-input';
 export * from './revision-history';
 export * from './search-bar';
 export * from './select';

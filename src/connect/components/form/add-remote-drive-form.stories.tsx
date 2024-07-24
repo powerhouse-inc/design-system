@@ -30,5 +30,4 @@ const Template: Story = {
 
 export const Default: Story = {
     ...Template,
-    render: args => <AddRemoteDriveForm {...args} />,
 };

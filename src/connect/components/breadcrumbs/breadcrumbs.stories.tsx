@@ -50,6 +50,7 @@ export const Default: Story = {
             setSelectedNode(mockDriveNodes[0].children[0]);
         }, []);
 
+        // stub implementation to mock behavior
         async function onAddAndSelectNewFolder(name: string) {
             if (!selectedNode) return;
 
