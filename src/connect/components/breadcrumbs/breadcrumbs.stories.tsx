@@ -62,6 +62,7 @@ export const Default: Story = {
                 id: `new-folder-${Math.floor(Math.random() * 1000)}`,
                 kind: FOLDER,
                 name,
+                slug: name.toLowerCase().replace(/\s/g, '-'),
                 parentFolder: selectedNode.id,
                 syncStatus: SUCCESS,
                 children: [],

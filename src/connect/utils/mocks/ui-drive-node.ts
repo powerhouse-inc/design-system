@@ -29,6 +29,7 @@ export const mockUiFileNode: UiFileNode = {
     documentType: 'makerdao/rwa-portfolio',
     id: 'file-1',
     name: 'Mock file in drive',
+    slug: 'mock-file-in-drive',
     parentFolder: mockDriveId,
     driveId: mockDriveId,
     syncStatus: SUCCESS,
@@ -40,6 +41,7 @@ export const mockUiFolderNode: UiFolderNode = {
     kind: FOLDER,
     id: 'folder-1',
     name: 'Mock folder in drive',
+    slug: 'mock-folder-in-drive',
     parentFolder: mockDriveId,
     driveId: mockDriveId,
     syncStatus: SUCCESS,
@@ -237,6 +239,7 @@ export function makeDriveNode(drive: DocumentDriveDocument) {
     const nodes = drive.state.global.nodes.map(n => {
         const node = {
             ...n,
+            slug: n.name.toLowerCase().replace(/\s/g, '-'),
             driveId: id,
             parentFolder: n.parentFolder || id,
             syncStatus: driveSyncStatus,

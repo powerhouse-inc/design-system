@@ -12,6 +12,7 @@ export type UiFileNode = {
     kind: typeof FILE;
     id: string;
     name: string;
+    slug: string;
     documentType: TDocumentType;
     parentFolder: string;
     driveId: string;
@@ -24,6 +25,7 @@ export type UiFolderNode = {
     kind: typeof FOLDER;
     id: string;
     name: string;
+    slug: string;
     parentFolder: string;
     driveId: string;
     children: UiNode[];
