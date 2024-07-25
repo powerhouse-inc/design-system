@@ -98,7 +98,7 @@ export const FileItem: React.FC<FileItemProps> = ({
         setSelectedNode(uiFileNode);
     }
 
-    function onItemClick(itemId: NodeOption) {
+    function onDropdownMenuOptionClick(itemId: NodeOption) {
         const handler = dropdownMenuHandlers[itemId];
         if (!handler) {
             console.error(`No handler found for dropdown menu item: ${itemId}`);
@@ -143,15 +143,25 @@ export const FileItem: React.FC<FileItemProps> = ({
                 </div>
             </div>
             {isAllowedToCreateDocuments && (
-                <button
-                    className="ml-auto hidden group-hover:block"
-                    onClick={e => {
-                        e.stopPropagation();
-                        setIsDropdownMenuOpen(true);
-                    }}
+                <ConnectDropdownMenu
+                    open={isDropdownMenuOpen}
+                    onOpenChange={setIsDropdownMenuOpen}
+                    onItemClick={onDropdownMenuOptionClick}
+                    items={dropdownMenuOptions}
                 >
-                    <Icon name="vertical-dots" />
-                </button>
+                    <button
+                        onClick={e => {
+                            e.stopPropagation();
+                            setIsDropdownMenuOpen(true);
+                        }}
+                        className={twMerge(
+                            'hidden group-hover:block',
+                            isDropdownMenuOpen && 'block',
+                        )}
+                    >
+                        <Icon name="vertical-dots" className="text-gray-600" />
+                    </button>
+                </ConnectDropdownMenu>
             )}
         </div>
     ) : (
@@ -171,23 +181,6 @@ export const FileItem: React.FC<FileItemProps> = ({
                     {content}
                 </div>
             </div>
-            {isAllowedToCreateDocuments && (
-                <ConnectDropdownMenu
-                    isOpen={isDropdownMenuOpen}
-                    onOpenChange={() =>
-                        setIsDropdownMenuOpen(!isDropdownMenuOpen)
-                    }
-                    items={dropdownMenuOptions}
-                    menuClassName="bg-white cursor-pointer"
-                    menuItemClassName="hover:bg-slate-50 px-2"
-                    onItemClick={onItemClick}
-                    popoverProps={{
-                        triggerRef: containerRef,
-                        placement: 'bottom end',
-                        offset: -10,
-                    }}
-                />
-            )}
         </div>
     );
 };

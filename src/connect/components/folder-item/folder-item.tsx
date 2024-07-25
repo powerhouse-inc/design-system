@@ -90,7 +90,7 @@ export const FolderItem: React.FC<FolderItemProps> = ({
         }))
         .filter(option => nodeOptionsForKind.includes(option.id));
 
-    function onItemClick(itemId: NodeOption) {
+    function onDropdownMenuOptionClick(itemId: NodeOption) {
         const handler = dropdownMenuHandlers[itemId];
         if (!handler) {
             console.error(`No handler found for dropdown menu item: ${itemId}`);
@@ -154,34 +154,30 @@ export const FolderItem: React.FC<FolderItemProps> = ({
                     {content}
                 </div>
                 {isReadMode && isAllowedToCreateDocuments && (
-                    <button
-                        className="hidden group-hover:block"
-                        onClick={e => {
-                            e.stopPropagation();
-                            setIsDropdownMenuOpen(true);
-                        }}
+                    <ConnectDropdownMenu
+                        open={isDropdownMenuOpen}
+                        onOpenChange={setIsDropdownMenuOpen}
+                        onItemClick={onDropdownMenuOptionClick}
+                        items={dropdownMenuOptions}
                     >
-                        <Icon name="vertical-dots" />
-                    </button>
+                        <button
+                            onClick={e => {
+                                e.stopPropagation();
+                                setIsDropdownMenuOpen(true);
+                            }}
+                            className={twMerge(
+                                'hidden group-hover:block',
+                                isDropdownMenuOpen && 'block',
+                            )}
+                        >
+                            <Icon
+                                name="vertical-dots"
+                                className="text-gray-600"
+                            />
+                        </button>
+                    </ConnectDropdownMenu>
                 )}
             </div>
-            {isAllowedToCreateDocuments && (
-                <ConnectDropdownMenu
-                    isOpen={isDropdownMenuOpen}
-                    onOpenChange={() =>
-                        setIsDropdownMenuOpen(!isDropdownMenuOpen)
-                    }
-                    items={dropdownMenuOptions}
-                    menuClassName="bg-white cursor-pointer"
-                    menuItemClassName="hover:bg-slate-50 px-2"
-                    onItemClick={onItemClick}
-                    popoverProps={{
-                        triggerRef: containerRef,
-                        placement: 'bottom end',
-                        offset: -10,
-                    }}
-                />
-            )}
         </div>
     );
 };

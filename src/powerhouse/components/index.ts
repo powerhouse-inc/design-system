@@ -5,4 +5,3 @@ export * from './icon';
 export * as legacy from './legacy';
 export * from './modal';
 export * from './sidebar';
-export * from './text-input';

@@ -140,9 +140,6 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
             id: id as NodeOption,
         }))
         .filter(option => nodeOptionsForKind.includes(option.id));
-    function onDropdownMenuOpenChange() {
-        setIsDropdownMenuOpen(!isDropdownMenuOpen);
-    }
 
     function onDropdownMenuOptionClick(itemId: NodeOption) {
         const handler = dropdownMenuHandlers[itemId];
@@ -270,15 +267,27 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
             className="group/node grid w-full grid-cols-[1fr,auto] items-center justify-between"
         >
             <p className="mr-1 truncate">{uiNode.name}</p>
-            <button
-                onClick={e => {
-                    e.stopPropagation();
-                    setIsDropdownMenuOpen(true);
-                }}
-                className="hidden group-hover/node:block"
-            >
-                <Icon name="vertical-dots" className="text-gray-600" />
-            </button>
+            {isAllowedToCreateDocuments && (
+                <ConnectDropdownMenu
+                    open={isDropdownMenuOpen}
+                    onOpenChange={setIsDropdownMenuOpen}
+                    onItemClick={onDropdownMenuOptionClick}
+                    items={dropdownMenuOptions}
+                >
+                    <button
+                        onClick={e => {
+                            e.stopPropagation();
+                            setIsDropdownMenuOpen(true);
+                        }}
+                        className={twMerge(
+                            'hidden group-hover/node:block',
+                            isDropdownMenuOpen && 'block',
+                        )}
+                    >
+                        <Icon name="vertical-dots" className="text-gray-600" />
+                    </button>
+                </ConnectDropdownMenu>
+            )}
         </div>
     );
 
@@ -346,21 +355,6 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
                     />
                 ))}
             </div>
-            {isAllowedToCreateDocuments && (
-                <ConnectDropdownMenu
-                    isOpen={isDropdownMenuOpen}
-                    onOpenChange={onDropdownMenuOpenChange}
-                    onItemClick={onDropdownMenuOptionClick}
-                    items={dropdownMenuOptions}
-                    menuClassName="bg-white cursor-pointer"
-                    menuItemClassName="hover:bg-slate-50 px-2"
-                    popoverProps={{
-                        triggerRef: containerRef,
-                        placement: 'bottom end',
-                        offset: -10,
-                    }}
-                />
-            )}
         </>
     );
 }
