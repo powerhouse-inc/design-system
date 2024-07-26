@@ -5,6 +5,7 @@ import {
     tabs,
 } from '@/rwa';
 import { ReactNode } from 'react';
+import { otherTables } from '../constants/other';
 
 export type RealWorldAssetsState = {
     accounts: Account[];
@@ -115,6 +116,17 @@ export type Tab = Tabs[number];
 export type TabComponents = {
     value: Tab;
     label: ReactNode;
-    disabled: boolean;
+    disabled?: boolean;
+    Component: () => JSX.Element;
+}[];
+
+export type OtherTables = typeof otherTables;
+
+export type OtherTable = OtherTables[number];
+
+export type OtherTableComponents = {
+    value: OtherTable;
+    label: ReactNode;
+    description: ReactNode;
     Component: () => JSX.Element;
 }[];

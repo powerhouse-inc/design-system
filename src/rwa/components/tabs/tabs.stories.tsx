@@ -1,11 +1,11 @@
 import { OTHER, PORTFOLIO, TRANSACTIONS } from '@/rwa/constants';
 import { TabComponents } from '@/rwa/types';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Tabs } from './_tabs';
+import { RWATabs } from './tabs';
 
-const meta: Meta<typeof Tabs> = {
+const meta: Meta<typeof RWATabs> = {
     title: 'RWA/Components/Tabs',
-    component: Tabs,
+    component: RWATabs,
 };
 
 export default meta;
