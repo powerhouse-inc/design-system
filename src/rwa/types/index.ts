@@ -2,7 +2,9 @@ import {
     allGroupTransactionTypes,
     assetGroupTransactions,
     groupTransactionTypeLabels,
+    tabs,
 } from '@/rwa';
+import { ReactNode } from 'react';
 
 export type RealWorldAssetsState = {
     accounts: Account[];
@@ -105,3 +107,14 @@ export type Account = {
     label?: string | null;
     reference: string;
 };
+
+export type Tabs = typeof tabs;
+
+export type Tab = Tabs[number];
+
+export type TabComponents = {
+    value: Tab;
+    label: ReactNode;
+    disabled: boolean;
+    Component: () => JSX.Element;
+}[];
