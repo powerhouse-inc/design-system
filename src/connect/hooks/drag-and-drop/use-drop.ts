@@ -46,25 +46,19 @@ export function useDrop(props: Props) {
         [onAddFile, onCopyNode, onMoveNode, uiNode],
     );
 
-    const value = useMemo(() => {
-        if (!allowedToBeDropTarget) {
-            return {
-                isDropTarget: false,
-                onDragOver: undefined,
-                onDragLeave: undefined,
-                onDrop: undefined,
-            };
-        }
-
+    return useMemo(() => {
+        const dropProps = allowedToBeDropTarget
+            ? { onDragOver, onDragLeave, onDrop }
+            : {
+                  onDragOver: undefined,
+                  onDragLeave: undefined,
+                  onDrop: undefined,
+              };
         return {
             isDropTarget,
-            onDragOver,
-            onDragLeave,
-            onDrop,
+            dropProps,
         };
     }, [allowedToBeDropTarget, isDropTarget, onDragLeave, onDragOver, onDrop]);
-
-    return value;
 }
 
 function getDroppedFiles(items: DataTransferItemList) {

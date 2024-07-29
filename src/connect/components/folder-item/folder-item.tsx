@@ -47,8 +47,8 @@ export function FolderItem(props: FolderItemProps) {
     } = props;
     const [mode, setMode] = useState<typeof READ | typeof WRITE>(READ);
     const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
-    const { draggable, onDragStart, onDragEnd } = useDrag(props);
-    const { isDropTarget, onDragOver, onDragLeave, onDrop } = useDrop(props);
+    const { dragProps } = useDrag(props);
+    const { isDropTarget, dropProps } = useDrop(props);
 
     const isReadMode = mode === READ;
 
@@ -119,15 +119,7 @@ export function FolderItem(props: FolderItemProps) {
 
     return (
         <div onClick={onClick} className="relative w-64">
-            <div
-                draggable={draggable}
-                onDragStart={onDragStart}
-                onDragEnd={onDragEnd}
-                onDrop={onDrop}
-                onDragLeave={onDragLeave}
-                onDragOver={onDragOver}
-                className={containerStyles}
-            >
+            <div {...dragProps} {...dropProps} className={containerStyles}>
                 <div className="flex items-center overflow-hidden">
                     <div className="p-1">
                         <div className="relative">

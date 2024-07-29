@@ -50,7 +50,7 @@ export function FileItem(props: FileItemProps) {
     } = props;
     const [mode, setMode] = useState<typeof READ | typeof WRITE>(READ);
     const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
-    const { draggable, onDragStart, onDragEnd } = useDrag(props);
+    const { dragProps } = useDrag(props);
 
     const isReadMode = mode === READ;
 
@@ -167,12 +167,7 @@ export function FileItem(props: FileItemProps) {
 
     return (
         <div onClick={onClick} className="relative w-64">
-            <div
-                draggable={draggable}
-                onDragStart={onDragStart}
-                onDragEnd={onDragEnd}
-                className={containerStyles}
-            >
+            <div {...dragProps} className={containerStyles}>
                 <div className="flex items-center">
                     <div className="mr-1.5">{iconNode}</div>
                     {content}

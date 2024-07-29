@@ -21,23 +21,22 @@ export function useDrag(props: Props) {
 
     const allowedToDragNode = !!uiNode && uiNode.kind !== DRIVE;
 
-    const value = useMemo(() => {
-        if (!allowedToDragNode) {
-            return {
-                draggable: false,
-                isDragging: false,
-                onDragStart: undefined,
-                onDragEnd: undefined,
-            };
-        }
+    return useMemo(() => {
+        const dragProps = allowedToDragNode
+            ? {
+                  draggable: true,
+                  onDragStart,
+                  onDragEnd,
+              }
+            : {
+                  draggable: false,
+                  onDragStart: undefined,
+                  onDragEnd: undefined,
+              };
 
         return {
-            draggable: true,
             isDragging,
-            onDragStart,
-            onDragEnd,
+            dragProps,
         };
     }, [allowedToDragNode, isDragging, onDragEnd, onDragStart]);
-
-    return value;
 }

@@ -11,7 +11,7 @@ type Props = TUiNodesContext &
 export function DropIndicator(props: Props) {
     const { uiNode, position, className, getParentNode } = props;
     const parentNode = getParentNode(uiNode);
-    const { isDropTarget, onDragLeave, onDragOver, onDrop } = useDrop({
+    const { isDropTarget, dropProps } = useDrop({
         ...props,
         uiNode: parentNode,
     });
@@ -20,9 +20,7 @@ export function DropIndicator(props: Props) {
 
     return (
         <div
-            onDragOver={onDragOver}
-            onDragLeave={onDragLeave}
-            onDrop={onDrop}
+            {...dropProps}
             className={twMerge(
                 'absolute left-0 z-10 flex h-0.5 w-full',
                 positionStyle,

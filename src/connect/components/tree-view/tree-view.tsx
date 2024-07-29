@@ -67,8 +67,8 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
     const [touched, setTouched] = useState(false);
     const [internalExpandedState, setInternalExpandedState] = useState(true);
     const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
-    const { draggable, onDragStart, onDragEnd } = useDrag(props);
-    const { isDropTarget, onDragOver, onDragLeave, onDrop } = useDrop(props);
+    const { dragProps } = useDrag(props);
+    const { isDropTarget, dropProps } = useDrop(props);
 
     const levelPadding = 10;
     const children = uiNode.kind !== FILE ? uiNode.children : null;
@@ -281,12 +281,8 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
     return (
         <>
             <div
-                draggable={draggable}
-                onDragStart={onDragStart}
-                onDragEnd={onDragEnd}
-                onDrop={onDrop}
-                onDragLeave={onDragLeave}
-                onDragOver={onDragOver}
+                {...dragProps}
+                {...dropProps}
                 onClick={handleClick}
                 className={twMerge(
                     'flex cursor-pointer select-none items-center rounded-lg px-1 py-2 text-gray-800 transition-colors hover:bg-gray-300',
