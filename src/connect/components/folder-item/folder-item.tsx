@@ -164,7 +164,7 @@ export function FolderItem(props: FolderItemProps) {
                                 setIsDropdownMenuOpen(true);
                             }}
                             className={twMerge(
-                                'hidden group-hover:block',
+                                'ml-auto hidden group-hover:block',
                                 isDropdownMenuOpen && 'block',
                             )}
                         >
