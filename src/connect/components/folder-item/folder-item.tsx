@@ -3,7 +3,6 @@ import {
     ADD_TRIGGER,
     ConnectDropdownMenu,
     DELETE,
-    DragAndDropProps,
     DropdownMenuHandlers,
     DUPLICATE,
     FOLDER,
@@ -17,46 +16,39 @@ import {
     SyncStatusIcon,
     TUiNodesContext,
     UiFolderNode,
+    useDrag,
+    useDrop,
     WRITE,
 } from '@/connect';
-import { Icon, useDraggableTarget } from '@/powerhouse';
-import React, { useRef, useState } from 'react';
+import { Icon } from '@/powerhouse';
+import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 export type FolderItemProps = TUiNodesContext &
-    DragAndDropProps &
     NodeProps & {
-        uiFolderNode: UiFolderNode;
+        uiNode: UiFolderNode;
         className?: string;
     };
 
-export const FolderItem: React.FC<FolderItemProps> = ({
-    uiFolderNode,
-    isAllowedToCreateDocuments,
-    nodeOptions,
-    isRemoteDrive,
-    className,
-    setSelectedNode,
-    onRenameNode,
-    onDuplicateNode,
-    onDeleteNode,
-    onDragEnd,
-    onDragStart,
-    onDropEvent,
-    onAddTrigger,
-    onRemoveTrigger,
-    onAddInvalidTrigger,
-}) => {
+export function FolderItem(props: FolderItemProps) {
+    const {
+        uiNode,
+        isAllowedToCreateDocuments,
+        nodeOptions,
+        isRemoteDrive,
+        className,
+        setSelectedNode,
+        onRenameNode,
+        onDuplicateNode,
+        onDeleteNode,
+        onAddTrigger,
+        onRemoveTrigger,
+        onAddInvalidTrigger,
+    } = props;
     const [mode, setMode] = useState<typeof READ | typeof WRITE>(READ);
     const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
-    const { dropProps, dragProps, isDropTarget } = useDraggableTarget({
-        data: uiFolderNode,
-        onDragEnd,
-        onDragStart,
-        onDropEvent,
-    });
-
-    const containerRef = useRef(null);
+    const { draggable, onDragStart, onDragEnd } = useDrag(props);
+    const { isDropTarget, onDragOver, onDragLeave, onDrop } = useDrop(props);
 
     const isReadMode = mode === READ;
 
@@ -65,23 +57,23 @@ export const FolderItem: React.FC<FolderItemProps> = ({
     }
 
     function onSubmit(name: string) {
-        onRenameNode(name, uiFolderNode);
+        onRenameNode(name, uiNode);
     }
 
     function onClick() {
-        setSelectedNode(uiFolderNode);
+        setSelectedNode(uiNode);
     }
 
     const dropdownMenuHandlers: DropdownMenuHandlers = {
-        [DUPLICATE]: () => onDuplicateNode(uiFolderNode),
+        [DUPLICATE]: () => onDuplicateNode(uiNode),
         [RENAME]: () => setMode(WRITE),
-        [DELETE]: () => onDeleteNode(uiFolderNode),
-        [ADD_TRIGGER]: () => onAddTrigger(uiFolderNode.driveId),
-        [REMOVE_TRIGGER]: () => onRemoveTrigger(uiFolderNode.driveId),
-        [ADD_INVALID_TRIGGER]: () => onAddInvalidTrigger(uiFolderNode.driveId),
+        [DELETE]: () => onDeleteNode(uiNode),
+        [ADD_TRIGGER]: () => onAddTrigger(uiNode.driveId),
+        [REMOVE_TRIGGER]: () => onRemoveTrigger(uiNode.driveId),
+        [ADD_INVALID_TRIGGER]: () => onAddInvalidTrigger(uiNode.driveId),
     } as const;
 
-    const nodeOptionsForKind = nodeOptions[uiFolderNode.sharingType][FOLDER];
+    const nodeOptionsForKind = nodeOptions[uiNode.sharingType][FOLDER];
 
     const dropdownMenuOptions = Object.entries(nodeOptionsMap)
         .map(([id, option]) => ({
@@ -103,12 +95,12 @@ export const FolderItem: React.FC<FolderItemProps> = ({
     const content =
         isReadMode || !isAllowedToCreateDocuments ? (
             <div className="ml-3 max-h-6 truncate font-medium text-slate-200">
-                {uiFolderNode.name}
+                {uiNode.name}
             </div>
         ) : (
             <NodeInput
                 className="ml-3 font-medium"
-                defaultValue={uiFolderNode.name}
+                defaultValue={uiNode.name}
                 onCancel={onCancel}
                 onSubmit={onSubmit}
             />
@@ -126,21 +118,27 @@ export const FolderItem: React.FC<FolderItemProps> = ({
     );
 
     return (
-        <div onClick={onClick} className="relative w-64" ref={containerRef}>
-            <div {...dropProps} {...dragProps} className={containerStyles}>
+        <div onClick={onClick} className="relative w-64">
+            <div
+                draggable={draggable}
+                onDragStart={onDragStart}
+                onDragEnd={onDragEnd}
+                onDrop={onDrop}
+                onDragLeave={onDragLeave}
+                onDragOver={onDragOver}
+                className={containerStyles}
+            >
                 <div className="flex items-center overflow-hidden">
                     <div className="p-1">
                         <div className="relative">
                             <Icon name="folder-close" size={24} />
                             {isReadMode &&
                                 isRemoteDrive &&
-                                uiFolderNode.syncStatus && (
+                                uiNode.syncStatus && (
                                     <div className="absolute bottom-[-3px] right-[-2px] size-3 rounded-full bg-white">
                                         <div className="absolute left-[-2px] top-[-2px]">
                                             <SyncStatusIcon
-                                                syncStatus={
-                                                    uiFolderNode.syncStatus
-                                                }
+                                                syncStatus={uiNode.syncStatus}
                                                 overrideSyncIcons={{
                                                     SUCCESS:
                                                         'check-circle-fill',
@@ -180,4 +178,4 @@ export const FolderItem: React.FC<FolderItemProps> = ({
             </div>
         </div>
     );
-};
+}

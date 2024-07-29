@@ -5,18 +5,6 @@ import {
     UiFolderNode,
     UiNode,
 } from '@/connect';
-import { UseDraggableTargetProps } from '@/powerhouse';
-
-export type UiNodeDraggableTargetProps = Pick<
-    UseDraggableTargetProps<UiNode>,
-    'onDragStart' | 'onDragEnd' | 'onDropEvent'
->;
-
-export type DragAndDropProps = UiNodeDraggableTargetProps & {
-    disableDropBetween: boolean;
-    disableHighlightStyles: boolean;
-    onDropActivate: (dropTargetItem: UiNode) => void;
-};
 
 export type NodeProps = {
     nodeOptions: TNodeOptions;

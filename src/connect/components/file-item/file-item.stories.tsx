@@ -24,7 +24,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
     args: {
-        uiFileNode: mockUiFileNode,
+        uiNode: mockUiFileNode,
         isRemoteDrive: true,
         isAllowedToCreateDocuments: true,
         nodeOptions: mockNodeOptions,
@@ -34,17 +34,20 @@ export const Default: Story = {
             mockUiFolderNode,
             mockUiFileNode,
         ],
+        onMoveNode: () => Promise.resolve(),
+        onAddFile: () => Promise.resolve(),
+        onCopyNode: () => Promise.resolve(),
     },
     render: function Wrapper(args) {
         const fileNodes = Array.from({ length: 100 }).map((_, index) => ({
-            ...args.uiFileNode,
+            ...args.uiNode,
             id: `file-${index}`,
             name: `File ${index} lorem ipsum dolor sit amet consectetur adipiscing elit`,
         }));
         return (
             <div className="flex flex-wrap gap-2">
                 {fileNodes.map(node => (
-                    <FileItem key={node.id} {...args} uiFileNode={node} />
+                    <FileItem key={node.id} {...args} uiNode={node} />
                 ))}
             </div>
         );
