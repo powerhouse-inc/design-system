@@ -1,3 +1,24 @@
+# [1.0.0-alpha.150](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.149...v1.0.0-alpha.150) (2024-07-25)
+
+
+### Features
+
+* add ml auto to folder item ([c84035e](https://github.com/powerhouse-inc/design-system/commit/c84035e5a84925a883e1e663f0154b80c3f693e4))
+
+# [1.0.0-alpha.149](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.148...v1.0.0-alpha.149) (2024-07-25)
+
+
+### Features
+
+* simplify tree view ([#332](https://github.com/powerhouse-inc/design-system/issues/332)) ([486c7e2](https://github.com/powerhouse-inc/design-system/commit/486c7e26c51bd97c57384b8d6ae16c7185c90e98))
+
+# [1.0.0-alpha.148](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.147...v1.0.0-alpha.148) (2024-07-23)
+
+
+### Features
+
+* use radix tooltip instead of react tooltip ([#329](https://github.com/powerhouse-inc/design-system/issues/329)) ([873b30a](https://github.com/powerhouse-inc/design-system/commit/873b30ad66700868bc8189f5a7d62257c5ea74f5))
+
 # [1.0.0-alpha.147](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.146...v1.0.0-alpha.147) (2024-07-03)
 
 
