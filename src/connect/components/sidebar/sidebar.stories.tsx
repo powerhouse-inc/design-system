@@ -55,6 +55,18 @@ export const Expanded: Story = {
 
         const nodeHandlers = {
             onAddFolder: (name: string, uiNode: UiNode) => {},
+            onAddFile: (file: File, parentNode: UiNode | null) => {
+                console.log('onAddFile', { file, parentNode });
+                return Promise.resolve();
+            },
+            onCopyNode: (uiNode: UiNode, targetNode: UiNode) => {
+                console.log('onCopyNode', { uiNode, targetNode });
+                return Promise.resolve();
+            },
+            onMoveNode: (uiNode: UiNode, targetNode: UiNode) => {
+                console.log('onMoveNode', { uiNode, targetNode });
+                return Promise.resolve();
+            },
             onAddAndSelectNewFolder: (name: string) => Promise.resolve(),
             onRenameNode: (name: string, uiNode: UiNode) => {},
             onDuplicateNode: (uiNode: UiNode) => {},

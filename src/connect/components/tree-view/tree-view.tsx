@@ -7,10 +7,10 @@ import {
     DELETE,
     DRIVE,
     DUPLICATE,
-    DragAndDropProps,
     FILE,
     LOCAL,
     NEW_FOLDER,
+    NodeInput,
     NodeOption,
     NodeProps,
     PUBLIC,
@@ -24,15 +24,16 @@ import {
     WRITE,
     iconMap,
     nodeOptionsMap,
+    useDrag,
+    useDrop,
 } from '@/connect';
-import { Icon, useDraggableTarget } from '@/powerhouse';
-import { MouseEventHandler, useRef, useState } from 'react';
-import { twJoin, twMerge } from 'tailwind-merge';
-import { NodeInput } from '../node-input/node-input';
+import { Icon } from '@/powerhouse';
+import { MouseEventHandler, useState } from 'react';
+import { twMerge } from 'tailwind-merge';
+import { DropIndicator } from './drop-indicator';
 
 export type ConnectTreeViewProps = TUiNodesContext &
-    NodeProps &
-    DragAndDropProps & {
+    NodeProps & {
         uiNode: UiNode;
         level?: number;
         showDriveSettingsModal: (uiDriveNode: UiDriveNode) => void;
@@ -44,8 +45,6 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
         uiNode,
         nodeOptions,
         level = 0,
-        disableDropBetween,
-        disableHighlightStyles,
         isAllowedToCreateDocuments,
         setSelectedNode,
         getIsInSelectedNodePath,
@@ -56,10 +55,6 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
         onDuplicateNode,
         onDeleteNode,
         onDeleteDrive,
-        onDragEnd,
-        onDragStart,
-        onDropEvent,
-        onDropActivate,
         showDriveSettingsModal,
         onAddTrigger,
         onRemoveTrigger,
@@ -72,25 +67,8 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
     const [touched, setTouched] = useState(false);
     const [internalExpandedState, setInternalExpandedState] = useState(true);
     const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
-    const containerRef = useRef<HTMLDivElement>(null);
-
-    const { dragProps, dropProps, isDropTarget, isDragging } =
-        useDraggableTarget<UiNode>({
-            data: uiNode,
-            onDragEnd,
-            onDragStart,
-            onDropEvent,
-            onDropActivate: () => {
-                onDropActivate(uiNode);
-            },
-        });
-
-    const { dropProps: dropDividerProps, isDropTarget: isDropDividerTarget } =
-        useDraggableTarget({
-            data: uiNode,
-            onDropEvent,
-            dropAfterItem: true,
-        });
+    const { draggable, onDragStart, onDragEnd } = useDrag(props);
+    const { isDropTarget, onDragOver, onDragLeave, onDrop } = useDrop(props);
 
     const levelPadding = 10;
     const children = uiNode.kind !== FILE ? uiNode.children : null;
@@ -199,8 +177,6 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
 
     function getIsHighlighted() {
         if (isDropTarget) return true;
-        if (disableHighlightStyles) return false;
-        if (isDragging) return false;
         if (mode === WRITE || mode === CREATE) return true;
         if (isDropdownMenuOpen) return true;
         if (isSelected) return true;
@@ -251,21 +227,8 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
 
     const nodeIcon = <div className="mr-2 w-5 flex-none">{getNodeIcon()}</div>;
 
-    const bottomIndicator = (
-        <div
-            {...dropDividerProps}
-            className={twJoin(
-                'absolute bottom-0 z-10 flex h-0.5 w-full',
-                isDropDividerTarget && 'bg-blue-800',
-            )}
-        />
-    );
-
     const readModeContent = (
-        <div
-            ref={containerRef}
-            className="group/node grid w-full grid-cols-[1fr,auto] items-center justify-between"
-        >
+        <div className="group/node grid w-full grid-cols-[1fr,auto] items-center justify-between">
             <p className="mr-1 truncate">{uiNode.name}</p>
             {isAllowedToCreateDocuments && (
                 <ConnectDropdownMenu
@@ -318,11 +281,15 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
     return (
         <>
             <div
-                {...(onDropEvent && { ...dragProps, ...dropProps })}
-                role="button"
+                draggable={draggable}
+                onDragStart={onDragStart}
+                onDragEnd={onDragEnd}
+                onDrop={onDrop}
+                onDragLeave={onDragLeave}
+                onDragOver={onDragOver}
                 onClick={handleClick}
                 className={twMerge(
-                    'flex cursor-pointer items-center rounded-lg px-1 py-2 text-gray-800 transition-colors hover:bg-gray-300',
+                    'flex cursor-pointer select-none items-center rounded-lg px-1 py-2 text-gray-800 transition-colors hover:bg-gray-300',
                     isHighlighted && 'bg-gray-300 text-gray-900',
                 )}
                 // hack to allow rounded corners on item being dragged
@@ -333,11 +300,11 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
                     paddingLeft: `${level * levelPadding + (hasChildren ? 0 : 20)}px`,
                 }}
             >
+                <DropIndicator {...props} position="before" />
                 {hasChildren && caretIcon}
                 {nodeIcon}
                 {mode === READ && readModeContent}
                 {mode === WRITE && writeModeContent}
-                {bottomIndicator}
             </div>
             <div
                 className={twMerge(

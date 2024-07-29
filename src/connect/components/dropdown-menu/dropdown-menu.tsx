@@ -29,7 +29,7 @@ export function ConnectDropdownMenu<TItemId extends string>(
 
     return (
         <DropdownMenu open={open} onOpenChange={onOpenChange}>
-            <DropdownMenuTrigger className="outline-none">
+            <DropdownMenuTrigger asChild className="outline-none">
                 {children}
             </DropdownMenuTrigger>
             <DropdownMenuContent className="modal-shadow cursor-pointer rounded-2xl bg-white text-sm font-medium text-slate-200">
