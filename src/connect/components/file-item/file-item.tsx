@@ -6,7 +6,7 @@ import {
     DropdownMenuHandlers,
     DUPLICATE,
     FILE,
-    iconMap,
+    getDocumentIconSrc,
     NodeInput,
     NodeOption,
     nodeOptionsMap,
@@ -20,14 +20,14 @@ import {
     WRITE,
 } from '@/connect';
 import { Icon } from '@/powerhouse';
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { SyncStatusIcon } from '../status-icon';
 
 export type FileItemProps = TUiNodesContext &
     NodeProps & {
         uiNode: UiFileNode;
-        customIcon?: ReactNode;
+        customDocumentIconSrc?: string;
         className?: string;
     };
 
@@ -38,7 +38,7 @@ export function FileItem(props: FileItemProps) {
         nodeOptions,
         isAllowedToCreateDocuments,
         isRemoteDrive,
-        customIcon,
+        customDocumentIconSrc,
         className,
         setSelectedNode,
         onRenameNode,
@@ -100,12 +100,15 @@ export function FileItem(props: FileItemProps) {
         setIsDropdownMenuOpen(false);
     }
 
-    const icon = iconMap[uiNode.documentType];
+    const iconSrc = getDocumentIconSrc(
+        uiNode.documentType,
+        customDocumentIconSrc,
+    );
 
-    const iconNode = customIcon || (
+    const iconNode = (
         <div className="relative">
             <img
-                src={icon}
+                src={iconSrc}
                 alt="file icon"
                 className="max-w-none"
                 width={32}

@@ -4,6 +4,7 @@ import {
     CLOUD,
     CREATE,
     ConnectDropdownMenu,
+    DEFAULT,
     DELETE,
     DRIVE,
     DUPLICATE,
@@ -22,7 +23,7 @@ import {
     UiDriveNode,
     UiNode,
     WRITE,
-    iconMap,
+    getDocumentIconSrc,
     nodeOptionsMap,
     useDrag,
     useDrop,
@@ -36,6 +37,7 @@ export type ConnectTreeViewProps = TUiNodesContext &
     NodeProps & {
         uiNode: UiNode;
         level?: number;
+        customDocumentIconSrc?: string;
         showDriveSettingsModal: (uiDriveNode: UiDriveNode) => void;
         onClick?: MouseEventHandler<HTMLDivElement>;
     };
@@ -46,6 +48,7 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
         nodeOptions,
         level = 0,
         isAllowedToCreateDocuments,
+        customDocumentIconSrc,
         setSelectedNode,
         getIsInSelectedNodePath,
         getIsSelected,
@@ -191,14 +194,16 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
         <Icon name="folder-open" className={sharedIconStyles} size={22} />
     );
 
-    const documentTypeFileIcon =
-        uiNode.kind === FILE ? (
-            <img
-                src={iconMap[uiNode.documentType]}
-                alt="file icon"
-                className="size-7 object-contain"
-            />
-        ) : null;
+    const documentTypeFileIcon = (
+        <img
+            src={getDocumentIconSrc(
+                uiNode.kind === FILE ? uiNode.documentType : DEFAULT,
+                customDocumentIconSrc,
+            )}
+            alt="file icon"
+            className="size-7 object-contain"
+        />
+    );
 
     const localDriveIcon = <Icon name="hdd" />;
 
