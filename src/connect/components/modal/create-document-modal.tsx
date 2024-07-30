@@ -1,7 +1,7 @@
+import { FormInput } from '@/connect';
 import { Button, Icon, Modal } from '@/powerhouse';
 import { ComponentPropsWithoutRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { FormInput } from '../form-input';
 
 const buttonStyles =
     'min-h-[48px] min-w-[142px] text-base font-semibold py-3 px-6 rounded-xl outline-none active:opacity-75 hover:scale-105 transform transition-all';
