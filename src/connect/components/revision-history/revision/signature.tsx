@@ -3,7 +3,7 @@ import { Icon } from '@/powerhouse';
 import { type Signature } from '../types';
 
 export type SignatureProps = {
-    signatures: Signature[] | undefined;
+    readonly signatures: Signature[] | undefined;
 };
 export function Signature(props: SignatureProps) {
     const { signatures } = props;
@@ -34,7 +34,7 @@ export function Signature(props: SignatureProps) {
         <div className="text-xs text-slate-300">
             <h3 className="mb-2">Signature details:</h3>
             {signatures.map((signature, index) => (
-                <div key={signature.hash} className="mb-2 last:mb-0">
+                <div className="mb-2 last:mb-0" key={signature.hash}>
                     <h4>
                         Signature #{index + 1} -{' '}
                         {signature.isVerified ? 'verified' : 'unverified'}
@@ -51,7 +51,7 @@ export function Signature(props: SignatureProps) {
         <Tooltip content={tooltipContent}>
             <span className="flex w-fit cursor-pointer items-center gap-1 rounded-lg border border-gray-200 px-2 py-1">
                 <VerificationStatus />{' '}
-                <Icon name="InfoSquare" className="text-gray-300" size={16} />
+                <Icon className="text-gray-300" name="InfoSquare" size={16} />
             </span>
         </Tooltip>
     );
