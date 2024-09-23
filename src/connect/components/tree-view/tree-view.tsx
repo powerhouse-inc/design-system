@@ -288,11 +288,11 @@ export function ConnectTreeView(props: ConnectTreeViewProps) {
             <div
                 {...dragProps}
                 {...dropProps}
-                onClick={handleClick}
                 className={twMerge(
                     'flex cursor-pointer select-none items-center rounded-lg px-1 py-2 text-gray-800 transition-colors hover:bg-gray-300',
                     isHighlighted && 'bg-gray-300 text-gray-900',
                 )}
+                onClick={handleClick}
                 // hack to allow rounded corners on item being dragged
                 // see: https://github.com/react-dnd/react-dnd/issues/788#issuecomment-367300464
                 style={{

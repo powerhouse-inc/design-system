@@ -128,7 +128,7 @@ export function useGroupTransactionForm(
         value: fixedIncome.id,
     }));
 
-    const createDefaultValues = {
+    const createDefaultValues: GroupTransactionFormInputs = {
         type: allGroupTransactionTypes[0],
         entryTime: convertToDateTimeLocalFormat(new Date()),
         cashAmount: null,
@@ -139,7 +139,7 @@ export function useGroupTransactionForm(
         txRef: null,
     };
 
-    const editDefaultValues = item
+    const editDefaultValues: GroupTransactionFormInputs = item
         ? {
               id: item.id,
               type: item.type,

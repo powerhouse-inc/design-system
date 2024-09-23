@@ -1,36 +1,32 @@
-// @ts-check
-
+import { fixupPluginRules } from '@eslint/compat';
 import { default as eslint } from '@eslint/js';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import tailwind from 'eslint-plugin-tailwindcss';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
-// const compat = new FlatCompat({
-//     baseDirectory: import.meta.dirname,
-// });
-
-// 'eslint:recommended',
-// 'plugin:react/recommended',
-// 'plugin:react-hooks/recommended',
-// 'plugin:@typescript-eslint/strict-type-checked',
-// 'plugin:@typescript-eslint/stylistic-type-checked',
-// 'plugin:storybook/recommended',
-// 'plugin:tailwindcss/recommended',
-// 'plugin:prettier/recommended',
-
 export default tseslint.config(
     eslint.configs.recommended,
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
     reactPlugin.configs.flat.all,
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
     reactPlugin.configs.flat['jsx-runtime'],
     ...tseslint.configs.stylisticTypeChecked,
     ...tseslint.configs.strictTypeChecked,
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
     ...tailwind.configs['flat/recommended'],
     eslintPluginPrettierRecommended,
     {
         ignores: ['node_modules/', 'dist/', 'build/', 'storybook-static/'],
+    },
+    {
         files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
+        plugins: {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            'react-hooks': fixupPluginRules(reactHooksPlugin),
+        },
         languageOptions: {
             globals: {
                 ...globals.browser,
@@ -58,8 +54,34 @@ export default tseslint.config(
                 ],
             },
         },
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         rules: {
-            "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            ...reactHooksPlugin.configs.recommended.rules,
+            'react/destructuring-assignment': 'off',
+            'react/function-component-definition': 'off',
+            'react/prop-types': 'off',
+            'react/no-unused-prop-types': 'warn',
+            'react/jsx-max-depth': 'warn',
+            'react/no-array-index-key': 'warn',
+            'react/jsx-filename-extension': [
+                'error',
+                { extensions: ['.tsx', '.ts'] },
+            ],
+            'react/jsx-props-no-spreading': [
+                'warn',
+                {
+                    html: 'ignore',
+                },
+            ],
+            'react/jsx-no-bind': 'warn',
+            'react/require-default-props': 'off',
+            'react/jsx-no-literals': 'off',
+            'react/forbid-component-props': 'off',
+            'react/no-multi-comp': 'off',
+            'react/button-has-type': 'warn',
+            'react/hook-use-state': 'warn',
+            'react/jsx-no-useless-fragment': 'warn',
             '@typescript-eslint/unbound-method': 'warn',
             '@typescript-eslint/no-non-null-assertion': 'warn',
             '@typescript-eslint/use-unknown-in-catch-callback-variable': 'warn',
@@ -85,6 +107,19 @@ export default tseslint.config(
             '@typescript-eslint/no-misused-promises': 'off',
             '@typescript-eslint/no-unnecessary-condition': 'warn',
             '@typescript-eslint/no-unnecessary-type-parameters': 'warn',
+        },
+    },
+    {
+        files: ['**/*.stories.tsx', '**/*.text.ts', '**/*.test.tsx'],
+        rules: {
+            'react/jsx-props-no-spreading': [
+                'warn',
+                {
+                    html: 'ignore',
+                },
+            ],
+            'react/jsx-no-bind': 'warn',
+            'react/button-has-type': 'warn',
         },
     },
 );
