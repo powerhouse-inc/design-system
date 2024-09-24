@@ -3,33 +3,31 @@ import {
     ItemDetails,
     ItemDetailsProps,
     SPV,
-    SPVFormInputs,
     getFixedIncomeAssets,
     useSpvForm,
 } from '@/rwa';
+import { useEditorContext } from '@/rwa/context/editor-context';
+import { useCallback, useMemo } from 'react';
 
-export function SPVDetails(props: ItemDetailsProps<SPV, SPVFormInputs>) {
+export function SPVDetails(props: ItemDetailsProps<SPV>) {
+    const { tableItem } = props;
+
     const {
-        state,
-        tableItem,
+        editorState: { portfolio },
         operation,
-        onSubmitCreate,
-        onSubmitEdit,
-        onSubmitDelete,
-    } = props;
+    } = useEditorContext();
 
-    const assets = getFixedIncomeAssets(state);
+    const assets = useMemo(() => getFixedIncomeAssets(portfolio), [portfolio]);
 
     const { submit, reset, inputs } = useSpvForm({
         item: tableItem,
-        state,
         operation,
-        onSubmitCreate,
-        onSubmitEdit,
-        onSubmitDelete,
     });
 
-    const formInputs = () => <FormInputs inputs={inputs} />;
+    const formInputs = useCallback(
+        () => <FormInputs inputs={inputs} />,
+        [inputs],
+    );
 
     const dependentAssets = assets.filter(
         asset => asset.spvId === tableItem?.id,

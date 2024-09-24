@@ -6,13 +6,9 @@ import {
 import { mockStateInitial, mockStateWithData } from '@/rwa/mocks/state';
 import { useArgs } from '@storybook/preview-api';
 import type { Meta, StoryObj } from '@storybook/react';
-import { useCallback } from 'react';
 import { useInterval } from 'usehooks-ts';
 import { getColumnCount } from '../hooks/useColumnPriority';
-import {
-    GroupTransactionsTable,
-    GroupTransactionsTableProps,
-} from './group-transactions-table';
+import { GroupTransactionsTable } from './group-transactions-table';
 
 const meta: Meta<typeof GroupTransactionsTable> = {
     title: 'RWA/Components/Group Transactions Table',
@@ -20,11 +16,10 @@ const meta: Meta<typeof GroupTransactionsTable> = {
 };
 
 export default meta;
-type Story = StoryObj<
-    GroupTransactionsTableProps & {
-        simulateBackgroundUpdates?: boolean;
-    }
->;
+type Story = StoryObj<{
+    simulateBackgroundUpdates?: boolean;
+    state: typeof mockStateInitial;
+}>;
 
 const columnCountByTableWidth = {
     1520: 12,
@@ -60,44 +55,11 @@ export const Empty: Story = {
             args.simulateBackgroundUpdates ? 3000 : null,
         );
 
-        const onSubmitEdit: GroupTransactionsTableProps['onSubmitEdit'] =
-            useCallback(data => {
-                console.log('edit', { data });
-            }, []);
-
-        const onSubmitCreate: GroupTransactionsTableProps['onSubmitCreate'] =
-            useCallback(data => {
-                console.log('create', { data });
-            }, []);
-
-        const onSubmitDelete: GroupTransactionsTableProps['onSubmitDelete'] =
-            useCallback(id => {
-                console.log('delete', { id });
-            }, []);
-
-        const onSubmitCreateAsset: GroupTransactionsTableProps['onSubmitCreateAsset'] =
-            useCallback(data => {
-                console.log('create asset', { data });
-            }, []);
-
-        const onSubmitCreateServiceProviderFeeType: GroupTransactionsTableProps['onSubmitCreateServiceProviderFeeType'] =
-            useCallback(data => {
-                console.log('create asset', { data });
-            }, []);
-
-        const argsWithHandlers: GroupTransactionsTableProps = {
-            ...args,
-            onSubmitEdit,
-            onSubmitCreate,
-            onSubmitDelete,
-            onSubmitCreateAsset,
-            onSubmitCreateServiceProviderFeeType,
-        };
         return (
             <div className="flex flex-col gap-4">
                 <div className="w-screen">
                     <p>parent element width: 100%</p>
-                    <GroupTransactionsTable {...argsWithHandlers} />
+                    <GroupTransactionsTable />
                 </div>
                 {Object.keys(columnCountByTableWidth)
                     .map(Number)
@@ -109,7 +71,7 @@ export const Empty: Story = {
                                 column count:{' '}
                                 {getColumnCount(width, columnCountByTableWidth)}
                             </p>
-                            <GroupTransactionsTable {...argsWithHandlers} />
+                            <GroupTransactionsTable />
                         </div>
                     ))}
             </div>
@@ -121,8 +83,6 @@ export const EmptyIsAllowedToCreateDocuments: Story = {
     ...Empty,
     args: {
         ...Empty.args,
-        isAllowedToCreateDocuments: true,
-        isAllowedToEditDocuments: true,
     },
 };
 
@@ -138,8 +98,6 @@ export const WithDataIsAllowedToCreateDocuments: Story = {
     ...WithDataReadyOnly,
     args: {
         ...WithDataReadyOnly.args,
-        isAllowedToCreateDocuments: true,
-        isAllowedToEditDocuments: true,
     },
 };
 

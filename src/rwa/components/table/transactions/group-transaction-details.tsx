@@ -1,5 +1,4 @@
 import {
-    AssetFormInputs,
     FeeTransactionsTable,
     FormInputs,
     FormattedNumber,
@@ -7,13 +6,10 @@ import {
     GroupTransactionsTableItem,
     ItemDetails,
     ItemDetailsProps,
-    RWACreateItemModal,
-    ServiceProviderFeeTypeFormInputs,
     calculateCashBalanceChange,
-    useAssetForm,
-    useServiceProviderFeeTypeForm,
 } from '@/rwa';
-import { memo } from 'react';
+import { useEditorContext } from '@/rwa/context/editor-context';
+import { memo, useCallback } from 'react';
 import { Control, useWatch } from 'react-hook-form';
 import { useGroupTransactionForm } from './useGroupTransactionForm';
 
@@ -45,128 +41,85 @@ function CashBalanceChange(props: {
 }
 
 type GroupTransactionDetailsProps = Omit<
-    ItemDetailsProps<GroupTransactionsTableItem, GroupTransactionFormInputs>,
+    ItemDetailsProps<GroupTransactionsTableItem>,
     'reset' | 'submit' | 'formInputs'
-> & {
-    readonly onSubmitCreateAsset: (data: AssetFormInputs) => void;
-    readonly onSubmitCreateServiceProviderFeeType: (
-        data: ServiceProviderFeeTypeFormInputs,
-    ) => void;
-};
+>;
 
 export function _GroupTransactionDetails(props: GroupTransactionDetailsProps) {
-    const {
-        state,
-        tableItem,
-        operation,
-        onSubmitCreate,
-        onSubmitEdit,
-        onSubmitDelete,
-        onSubmitCreateAsset,
-        onSubmitCreateServiceProviderFeeType,
-    } = props;
+    const { tableItem, itemName, setSelectedTableItem } = props;
 
-    const { serviceProviderFeeTypes } = state;
+    const {
+        editorState: { serviceProviderFeeTypes },
+        operation,
+    } = useEditorContext();
 
     const {
         submit,
         reset,
         formState,
         inputs,
-        register,
         control,
-        watch,
         append,
         remove,
         fields,
         serviceProviderFeeTypeOptions,
-        showCreateAssetModal,
-        setShowCreateAssetModal,
-        setShowCreateServiceProviderFeeTypeModal,
-        showCreateServiceProviderFeeTypeModal,
         canHaveTransactionFees,
+        showCreateServiceProviderFeeTypeModal,
     } = useGroupTransactionForm({
         item: tableItem,
-        state,
         operation,
-        onSubmitCreate,
-        onSubmitEdit,
-        onSubmitDelete,
     });
 
     const { errors } = formState;
 
-    const assetFormProps = useAssetForm({
-        state,
-        operation: 'create',
-        onSubmitCreate: data => {
-            onSubmitCreateAsset(data);
-            setShowCreateAssetModal(false);
-        },
-    });
-
-    const serviceProviderFeeTypeFormProps = useServiceProviderFeeTypeForm({
-        state,
-        operation: 'create',
-        onSubmitCreate: data => {
-            onSubmitCreateServiceProviderFeeType(data);
-            setShowCreateServiceProviderFeeTypeModal(false);
-        },
-    });
-
-    const formInputs = () => (
-        <>
-            <FormInputs inputs={inputs} />
-            {canHaveTransactionFees ? (
-                <FeeTransactionsTable
-                    append={append}
-                    control={control}
-                    errors={errors}
-                    feeInputs={fields}
-                    isViewOnly={operation === 'view'}
-                    register={register}
-                    remove={remove}
-                    serviceProviderFeeTypeOptions={
-                        serviceProviderFeeTypeOptions
-                    }
-                    serviceProviderFeeTypes={serviceProviderFeeTypes}
-                    setShowServiceProviderFeeTypeModal={
-                        setShowCreateServiceProviderFeeTypeModal
-                    }
-                    watch={watch}
-                />
-            ) : null}
-            <CashBalanceChange control={control} />
-        </>
+    const formInputs = useCallback(
+        () => (
+            <>
+                <FormInputs inputs={inputs} />
+                {canHaveTransactionFees ? (
+                    <FeeTransactionsTable
+                        append={append}
+                        control={control}
+                        errors={errors}
+                        feeInputs={fields}
+                        isViewOnly={operation === 'view'}
+                        remove={remove}
+                        serviceProviderFeeTypeOptions={
+                            serviceProviderFeeTypeOptions
+                        }
+                        serviceProviderFeeTypes={serviceProviderFeeTypes}
+                        showCreateServiceProviderFeeTypeModal={
+                            showCreateServiceProviderFeeTypeModal
+                        }
+                    />
+                ) : null}
+                <CashBalanceChange control={control} />
+            </>
+        ),
+        [
+            append,
+            canHaveTransactionFees,
+            control,
+            errors,
+            fields,
+            inputs,
+            operation,
+            remove,
+            serviceProviderFeeTypeOptions,
+            serviceProviderFeeTypes,
+            showCreateServiceProviderFeeTypeModal,
+        ],
     );
 
     return (
-        <>
-            <ItemDetails
-                {...props}
-                formInputs={formInputs}
-                reset={reset}
-                submit={submit}
-            />
-            {showCreateAssetModal ? (
-                <RWACreateItemModal
-                    {...props}
-                    {...assetFormProps}
-                    itemName="Asset"
-                    onOpenChange={setShowCreateAssetModal}
-                    open={showCreateAssetModal}
-                />
-            ) : null}
-            {showCreateServiceProviderFeeTypeModal ? (
-                <RWACreateItemModal
-                    {...props}
-                    {...serviceProviderFeeTypeFormProps}
-                    itemName="Service Provider Fee Type"
-                    onOpenChange={setShowCreateServiceProviderFeeTypeModal}
-                    open={showCreateServiceProviderFeeTypeModal}
-                />
-            ) : null}
-        </>
+        <ItemDetails
+            formInputs={formInputs}
+            itemName={itemName}
+            reset={reset}
+            setSelectedTableItem={setSelectedTableItem}
+            submit={submit}
+            tableItem={tableItem}
+        />
     );
 }
 

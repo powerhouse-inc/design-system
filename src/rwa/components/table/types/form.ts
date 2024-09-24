@@ -1,10 +1,9 @@
 import {
     GroupTransactionType,
     Item,
+    ItemName,
     Operation,
-    RealWorldAssetsState,
     TableItem,
-    TableWrapperProps,
 } from '@/rwa';
 import { ReactNode } from 'react';
 import { FieldValues, UseFormReturn } from 'react-hook-form';
@@ -13,13 +12,9 @@ export type ItemDetailsFormProps<
     TFieldValues extends FieldValues = FieldValues,
 > = Pick<UseFormReturn<TFieldValues>, 'reset'>;
 
-export type ItemDetailsProps<
-    TItem extends Item,
-    TFieldValues extends FieldValues,
-> = TableWrapperProps<TFieldValues> & {
+export type ItemDetailsProps<TItem extends Item> = {
     tableItem: TableItem<TItem> | undefined;
-    itemName: string;
-    operation: Operation;
+    itemName: ItemName;
     isAllowedToDeleteItem?: boolean;
     hasDependentItems?: boolean;
     dependentItemProps?: {
@@ -27,7 +22,6 @@ export type ItemDetailsProps<
         dependentItemList: ReactNode[];
     };
     className?: string;
-    setOperation: (operation: Operation) => void;
     setSelectedTableItem: <TSelectedTableItem extends TableItem<TItem>>(
         tableItem: TSelectedTableItem | undefined,
     ) => void;
@@ -85,14 +79,7 @@ export type FixedIncomeTypeFormInputs = {
     name?: string | null;
 };
 
-export type FormHookProps<
-    TItem extends Item,
-    TFieldValues extends FieldValues,
-> = {
+export type FormHookProps<TItem extends Item> = {
     item?: TItem | undefined;
-    state: RealWorldAssetsState;
     operation: Operation;
-    onSubmitCreate: (data: TFieldValues) => void;
-    onSubmitEdit?: (data: TFieldValues) => void;
-    onSubmitDelete?: (itemId: string) => void;
 };

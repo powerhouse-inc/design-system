@@ -6,27 +6,21 @@ import {
     ServiceProviderFeeType,
     ServiceProviderFeeTypeFormInputs,
 } from '@/rwa';
-import { useCallback, useMemo, useState } from 'react';
+import { useEditorContext } from '@/rwa/context/editor-context';
+import { useCallback, useMemo } from 'react';
+import { useModal } from '../../modal/modal-manager';
 import { useSubmit } from '../hooks/useSubmit';
 
 export function useServiceProviderFeeTypeForm(
-    props: FormHookProps<
-        ServiceProviderFeeType,
-        ServiceProviderFeeTypeFormInputs
-    >,
+    props: FormHookProps<ServiceProviderFeeType>,
 ) {
-    const [showCreateAccountModal, setShowCreateAccountModal] = useState(false);
+    const { item, operation } = props;
 
     const {
-        item,
-        state,
-        onSubmitCreate,
-        onSubmitEdit,
-        onSubmitDelete,
-        operation,
-    } = props;
-
-    const { accounts } = state;
+        editorState: { accounts },
+        dispatchEditorAction,
+    } = useEditorContext();
+    const { showModal } = useModal();
 
     const createDefaultValues = {
         name: null,
@@ -43,6 +37,27 @@ export function useServiceProviderFeeTypeForm(
           }
         : createDefaultValues;
 
+    const onSubmitCreate = (data: ServiceProviderFeeTypeFormInputs) => {
+        dispatchEditorAction({
+            type: 'CREATE_SERVICE_PROVIDER_FEE_TYPE',
+            payload: data,
+        });
+    };
+
+    const onSubmitEdit = (data: ServiceProviderFeeTypeFormInputs) => {
+        dispatchEditorAction({
+            type: 'EDIT_SERVICE_PROVIDER_FEE_TYPE',
+            payload: data,
+        });
+    };
+
+    const onSubmitDelete = (id: string) => {
+        dispatchEditorAction({
+            type: 'DELETE_SERVICE_PROVIDER_FEE_TYPE',
+            payload: id,
+        });
+    };
+
     const { submit, reset, register, control, formState } = useSubmit({
         operation,
         createDefaultValues,
@@ -53,6 +68,10 @@ export function useServiceProviderFeeTypeForm(
     });
 
     const { errors } = formState;
+
+    const showCreateAccountModal = useCallback(() => {
+        showModal('createAccount', {});
+    }, [showModal]);
 
     function makeAccountLabel(account: Account) {
         return `${account.label} (${account.reference})`;
@@ -105,7 +124,7 @@ export function useServiceProviderFeeTypeForm(
                 Input: () => (
                     <RWATableSelect
                         addItemButtonProps={{
-                            onClick: () => setShowCreateAccountModal(true),
+                            onClick: showCreateAccountModal,
                             label: 'Create Account',
                         }}
                         aria-invalid={errors.accountId ? 'true' : 'false'}
@@ -128,6 +147,7 @@ export function useServiceProviderFeeTypeForm(
             makeAccountOptions,
             operation,
             register,
+            showCreateAccountModal,
         ],
     );
 
@@ -139,16 +159,6 @@ export function useServiceProviderFeeTypeForm(
             control,
             inputs,
             formState: { errors },
-            showCreateAccountModal,
-            setShowCreateAccountModal,
         };
-    }, [
-        submit,
-        reset,
-        register,
-        control,
-        inputs,
-        errors,
-        showCreateAccountModal,
-    ]);
+    }, [submit, reset, register, control, inputs, errors]);
 }

@@ -1,75 +1,33 @@
 import {
-    AssetFormInputs,
     AssetsTableItem,
-    FixedIncomeTypeFormInputs,
     FormInputs,
     ItemDetails,
     ItemDetailsProps,
-    RWACreateItemModal,
-    SPVFormInputs,
     useAssetForm,
-    useFixedIncomeTypeForm,
-    useSpvForm,
 } from '@/rwa';
-import { memo } from 'react';
+import { ASSET } from '@/rwa/constants/names';
+import { useEditorContext } from '@/rwa/context/editor-context';
+import { memo, useCallback } from 'react';
 
-type AssetDetailsProps = ItemDetailsProps<AssetsTableItem, AssetFormInputs> & {
-    readonly onSubmitCreateFixedIncomeType: (
-        data: FixedIncomeTypeFormInputs,
-    ) => void;
-    readonly onSubmitCreateSpv: (data: SPVFormInputs) => void;
-};
+type AssetDetailsProps = ItemDetailsProps<AssetsTableItem>;
 
 export function _AssetDetails(props: AssetDetailsProps) {
+    const { tableItem, setSelectedTableItem } = props;
+
     const {
-        state,
-        tableItem,
+        editorState: { transactions },
         operation,
-        onSubmitCreate,
-        onSubmitEdit,
-        onSubmitDelete,
-        onSubmitCreateFixedIncomeType,
-        onSubmitCreateSpv,
-    } = props;
+    } = useEditorContext();
 
-    const { transactions } = state;
-
-    const {
-        submit,
-        reset,
-        inputs,
-        showCreateFixedIncomeTypeModal,
-        setShowCreateFixedIncomeTypeModal,
-        showCreateSpvModal,
-        setShowCreateSpvModal,
-    } = useAssetForm({
+    const { submit, reset, inputs } = useAssetForm({
         item: tableItem,
-        state,
         operation,
-        onSubmitCreate,
-        onSubmitEdit,
-        onSubmitDelete,
     });
 
-    const formInputs = () => <FormInputs inputs={inputs} />;
-
-    const createFixedIncomeTypeModalProps = useFixedIncomeTypeForm({
-        state,
-        operation: 'create',
-        onSubmitCreate: data => {
-            onSubmitCreateFixedIncomeType(data);
-            setShowCreateFixedIncomeTypeModal(false);
-        },
-    });
-
-    const createSpvModalProps = useSpvForm({
-        state,
-        operation: 'create',
-        onSubmitCreate: data => {
-            onSubmitCreateSpv(data);
-            setShowCreateSpvModal(false);
-        },
-    });
+    const formInputs = useCallback(
+        () => <FormInputs inputs={inputs} />,
+        [inputs],
+    );
 
     const dependentTransactions = transactions
         .map((t, index) => ({
@@ -88,33 +46,15 @@ export function _AssetDetails(props: AssetDetailsProps) {
     };
 
     return (
-        <>
-            <ItemDetails
-                {...props}
-                dependentItemProps={dependentItemProps}
-                formInputs={formInputs}
-                reset={reset}
-                submit={submit}
-            />
-            {showCreateFixedIncomeTypeModal ? (
-                <RWACreateItemModal
-                    {...createFixedIncomeTypeModalProps}
-                    itemName="Fixed Income Type"
-                    onOpenChange={setShowCreateFixedIncomeTypeModal}
-                    open={showCreateFixedIncomeTypeModal}
-                    state={state}
-                />
-            ) : null}
-            {showCreateSpvModal ? (
-                <RWACreateItemModal
-                    {...createSpvModalProps}
-                    itemName="SPV"
-                    onOpenChange={setShowCreateSpvModal}
-                    open={showCreateSpvModal}
-                    state={state}
-                />
-            ) : null}
-        </>
+        <ItemDetails
+            dependentItemProps={dependentItemProps}
+            formInputs={formInputs}
+            itemName={ASSET}
+            reset={reset}
+            setSelectedTableItem={setSelectedTableItem}
+            submit={submit}
+            tableItem={tableItem}
+        />
     );
 }
 

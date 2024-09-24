@@ -2,14 +2,13 @@ import { Icon } from '@/powerhouse';
 import {
     Account,
     AccountDetails,
-    AccountFormInputs,
     ItemData,
     Table,
     TableItem,
-    TableWrapperProps,
     makeTableData,
-    useDocumentOperationState,
 } from '@/rwa';
+import { ACCOUNT } from '@/rwa/constants/names';
+import { useEditorContext } from '@/rwa/context/editor-context';
 import { useMemo, useState } from 'react';
 
 const columns = [
@@ -47,42 +46,35 @@ function makeAccountsTableItems(
     return withCustomTransform;
 }
 
-export type AccountsTableProps = TableWrapperProps<AccountFormInputs>;
-
-export function AccountsTable(props: AccountsTableProps) {
-    const { state } = props;
-    const { accounts, principalLenderAccountId } = state;
-    const itemName = 'Account';
+export function AccountsTable() {
+    const {
+        editorState: { accounts, principalLenderAccountId },
+        operation,
+        showForm,
+        setOperation,
+    } = useEditorContext();
+    const itemName = ACCOUNT;
     const tableData = useMemo(
         () => makeAccountsTableItems(accounts, principalLenderAccountId),
         [accounts, principalLenderAccountId],
     );
     const [selectedTableItem, setSelectedTableItem] =
         useState<TableItem<Account>>();
-    const { operation, setOperation, showForm, existingState } =
-        useDocumentOperationState({ state });
 
     return (
         <>
             <Table
-                {...props}
                 columns={columns}
                 itemName={itemName}
-                operation={operation}
                 selectedTableItem={selectedTableItem}
-                setOperation={setOperation}
                 setSelectedTableItem={setSelectedTableItem}
                 tableData={tableData}
             />
             {showForm ? (
                 <div className="mt-4 rounded-md bg-white">
                     <AccountDetails
-                        {...props}
                         itemName={itemName}
-                        operation={operation}
-                        setOperation={setOperation}
                         setSelectedTableItem={setSelectedTableItem}
-                        state={existingState}
                         tableItem={selectedTableItem}
                     />
                 </div>

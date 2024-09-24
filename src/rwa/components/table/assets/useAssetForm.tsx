@@ -9,25 +9,20 @@ import {
     formatDateForDisplay,
     handleTableDatum,
 } from '@/rwa';
-import { useMemo, useState } from 'react';
+import { useEditorContext } from '@/rwa/context/editor-context';
+import { useCallback, useMemo } from 'react';
+import { useModal } from '../../modal/modal-manager';
 import { useSubmit } from '../hooks/useSubmit';
 
-export function useAssetForm(
-    props: FormHookProps<FixedIncome, AssetFormInputs>,
-) {
-    const [showCreateFixedIncomeTypeModal, setShowCreateFixedIncomeTypeModal] =
-        useState(false);
-    const [showCreateSpvModal, setShowCreateSpvModal] = useState(false);
-    const {
-        item,
-        state,
-        onSubmitCreate,
-        onSubmitEdit,
-        onSubmitDelete,
-        operation,
-    } = props;
+export function useAssetForm(props: FormHookProps<FixedIncome>) {
+    const { item, operation } = props;
 
-    const { fixedIncomeTypes, spvs } = state;
+    const {
+        editorState: { fixedIncomeTypes, spvs },
+        dispatchEditorAction,
+    } = useEditorContext();
+
+    const { showModal } = useModal();
 
     const createDefaultValues = {
         fixedIncomeTypeId: fixedIncomeTypes[0]?.id ?? null,
@@ -54,6 +49,30 @@ export function useAssetForm(
           }
         : createDefaultValues;
 
+    const onSubmitCreate = (data: AssetFormInputs) => {
+        dispatchEditorAction({
+            type: 'CREATE_ASSET',
+            payload: data,
+        });
+    };
+
+    const onSubmitEdit = (data: AssetFormInputs) => {
+        dispatchEditorAction({
+            type: 'EDIT_ASSET',
+            payload: data,
+        });
+    };
+
+    const onSubmitDelete = useCallback(
+        (id: string) => {
+            dispatchEditorAction({
+                type: 'DELETE_ASSET',
+                payload: id,
+            });
+        },
+        [dispatchEditorAction],
+    );
+
     const { submit, reset, register, control, formState, watch } = useSubmit({
         operation,
         createDefaultValues,
@@ -64,6 +83,14 @@ export function useAssetForm(
     });
 
     const { errors } = formState;
+
+    const showCreateFixedIncomeTypeModal = useCallback(() => {
+        showModal('createFixedIncomeType', {});
+    }, [showModal]);
+
+    const showCreateSpvModal = useCallback(() => {
+        showModal('createSpv', {});
+    }, [showModal]);
 
     const derivedInputsToDisplay = useMemo(
         () =>
@@ -206,8 +233,7 @@ export function useAssetForm(
                 Input: () => (
                     <RWATableSelect
                         addItemButtonProps={{
-                            onClick: () =>
-                                setShowCreateFixedIncomeTypeModal(true),
+                            onClick: showCreateFixedIncomeTypeModal,
                             label: 'Create Fixed Income Type',
                         }}
                         aria-invalid={
@@ -231,7 +257,7 @@ export function useAssetForm(
                 Input: () => (
                     <RWATableSelect
                         addItemButtonProps={{
-                            onClick: () => setShowCreateSpvModal(true),
+                            onClick: showCreateSpvModal,
                             label: 'Create SPV',
                         }}
                         aria-invalid={errors.spvId ? 'true' : 'false'}
@@ -262,8 +288,10 @@ export function useAssetForm(
             errors.spvId,
             item?.CUSIP,
             item?.ISIN,
+            showCreateFixedIncomeTypeModal,
             control,
             fixedIncomeTypes,
+            showCreateSpvModal,
             spvs,
         ],
     );
@@ -277,9 +305,8 @@ export function useAssetForm(
             inputs,
             formState,
             showCreateFixedIncomeTypeModal,
-            setShowCreateFixedIncomeTypeModal,
             showCreateSpvModal,
-            setShowCreateSpvModal,
+            onSubmitDelete,
         };
     }, [
         submit,
@@ -290,5 +317,6 @@ export function useAssetForm(
         formState,
         showCreateFixedIncomeTypeModal,
         showCreateSpvModal,
+        onSubmitDelete,
     ]);
 }

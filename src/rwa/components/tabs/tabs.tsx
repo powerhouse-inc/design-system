@@ -1,46 +1,45 @@
 import { EditorActionButtons } from '@/connect';
-import { PORTFOLIO, TabComponents } from '@/rwa';
+import { OtherTab, PORTFOLIO, PortfolioTab, TransactionsTab } from '@/rwa';
+import { useEditorContext } from '@/rwa/context/editor-context';
 import { Content, List, Root, Trigger } from '@radix-ui/react-tabs';
 
-export type RWATabsProps = {
-    readonly tabComponents: TabComponents;
-    readonly canUndo: boolean;
-    readonly canRedo: boolean;
-    readonly onClose: () => void;
-    readonly onExport: () => void;
-    readonly undo: () => void;
-    readonly redo: () => void;
-    readonly onShowRevisionHistory: () => void;
-    readonly onSwitchboardLinkClick: (() => void) | undefined;
-};
-
-export function RWATabs(props: RWATabsProps) {
-    const { tabComponents } = props;
+export function RWATabs() {
+    const tabs = ['Portfolio', 'Transactions', 'Other'] as const;
+    const { onSwitchboardLinkClick, onExport, onClose, onShowRevisionHistory } =
+        useEditorContext();
 
     return (
         <Root defaultValue={PORTFOLIO}>
             <div className="flex justify-between">
                 {/* <EditorUndoRedoButtons {...props} /> */}
                 <List className="flex gap-x-2 rounded-xl bg-slate-50 p-1 text-sm font-semibold text-gray-600 outline-none">
-                    {tabComponents.map(({ value, label, disabled }) => (
+                    {tabs.map(tab => (
                         <Trigger
                             className="data-[state='active']:tab-shadow data-disabled:cursor-not-allowed data-disabled:text-gray-400 h-7 w-32 rounded-lg  transition duration-300 data-[state='active']:bg-gray-50 data-[state='active']:text-gray-900"
-                            disabled={disabled}
-                            key={value}
-                            value={value}
+                            key={tab}
+                            value={tab}
                         >
-                            {label}
+                            {tab}
                         </Trigger>
                     ))}
                 </List>
-                <EditorActionButtons {...props} />
+                <EditorActionButtons
+                    onClose={onClose}
+                    onExport={onExport}
+                    onShowRevisionHistory={onShowRevisionHistory}
+                    onSwitchboardLinkClick={onSwitchboardLinkClick}
+                />
             </div>
             <div className="mt-3 rounded-md bg-slate-50 p-8">
-                {tabComponents.map(({ value, Component }) => (
-                    <Content key={value} value={value}>
-                        <Component />
-                    </Content>
-                ))}
+                <Content value="Portfolio">
+                    <PortfolioTab />
+                </Content>
+                <Content value="Transactions">
+                    <TransactionsTab />
+                </Content>
+                <Content value="Other">
+                    <OtherTab />
+                </Content>
             </div>
         </Root>
     );

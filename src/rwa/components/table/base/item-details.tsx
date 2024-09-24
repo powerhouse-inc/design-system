@@ -1,14 +1,12 @@
 import { Icon } from '@/powerhouse';
-import {
-    Item,
-    ItemDetailsFormProps,
-    ItemDetailsProps,
-    RWAButton,
-    RWADeleteItemModal,
-} from '@/rwa';
-import { ComponentType, useState } from 'react';
+import { Item, ItemDetailsFormProps, ItemDetailsProps, RWAButton } from '@/rwa';
+import { deleteEditorActionInputsByItemName } from '@/rwa/constants/names';
+import { useEditorContext } from '@/rwa/context/editor-context';
+import { sentenceCase } from 'change-case';
+import { ComponentType, useCallback } from 'react';
 import { FieldValues } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
+import { useModal } from '../../modal/modal-manager';
 
 /**
  * Displays and allows creating or editing an item. Intended to be used with react-hook-form.
@@ -34,7 +32,7 @@ export function ItemDetails<
     TItem extends Item,
     TFieldValues extends FieldValues = FieldValues,
 >(
-    props: ItemDetailsProps<TItem, TFieldValues> &
+    props: ItemDetailsProps<TItem> &
         ItemDetailsFormProps<TFieldValues> & {
             readonly submit: (e?: React.BaseSyntheticEvent) => Promise<void>;
             readonly formInputs: ComponentType;
@@ -44,20 +42,22 @@ export function ItemDetails<
         tableItem,
         itemName,
         className,
-        operation = 'view',
-        isAllowedToCreateDocuments,
-        isAllowedToEditDocuments,
         isAllowedToDeleteItem = true,
         dependentItemProps,
         formInputs: FormInputs,
-        setOperation,
         submit,
-        onSubmitDelete,
         reset,
         setSelectedTableItem,
     } = props;
+    const { showModal, closeModal } = useModal();
 
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const {
+        operation,
+        dispatchEditorAction,
+        setOperation,
+        isAllowedToCreateDocuments,
+        isAllowedToEditDocuments,
+    } = useEditorContext();
 
     const hasDependentItems = !!dependentItemProps?.dependentItemList.length;
 
@@ -73,7 +73,9 @@ export function ItemDetails<
         isEditOperation && isAllowedToEditDocuments && isAllowedToDeleteItem;
     const showEditButton = isViewOperation && isAllowedToEditDocuments;
 
-    function handleCancel() {
+    const itemNameForDisplay = sentenceCase(itemName);
+
+    const handleCancel = useCallback(() => {
         if (operation === 'edit') {
             setOperation('view');
             return;
@@ -81,19 +83,44 @@ export function ItemDetails<
         reset();
         setSelectedTableItem(undefined);
         setOperation(null);
-    }
+    }, [operation, reset, setOperation, setSelectedTableItem]);
 
-    function handleDelete() {
+    const showDeleteModal = useCallback(() => {
+        if (!isAllowedToDeleteItem || !dependentItemProps) return;
+        const { dependentItemName, dependentItemList } = dependentItemProps;
+
+        showModal('deleteItem', {
+            itemName,
+            dependentItemName,
+            dependentItemList,
+        });
+    }, [dependentItemProps, isAllowedToDeleteItem, itemName, showModal]);
+
+    const handleDelete = useCallback(() => {
         if (!tableItem) return;
 
         if (hasDependentItems) {
-            setShowDeleteModal(true);
+            showDeleteModal();
             return;
         }
 
-        onSubmitDelete(tableItem.id);
+        const editorDeleteActionType =
+            deleteEditorActionInputsByItemName[itemName];
+        dispatchEditorAction({
+            type: editorDeleteActionType,
+            payload: tableItem.id,
+        });
         setSelectedTableItem(undefined);
-    }
+        closeModal();
+    }, [
+        closeModal,
+        dispatchEditorAction,
+        hasDependentItems,
+        itemName,
+        setSelectedTableItem,
+        showDeleteModal,
+        tableItem,
+    ]);
 
     const cancelButton = (
         <RWAButton className="text-gray-600" onClick={handleCancel}>
@@ -126,7 +153,7 @@ export function ItemDetails<
                 setOperation('edit');
             }}
         >
-            Edit {itemName}
+            Edit {itemNameForDisplay}
         </RWAButton>
     );
 
@@ -140,8 +167,8 @@ export function ItemDetails<
             <div className="flex justify-between rounded-t-md border-b border-gray-300 bg-gray-100 p-3 font-semibold text-gray-800">
                 <div className="flex items-center">
                     {tableItem?.itemNumber
-                        ? `${itemName} #${tableItem.itemNumber}`
-                        : `New ${itemName}`}
+                        ? `${itemNameForDisplay} #${tableItem.itemNumber}`
+                        : `New ${itemNameForDisplay}`}
                 </div>
                 <div className="flex gap-x-2">
                     {showCancelButton ? cancelButton : null}
@@ -151,14 +178,6 @@ export function ItemDetails<
                 </div>
             </div>
             <FormInputs />
-            {dependentItemProps ? (
-                <RWADeleteItemModal
-                    {...dependentItemProps}
-                    itemName={itemName.toLowerCase()}
-                    onContinue={() => setShowDeleteModal(false)}
-                    open={showDeleteModal}
-                />
-            ) : null}
         </div>
     );
 }

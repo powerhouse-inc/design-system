@@ -6,11 +6,13 @@ import {
     FixedIncomeTypeFormInputs,
     GroupTransactionFormInputs,
     groupTransactionTypeLabels,
+    ServiceProviderFeeTypeFormInputs,
     SPVFormInputs,
     tabs,
 } from '@/rwa';
 import { Maybe, Scalars } from 'document-model/document';
 import { ReactNode } from 'react';
+import { itemNamesList } from '../constants/names';
 import { otherTables } from '../constants/other';
 
 export type RealWorldAssetsState = {
@@ -130,13 +132,6 @@ export type OtherTables = typeof otherTables;
 
 export type OtherTable = OtherTables[number];
 
-export type OtherTableComponents = {
-    value: OtherTable;
-    label: ReactNode;
-    description: ReactNode;
-    Component: () => JSX.Element;
-}[];
-
 export type EditorActionInputs =
     | { type: 'UNDO' }
     | { type: 'REDO' }
@@ -146,7 +141,7 @@ export type EditorActionInputs =
     | { type: 'CREATE_FIXED_INCOME_TYPE'; payload: FixedIncomeTypeFormInputs }
     | {
           type: 'CREATE_SERVICE_PROVIDER_FEE_TYPE';
-          payload: ServiceProviderFeeType;
+          payload: ServiceProviderFeeTypeFormInputs;
       }
     | { type: 'CREATE_SPV'; payload: SPVFormInputs }
     | { type: 'EDIT_ASSET'; payload: AssetFormInputs }
@@ -155,7 +150,7 @@ export type EditorActionInputs =
     | { type: 'EDIT_FIXED_INCOME_TYPE'; payload: FixedIncomeTypeFormInputs }
     | {
           type: 'EDIT_SERVICE_PROVIDER_FEE_TYPE';
-          payload: ServiceProviderFeeType;
+          payload: ServiceProviderFeeTypeFormInputs;
       }
     | { type: 'EDIT_SPV'; payload: SPVFormInputs }
     | { type: 'DELETE_ASSET'; payload: string }
@@ -164,3 +159,6 @@ export type EditorActionInputs =
     | { type: 'DELETE_FIXED_INCOME_TYPE'; payload: string }
     | { type: 'DELETE_SERVICE_PROVIDER_FEE_TYPE'; payload: string }
     | { type: 'DELETE_SPV'; payload: string };
+
+export type ItemNames = typeof itemNamesList;
+export type ItemName = ItemNames[number];

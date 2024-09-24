@@ -18,16 +18,18 @@ import {
     makeFixedIncomeOptionLabel,
 } from '@/rwa';
 
+import { useEditorContext } from '@/rwa/context/editor-context';
 import { getIsTransaction } from '@/services/viem';
 import {
     ComponentPropsWithRef,
     ForwardedRef,
     forwardRef,
+    useCallback,
     useMemo,
-    useState,
 } from 'react';
 import { Control, useFieldArray, useWatch } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
+import { useModal } from '../../modal/modal-manager';
 import { useSubmit } from '../hooks/useSubmit';
 
 const TransactionReference = forwardRef(function TransactionReference(
@@ -96,28 +98,20 @@ function UnitPrice(props: {
 }
 
 export function useGroupTransactionForm(
-    props: FormHookProps<
-        GroupTransactionsTableItem,
-        GroupTransactionFormInputs
-    >,
+    props: FormHookProps<GroupTransactionsTableItem>,
 ) {
-    const [showCreateAssetModal, setShowCreateAssetModal] = useState(false);
-    const [
-        showCreateServiceProviderFeeTypeModal,
-        setShowCreateServiceProviderFeeTypeModal,
-    ] = useState(false);
+    const { item } = props;
     const {
-        item,
-        state,
-        onSubmitCreate,
-        onSubmitEdit,
-        onSubmitDelete,
+        editorState: { portfolio, serviceProviderFeeTypes, accounts },
         operation,
-    } = props;
+        dispatchEditorAction,
+    } = useEditorContext();
+    const { showModal } = useModal();
 
-    const { serviceProviderFeeTypes, accounts } = state;
-
-    const fixedIncomes = useMemo(() => getFixedIncomeAssets(state), [state]);
+    const fixedIncomes = useMemo(
+        () => getFixedIncomeAssets(portfolio),
+        [portfolio],
+    );
 
     const transactionTypeOptions = allGroupTransactionTypes.map(type => ({
         label: groupTransactionTypeLabels[type],
@@ -152,6 +146,27 @@ export function useGroupTransactionForm(
               txRef: item.txRef ?? null,
           }
         : createDefaultValues;
+
+    const onSubmitCreate = (data: GroupTransactionFormInputs) => {
+        dispatchEditorAction({
+            type: 'CREATE_TRANSACTION',
+            payload: data,
+        });
+    };
+
+    const onSubmitEdit = (data: GroupTransactionFormInputs) => {
+        dispatchEditorAction({
+            type: 'EDIT_TRANSACTION',
+            payload: data,
+        });
+    };
+
+    const onSubmitDelete = (id: string) => {
+        dispatchEditorAction({
+            type: 'DELETE_TRANSACTION',
+            payload: id,
+        });
+    };
 
     const { submit, reset, register, watch, control, formState } = useSubmit({
         operation,
@@ -189,7 +204,7 @@ export function useGroupTransactionForm(
         };
         const onSubmitForm = formActions[operation];
 
-        onSubmitForm?.({
+        onSubmitForm({
             id,
             type,
             entryTime,
@@ -217,6 +232,14 @@ export function useGroupTransactionForm(
             })),
         [serviceProviderFeeTypes, accounts],
     );
+
+    const showCreateAssetModal = useCallback(() => {
+        showModal('createAsset', {});
+    }, [showModal]);
+
+    const showCreateServiceProviderFeeTypeModal = useCallback(() => {
+        showModal('createServiceProviderFeeType', {});
+    }, [showModal]);
 
     const entryTimeInputValue =
         watch('entryTime') || formState.defaultValues?.entryTime;
@@ -257,10 +280,7 @@ export function useGroupTransactionForm(
                   Input: () => (
                       <RWATableSelect
                           addItemButtonProps={{
-                              onClick: () =>
-                                  setShowCreateServiceProviderFeeTypeModal(
-                                      true,
-                                  ),
+                              onClick: showCreateServiceProviderFeeTypeModal,
                               label: 'Add Service Provider',
                           }}
                           control={control}
@@ -277,7 +297,7 @@ export function useGroupTransactionForm(
                   Input: () => (
                       <RWATableSelect
                           addItemButtonProps={{
-                              onClick: () => setShowCreateAssetModal(true),
+                              onClick: showCreateAssetModal,
                               label: 'Create Asset',
                           }}
                           aria-invalid={errors.type ? 'true' : 'false'}
@@ -376,9 +396,7 @@ export function useGroupTransactionForm(
             formState,
             serviceProviderFeeTypeOptions,
             showCreateAssetModal,
-            setShowCreateAssetModal,
             showCreateServiceProviderFeeTypeModal,
-            setShowCreateServiceProviderFeeTypeModal,
             canHaveTransactionFees,
         };
     }, [

@@ -1,38 +1,34 @@
 import {
     FixedIncomeType,
-    FixedIncomeTypeFormInputs,
     FormInputs,
     ItemDetails,
     ItemDetailsProps,
     getFixedIncomeAssets,
     useFixedIncomeTypeForm,
 } from '@/rwa';
-import { memo } from 'react';
+import { useEditorContext } from '@/rwa/context/editor-context';
+import { memo, useCallback, useMemo } from 'react';
 
 export function _FixedIncomeTypeDetails(
-    props: ItemDetailsProps<FixedIncomeType, FixedIncomeTypeFormInputs>,
+    props: ItemDetailsProps<FixedIncomeType>,
 ) {
+    const { tableItem } = props;
     const {
-        state,
-        tableItem,
+        editorState: { portfolio },
         operation,
-        onSubmitCreate,
-        onSubmitEdit,
-        onSubmitDelete,
-    } = props;
+    } = useEditorContext();
 
-    const assets = getFixedIncomeAssets(state);
+    const assets = useMemo(() => getFixedIncomeAssets(portfolio), [portfolio]);
 
     const { submit, reset, inputs } = useFixedIncomeTypeForm({
         item: tableItem,
-        state,
         operation,
-        onSubmitCreate,
-        onSubmitEdit,
-        onSubmitDelete,
     });
 
-    const formInputs = () => <FormInputs inputs={inputs} />;
+    const formInputs = useCallback(
+        () => <FormInputs inputs={inputs} />,
+        [inputs],
+    );
 
     const dependentAssets = assets.filter(
         asset => asset.fixedIncomeTypeId === tableItem?.id,

@@ -1,26 +1,25 @@
 import { Pagination, usePagination } from '@/powerhouse';
 import {
     AssetDetails,
-    AssetFormInputs,
     AssetsTableItem,
     FixedIncome,
-    FixedIncomeTypeFormInputs,
+    FixedIncomeType,
+    GroupTransaction,
     RWATableCell,
     RWATableRow,
-    SPVFormInputs,
     Table,
+    TableColumn,
     TableItem,
-    TableProps,
-    TableWrapperProps,
     getCashAsset,
     getFixedIncomeAssets,
     handleTableDatum,
     makeTableData,
-    useDocumentOperationState,
 } from '@/rwa';
-import { Fragment, useMemo, useState } from 'react';
+import { ASSET } from '@/rwa/constants/names';
+import { useEditorContext } from '@/rwa/context/editor-context';
+import { Fragment, useCallback, useMemo, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { sumTotalForProperty } from './utils';
+import { calculateCurrentValue, sumTotalForProperty } from './utils';
 
 const columns = [
     { key: 'name' as const, label: 'Name', allowSorting: true },
@@ -80,19 +79,20 @@ const columns = [
     },
 ];
 
-type CalculateCurrentValueCallback = (
-    asset: FixedIncome,
-    currentDate?: Date,
-) => number | null;
-
 export function makeAssetsTableItems(
     assets: FixedIncome[],
-    calculateCurrentValueCallback: CalculateCurrentValueCallback,
+    transactions: GroupTransaction[],
+    fixedIncomeTypes: FixedIncomeType[],
 ): AssetsTableItem[] {
     const currentDate = new Date();
 
     const tableItems = assets.map(asset => {
-        const currentValue = calculateCurrentValueCallback(asset, currentDate);
+        const currentValue = calculateCurrentValue({
+            asset,
+            currentDate,
+            transactions,
+            fixedIncomeTypes,
+        });
 
         return {
             ...asset,
@@ -103,34 +103,24 @@ export function makeAssetsTableItems(
     return tableItems;
 }
 
-export type AssetsTableProps = TableWrapperProps<AssetFormInputs> & {
-    readonly calculateCurrentValueCallback: CalculateCurrentValueCallback;
-    readonly onSubmitCreateFixedIncomeType: (
-        data: FixedIncomeTypeFormInputs,
-    ) => void;
-    readonly onSubmitCreateSpv: (data: SPVFormInputs) => void;
-    readonly itemsPerPage?: number;
-    readonly pageRange?: number;
-    readonly initialPage?: number;
-};
-
-export function AssetsTable(props: AssetsTableProps) {
-    const itemName = 'Asset';
+export function AssetsTable() {
+    const itemName = ASSET;
+    const itemsPerPage = 20;
+    const initialPage = 0;
+    const pageRange = 3;
     const {
-        state,
-        calculateCurrentValueCallback,
-        itemsPerPage = 20,
-        initialPage = 0,
-        pageRange = 3,
-    } = props;
-    const assets = getFixedIncomeAssets(state);
+        editorState: { portfolio, fixedIncomeTypes, transactions },
+        showForm,
+    } = useEditorContext();
+    const assets = useMemo(() => getFixedIncomeAssets(portfolio), [portfolio]);
+    const cashAsset = useMemo(() => getCashAsset(portfolio), [portfolio])!;
 
     const tableData = useMemo(
         () =>
             makeTableData(
-                makeAssetsTableItems(assets, calculateCurrentValueCallback),
+                makeAssetsTableItems(assets, transactions, fixedIncomeTypes),
             ),
-        [assets, calculateCurrentValueCallback],
+        [assets, fixedIncomeTypes, transactions],
     );
 
     const {
@@ -152,34 +142,29 @@ export function AssetsTable(props: AssetsTableProps) {
 
     const [selectedTableItem, setSelectedTableItem] =
         useState<TableItem<AssetsTableItem>>();
-    const { operation, setOperation, showForm, existingState } =
-        useDocumentOperationState({ state });
 
-    const cashAsset = getCashAsset(state);
-
-    const cashAssetFormattedAsTableItem = {
-        id: 'special-first-row',
-        name: 'Cash $USD',
-        fixedIncomeTypeId: '--',
-        spvId: '--',
-        maturity: '--',
-        ISIN: '--',
-        CUSIP: '--',
-        coupon: null,
-        notional: cashAsset?.balance ?? 0,
-        purchaseDate: '--',
-        purchasePrice: '--',
-        purchaseProceeds: '--',
-        salesProceeds: '--',
-        totalDiscount: '--',
-        realizedSurplus: '--',
-        currentValue: '--',
-    };
-
-    const totalNotional = sumTotalForProperty(
-        [...assets, cashAssetFormattedAsTableItem],
-        'notional',
+    const cashAssetFormattedAsTableItem = useMemo(
+        () => ({
+            id: 'special-first-row',
+            name: 'Cash $USD',
+            fixedIncomeTypeId: '--',
+            spvId: '--',
+            maturity: '--',
+            ISIN: '--',
+            CUSIP: '--',
+            coupon: null,
+            notional: cashAsset.balance ?? 0,
+            purchaseDate: '--',
+            purchasePrice: '--',
+            purchaseProceeds: '--',
+            salesProceeds: '--',
+            totalDiscount: '--',
+            realizedSurplus: '--',
+            currentValue: '--',
+        }),
+        [cashAsset.balance],
     );
+
     const totalPurchaseProceeds = sumTotalForProperty(
         assets,
         'purchaseProceeds',
@@ -188,74 +173,97 @@ export function AssetsTable(props: AssetsTableProps) {
     const totalTotalDiscount = sumTotalForProperty(assets, 'totalDiscount');
     const totalRealizedSurplus = sumTotalForProperty(assets, 'realizedSurplus');
 
-    const specialFirstRow: TableProps<
-        FixedIncome,
-        TableItem<AssetsTableItem>
-    >['specialFirstRow'] = c => (
-        <RWATableRow>
-            {c.map(column => (
-                <Fragment key={column.key}>
-                    {column.key === 'name' && (
-                        <RWATableCell>Cash $USD</RWATableCell>
-                    )}
-                    {column.key === 'notional' && (
-                        <RWATableCell className="text-right" key={column.key}>
-                            {handleTableDatum(
-                                cashAssetFormattedAsTableItem[column.key],
-                            )}
-                        </RWATableCell>
-                    )}
-                    {column.key !== 'name' && column.key !== 'notional' && (
-                        <RWATableCell />
-                    )}
-                </Fragment>
-            ))}
-        </RWATableRow>
+    const specialFirstRow = useCallback(
+        (c: TableColumn<FixedIncome, TableItem<AssetsTableItem>>[]) => (
+            <RWATableRow>
+                {c.map(column => (
+                    <Fragment key={column.key}>
+                        {column.key === 'name' && (
+                            <RWATableCell>Cash $USD</RWATableCell>
+                        )}
+                        {column.key === 'notional' && (
+                            <RWATableCell
+                                className="text-right"
+                                key={column.key}
+                            >
+                                {handleTableDatum(
+                                    cashAssetFormattedAsTableItem[column.key],
+                                )}
+                            </RWATableCell>
+                        )}
+                        {column.key !== 'name' && column.key !== 'notional' && (
+                            <RWATableCell />
+                        )}
+                    </Fragment>
+                ))}
+            </RWATableRow>
+        ),
+        [cashAssetFormattedAsTableItem],
     );
 
-    const specialLastRow: TableProps<
-        FixedIncome,
-        TableItem<AssetsTableItem>
-    >['specialLastRow'] = c => (
-        <RWATableRow
-            className={twMerge(
-                'sticky bottom-0',
-                selectedTableItem !== undefined && 'hidden',
-            )}
-        >
-            {c.map(column => (
-                <Fragment key={column.key}>
-                    {column.key === 'name' && (
-                        <RWATableCell>Totals</RWATableCell>
-                    )}
-                    {column.key === 'purchaseProceeds' && (
-                        <RWATableCell className="text-right" key={column.key}>
-                            {handleTableDatum(totalPurchaseProceeds)}
-                        </RWATableCell>
-                    )}
-                    {column.key === 'salesProceeds' && (
-                        <RWATableCell className="text-right" key={column.key}>
-                            {handleTableDatum(totalSalesProceeds)}
-                        </RWATableCell>
-                    )}
-                    {column.key === 'totalDiscount' && (
-                        <RWATableCell className="text-right" key={column.key}>
-                            {handleTableDatum(totalTotalDiscount)}
-                        </RWATableCell>
-                    )}
-                    {column.key === 'realizedSurplus' && (
-                        <RWATableCell className="text-right" key={column.key}>
-                            {handleTableDatum(totalRealizedSurplus)}
-                        </RWATableCell>
-                    )}
-                    {column.key !== 'name' &&
-                        column.key !== 'purchaseProceeds' &&
-                        column.key !== 'salesProceeds' &&
-                        column.key !== 'totalDiscount' &&
-                        column.key !== 'realizedSurplus' && <RWATableCell />}
-                </Fragment>
-            ))}
-        </RWATableRow>
+    const specialLastRow = useCallback(
+        (c: TableColumn<FixedIncome, TableItem<AssetsTableItem>>[]) => (
+            <RWATableRow
+                className={twMerge(
+                    'sticky bottom-0',
+                    selectedTableItem !== undefined && 'hidden',
+                )}
+            >
+                {c.map(column => (
+                    <Fragment key={column.key}>
+                        {column.key === 'name' && (
+                            <RWATableCell>Totals</RWATableCell>
+                        )}
+                        {column.key === 'purchaseProceeds' && (
+                            <RWATableCell
+                                className="text-right"
+                                key={column.key}
+                            >
+                                {handleTableDatum(totalPurchaseProceeds)}
+                            </RWATableCell>
+                        )}
+                        {column.key === 'salesProceeds' && (
+                            <RWATableCell
+                                className="text-right"
+                                key={column.key}
+                            >
+                                {handleTableDatum(totalSalesProceeds)}
+                            </RWATableCell>
+                        )}
+                        {column.key === 'totalDiscount' && (
+                            <RWATableCell
+                                className="text-right"
+                                key={column.key}
+                            >
+                                {handleTableDatum(totalTotalDiscount)}
+                            </RWATableCell>
+                        )}
+                        {column.key === 'realizedSurplus' && (
+                            <RWATableCell
+                                className="text-right"
+                                key={column.key}
+                            >
+                                {handleTableDatum(totalRealizedSurplus)}
+                            </RWATableCell>
+                        )}
+                        {column.key !== 'name' &&
+                            column.key !== 'purchaseProceeds' &&
+                            column.key !== 'salesProceeds' &&
+                            column.key !== 'totalDiscount' &&
+                            column.key !== 'realizedSurplus' && (
+                                <RWATableCell />
+                            )}
+                    </Fragment>
+                ))}
+            </RWATableRow>
+        ),
+        [
+            selectedTableItem,
+            totalPurchaseProceeds,
+            totalRealizedSurplus,
+            totalSalesProceeds,
+            totalTotalDiscount,
+        ],
     );
 
     return (
@@ -276,12 +284,9 @@ export function AssetsTable(props: AssetsTableProps) {
                 />
             </div>
             <Table
-                {...props}
                 columns={columns}
                 itemName={itemName}
-                operation={operation}
                 selectedTableItem={selectedTableItem}
-                setOperation={setOperation}
                 setSelectedTableItem={setSelectedTableItem}
                 specialFirstRow={specialFirstRow}
                 specialLastRow={specialLastRow}
@@ -290,12 +295,8 @@ export function AssetsTable(props: AssetsTableProps) {
             {showForm ? (
                 <div className="mt-4 rounded-md bg-white">
                     <AssetDetails
-                        {...props}
                         itemName={itemName}
-                        operation={operation}
-                        setOperation={setOperation}
                         setSelectedTableItem={setSelectedTableItem}
-                        state={existingState}
                         tableItem={selectedTableItem}
                     />
                 </div>

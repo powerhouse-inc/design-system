@@ -1,17 +1,13 @@
 import { Combobox } from '@/connect';
 import { Pagination, usePagination } from '@/powerhouse';
 import {
-    AssetFormInputs,
     FEES_INCOME,
     FixedIncome,
     GroupTransaction,
     GroupTransactionDetails,
-    GroupTransactionFormInputs,
     GroupTransactionsTableItem,
-    ServiceProviderFeeTypeFormInputs,
     Table,
     TableItem,
-    TableWrapperProps,
     allGroupTransactionTypes,
     assetTransactionSignByTransactionType,
     cashTransactionSignByTransactionType,
@@ -21,9 +17,10 @@ import {
     isFixedIncomeAsset,
     makeFixedIncomeOptionLabel,
     makeTableData,
-    useDocumentOperationState,
 } from '@/rwa';
-import { useEffect, useMemo, useState } from 'react';
+import { TRANSACTION } from '@/rwa/constants/names';
+import { useEditorContext } from '@/rwa/context/editor-context';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const columns = [
     {
@@ -124,25 +121,17 @@ export function makeGroupTransactionsTableItems(
     return makeTableData(tableData);
 }
 
-export type GroupTransactionsTableProps =
-    TableWrapperProps<GroupTransactionFormInputs> & {
-        readonly itemsPerPage?: number;
-        readonly pageRange?: number;
-        readonly initialPage?: number;
-        readonly onSubmitCreateAsset: (data: AssetFormInputs) => void;
-        readonly onSubmitCreateServiceProviderFeeType: (
-            data: ServiceProviderFeeTypeFormInputs,
-        ) => void;
-    };
-
-export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
-    const itemName = 'Group Transaction';
-    const { state, itemsPerPage = 20, initialPage = 0, pageRange = 3 } = props;
+export function GroupTransactionsTable() {
+    const itemName = TRANSACTION;
+    const itemsPerPage = 20;
+    const initialPage = 0;
+    const pageRange = 3;
     const [selectedTableItem, setSelectedTableItem] =
         useState<TableItem<GroupTransactionsTableItem>>();
-    const { transactions, portfolio } = state;
-    const { operation, setOperation, showForm, existingState } =
-        useDocumentOperationState({ state });
+    const {
+        editorState: { transactions, portfolio },
+        showForm,
+    } = useEditorContext();
     const fixedIncomes = portfolio.filter(a => isFixedIncomeAsset(a));
 
     const [filteredTransactions, setFilteredTransactions] =
@@ -229,7 +218,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
         itemsPerPage,
     });
 
-    function handleFilterByAssetChange(update: unknown) {
+    const handleFilterByAssetChange = useCallback((update: unknown) => {
         if (!update || !(typeof update === 'object') || !('value' in update)) {
             setFilterAssetId(undefined);
             return;
@@ -238,9 +227,9 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
         const { value: assetId } = update;
 
         setFilterAssetId(assetId as string);
-    }
+    }, []);
 
-    function handleFilterByTypeChange(update: unknown) {
+    const handleFilterByTypeChange = useCallback((update: unknown) => {
         if (!update || !Array.isArray(update)) {
             setFilterTypes([]);
             return;
@@ -251,7 +240,7 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
         }[];
 
         setFilterTypes(_update.map(({ value }) => value));
-    }
+    }, []);
 
     return (
         <>
@@ -290,25 +279,17 @@ export function GroupTransactionsTable(props: GroupTransactionsTableProps) {
                 </div>
             </div>
             <Table
-                {...props}
                 columns={columns}
                 itemName={itemName}
-                operation={operation}
                 selectedTableItem={selectedTableItem}
-                setOperation={setOperation}
                 setSelectedTableItem={setSelectedTableItem}
-                state={state}
                 tableData={pageItems}
             />
             {showForm ? (
                 <div className="mt-4 rounded-md bg-white">
                     <GroupTransactionDetails
-                        {...props}
                         itemName={itemName}
-                        operation={operation}
-                        setOperation={setOperation}
                         setSelectedTableItem={setSelectedTableItem}
-                        state={existingState}
                         tableItem={selectedTableItem}
                     />
                 </div>

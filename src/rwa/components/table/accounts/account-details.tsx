@@ -1,40 +1,35 @@
 import {
     Account,
-    AccountFormInputs,
     FormInputs,
     ItemDetails,
     ItemDetailsProps,
     useAccountForm,
 } from '@/rwa';
-import { memo } from 'react';
+import { useEditorContext } from '@/rwa/context/editor-context';
+import { memo, useCallback } from 'react';
 
-export function _AccountDetails(
-    props: ItemDetailsProps<Account, AccountFormInputs>,
-) {
+export function _AccountDetails(props: ItemDetailsProps<Account>) {
+    const { tableItem } = props;
+
     const {
-        state,
-        tableItem,
+        editorState: {
+            serviceProviderFeeTypes,
+            transactions,
+            principalLenderAccountId,
+        },
         operation,
-        onSubmitCreate,
-        onSubmitEdit,
-        onSubmitDelete,
-    } = props;
-
-    const { serviceProviderFeeTypes, transactions, principalLenderAccountId } =
-        state;
-
+    } = useEditorContext();
     const isPrincipalLenderAccount = tableItem?.id === principalLenderAccountId;
 
     const { submit, reset, inputs } = useAccountForm({
         item: tableItem,
-        state,
         operation,
-        onSubmitCreate,
-        onSubmitEdit,
-        onSubmitDelete,
     });
 
-    const formInputs = () => <FormInputs inputs={inputs} />;
+    const formInputs = useCallback(
+        () => <FormInputs inputs={inputs} />,
+        [inputs],
+    );
 
     const isAllowedToDeleteItem = !isPrincipalLenderAccount;
 

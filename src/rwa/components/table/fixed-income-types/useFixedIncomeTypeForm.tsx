@@ -4,17 +4,17 @@ import {
     FormHookProps,
     RWATableTextInput,
 } from '@/rwa';
-import { useMemo } from 'react';
+import { useEditorContext } from '@/rwa/context/editor-context';
+import { useCallback, useMemo } from 'react';
 import { useSubmit } from '../hooks/useSubmit';
 
-export function useFixedIncomeTypeForm(
-    props: FormHookProps<FixedIncomeType, FixedIncomeTypeFormInputs>,
-) {
-    const { item, onSubmitCreate, onSubmitEdit, onSubmitDelete, operation } =
-        props;
+export function useFixedIncomeTypeForm(props: FormHookProps<FixedIncomeType>) {
+    const { item, operation } = props;
+
+    const { dispatchEditorAction } = useEditorContext();
 
     const createDefaultValues = {
-        name: null,
+        name: undefined,
     };
 
     const editDefaultValues = item
@@ -23,6 +23,30 @@ export function useFixedIncomeTypeForm(
               name: item.name,
           }
         : createDefaultValues;
+
+    const onSubmitCreate = (data: FixedIncomeTypeFormInputs) => {
+        dispatchEditorAction({
+            type: 'CREATE_FIXED_INCOME_TYPE',
+            payload: data,
+        });
+    };
+
+    const onSubmitEdit = (data: FixedIncomeTypeFormInputs) => {
+        dispatchEditorAction({
+            type: 'EDIT_FIXED_INCOME_TYPE',
+            payload: data,
+        });
+    };
+
+    const onSubmitDelete = useCallback(
+        (id: string) => {
+            dispatchEditorAction({
+                type: 'DELETE_FIXED_INCOME_TYPE',
+                payload: id,
+            });
+        },
+        [dispatchEditorAction],
+    );
 
     const { submit, reset, register, control, formState } = useSubmit({
         operation,

@@ -13,8 +13,9 @@ import {
     useColumnPriority,
     useSortTableItems,
 } from '@/rwa';
-import { Fragment, useRef, useState } from 'react';
-import { FieldValues } from 'react-hook-form';
+import { useEditorContext } from '@/rwa/context/editor-context';
+import { sentenceCase } from 'change-case';
+import { Fragment, useCallback, useRef, useState } from 'react';
 import { RWATableRow } from './table-row';
 import { useTableHeight } from './use-table-height';
 
@@ -37,24 +38,22 @@ import { useTableHeight } from './use-table-height';
  * @param createForm - Form component for creating an item. Must be a React component. Intended to be used with react-hook-form register/control.
  * @param specialFirstRow - Function to render a special first row (like the cash asset for instance), must return a React element
  */
-export function Table<
-    TItem extends Item,
-    TTableData extends TableItem<TItem>,
-    TFieldValues extends FieldValues = FieldValues,
->(props: TableProps<TItem, TTableData, TFieldValues>) {
+export function Table<TItem extends Item, TTableData extends TableItem<TItem>>(
+    props: TableProps<TItem, TTableData>,
+) {
     const {
         itemName,
         columns,
         tableData,
         selectedTableItem,
         columnCountByTableWidth = defaultColumnCountByTableWidth,
-        isAllowedToCreateDocuments,
-        operation,
         setSelectedTableItem,
-        setOperation,
         specialFirstRow,
         specialLastRow,
     } = props;
+
+    const { operation, setOperation, isAllowedToCreateDocuments } =
+        useEditorContext();
 
     const tableContainerRef = useRef<HTMLDivElement>(null);
     const rowRefs = useRef<(HTMLTableRowElement | null)[]>([]);
@@ -76,10 +75,12 @@ export function Table<
         selectedRowNumber,
     });
 
-    function onCreateItemClick() {
+    const itemNameForDisplay = sentenceCase(itemName);
+
+    const onCreateItemClick = useCallback(() => {
         setSelectedTableItem(undefined);
         setOperation('create');
-    }
+    }, [setOperation, setSelectedTableItem]);
 
     const renderRow = (
         tableItem: TTableData,
@@ -160,7 +161,7 @@ export function Table<
                     className="mt-4 flex h-11 w-full items-center justify-center gap-x-2 rounded-lg border border-gray-300 bg-white text-sm font-semibold text-gray-900"
                     onClick={onCreateItemClick}
                 >
-                    <span>Create {itemName}</span>
+                    <span>Create {itemNameForDisplay}</span>
                     <Icon name="Plus" size={14} />
                 </button>
             ) : null}

@@ -7,7 +7,6 @@ import {
     CashAsset,
     FixedIncome,
     GroupTransactionType,
-    RealWorldAssetsState,
 } from '../types';
 
 /**
@@ -53,10 +52,10 @@ export function isCashAsset(
     return false;
 }
 
-export function getFixedIncomeAssets(state: RealWorldAssetsState) {
-    return state.portfolio.filter(a => isFixedIncomeAsset(a));
+export function getFixedIncomeAssets(portfolio: Asset[]) {
+    return portfolio.filter(a => isFixedIncomeAsset(a));
 }
 
-export function getCashAsset(state: RealWorldAssetsState) {
-    return state.portfolio.find(a => isCashAsset(a));
+export function getCashAsset(portfolio: Asset[]) {
+    return portfolio.find(a => isCashAsset(a));
 }

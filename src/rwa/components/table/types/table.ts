@@ -1,12 +1,6 @@
 import { DivProps } from '@/powerhouse';
-import {
-    FixedIncome,
-    GroupTransaction,
-    RealWorldAssetsState,
-    ServiceProviderFeeType,
-} from '@/rwa';
+import { FixedIncome, GroupTransaction, ServiceProviderFeeType } from '@/rwa';
 import React, { ReactNode, RefObject } from 'react';
-import { FieldValues } from 'react-hook-form';
 
 export type ColumnCountByTableWidth = Record<number, number>;
 
@@ -65,29 +59,17 @@ export type TableBaseProps<
 export type TableProps<
     TItem extends Item,
     TTableData extends TableItem<TItem>,
-    TFieldValues extends FieldValues = FieldValues,
-> = TableWrapperProps<TFieldValues> & {
+> = {
     columns: TableColumn<TItem, TTableData>[];
     tableData: TTableData[] | undefined;
     itemName: string;
     columnCountByTableWidth?: ColumnCountByTableWidth;
     selectedTableItem: TTableData | undefined;
-    operation: Operation;
-    setOperation: (operation: Operation) => void;
     setSelectedTableItem: (item: TTableData | undefined) => void;
     specialFirstRow?: (
         columns: TableColumn<TItem, TTableData>[],
     ) => JSX.Element;
     specialLastRow?: (columns: TableColumn<TItem, TTableData>[]) => JSX.Element;
-};
-
-export type TableWrapperProps<TFormInputs extends FieldValues> = {
-    state: RealWorldAssetsState;
-    isAllowedToCreateDocuments: boolean;
-    isAllowedToEditDocuments: boolean;
-    onSubmitCreate: (data: TFormInputs) => void;
-    onSubmitEdit: (data: TFormInputs) => void;
-    onSubmitDelete: (itemId: string) => void;
 };
 
 export type Operation = 'view' | 'create' | 'edit' | null;

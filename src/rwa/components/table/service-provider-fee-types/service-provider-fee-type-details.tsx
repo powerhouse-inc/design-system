@@ -1,63 +1,36 @@
 import {
-    AccountFormInputs,
     FormInputs,
     ItemDetails,
     ItemDetailsProps,
-    RWACreateItemModal,
-    ServiceProviderFeeTypeFormInputs,
     ServiceProviderFeeTypeTableItem,
-    useAccountForm,
     useServiceProviderFeeTypeForm,
 } from '@/rwa';
-import { memo } from 'react';
+import { SERVICE_PROVIDER_FEE_TYPE } from '@/rwa/constants/names';
+import { useEditorContext } from '@/rwa/context/editor-context';
+import { memo, useCallback } from 'react';
 
-export type ServiceProviderFeeTypeDetailsProps = ItemDetailsProps<
-    ServiceProviderFeeTypeTableItem,
-    ServiceProviderFeeTypeFormInputs
-> & {
-    readonly onSubmitCreateAccount: (data: AccountFormInputs) => void;
-};
+export type ServiceProviderFeeTypeDetailsProps =
+    ItemDetailsProps<ServiceProviderFeeTypeTableItem>;
 
 export function _ServiceProviderFeeTypeDetails(
     props: ServiceProviderFeeTypeDetailsProps,
 ) {
+    const { tableItem, setSelectedTableItem } = props;
+
     const {
-        state,
-        tableItem,
+        editorState: { transactions },
         operation,
-        onSubmitCreate,
-        onSubmitEdit,
-        onSubmitDelete,
-        onSubmitCreateAccount,
-    } = props;
+    } = useEditorContext();
 
-    const { transactions } = state;
-
-    const {
-        inputs,
-        submit,
-        reset,
-        showCreateAccountModal,
-        setShowCreateAccountModal,
-    } = useServiceProviderFeeTypeForm({
+    const { inputs, submit, reset } = useServiceProviderFeeTypeForm({
         item: tableItem,
-        state,
         operation,
-        onSubmitCreate,
-        onSubmitEdit,
-        onSubmitDelete,
     });
 
-    const formInputs = () => <FormInputs inputs={inputs} />;
-
-    const createAccountModalProps = useAccountForm({
-        state,
-        operation: 'create',
-        onSubmitCreate: data => {
-            onSubmitCreateAccount(data);
-            setShowCreateAccountModal(false);
-        },
-    });
+    const formInputs = useCallback(
+        () => <FormInputs inputs={inputs} />,
+        [inputs],
+    );
 
     const dependentTransactions = transactions.filter(t =>
         t.fees?.some(f => f.serviceProviderFeeTypeId === tableItem?.id),
@@ -71,27 +44,15 @@ export function _ServiceProviderFeeTypeDetails(
     };
 
     return (
-        <>
-            <ItemDetails
-                {...props}
-                dependentItemProps={dependentItemProps}
-                formInputs={formInputs}
-                onSubmitCreate={onSubmitCreate}
-                onSubmitDelete={onSubmitDelete}
-                onSubmitEdit={onSubmitEdit}
-                reset={reset}
-                submit={submit}
-            />
-            {showCreateAccountModal ? (
-                <RWACreateItemModal
-                    {...props}
-                    {...createAccountModalProps}
-                    itemName="Account"
-                    onOpenChange={setShowCreateAccountModal}
-                    open={showCreateAccountModal}
-                />
-            ) : null}
-        </>
+        <ItemDetails
+            dependentItemProps={dependentItemProps}
+            formInputs={formInputs}
+            itemName={SERVICE_PROVIDER_FEE_TYPE}
+            reset={reset}
+            setSelectedTableItem={setSelectedTableItem}
+            submit={submit}
+            tableItem={tableItem}
+        />
     );
 }
 

@@ -1,21 +1,15 @@
-import {
-    Account,
-    AccountFormInputs,
-    FormHookProps,
-    RWATableTextInput,
-} from '@/rwa';
+import { Account, FormHookProps, RWATableTextInput } from '@/rwa';
+import { useEditorContext } from '@/rwa/context/editor-context';
 import { useMemo } from 'react';
 import { useSubmit } from '../hooks/useSubmit';
 
-export function useAccountForm(
-    props: FormHookProps<Account, AccountFormInputs>,
-) {
-    const { item, onSubmitCreate, onSubmitEdit, onSubmitDelete, operation } =
-        props;
+export function useAccountForm(props: FormHookProps<Account>) {
+    const { item, operation } = props;
+    const { dispatchEditorAction } = useEditorContext();
 
     const createDefaultValues = {
-        label: null,
-        reference: null,
+        label: undefined,
+        reference: undefined,
     };
 
     const editDefaultValues = item
@@ -25,6 +19,27 @@ export function useAccountForm(
               reference: item.reference,
           }
         : createDefaultValues;
+
+    const onSubmitCreate = (data: Account) => {
+        dispatchEditorAction({
+            type: 'CREATE_ACCOUNT',
+            payload: data,
+        });
+    };
+
+    const onSubmitEdit = (data: Account) => {
+        dispatchEditorAction({
+            type: 'EDIT_ACCOUNT',
+            payload: data,
+        });
+    };
+
+    const onSubmitDelete = (id: string) => {
+        dispatchEditorAction({
+            type: 'DELETE_ACCOUNT',
+            payload: id,
+        });
+    };
 
     const { submit, reset, register, control, formState } = useSubmit({
         operation,
