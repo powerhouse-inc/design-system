@@ -1,26 +1,21 @@
 import { Icon, Modal } from '@/powerhouse';
-import { ModalFormInputs } from '@/rwa';
+import { ModalFormInputs, TableName, useTableForm } from '@/rwa';
 import { ComponentPropsWithoutRef, useCallback } from 'react';
-import { FieldValues, UseFormReset } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 
-export type RWACreateItemModalProps<TFieldValues extends FieldValues> =
-    ComponentPropsWithoutRef<typeof Modal> & {
-        readonly open: boolean;
-        readonly tableName: string;
-        readonly inputs: {
-            label: string;
-            Input: () => string | React.JSX.Element;
-        }[];
-        readonly onOpenChange: (open: boolean) => void;
-        readonly submit: (e?: React.BaseSyntheticEvent) => Promise<void>;
-        readonly reset: UseFormReset<TFieldValues>;
-    };
+export type RWACreateItemModalProps = ComponentPropsWithoutRef<typeof Modal> & {
+    readonly open: boolean;
+    readonly tableName: TableName;
+    readonly onOpenChange: (open: boolean) => void;
+};
 
-export function RWACreateItemModal<TFieldValues extends FieldValues>(
-    props: RWACreateItemModalProps<TFieldValues>,
-) {
-    const { tableName, open, inputs, onOpenChange, reset, submit } = props;
+export function RWACreateItemModal(props: RWACreateItemModalProps) {
+    const { tableName, open, onOpenChange } = props;
+
+    const { reset, submit, inputs } = useTableForm({
+        operation: 'create',
+        tableName,
+    });
 
     const handleCancel = useCallback(() => {
         reset();

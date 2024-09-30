@@ -24,7 +24,7 @@ import { useMemo } from 'react';
 
 export function useTableData<TTableName extends TableName>(
     tableName: TTableName,
-): TableItem<TableItemType<TTableName>>[] {
+): TableItemType<TTableName>[] {
     const {
         fixedIncomes,
         transactions,
@@ -74,9 +74,9 @@ export function useTableData<TTableName extends TableName>(
         transactions,
     ]);
 
-    // @ts-expect-error - type inference is going wrong because some of the table data types have a "type" field.
+    // type inference is going wrong because some of the table data types have a "type" field.
     // even though this "type" field is not relevant to the table data type, typescript insists on including it in its type narrowing logic.
-    return tableData;
+    return tableData as unknown as TableItemType<TTableName>[];
 }
 
 export function makeFixedIncomeTypesTableData(

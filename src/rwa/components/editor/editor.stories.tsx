@@ -29,8 +29,8 @@ type Story = StoryObj<
 
 export const WithoutData: Story = {
     args: {
-        simulateBackgroundUpdates: true,
-        backgroundUpdateRate: 1000,
+        simulateBackgroundUpdates: false,
+        backgroundUpdateRate: 3000,
         state: mockStateInitial,
         isAllowedToCreateDocuments: true,
         isAllowedToEditDocuments: true,

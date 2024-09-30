@@ -63,25 +63,12 @@ export function useFormInputs(props: Props): Input[] {
     } = useEditorContext();
     const { showModal } = useModal();
 
-    const showCreateFixedIncomeTypeModal = useCallback(() => {
-        showModal('createFixedIncomeType', {});
-    }, [showModal]);
-
-    const showCreateSpvModal = useCallback(() => {
-        showModal('createSpv', {});
-    }, [showModal]);
-
-    const showCreateAssetModal = useCallback(() => {
-        showModal('createAsset', {});
-    }, [showModal]);
-
-    const showCreateServiceProviderFeeTypeModal = useCallback(() => {
-        showModal('createServiceProviderFeeType', {});
-    }, [showModal]);
-
-    const showCreateAccountModal = useCallback(() => {
-        showModal('createAccount', {});
-    }, [showModal]);
+    const showCreateItemModal = useCallback(
+        (tableName: TableName) => () => {
+            showModal('createItem', { tableName });
+        },
+        [showModal],
+    );
 
     const getInputs = useCallback(() => {
         switch (tableName) {
@@ -246,7 +233,7 @@ export function useFormInputs(props: Props): Input[] {
                         Input: () => (
                             <RWATableSelect
                                 addItemButtonProps={{
-                                    onClick: showCreateFixedIncomeTypeModal,
+                                    onClick: showCreateItemModal('ASSET'),
                                     label: 'Create Fixed Income Type',
                                 }}
                                 aria-invalid={
@@ -270,7 +257,7 @@ export function useFormInputs(props: Props): Input[] {
                         Input: () => (
                             <RWATableSelect
                                 addItemButtonProps={{
-                                    onClick: showCreateSpvModal,
+                                    onClick: showCreateItemModal('SPV'),
                                     label: 'Create SPV',
                                 }}
                                 aria-invalid={errors.spvId ? 'true' : 'false'}
@@ -361,8 +348,9 @@ export function useFormInputs(props: Props): Input[] {
                               Input: () => (
                                   <RWATableSelect
                                       addItemButtonProps={{
-                                          onClick:
-                                              showCreateServiceProviderFeeTypeModal,
+                                          onClick: showCreateItemModal(
+                                              'SERVICE_PROVIDER_FEE_TYPE',
+                                          ),
                                           label: 'Add Service Provider',
                                       }}
                                       control={control}
@@ -379,7 +367,7 @@ export function useFormInputs(props: Props): Input[] {
                               Input: () => (
                                   <RWATableSelect
                                       addItemButtonProps={{
-                                          onClick: showCreateAssetModal,
+                                          onClick: showCreateItemModal('ASSET'),
                                           label: 'Create Asset',
                                       }}
                                       aria-invalid={
@@ -643,7 +631,7 @@ export function useFormInputs(props: Props): Input[] {
                         Input: () => (
                             <RWATableSelect
                                 addItemButtonProps={{
-                                    onClick: showCreateAccountModal,
+                                    onClick: showCreateItemModal('ACCOUNT'),
                                     label: 'Create Account',
                                 }}
                                 aria-invalid={
@@ -674,11 +662,7 @@ export function useFormInputs(props: Props): Input[] {
         fixedIncomes,
         operation,
         serviceProviderFeeTypes,
-        showCreateAccountModal,
-        showCreateAssetModal,
-        showCreateFixedIncomeTypeModal,
-        showCreateServiceProviderFeeTypeModal,
-        showCreateSpvModal,
+        showCreateItemModal,
         spvs,
         tableName,
     ]);

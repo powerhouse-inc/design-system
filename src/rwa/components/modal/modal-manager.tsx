@@ -2,12 +2,7 @@ import { ModalPropsMapping, modals, ModalType } from '@/rwa';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 
 type MapModalProps<T> = {
-    [K in keyof T]: Omit<
-        T[K],
-        'open' | 'onOpenChange' | 'tableName' | 'reset' | 'submit' | 'inputs'
-    > & {
-        tableName?: string;
-    };
+    [K in keyof T]: Omit<T[K], 'open' | 'onOpenChange'>;
 };
 
 type ModalProps = MapModalProps<ModalPropsMapping>;
@@ -15,7 +10,7 @@ type ModalProps = MapModalProps<ModalPropsMapping>;
 interface ModalContextValue {
     showModal: <T extends ModalType>(
         modalType: T,
-        props: ModalProps[T],
+        props?: ModalProps[T],
     ) => void;
     closeModal: () => void;
 }
