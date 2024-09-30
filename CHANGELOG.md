@@ -1,3 +1,24 @@
+# [1.0.0-alpha.181](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.180...v1.0.0-alpha.181) (2024-09-23)
+
+
+### Bug Fixes
+
+* updated dependencies check to check Connect dev dependencies ([4a53be0](https://github.com/powerhouse-inc/design-system/commit/4a53be0597b309eec07e2246acd56a06a2e308f0))
+
+# [1.0.0-alpha.180](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.179...v1.0.0-alpha.180) (2024-09-23)
+
+
+### Features
+
+* migrate eslint config ([#378](https://github.com/powerhouse-inc/design-system/issues/378)) ([768e34d](https://github.com/powerhouse-inc/design-system/commit/768e34d9a3db51a7f181d9ef20f46b8a8f998b3a))
+
+# [1.0.0-alpha.179](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.178...v1.0.0-alpha.179) (2024-09-23)
+
+
+### Bug Fixes
+
+* [#376](https://github.com/powerhouse-inc/design-system/issues/376) skipped operations on revision history ([900bc43](https://github.com/powerhouse-inc/design-system/commit/900bc434a1ade2dbc3cbd648a35c64d023d0eabe))
+
 # [1.0.0-alpha.178](https://github.com/powerhouse-inc/design-system/compare/v1.0.0-alpha.177...v1.0.0-alpha.178) (2024-09-19)
 
 
