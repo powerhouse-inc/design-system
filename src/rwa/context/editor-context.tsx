@@ -1,6 +1,7 @@
 import {
     CashAsset,
     DispatchEditorAction,
+    EditorAction,
     editorStateKeysByTableName,
     FixedIncome,
     getCashAsset,
@@ -21,7 +22,6 @@ import {
     useRef,
     useState,
 } from 'react';
-import { EditorAction } from '../types/actions';
 
 export type RWAEditorContextProps = {
     readonly isAllowedToCreateDocuments: boolean;
@@ -98,30 +98,27 @@ const defaultEditorContextValue: TEditorContext = {
 
 const EditorContext = createContext(defaultEditorContextValue);
 
-type TableState<TTableName extends TableName> = {
-    selectedTableItem: TableItemType<TTableName> | null;
-    selectedTableName: TTableName | null;
+type TableState = {
+    selectedTableItem: TableItemType<TableName> | null;
+    selectedTableName: TableName | null;
     operation: Operation;
 };
 
-type TableAction<TTableName extends TableName> =
+type TableAction =
     | {
           type: 'VIEW_ITEM';
-          item: TableItemType<TTableName>;
-          tableName: TTableName;
+          item: TableItemType<TableName>;
+          tableName: TableName;
       }
-    | { type: 'CREATE_ITEM'; tableName: TTableName }
+    | { type: 'CREATE_ITEM'; tableName: TableName }
     | {
           type: 'EDIT_ITEM';
-          item: TableItemType<TTableName>;
-          tableName: TTableName;
+          item: TableItemType<TableName>;
+          tableName: TableName;
       }
     | { type: 'CLEAR_SELECTED' };
 
-function tableReducer<TTableName extends TableName>(
-    state: TableState<TTableName>,
-    action: TableAction<TTableName>,
-): TableState<TTableName> {
+function tableReducer(state: TableState, action: TableAction): TableState {
     switch (action.type) {
         case 'VIEW_ITEM':
             return {
