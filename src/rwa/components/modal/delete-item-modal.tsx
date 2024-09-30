@@ -1,15 +1,16 @@
 import { Icon, Modal } from '@/powerhouse';
-import React, { ComponentPropsWithoutRef, Fragment, useCallback } from 'react';
+import { DependentItemProps, tableLabels, TableName } from '@/rwa';
+import { ComponentPropsWithoutRef, useCallback } from 'react';
 
 export type RWADeleteItemModalProps = ComponentPropsWithoutRef<typeof Modal> & {
-    readonly itemName: React.ReactNode;
-    readonly dependentItemName: React.ReactNode;
-    readonly dependentItemList: React.ReactNode[];
+    readonly tableName: TableName;
+    readonly dependentItemProps: DependentItemProps;
 };
 
 export function RWADeleteItemModal(props: RWADeleteItemModalProps) {
-    const { itemName, dependentItemName, dependentItemList, onOpenChange } =
-        props;
+    const { tableName, dependentItemProps, onOpenChange } = props;
+
+    const tableNameForDisplay = tableLabels[tableName].toLowerCase();
 
     const handleCancel = useCallback(() => {
         onOpenChange?.(false);
@@ -26,22 +27,33 @@ export function RWADeleteItemModal(props: RWADeleteItemModalProps) {
         >
             <div className="w-[400px] p-6 text-slate-300">
                 <div className="border-b border-slate-50 pb-2 text-2xl font-bold text-gray-800">
-                    Cannot delete {itemName}
+                    Cannot delete {tableName}
                 </div>
                 <div className="my-6 flex gap-2 rounded-md bg-orange-100 p-4 text-orange-800">
                     <div>
                         <Icon className="mt-1 text-orange-800" name="Error" />
                     </div>
                     <div>
-                        Warning! Cannot delete this {itemName} because there are{' '}
-                        {dependentItemName} that depend on it. Please change or
-                        delete those first.
+                        Warning! Cannot delete this {tableNameForDisplay}{' '}
+                        because there are items that depend on it. Please change
+                        or delete those first.
                     </div>
                 </div>
                 <div className="my-6 rounded-md bg-slate-50 p-4 text-slate-200">
-                    {dependentItemList.map((item, index) => (
-                        <Fragment key={index}>{item}</Fragment>
-                    ))}
+                    {dependentItemProps.map(
+                        ({ dependentTableName, dependentItems }) => (
+                            <div key={dependentTableName}>
+                                <div className="mb-0.5 font-semibold" key={1}>
+                                    {`${tableLabels[
+                                        dependentTableName
+                                    ].toLocaleLowerCase()}s: `}
+                                </div>
+                                {dependentItems.map(({ id, label }) => (
+                                    <div key={id}>{label}</div>
+                                ))}
+                            </div>
+                        ),
+                    )}
                 </div>
                 <div className="mt-8 flex justify-between gap-3">
                     <button

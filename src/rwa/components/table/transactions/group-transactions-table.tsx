@@ -1,155 +1,38 @@
 import { Combobox } from '@/connect';
 import { Pagination, usePagination } from '@/powerhouse';
 import {
-    FEES_INCOME,
-    FixedIncome,
-    GroupTransaction,
-    GroupTransactionDetails,
-    GroupTransactionsTableItem,
-    Table,
-    TableItem,
     allGroupTransactionTypes,
-    assetTransactionSignByTransactionType,
-    cashTransactionSignByTransactionType,
-    feesTransactions,
     groupTransactionTypeLabels,
-    isAssetGroupTransactionType,
-    isFixedIncomeAsset,
+    ItemDetails,
     makeFixedIncomeOptionLabel,
-    makeTableData,
+    Table,
+    tableNames,
+    useEditorContext,
+    useTableData,
 } from '@/rwa';
-import { TRANSACTION } from '@/rwa/constants/names';
-import { useEditorContext } from '@/rwa/context/editor-context';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-const columns = [
-    {
-        key: 'typeLabel' as const,
-        label: 'Type',
-        allowSorting: true,
-    },
-    {
-        key: 'entryTime' as const,
-        label: 'Entry Time',
-        allowSorting: true,
-    },
-    {
-        key: 'asset' as const,
-        label: 'Asset',
-        allowSorting: true,
-    },
-    {
-        key: 'quantity' as const,
-        label: 'Quantity',
-        allowSorting: true,
-        isNumberColumn: true,
-    },
-    {
-        key: 'cashAmount' as const,
-        label: 'Cash Amount ($)',
-        allowSorting: true,
-        isNumberColumn: true,
-    },
-    {
-        key: 'totalFees' as const,
-        label: 'Total Fees ($)',
-        allowSorting: true,
-        isNumberColumn: true,
-    },
-    {
-        key: 'cashBalanceChange' as const,
-        label: 'Cash Balance Change ($)',
-        allowSorting: true,
-        isNumberColumn: true,
-    },
-];
-
-function maybeAddSignToAmount(amount: number | undefined, sign: 1 | -1) {
-    if (!amount) return amount;
-    return amount * sign;
-}
-
-export function makeGroupTransactionsTableItems(
-    transactions: GroupTransaction[] | undefined,
-    fixedIncomes: FixedIncome[] | undefined,
-): GroupTransactionsTableItem[] {
-    if (!transactions?.length) return [];
-
-    const tableData = transactions.map(transaction => {
-        const id = transaction.id;
-        const entryTime = transaction.entryTime;
-        const asset = fixedIncomes?.find(
-            asset => asset.id === transaction.fixedIncomeTransaction?.assetId,
-        )?.name;
-        const type = transaction.type;
-        const typeLabel = groupTransactionTypeLabels[type];
-        const cashTransactionSign = cashTransactionSignByTransactionType[type];
-        const assetTransactionSign = isAssetGroupTransactionType(type)
-            ? assetTransactionSignByTransactionType[type]
-            : 1;
-        const quantity = maybeAddSignToAmount(
-            transaction.fixedIncomeTransaction?.amount,
-            assetTransactionSign,
-        );
-        const cashAmount = maybeAddSignToAmount(
-            transaction.cashTransaction.amount,
-            cashTransactionSign,
-        );
-        const totalFees = feesTransactions.includes(transaction.type)
-            ? (maybeAddSignToAmount(
-                  transaction.cashTransaction.amount,
-                  transaction.type === FEES_INCOME ? -1 : 1,
-              ) ?? 0)
-            : (transaction.fees?.reduce((acc, fee) => acc + fee.amount, 0) ??
-              0);
-        const cashBalanceChange = transaction.cashBalanceChange;
-
-        return {
-            ...transaction,
-            id,
-            type,
-            typeLabel,
-            entryTime,
-            asset,
-            quantity,
-            cashAmount,
-            totalFees,
-            cashBalanceChange,
-        };
-    });
-
-    return makeTableData(tableData);
-}
-
 export function GroupTransactionsTable() {
-    const itemName = TRANSACTION;
-    const itemsPerPage = 20;
-    const initialPage = 0;
-    const pageRange = 3;
-    const [selectedTableItem, setSelectedTableItem] =
-        useState<TableItem<GroupTransactionsTableItem>>();
-    const {
-        editorState: { transactions, portfolio },
-        showForm,
-    } = useEditorContext();
-    const fixedIncomes = portfolio.filter(a => isFixedIncomeAsset(a));
+    const tableName = tableNames.TRANSACTION;
+    const { getIsFormOpen, fixedIncomes } = useEditorContext();
 
-    const [filteredTransactions, setFilteredTransactions] =
-        useState(transactions);
-
+    const showForm = getIsFormOpen(tableName);
+    const tableData = useTableData(tableName);
+    const [filteredTableData, setFilteredTableData] = useState(tableData);
     const [filterAssetId, setFilterAssetId] = useState<string>();
     const [filterTypes, setFilterTypes] = useState<
         (keyof typeof allGroupTransactionTypes)[]
     >([]);
+    const shouldPaginate = filteredTableData.length > 20;
 
     useEffect(() => {
         if (!filterAssetId && !filterTypes.length) {
-            setFilteredTransactions(transactions);
+            setFilteredTableData(tableData);
             return;
         }
 
-        setFilteredTransactions(
-            transactions.filter(transaction => {
+        setFilteredTableData(
+            tableData.filter(transaction => {
                 if (filterAssetId && filterTypes.length) {
                     return (
                         transaction.fixedIncomeTransaction?.assetId ===
@@ -170,7 +53,7 @@ export function GroupTransactionsTable() {
                 }
             }),
         );
-    }, [filterAssetId, filterTypes, transactions]);
+    }, [filterAssetId, filterTypes, tableData]);
 
     const filterByAssetOptions = useMemo(
         () =>
@@ -190,17 +73,6 @@ export function GroupTransactionsTable() {
         [],
     );
 
-    const tableData = useMemo(
-        () =>
-            makeTableData(
-                makeGroupTransactionsTableItems(
-                    filteredTransactions,
-                    fixedIncomes,
-                ),
-            ),
-        [filteredTransactions, fixedIncomes],
-    );
-
     const {
         pageItems,
         pages,
@@ -212,11 +84,7 @@ export function GroupTransactionsTable() {
         hiddenNextPages,
         isNextPageAvailable,
         isPreviousPageAvailable,
-    } = usePagination(tableData, {
-        pageRange,
-        initialPage,
-        itemsPerPage,
-    });
+    } = usePagination(filteredTableData);
 
     const handleFilterByAssetChange = useCallback((update: unknown) => {
         if (!update || !(typeof update === 'object') || !('value' in update)) {
@@ -263,35 +131,27 @@ export function GroupTransactionsTable() {
                     />
                 </div>
                 <div className="flex w-full justify-end">
-                    <Pagination
-                        goToFirstPage={goToFirstPage}
-                        goToLastPage={goToLastPage}
-                        goToNextPage={goToNextPage}
-                        goToPage={goToPage}
-                        goToPreviousPage={goToPreviousPage}
-                        hiddenNextPages={hiddenNextPages}
-                        isNextPageAvailable={isNextPageAvailable}
-                        isPreviousPageAvailable={isPreviousPageAvailable}
-                        nextPageLabel="Next"
-                        pages={pages}
-                        previousPageLabel="Previous"
-                    />
+                    {shouldPaginate ? (
+                        <Pagination
+                            goToFirstPage={goToFirstPage}
+                            goToLastPage={goToLastPage}
+                            goToNextPage={goToNextPage}
+                            goToPage={goToPage}
+                            goToPreviousPage={goToPreviousPage}
+                            hiddenNextPages={hiddenNextPages}
+                            isNextPageAvailable={isNextPageAvailable}
+                            isPreviousPageAvailable={isPreviousPageAvailable}
+                            nextPageLabel="Next"
+                            pages={pages}
+                            previousPageLabel="Previous"
+                        />
+                    ) : null}
                 </div>
             </div>
-            <Table
-                columns={columns}
-                itemName={itemName}
-                selectedTableItem={selectedTableItem}
-                setSelectedTableItem={setSelectedTableItem}
-                tableData={pageItems}
-            />
+            <Table tableData={pageItems} tableName={tableName} />
             {showForm ? (
                 <div className="mt-4 rounded-md bg-white">
-                    <GroupTransactionDetails
-                        itemName={itemName}
-                        setSelectedTableItem={setSelectedTableItem}
-                        tableItem={selectedTableItem}
-                    />
+                    <ItemDetails tableName={tableName} />
                 </div>
             ) : null}
         </>

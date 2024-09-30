@@ -1,17 +1,17 @@
 import {
+    AssetsTable,
+    defaultColumnCountByTableWidth,
+    getColumnCount,
     mockCashAsset,
     mockFixedIncomeTypes,
     mockFixedIncomes,
     mockGroupTransactions,
     mockSPVs,
-} from '@/rwa/mocks';
-import { mockStateInitial } from '@/rwa/mocks/state';
+    mockStateInitial,
+} from '@/rwa';
 import { useArgs } from '@storybook/preview-api';
 import { Meta, StoryObj } from '@storybook/react';
 import { useInterval } from 'usehooks-ts';
-import { defaultColumnCountByTableWidth } from '../constants';
-import { getColumnCount } from '../hooks';
-import { AssetsTable } from './assets-table';
 
 const meta: Meta<typeof AssetsTable> = {
     title: 'RWA/Components/Assets Table',

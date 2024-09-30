@@ -1,12 +1,12 @@
+import { ModalPropsMapping, modals, ModalType } from '@/rwa';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
-import { ModalPropsMapping, modals, ModalType } from './modals';
 
 type MapModalProps<T> = {
     [K in keyof T]: Omit<
         T[K],
-        'open' | 'onOpenChange' | 'itemName' | 'reset' | 'submit' | 'inputs'
+        'open' | 'onOpenChange' | 'tableName' | 'reset' | 'submit' | 'inputs'
     > & {
-        itemName?: string;
+        tableName?: string;
     };
 };
 
@@ -66,7 +66,7 @@ export const ModalManager: React.FC<{
             {ModalComponent ? (
                 <ModalComponent
                     {...(modalProps as any)}
-                    onClose={closeModal}
+                    onOpenChange={setOpen}
                     open={open}
                 />
             ) : null}

@@ -2,40 +2,33 @@ import {
     Account,
     FixedIncome,
     FixedIncomeType,
-    ServiceProviderFeeType,
-    SPV,
-} from '@/rwa/types';
-import {
-    useAccountForm,
-    useAssetForm,
-    useFixedIncomeTypeForm,
-    useServiceProviderFeeTypeForm,
-    useSpvForm,
-} from '../table';
-import {
     RWACreateItemModal,
     RWACreateItemModalProps,
-} from './create-item-modal';
-import {
     RWADeleteItemModal,
     RWADeleteItemModalProps,
-} from './delete-item-modal';
+    ServiceProviderFeeType,
+    SPV,
+    tableNames,
+    useTableForm,
+} from '@/rwa';
 
 export function CreateAssetModal({
     open,
     onOpenChange,
 }: RWACreateItemModalProps<FixedIncome>) {
-    const { reset, submit, inputs } = useAssetForm({
+    const tableName = tableNames.ASSET;
+    const { reset, submit, inputs } = useTableForm({
         operation: 'create',
+        tableName,
     });
     return (
         <RWACreateItemModal
             inputs={inputs}
-            itemName="Asset"
             onOpenChange={onOpenChange}
             open={open}
             reset={reset}
             submit={submit}
+            tableName={tableName}
         />
     );
 }
@@ -44,17 +37,19 @@ export function CreateFixedIncomeTypeModal({
     open,
     onOpenChange,
 }: RWACreateItemModalProps<FixedIncomeType>) {
-    const { reset, submit, inputs } = useFixedIncomeTypeForm({
+    const tableName = tableNames.FIXED_INCOME_TYPE;
+    const { reset, submit, inputs } = useTableForm({
         operation: 'create',
+        tableName,
     });
     return (
         <RWACreateItemModal
             inputs={inputs}
-            itemName="Fixed Income Asset Type"
             onOpenChange={onOpenChange}
             open={open}
             reset={reset}
             submit={submit}
+            tableName={tableName}
         />
     );
 }
@@ -63,17 +58,19 @@ export function CreateSpvModal({
     open,
     onOpenChange,
 }: RWACreateItemModalProps<SPV>) {
-    const { reset, submit, inputs } = useSpvForm({
+    const tableName = tableNames.SPV;
+    const { reset, submit, inputs } = useTableForm({
         operation: 'create',
+        tableName,
     });
     return (
         <RWACreateItemModal
             inputs={inputs}
-            itemName="SPV"
             onOpenChange={onOpenChange}
             open={open}
             reset={reset}
             submit={submit}
+            tableName={tableName}
         />
     );
 }
@@ -82,17 +79,19 @@ export function CreateAccountModal({
     open,
     onOpenChange,
 }: RWACreateItemModalProps<Account>) {
-    const { reset, submit, inputs } = useAccountForm({
+    const tableName = tableNames.ACCOUNT;
+    const { reset, submit, inputs } = useTableForm({
         operation: 'create',
+        tableName,
     });
     return (
         <RWACreateItemModal
             inputs={inputs}
-            itemName="Account"
             onOpenChange={onOpenChange}
             open={open}
             reset={reset}
             submit={submit}
+            tableName={tableName}
         />
     );
 }
@@ -102,28 +101,29 @@ export function CreateServiceProviderFeeTypeModal({
     onOpenChange,
     inputs,
 }: RWACreateItemModalProps<ServiceProviderFeeType>) {
-    const { reset, submit } = useServiceProviderFeeTypeForm({
+    const tableName = tableNames.SERVICE_PROVIDER_FEE_TYPE;
+    const { reset, submit } = useTableForm({
         operation: 'create',
+        tableName,
     });
     return (
         <RWACreateItemModal
             inputs={inputs}
-            itemName="Service Provider Fee Type"
             onOpenChange={onOpenChange}
             open={open}
             reset={reset}
             submit={submit}
+            tableName="Service Provider Fee Type"
         />
     );
 }
 
 export function DeleteItemModal(props: RWADeleteItemModalProps) {
-    const { itemName, dependentItemName, dependentItemList } = props;
+    const { tableName, dependentItemProps } = props;
     return (
         <RWADeleteItemModal
-            dependentItemList={dependentItemList}
-            dependentItemName={dependentItemName}
-            itemName={itemName}
+            dependentItemProps={dependentItemProps}
+            tableName={tableName}
         />
     );
 }

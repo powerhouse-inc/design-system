@@ -1,14 +1,15 @@
 import {
+    getColumnCount,
+    GroupTransactionsTable,
     manyMockGroupTransactions,
     mockFixedIncomes,
     mockGroupTransaction,
-} from '@/rwa/mocks';
-import { mockStateInitial, mockStateWithData } from '@/rwa/mocks/state';
+    mockStateInitial,
+    mockStateWithData,
+} from '@/rwa';
 import { useArgs } from '@storybook/preview-api';
-import type { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { useInterval } from 'usehooks-ts';
-import { getColumnCount } from '../hooks/useColumnPriority';
-import { GroupTransactionsTable } from './group-transactions-table';
 
 const meta: Meta<typeof GroupTransactionsTable> = {
     title: 'RWA/Components/Group Transactions Table',

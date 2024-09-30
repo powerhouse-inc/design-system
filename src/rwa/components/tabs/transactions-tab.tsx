@@ -1,5 +1,4 @@
-import { GroupTransactionsTable } from '../table';
-import { TabContent } from './tab-content';
+import { GroupTransactionsTable, TabContent } from '@/rwa';
 
 export function TransactionsTab() {
     return (

@@ -1,5 +1,4 @@
-import { AssetsTable } from '../table';
-import { TabContent } from './tab-content';
+import { AssetsTable, TabContent } from '@/rwa';
 
 export function PortfolioTab() {
     return (

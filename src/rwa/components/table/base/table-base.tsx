@@ -1,8 +1,8 @@
 import { Icon, fixedForwardRef } from '@/powerhouse';
-import { Item, SortDirection, TableBaseProps, TableItem } from '@/rwa';
+import { SortDirection, TableBaseProps, TableName } from '@/rwa';
 import { Order } from 'natural-orderby';
 import React, { useState } from 'react';
-import { twMerge } from 'tailwind-merge';
+import { twJoin, twMerge } from 'tailwind-merge';
 
 /**
  * Base table component
@@ -19,12 +19,8 @@ import { twMerge } from 'tailwind-merge';
  * @param specialFirstRow - Function to render a special first row (like the cash asset for instance), must return a React element
  */
 export const TableBase = fixedForwardRef(function TableBase<
-    TItem extends Item,
-    TTableData extends TableItem<TItem>,
->(
-    props: TableBaseProps<TItem, TTableData>,
-    ref: React.ForwardedRef<HTMLDivElement>,
-) {
+    TTableName extends TableName,
+>(props: TableBaseProps<TTableName>, ref: React.ForwardedRef<HTMLDivElement>) {
     const {
         children,
         tableData,
@@ -37,7 +33,6 @@ export const TableBase = fixedForwardRef(function TableBase<
         maxHeight,
         headerRef,
         hasSelectedItem,
-        ...containerProps
     } = props;
 
     const [sortDirection, setSortDirection] = useState<SortDirection | null>(
@@ -48,11 +43,9 @@ export const TableBase = fixedForwardRef(function TableBase<
     return (
         <>
             <div
-                {...containerProps}
-                className={twMerge(
+                className={twJoin(
                     'relative rounded-lg border border-gray-300 bg-white',
                     hasSelectedItem ? 'overflow-hidden' : 'overflow-scroll',
-                    containerProps.className,
                 )}
                 ref={ref}
                 style={{ maxHeight }}
@@ -70,7 +63,7 @@ export const TableBase = fixedForwardRef(function TableBase<
                                         column.allowSorting &&
                                             'cursor-pointer hover:text-gray-900',
                                     )}
-                                    key={column.key}
+                                    key={column.key as string}
                                     onClick={() => {
                                         if (!column.allowSorting) return;
                                         let sortDir: Order = 'asc';
@@ -83,9 +76,12 @@ export const TableBase = fixedForwardRef(function TableBase<
                                         }
 
                                         setSortDirection(sortDir);
-                                        setSortKey(column.key);
+                                        setSortKey(column.key as string);
 
-                                        onClickSort(column.key, sortDir);
+                                        onClickSort(
+                                            column.key as string,
+                                            sortDir,
+                                        );
                                     }}
                                 >
                                     <div

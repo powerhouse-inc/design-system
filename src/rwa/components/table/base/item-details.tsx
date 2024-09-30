@@ -1,126 +1,131 @@
 import { Icon } from '@/powerhouse';
-import { Item, ItemDetailsFormProps, ItemDetailsProps, RWAButton } from '@/rwa';
-import { deleteEditorActionInputsByItemName } from '@/rwa/constants/names';
-import { useEditorContext } from '@/rwa/context/editor-context';
-import { sentenceCase } from 'change-case';
-import { ComponentType, useCallback } from 'react';
-import { FieldValues } from 'react-hook-form';
+import {
+    FormInputs,
+    ItemDetailsProps,
+    RWAButton,
+    tableLabels,
+    useDependentItemProps,
+    useEditorContext,
+    useModal,
+    useTableForm,
+} from '@/rwa';
+import { memo, useCallback } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { useModal } from '../../modal/modal-manager';
 
-/**
- * Displays and allows creating or editing an item. Intended to be used with react-hook-form.
- *
- * @type TItem - Table item type, any record with an "id" field and any string keys
- * @type TFieldValues - Field values type for the forms, must satisfy FieldValues (from react-hook-form)
- *
- * @param item - The item to display or edit, must satisfy TableItem
- * @param itemName - Name of the item, e.g. "Transaction" or "Asset". Comes from the ancestor `Table` element
- * @param itemNumber - Number of the item, e.g. "1" or "2". Comes from the ancestor `Table` element. Usually is `index + 1` when editing an existing item, and `tableData.length + 1` when creating a new item
- * @param className - Additional classes to apply to the item details container
- * @param formInputs - Form inputs defined in the parent component. Intended to be a React component that accepts no props and registers form inputs with react-hook-form
- * @param operation - Operation to perform on the item. Can be 'view', 'edit', or 'create'. Defaults to 'view'
- * @param handleSubmit - Function to handle form submission, returned by the `useForm` hook which is called in the parent `*Details` element
- * @param onSubmit - Submit handler to be called by `handleSubmit`. defined in the parent `*Details` element
- * @param onSubmitDelete - Function to perform the delete operation on the item. Defined in the parent `*Details` element
- * @param reset - Function to reset the form, returned by the `useForm` hook which is called in the parent `*Details` element
- * @param setSelectedItem - Function to set the selected item in the parent `Table` element
- * @param setShowNewItemForm - Function to set the showNewItemForm state in the parent `Table` element
- * @param onCancel - Function to call when the cancel button is clicked if additional logic is required. The form is already reset and the item is deselected by default.
- */
-export function ItemDetails<
-    TItem extends Item,
-    TFieldValues extends FieldValues = FieldValues,
->(
-    props: ItemDetailsProps<TItem> &
-        ItemDetailsFormProps<TFieldValues> & {
-            readonly submit: (e?: React.BaseSyntheticEvent) => Promise<void>;
-            readonly formInputs: ComponentType;
-        },
-) {
-    const {
-        tableItem,
-        itemName,
-        className,
-        isAllowedToDeleteItem = true,
-        dependentItemProps,
-        formInputs: FormInputs,
-        submit,
-        reset,
-        setSelectedTableItem,
-    } = props;
+function _ItemDetails(props: ItemDetailsProps) {
+    const { tableName, className } = props;
     const { showModal, closeModal } = useModal();
 
     const {
+        selectedTableItem,
         operation,
-        dispatchEditorAction,
-        setOperation,
+        viewItem,
+        editItem,
+        clearSelected,
+        handleAction,
         isAllowedToCreateDocuments,
         isAllowedToEditDocuments,
+        principalLenderAccountId,
     } = useEditorContext();
 
-    const hasDependentItems = !!dependentItemProps?.dependentItemList.length;
+    const dependentItemProps = useDependentItemProps(
+        tableName,
+        selectedTableItem?.id,
+    );
+    const hasDependentItems = dependentItemProps.some(
+        p => p.dependentItems.length > 0,
+    );
 
     const isEditOperation = operation === 'edit';
     const isCreateOperation = operation === 'create';
     const isViewOperation = operation === 'view';
     const isAllowedToCreateOrEdit =
         isAllowedToCreateDocuments || isAllowedToEditDocuments;
-
+    const isPrincipalLenderAccount =
+        tableName === 'ACCOUNT' &&
+        selectedTableItem?.id === principalLenderAccountId;
+    const isAllowedToDeleteItem = !isPrincipalLenderAccount;
     const showCancelButton = !isViewOperation && isAllowedToCreateOrEdit;
     const showSubmitButton = !isViewOperation && isAllowedToCreateOrEdit;
     const showDeleteButton =
         isEditOperation && isAllowedToEditDocuments && isAllowedToDeleteItem;
     const showEditButton = isViewOperation && isAllowedToEditDocuments;
+    const showCloseButton = isViewOperation;
 
-    const itemNameForDisplay = sentenceCase(itemName);
+    const tableNameForDisplay = tableLabels[tableName];
+
+    const { submit, reset, inputs } = useTableForm({
+        tableName,
+        tableItem: selectedTableItem,
+        operation,
+    });
+
+    const handleClose = useCallback(() => {
+        reset();
+        clearSelected();
+    }, [clearSelected, reset]);
 
     const handleCancel = useCallback(() => {
-        if (operation === 'edit') {
-            setOperation('view');
+        if (operation === 'edit' && !!selectedTableItem) {
+            viewItem(selectedTableItem, tableName);
             return;
         }
-        reset();
-        setSelectedTableItem(undefined);
-        setOperation(null);
-    }, [operation, reset, setOperation, setSelectedTableItem]);
+        handleClose();
+    }, [handleClose, operation, selectedTableItem, tableName, viewItem]);
 
     const showDeleteModal = useCallback(() => {
-        if (!isAllowedToDeleteItem || !dependentItemProps) return;
-        const { dependentItemName, dependentItemList } = dependentItemProps;
+        if (!isAllowedToDeleteItem || !hasDependentItems) return;
 
         showModal('deleteItem', {
-            itemName,
-            dependentItemName,
-            dependentItemList,
+            tableName,
+            dependentItemProps,
         });
-    }, [dependentItemProps, isAllowedToDeleteItem, itemName, showModal]);
+    }, [
+        isAllowedToDeleteItem,
+        hasDependentItems,
+        showModal,
+        tableName,
+        dependentItemProps,
+    ]);
 
     const handleDelete = useCallback(() => {
-        if (!tableItem) return;
+        if (!selectedTableItem) return;
 
         if (hasDependentItems) {
             showDeleteModal();
             return;
         }
 
-        const editorDeleteActionType =
-            deleteEditorActionInputsByItemName[itemName];
-        dispatchEditorAction({
-            type: editorDeleteActionType,
-            payload: tableItem.id,
-        });
-        setSelectedTableItem(undefined);
+        const editorDeleteActionType = `DELETE_${tableName}` as const;
+        handleAction(
+            {
+                type: editorDeleteActionType,
+                payload: selectedTableItem,
+            },
+            tableName,
+        );
+        clearSelected();
         closeModal();
     }, [
-        closeModal,
-        dispatchEditorAction,
+        selectedTableItem,
         hasDependentItems,
-        itemName,
-        setSelectedTableItem,
+        tableName,
+        handleAction,
+        clearSelected,
+        closeModal,
         showDeleteModal,
-        tableItem,
     ]);
+
+    const onEditButtonClick = useCallback(() => {
+        if (!selectedTableItem) return;
+        editItem(selectedTableItem, tableName);
+    }, [selectedTableItem, editItem, tableName]);
+
+    const closeButton = (
+        <RWAButton className="text-gray-600" onClick={handleClose}>
+            Close
+        </RWAButton>
+    );
 
     const cancelButton = (
         <RWAButton className="text-gray-600" onClick={handleCancel}>
@@ -148,12 +153,9 @@ export function ItemDetails<
         <RWAButton
             icon={<Icon name="Pencil" size={16} />}
             iconPosition="right"
-            onClick={() => {
-                setSelectedTableItem(tableItem);
-                setOperation('edit');
-            }}
+            onClick={onEditButtonClick}
         >
-            Edit {itemNameForDisplay}
+            Edit {tableNameForDisplay}
         </RWAButton>
     );
 
@@ -166,18 +168,21 @@ export function ItemDetails<
         >
             <div className="flex justify-between rounded-t-md border-b border-gray-300 bg-gray-100 p-3 font-semibold text-gray-800">
                 <div className="flex items-center">
-                    {tableItem?.itemNumber
-                        ? `${itemNameForDisplay} #${tableItem.itemNumber}`
-                        : `New ${itemNameForDisplay}`}
+                    {selectedTableItem?.itemNumber
+                        ? `${tableNameForDisplay} #${selectedTableItem.itemNumber}`
+                        : `New ${tableNameForDisplay}`}
                 </div>
                 <div className="flex gap-x-2">
                     {showCancelButton ? cancelButton : null}
+                    {showCloseButton ? closeButton : null}
                     {showSubmitButton ? submitButton : null}
                     {showDeleteButton ? deleteButton : null}
                     {showEditButton ? editButton : null}
                 </div>
             </div>
-            <FormInputs />
+            <FormInputs inputs={inputs} />
         </div>
     );
 }
+
+export const ItemDetails = memo(_ItemDetails);

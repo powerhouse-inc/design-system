@@ -1,15 +1,29 @@
 import { EditorActionButtons } from '@/connect';
-import { OtherTab, PORTFOLIO, PortfolioTab, TransactionsTab } from '@/rwa';
-import { useEditorContext } from '@/rwa/context/editor-context';
+import {
+    OtherTab,
+    PortfolioTab,
+    TransactionsTab,
+    useEditorContext,
+} from '@/rwa';
 import { Content, List, Root, Trigger } from '@radix-ui/react-tabs';
+import { useCallback } from 'react';
 
 export function RWATabs() {
     const tabs = ['Portfolio', 'Transactions', 'Other'] as const;
-    const { onSwitchboardLinkClick, onExport, onClose, onShowRevisionHistory } =
-        useEditorContext();
+    const {
+        onSwitchboardLinkClick,
+        onExport,
+        onClose,
+        onShowRevisionHistory,
+        clearSelected,
+    } = useEditorContext();
+
+    const handleTabChange = useCallback(() => {
+        clearSelected();
+    }, [clearSelected]);
 
     return (
-        <Root defaultValue={PORTFOLIO}>
+        <Root defaultValue="Portfolio" onValueChange={handleTabChange}>
             <div className="flex justify-between">
                 {/* <EditorUndoRedoButtons {...props} /> */}
                 <List className="flex gap-x-2 rounded-xl bg-slate-50 p-1 text-sm font-semibold text-gray-600 outline-none">

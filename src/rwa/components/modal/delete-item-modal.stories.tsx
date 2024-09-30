@@ -12,21 +12,15 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
     args: {
         open: true,
-        itemName: 'account',
-        dependentItemName: 'service providers and transactions',
-        dependentItemList: [
-            <div className="mb-0.5 font-semibold" key={1}>
-                Service providers:
-            </div>,
-            <div key={2}>Service provider 1</div>,
-            <div key={3}>Service provider 2</div>,
-            <div key={4}>Service provider 3</div>,
-            <div className="mb-0.5 mt-1 font-semibold" key={5}>
-                Transactions:
-            </div>,
-            <div key={6}>Transaction 1</div>,
-            <div key={7}>Transaction 2</div>,
-            <div key={8}>Transaction 3</div>,
+        tableName: 'SPV',
+        dependentItemProps: [
+            {
+                dependentTableName: 'ASSET',
+                dependentItems: [
+                    { id: '1', label: 'Asset 1' },
+                    { id: '2', label: 'Asset 2' },
+                ],
+            },
         ],
     },
 };

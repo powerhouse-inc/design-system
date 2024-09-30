@@ -1,13 +1,13 @@
 import { Icon, Modal } from '@/powerhouse';
+import { ModalFormInputs } from '@/rwa';
 import { ComponentPropsWithoutRef, useCallback } from 'react';
 import { FieldValues, UseFormReset } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
-import { ModalFormInputs } from './modal-form-inputs';
 
 export type RWACreateItemModalProps<TFieldValues extends FieldValues> =
     ComponentPropsWithoutRef<typeof Modal> & {
         readonly open: boolean;
-        readonly itemName: string;
+        readonly tableName: string;
         readonly inputs: {
             label: string;
             Input: () => string | React.JSX.Element;
@@ -20,7 +20,7 @@ export type RWACreateItemModalProps<TFieldValues extends FieldValues> =
 export function RWACreateItemModal<TFieldValues extends FieldValues>(
     props: RWACreateItemModalProps<TFieldValues>,
 ) {
-    const { itemName, open, inputs, onOpenChange, reset, submit } = props;
+    const { tableName, open, inputs, onOpenChange, reset, submit } = props;
 
     const handleCancel = useCallback(() => {
         reset();
@@ -43,7 +43,7 @@ export function RWACreateItemModal<TFieldValues extends FieldValues>(
         >
             <div className="w-[400px] p-6 text-slate-300">
                 <div className="mb-6 flex justify-between">
-                    <h1 className="text-xl font-bold">Create {itemName}</h1>
+                    <h1 className="text-xl font-bold">Create {tableName}</h1>
                     <button
                         className="flex size-8 items-center justify-center rounded-md bg-gray-100 text-gray-500 outline-none hover:text-gray-900"
                         onClick={handleCancel}
