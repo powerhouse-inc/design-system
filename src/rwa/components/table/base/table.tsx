@@ -21,9 +21,7 @@ import { sentenceCase } from 'change-case';
 import { useCallback, useRef } from 'react';
 import { Fragment } from 'react/jsx-runtime';
 
-export function Table<TTableName extends TableName>(
-    props: TableProps<TTableName>,
-) {
+export function Table(props: TableProps) {
     const {
         tableName,
         tableData,
@@ -47,7 +45,7 @@ export function Table<TTableName extends TableName>(
 
     const { sortedItems, sortHandler } = useSortTableItems(tableData);
 
-    const { columnsToShow } = useColumnPriority({
+    const columnsToShow = useColumnPriority({
         columns,
         columnCountByTableWidth,
         tableContainerRef,
@@ -67,10 +65,7 @@ export function Table<TTableName extends TableName>(
     }, [createItem, tableName]);
 
     const handleTableItem = useCallback(
-        (
-            tableItem: TableItemType<TableName>,
-            column: TableColumn<TableName>,
-        ) => {
+        (tableItem: TableItemType<TableName>, column: TableColumn) => {
             const hasCustomTransform = 'customTransform' in tableItem;
 
             const customTransformResult = hasCustomTransform
@@ -81,8 +76,15 @@ export function Table<TTableName extends TableName>(
                 return customTransformResult;
             }
 
+            if (!(column.key in tableItem)) {
+                console.error(
+                    `Column key ${column.key} not found in table item`,
+                );
+                return null;
+            }
+
             return handleTableDatum(
-                tableItem[column.key],
+                tableItem[column.key as keyof TableItemType<TableName>],
                 column.decimalScale,
                 column.displayTime,
             );
@@ -93,7 +95,7 @@ export function Table<TTableName extends TableName>(
     const renderRow = useCallback(
         (
             tableItem: TableItemType<TableName>,
-            columns: TableColumn<TableName>[],
+            columns: TableColumn[],
             index: number,
         ) => {
             const isSelected = selectedTableItem?.id === tableItem.id;
@@ -135,7 +137,7 @@ export function Table<TTableName extends TableName>(
                 </RWATableRow>
             );
         },
-        [selectedTableItem?.id, tableName],
+        [handleTableItem, selectedTableItem?.id, tableName],
     );
 
     return (

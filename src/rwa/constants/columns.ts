@@ -1,7 +1,7 @@
 import { TableColumn, TableName } from '@/rwa';
 
 export type ColumnsByTableName = {
-    [K in TableName]: TableColumn<K>[];
+    [K in TableName]: TableColumn[];
 };
 
 export const columnsByTableName: ColumnsByTableName = {

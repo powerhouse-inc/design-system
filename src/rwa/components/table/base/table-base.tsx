@@ -1,7 +1,7 @@
-import { Icon, fixedForwardRef } from '@/powerhouse';
-import { SortDirection, TableBaseProps, TableName } from '@/rwa';
+import { Icon } from '@/powerhouse';
+import { SortDirection, TableBaseProps } from '@/rwa';
 import { Order } from 'natural-orderby';
-import React, { useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { twJoin, twMerge } from 'tailwind-merge';
 
 /**
@@ -18,9 +18,10 @@ import { twJoin, twMerge } from 'tailwind-merge';
  * @param hasExpandedRow - Whether the table has an expanded row
  * @param specialFirstRow - Function to render a special first row (like the cash asset for instance), must return a React element
  */
-export const TableBase = fixedForwardRef(function TableBase<
-    TTableName extends TableName,
->(props: TableBaseProps<TTableName>, ref: React.ForwardedRef<HTMLDivElement>) {
+export const TableBase = forwardRef(function TableBase(
+    props: TableBaseProps,
+    ref: React.ForwardedRef<HTMLDivElement>,
+) {
     const {
         children,
         tableData,

@@ -55,7 +55,7 @@ export function AssetsTable() {
     );
 
     const specialFirstRow = useCallback(
-        (c: TableColumn<'ASSET'>[]) => (
+        (c: TableColumn[]) => (
             <RWATableRow>
                 {c.map(column => (
                     <Fragment key={column.key}>
@@ -83,7 +83,7 @@ export function AssetsTable() {
     );
 
     const specialLastRow = useCallback(
-        (c: TableColumn<'ASSET'>[]) => (
+        (c: TableColumn[]) => (
             <RWATableRow
                 className={twMerge(
                     'sticky bottom-0',

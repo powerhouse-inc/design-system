@@ -23,8 +23,8 @@ export type TableItem<TItem extends Item> = TItem & {
     moreDetails?: null;
 };
 
-export type TableColumn<TTableName extends TableName> = {
-    key: keyof TableItemType<TTableName>;
+export type TableColumn = {
+    key: string;
     label: ReactNode | null; // Allows JSX or string labels, null for no header
     allowSorting?: boolean;
     isSpecialColumn?: boolean; // Used to identify index or more details columns
@@ -33,12 +33,12 @@ export type TableColumn<TTableName extends TableName> = {
     displayTime?: boolean; // Used to format dates (true for datetime-local)
 };
 
-export type TableBaseProps<TTableName extends TableName> = {
-    columns: TableColumn<TTableName>[];
+export type TableBaseProps = {
+    columns: TableColumn[];
     tableData: TableItemType<TableName>[] | undefined;
     renderRow: (
         item: TableItemType<TableName>,
-        columns: TableColumn<TTableName>[],
+        columns: TableColumn[],
         index: number,
     ) => JSX.Element;
     onClickSort: (key: string, direction: SortDirection) => void;
@@ -47,16 +47,16 @@ export type TableBaseProps<TTableName extends TableName> = {
     headerRef: RefObject<HTMLTableSectionElement>;
     maxHeight?: string;
     hasSelectedItem?: boolean;
-    specialFirstRow?: (columns: TableColumn<TTableName>[]) => JSX.Element;
-    specialLastRow?: (columns: TableColumn<TTableName>[]) => JSX.Element;
+    specialFirstRow?: (columns: TableColumn[]) => JSX.Element;
+    specialLastRow?: (columns: TableColumn[]) => JSX.Element;
 };
 
-export type TableProps<TTableName extends TableName> = {
-    tableName: TTableName;
-    tableData: TableItemType<TTableName>[] | undefined;
+export type TableProps = {
+    tableName: TableName;
+    tableData: TableItemType<TableName>[] | undefined;
     columnCountByTableWidth?: ColumnCountByTableWidth;
-    specialFirstRow?: (columns: TableColumn<TTableName>[]) => JSX.Element;
-    specialLastRow?: (columns: TableColumn<TTableName>[]) => JSX.Element;
+    specialFirstRow?: (columns: TableColumn[]) => JSX.Element;
+    specialLastRow?: (columns: TableColumn[]) => JSX.Element;
 };
 
 export type Operation = 'view' | 'create' | 'edit' | null;

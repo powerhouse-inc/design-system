@@ -9,15 +9,12 @@ import {
 } from '@/rwa';
 import React from 'react';
 
-export function TableWithForm<TTableName extends TableName>(props: {
+type Props = {
     readonly tableName: TableName;
-    readonly specialFirstRow?: (
-        columns: TableColumn<TTableName>[],
-    ) => React.JSX.Element;
-    readonly specialLastRow?: (
-        columns: TableColumn<TTableName>[],
-    ) => React.JSX.Element;
-}) {
+    readonly specialFirstRow?: (columns: TableColumn[]) => React.JSX.Element;
+    readonly specialLastRow?: (columns: TableColumn[]) => React.JSX.Element;
+};
+export function TableWithForm(props: Props) {
     const { tableName, specialFirstRow, specialLastRow } = props;
     const { getIsFormOpen } = useEditorContext();
     const showForm = getIsFormOpen(tableName);

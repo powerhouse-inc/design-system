@@ -1,8 +1,8 @@
-import { ColumnCountByTableWidth, TableColumn, TableName } from '@/rwa';
+import { ColumnCountByTableWidth, TableColumn } from '@/rwa';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-type Props<TTableName extends TableName> = {
-    columns: TableColumn<TTableName>[] | undefined;
+type Props<TColumn extends TableColumn> = {
+    columns: TColumn[] | undefined;
     columnCountByTableWidth: ColumnCountByTableWidth;
     tableContainerRef: React.RefObject<HTMLDivElement>;
     hasItemNumberColumn?: boolean;
@@ -18,8 +18,8 @@ type Props<TTableName extends TableName> = {
  * @param hasIndexColumn - When true, adds an "index" column with the index of the row as the _first column_. This column is exempt from being dropped.
  * @param hasMoreDetailsColumn - When true, adds a "more details" column as the _last column_. This column is exempt from being dropped. This column has no header label by default.
  */
-export function useColumnPriority<TTableName extends TableName>(
-    props: Props<TTableName>,
+export function useColumnPriority<TColumn extends TableColumn>(
+    props: Props<TColumn>,
 ) {
     const {
         columnCountByTableWidth,
@@ -32,7 +32,7 @@ export function useColumnPriority<TTableName extends TableName>(
     const [parentWidth, setParentWidth] = useState(0);
 
     // Define special columns individually for clarity
-    const indexColumn: TableColumn<TableName> | undefined = useMemo(
+    const indexColumn = useMemo(
         () =>
             hasItemNumberColumn
                 ? {
@@ -45,7 +45,7 @@ export function useColumnPriority<TTableName extends TableName>(
         [hasItemNumberColumn],
     );
 
-    const moreDetailsColumn: TableColumn<TableName> | undefined = useMemo(
+    const moreDetailsColumn = useMemo(
         () =>
             hasMoreDetailsColumn
                 ? {
@@ -57,9 +57,7 @@ export function useColumnPriority<TTableName extends TableName>(
         [hasMoreDetailsColumn],
     );
 
-    const [columnsToShow, setColumnsToShow] = useState<
-        TableColumn<TableName>[]
-    >([]);
+    const [columnsToShow, setColumnsToShow] = useState<TColumn[]>([]);
 
     const handleResize = useCallback(() => {
         if (tableContainerRef.current?.parentElement) {
@@ -77,7 +75,7 @@ export function useColumnPriority<TTableName extends TableName>(
         setColumnsToShow(
             [indexColumn, ...dynamicColumnsToShow, moreDetailsColumn].filter(
                 Boolean,
-            ) as TableColumn<TableName>[],
+            ),
         );
     }, [
         parentWidth,
@@ -97,7 +95,7 @@ export function useColumnPriority<TTableName extends TableName>(
         handleDropColumns();
     }, [handleDropColumns, parentWidth]);
 
-    return useMemo(() => ({ columnsToShow }) as const, [columnsToShow]);
+    return useMemo(() => columnsToShow, [columnsToShow]);
 }
 
 export function getColumnCount(
