@@ -7,7 +7,7 @@ import {
     SPV,
     tableNames,
 } from '@/rwa';
-import React, { ReactNode, RefObject } from 'react';
+import { ReactNode, RefObject } from 'react';
 
 export type ColumnCountByTableWidth = Record<number, number>;
 
@@ -78,17 +78,10 @@ export type AssetsTableData = FixedIncome & {
     currentValue: number | null | undefined;
 };
 
-export type AccountsTableData = Account & {
-    customTransform: (
-        item: Account,
-        columnKey: string,
-    ) => string | React.JSX.Element | null | undefined;
-};
-
 export type TableItemByTableName = {
     [tableNames.SERVICE_PROVIDER_FEE_TYPE]: TableItem<ServiceProviderFeeTypeTableData>;
     [tableNames.FIXED_INCOME_TYPE]: TableItem<FixedIncomeType>;
-    [tableNames.ACCOUNT]: TableItem<AccountsTableData>;
+    [tableNames.ACCOUNT]: TableItem<Account>;
     [tableNames.TRANSACTION]: TableItem<GroupTransactionsTableData>;
     [tableNames.ASSET]: TableItem<AssetsTableData>;
     [tableNames.SPV]: TableItem<SPV>;

@@ -1,4 +1,3 @@
-import { Icon } from '@/powerhouse';
 import {
     Account,
     assetTransactionSignByTransactionType,
@@ -170,26 +169,10 @@ function makeAccountsTableData(
     accounts: Account[],
     principalLenderAccountId: string,
 ): TableItemType<'ACCOUNT'>[] {
-    const customTransform = (item: Account, columnKey: string) => {
-        if (item.id === principalLenderAccountId && columnKey === 'label') {
-            const itemData = item[columnKey];
-            return (
-                <>
-                    {itemData}{' '}
-                    <span className="ml-2 inline-flex items-center gap-1 rounded bg-green-100 px-1 font-extralight">
-                        Lender <Icon name="CheckCircle" size={14} />
-                    </span>
-                </>
-            );
-        }
-        return item[columnKey as keyof Account];
-    };
-    const withCustomTransform = accounts.map(account => ({
-        ...account,
-        customTransform,
-    }));
-
-    const tableData = makeTableData(withCustomTransform);
+    const withoutPrincipalLender = accounts.filter(
+        account => account.id !== principalLenderAccountId,
+    );
+    const tableData = makeTableData(withoutPrincipalLender);
 
     return tableData;
 }

@@ -1,4 +1,5 @@
 import {
+    mockAccounts,
     mockFixedIncomes,
     mockFixedIncomeTypes,
     mockGroupTransactions,
@@ -54,7 +55,7 @@ export const WithoutData: Story = {
                     accounts: [
                         ...prev.accounts,
                         {
-                            ...mockStateInitial.accounts[0],
+                            ...mockAccounts[1],
                             id: `new-${Date.now()}`,
                         },
                     ],
@@ -142,7 +143,7 @@ export const WithManyItems: Story = {
             accounts: [
                 ...mockStateWithData.accounts,
                 ...Array.from({ length: 100 }, (_, i) => ({
-                    ...mockStateWithData.accounts[0],
+                    ...mockStateWithData.accounts[1],
                     id: `new-${i}`,
                 })),
             ],

@@ -1,4 +1,5 @@
 import { tableNames, TableWithForm } from '@/rwa';
+import { AccountsTable } from '../table/accounts';
 
 export function OtherTab() {
     return (
@@ -9,7 +10,7 @@ export function OtherTab() {
                     Add and manage accounts that can be associated with
                     transactions and fees.
                 </p>
-                <TableWithForm tableName={tableNames.ACCOUNT} />
+                <AccountsTable />
             </div>
             <div>
                 <h2 className="mb-2 text-lg font-bold">Fixed Income Types</h2>

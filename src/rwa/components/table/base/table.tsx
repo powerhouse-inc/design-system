@@ -64,34 +64,6 @@ export function Table(props: TableProps) {
         createItem(tableName);
     }, [createItem, tableName]);
 
-    const handleTableItem = useCallback(
-        (tableItem: TableItemType<TableName>, column: TableColumn) => {
-            const hasCustomTransform = 'customTransform' in tableItem;
-
-            const customTransformResult = hasCustomTransform
-                ? tableItem.customTransform(tableItem, column.key)
-                : null;
-
-            if (customTransformResult) {
-                return customTransformResult;
-            }
-
-            if (!(column.key in tableItem)) {
-                console.error(
-                    `Column key ${column.key} not found in table item`,
-                );
-                return null;
-            }
-
-            return handleTableDatum(
-                tableItem[column.key as keyof TableItemType<TableName>],
-                column.decimalScale,
-                column.displayTime,
-            );
-        },
-        [],
-    );
-
     const renderRow = useCallback(
         (
             tableItem: TableItemType<TableName>,
@@ -122,7 +94,13 @@ export function Table(props: TableProps) {
                                         }
                                         key={column.key}
                                     >
-                                        {handleTableItem(tableItem, column)}
+                                        {handleTableDatum(
+                                            tableItem[
+                                                column.key as keyof TableItemType<TableName>
+                                            ],
+                                            column.decimalScale,
+                                            column.displayTime,
+                                        )}
                                     </RWATableCell>
                                 )}
                             {column.key === 'moreDetails' && (
@@ -137,7 +115,7 @@ export function Table(props: TableProps) {
                 </RWATableRow>
             );
         },
-        [handleTableItem, selectedTableItem?.id, tableName],
+        [selectedTableItem?.id, tableName],
     );
 
     return (
