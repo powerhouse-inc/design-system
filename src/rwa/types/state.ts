@@ -1,8 +1,4 @@
-import {
-    allGroupTransactionTypes,
-    assetGroupTransactions,
-    groupTransactionTypeLabels,
-} from '@/rwa';
+import { allGroupTransactionTypes, assetGroupTransactions } from '@/rwa';
 import { Maybe, Scalars } from 'document-model/document';
 
 export type RealWorldAssetsState = {
@@ -58,9 +54,6 @@ export type SPV = {
 export type AssetGroupTransactionType = (typeof assetGroupTransactions)[number];
 
 export type GroupTransactionType = (typeof allGroupTransactionTypes)[number];
-
-export type GroupTransactionTypeLabel =
-    (typeof groupTransactionTypeLabels)[keyof typeof groupTransactionTypeLabels];
 
 export type GroupTransaction = {
     cashBalanceChange: Scalars['Float']['output'];

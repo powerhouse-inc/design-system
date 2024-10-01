@@ -2,7 +2,6 @@ import {
     CashAsset,
     DispatchEditorAction,
     EditorAction,
-    editorStateKeysByTableName,
     FixedIncome,
     getCashAsset,
     getFixedIncomeAssets,
@@ -50,11 +49,9 @@ type TEditorContext = RWAEditorContextProps &
             tableName: TableName,
         ) => void;
         readonly clearSelected: () => void;
+        readonly viewEditedItem: () => void;
         readonly getIsFormOpen: (tableName: TableName) => boolean;
-        readonly handleAction: (
-            action: EditorAction,
-            tableName: TableName,
-        ) => void;
+        readonly handleAction: (action: EditorAction) => void;
         readonly handleUndo: () => void;
         readonly handleRedo: () => void;
     };
@@ -86,6 +83,7 @@ const defaultEditorContextValue: TEditorContext = {
     getIsFormOpen: () => false,
     clearSelected: () => {},
     viewItem: () => {},
+    viewEditedItem: () => {},
     createItem: () => {},
     editItem: () => {},
     onExport: () => {},
@@ -116,7 +114,8 @@ type TableAction =
           item: TableItemType<TableName>;
           tableName: TableName;
       }
-    | { type: 'CLEAR_SELECTED' };
+    | { type: 'CLEAR_SELECTED' }
+    | { type: 'VIEW_EDITED_ITEM' };
 
 function tableReducer(state: TableState, action: TableAction): TableState {
     switch (action.type) {
@@ -144,6 +143,17 @@ function tableReducer(state: TableState, action: TableAction): TableState {
                 selectedTableName: null,
                 operation: null,
             };
+        case 'VIEW_EDITED_ITEM': {
+            if (!state.selectedTableItem || !state.selectedTableName) {
+                console.error('No item or table name selected');
+                return state;
+            }
+            return {
+                selectedTableItem: state.selectedTableItem,
+                selectedTableName: state.selectedTableName,
+                operation: 'view',
+            };
+        }
         default:
             return state;
     }
@@ -262,30 +272,17 @@ export function RWAEditorContextProvider(
         setEditorState(stateRef.current);
     }, []);
 
-    const handleAction = useCallback(
-        (action: EditorAction, tableName: TableName) => {
-            try {
-                const result = dispatchEditorAction(action);
-                const editorStateKey = editorStateKeysByTableName[tableName];
-                const isCreate = action.type.startsWith('CREATE') && !!result;
-                if (isCreate) {
-                    setEditorState(prev => {
-                        if (tableName === selectedTableName) {
-                            tableDispatch({
-                                type: 'VIEW_ITEM',
-                                item: {
-                                    ...result,
-                                    itemNumber: prev[editorStateKey].length + 1,
-                                } as TableItemType<TableName>,
-                                tableName,
-                            });
-                        }
+    const viewEditedItem = useCallback(() => {
+        tableDispatch({ type: 'VIEW_EDITED_ITEM' });
+        setEditorState(stateRef.current);
+    }, []);
 
-                        return {
-                            ...prev,
-                            [editorStateKey]: [...prev[editorStateKey], result],
-                        };
-                    });
+    const handleAction = useCallback(
+        (action: EditorAction) => {
+            try {
+                dispatchEditorAction(action);
+                if (action.type.startsWith('EDIT')) {
+                    viewEditedItem();
                 }
             } catch (error) {
                 console.error(
@@ -294,7 +291,7 @@ export function RWAEditorContextProvider(
                 );
             }
         },
-        [dispatchEditorAction, selectedTableName],
+        [dispatchEditorAction, viewEditedItem],
     );
 
     const value = useMemo(
@@ -319,6 +316,7 @@ export function RWAEditorContextProvider(
             handleUndo,
             handleRedo,
             viewItem,
+            viewEditedItem,
             createItem,
             editItem,
             clearSelected,
@@ -356,6 +354,7 @@ export function RWAEditorContextProvider(
             serviceProviderFeeTypes,
             spvs,
             transactions,
+            viewEditedItem,
             viewItem,
         ],
     );

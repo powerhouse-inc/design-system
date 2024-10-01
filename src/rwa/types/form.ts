@@ -4,11 +4,6 @@ import {
     TableItemType,
     TableName,
 } from '@/rwa';
-import { FieldValues, UseFormReturn } from 'react-hook-form';
-
-export type ItemDetailsFormProps<
-    TFieldValues extends FieldValues = FieldValues,
-> = Pick<UseFormReturn<TFieldValues>, 'reset'>;
 
 export type ItemDetailsProps = {
     tableName: TableName;

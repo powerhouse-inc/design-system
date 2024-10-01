@@ -97,13 +97,10 @@ function _ItemDetails(props: ItemDetailsProps) {
         }
 
         const editorDeleteActionType = `DELETE_${tableName}` as const;
-        handleAction(
-            {
-                type: editorDeleteActionType,
-                payload: selectedTableItem,
-            },
-            tableName,
-        );
+        handleAction({
+            type: editorDeleteActionType,
+            payload: selectedTableItem,
+        });
         clearSelected();
         closeModal();
     }, [

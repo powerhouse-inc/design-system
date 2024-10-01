@@ -17,11 +17,10 @@ import {
     tableNames,
 } from '@/rwa';
 
-export function getDefaultFormValues<TTableName extends TableName>(args: {
+export function getDefaultFormValues(args: {
     operation: Operation;
-    tableName: TTableName;
+    tableName: TableName;
     tableItem?: TableItemType<TableName> | null;
-    fixedIncomes: FixedIncome[];
     fixedIncomeTypes: FixedIncomeType[];
     spvs: SPV[];
     accounts: Account[];
@@ -30,7 +29,6 @@ export function getDefaultFormValues<TTableName extends TableName>(args: {
         operation,
         tableName,
         tableItem,
-        fixedIncomes,
         fixedIncomeTypes,
         spvs,
         accounts,
@@ -53,7 +51,7 @@ export function getDefaultFormValues<TTableName extends TableName>(args: {
                     type: allGroupTransactionTypes[0],
                     entryTime: convertToDateTimeLocalFormat(new Date()),
                     cashAmount: null,
-                    fixedIncomeId: fixedIncomes[0]?.id ?? null,
+                    fixedIncomeId: null,
                     fixedIncomeAmount: null,
                     serviceProviderFeeTypeId: null,
                     fees: null,

@@ -21,44 +21,38 @@ function useWrappedForm<TValues extends FieldValues>(defaultValues: TValues) {
 
     return form;
 }
-type Props<TTableName extends TableName> = {
+type Props = {
     operation: Operation;
-    tableName: TTableName;
-    tableItem?: TableItemType<TTableName> | null;
+    tableName: TableName;
+    tableItem?: TableItemType<TableName> | null;
 };
-export function useSubmit<TTableName extends TableName>(
-    props: Props<TTableName>,
-) {
+export function useSubmit(props: Props) {
     const { operation, tableName, tableItem } = props;
-    const { handleAction, fixedIncomes, fixedIncomeTypes, spvs, accounts } =
+    const { handleAction, fixedIncomeTypes, spvs, accounts } =
         useEditorContext();
     const defaultValues = getDefaultFormValues({
         operation,
         tableName,
         tableItem,
-        fixedIncomes,
         fixedIncomeTypes,
         spvs,
         accounts,
     });
     const action = operation === 'create' ? 'CREATE' : 'EDIT';
 
-    const formValues = defaultValues as FormInputsByTableName[TTableName];
+    const formValues = defaultValues as FormInputsByTableName[TableName];
 
     const { register, handleSubmit, reset, watch, control, formState } =
-        useWrappedForm<FormInputsByTableName[TTableName]>(formValues);
+        useWrappedForm<FormInputsByTableName[TableName]>(formValues);
 
-    const onSubmit: SubmitHandler<FormInputsByTableName[TTableName]> =
+    const onSubmit: SubmitHandler<FormInputsByTableName[TableName]> =
         useCallback(
             payload => {
                 const actionType = `${action}_${tableName}` as const;
-                handleAction(
-                    {
-                        type: actionType,
-                        payload,
-                    },
-                    tableName,
-                );
+                handleAction({
+                    type: actionType,
+                    payload,
+                });
             },
             [action, handleAction, tableName],
         );
