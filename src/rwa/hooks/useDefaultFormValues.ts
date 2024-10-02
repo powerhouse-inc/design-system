@@ -7,7 +7,6 @@ import {
     FixedIncomeType,
     FixedIncomeTypeFormInputs,
     GroupTransactionFormInputs,
-    Operation,
     ServiceProviderFeeTypeFormInputs,
     SPV,
     SPVFormInputs,
@@ -17,24 +16,16 @@ import {
 import { convertToDateTimeLocalFormat } from '../utils';
 
 export function useDefaultFormValues(args: {
-    operation: Operation;
     tableName: TableName;
     tableItem?: TableItemType<TableName> | null;
     fixedIncomeTypes: FixedIncomeType[];
     spvs: SPV[];
     accounts: Account[];
 }) {
-    const {
-        operation,
-        tableName,
-        tableItem,
-        fixedIncomeTypes,
-        spvs,
-        accounts,
-    } = args;
+    const { tableName, tableItem, fixedIncomeTypes, spvs, accounts } = args;
 
     return useMemo(() => {
-        if (operation === 'create') {
+        if (!tableItem) {
             switch (tableName) {
                 case tableNames.ASSET:
                     return {
@@ -151,5 +142,5 @@ export function useDefaultFormValues(args: {
                 } as AccountFormInputs;
             }
         }
-    }, [accounts, fixedIncomeTypes, operation, spvs, tableItem, tableName]);
+    }, [accounts, fixedIncomeTypes, spvs, tableItem, tableName]);
 }

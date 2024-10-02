@@ -5,7 +5,7 @@ import {
     TableName,
     useEditorContext,
 } from '@/rwa';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import {
     DefaultValues,
     FieldValues,
@@ -31,7 +31,6 @@ export function useSubmit(props: Props) {
     const { handleAction, fixedIncomeTypes, spvs, accounts } =
         useEditorContext();
     const defaultValues = useDefaultFormValues({
-        operation,
         tableName,
         tableItem,
         fixedIncomeTypes,
@@ -44,6 +43,10 @@ export function useSubmit(props: Props) {
 
     const { register, handleSubmit, reset, watch, control, formState } =
         useWrappedForm<FormInputsByTableName[TableName]>(formValues);
+
+    useEffect(() => {
+        reset(formValues);
+    }, [formValues, reset]);
 
     const onSubmit: SubmitHandler<FormInputsByTableName[TableName]> =
         useCallback(
