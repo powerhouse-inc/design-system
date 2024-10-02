@@ -12,12 +12,12 @@ import {
     columnsByTableName,
     defaultColumnCountByTableWidth,
     handleTableDatum,
+    tableLabels,
     useColumnPriority,
     useEditorContext,
     useSortTableItems,
     useTableHeight,
 } from '@/rwa';
-import { sentenceCase } from 'change-case';
 import { useCallback, useRef } from 'react';
 import { Fragment } from 'react/jsx-runtime';
 
@@ -59,7 +59,7 @@ export function Table(props: TableProps) {
         hasSpecialLastRow: !!specialLastRow,
     });
 
-    const tableNameForDisplay = sentenceCase(tableName);
+    const tableNameForDisplay = tableLabels[tableName];
 
     const onCreateItemClick = useCallback(() => {
         createItem(tableName);
