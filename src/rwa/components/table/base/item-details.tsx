@@ -54,9 +54,13 @@ function _ItemDetails(props: Props) {
     const showEditButton = isViewOperation && isAllowedToEditDocuments;
     const showCloseButton = isViewOperation;
 
-    const tableNameForDisplay = tableLabels[tableName];
+    const tableLabel = tableLabels[tableName];
 
-    const { submit, reset, inputs } = useTableForm({
+    const {
+        submit,
+        reset,
+        formInputs: { inputs, additionalInputs },
+    } = useTableForm({
         tableName,
         tableItem: selectedTableItem,
         operation,
@@ -154,7 +158,7 @@ function _ItemDetails(props: Props) {
             iconPosition="right"
             onClick={onEditButtonClick}
         >
-            Edit {tableNameForDisplay}
+            Edit {tableLabel}
         </RWAButton>
     );
 
@@ -163,8 +167,8 @@ function _ItemDetails(props: Props) {
             <div className="flex justify-between rounded-t-md border-b border-gray-300 bg-gray-100 p-3 font-semibold text-gray-800">
                 <div className="flex items-center">
                     {selectedTableItem?.itemNumber
-                        ? `${tableNameForDisplay} #${selectedTableItem.itemNumber}`
-                        : `New ${tableNameForDisplay}`}
+                        ? `${tableLabel} #${selectedTableItem.itemNumber}`
+                        : `New ${tableLabel}`}
                 </div>
                 <div className="flex gap-x-2">
                     {showCancelButton ? cancelButton : null}
@@ -175,6 +179,7 @@ function _ItemDetails(props: Props) {
                 </div>
             </div>
             <FormInputs inputs={inputs} />
+            {additionalInputs}
         </div>
     );
 }

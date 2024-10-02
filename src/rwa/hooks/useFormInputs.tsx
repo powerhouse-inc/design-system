@@ -4,6 +4,7 @@ import {
     allGroupTransactionTypes,
     assetGroupTransactions,
     feesTransactions,
+    FeeTransactionsTable,
     formatDateForDisplay,
     FormInputsByTableName,
     groupTransactionTypeLabels,
@@ -21,13 +22,14 @@ import {
     useEditorContext,
     useModal,
 } from '@/rwa';
-import { useCallback, useMemo } from 'react';
+import { ReactElement, useCallback, useMemo } from 'react';
 import {
     Control,
     FieldErrors,
     UseFormRegister,
     UseFormWatch,
 } from 'react-hook-form';
+import { CashBalanceChange } from '../components/table/transactions/cash-balance-change';
 
 type Input = {
     label: string;
@@ -44,7 +46,10 @@ type Props = {
     errors: FieldErrors<FormInputsByTableName[TableName]>;
     control: Control<FormInputsByTableName[TableName]>;
 };
-export function useFormInputs(props: Props): Input[] {
+export function useFormInputs(props: Props): {
+    inputs: Input[];
+    additionalInputs?: ReactElement;
+} {
     const {
         tableName,
         operation,
@@ -277,7 +282,7 @@ export function useFormInputs(props: Props): Input[] {
                     ...derivedInputsToDisplay,
                 ];
 
-                return inputs;
+                return { inputs };
             }
             case tableNames.TRANSACTION: {
                 type Payload = FormInputsByTableName['TRANSACTION'];
@@ -292,6 +297,7 @@ export function useFormInputs(props: Props): Input[] {
                     !!type && feesTransactions.includes(type);
                 const isAssetTransaction =
                     !!type && assetGroupTransactions.includes(type);
+                const canHaveTransactionFees = !isFeesTransaction;
                 const transactionTypeOptions = allGroupTransactionTypes.map(
                     type => ({
                         label: groupTransactionTypeLabels[type],
@@ -466,7 +472,26 @@ export function useFormInputs(props: Props): Input[] {
                     },
                 ].filter(Boolean);
 
-                return inputs;
+                const additionalInputs = (
+                    <>
+                        <FeeTransactionsTable
+                            canHaveTransactionFees={canHaveTransactionFees}
+                            control={control}
+                            errors={errors}
+                            isViewOnly={operation === 'view'}
+                            serviceProviderFeeTypeOptions={
+                                serviceProviderFeeTypeOptions
+                            }
+                            serviceProviderFeeTypes={serviceProviderFeeTypes}
+                            showCreateServiceProviderFeeTypeModal={showCreateItemModal(
+                                'SERVICE_PROVIDER_FEE_TYPE',
+                            )}
+                        />
+                        <CashBalanceChange control={control} />
+                    </>
+                );
+
+                return { inputs, additionalInputs };
             }
             case tableNames.ACCOUNT: {
                 type Payload = FormInputsByTableName['ACCOUNT'];
@@ -510,7 +535,7 @@ export function useFormInputs(props: Props): Input[] {
                         ),
                     },
                 ];
-                return inputs;
+                return { inputs };
             }
             case tableNames.SPV: {
                 type Payload = FormInputsByTableName['SPV'];
@@ -538,7 +563,7 @@ export function useFormInputs(props: Props): Input[] {
                     },
                 ];
 
-                return inputs;
+                return { inputs };
             }
             case tableNames.FIXED_INCOME_TYPE: {
                 type Payload = FormInputsByTableName['FIXED_INCOME_TYPE'];
@@ -567,7 +592,7 @@ export function useFormInputs(props: Props): Input[] {
                     },
                 ];
 
-                return inputs;
+                return { inputs };
             }
             case tableNames.SERVICE_PROVIDER_FEE_TYPE: {
                 type Payload =
@@ -648,7 +673,7 @@ export function useFormInputs(props: Props): Input[] {
                     },
                 ];
 
-                return inputs;
+                return { inputs };
             }
         }
     }, [

@@ -59,7 +59,7 @@ export function Table(props: TableProps) {
         hasSpecialLastRow: !!specialLastRow,
     });
 
-    const tableNameForDisplay = tableLabels[tableName];
+    const tableLabel = tableLabels[tableName];
 
     const onCreateItemClick = useCallback(() => {
         createItem(tableName);
@@ -138,7 +138,7 @@ export function Table(props: TableProps) {
                     className="mt-4 flex h-11 w-full items-center justify-center gap-x-2 rounded-lg border border-gray-300 bg-white text-sm font-semibold text-gray-900"
                     onClick={onCreateItemClick}
                 >
-                    <span>Create {tableNameForDisplay}</span>
+                    <span>Create {tableLabel}</span>
                     <Icon name="Plus" size={14} />
                 </button>
             ) : null}

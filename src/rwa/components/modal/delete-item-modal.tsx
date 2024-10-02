@@ -10,7 +10,7 @@ export type RWADeleteItemModalProps = ComponentPropsWithoutRef<typeof Modal> & {
 export function _RWADeleteItemModal(props: RWADeleteItemModalProps) {
     const { tableName, dependentItemProps, onOpenChange } = props;
 
-    const tableNameForDisplay = tableLabels[tableName].toLowerCase();
+    const tableLabel = tableLabels[tableName].toLowerCase();
 
     const handleCancel = useCallback(() => {
         onOpenChange?.(false);
@@ -34,9 +34,9 @@ export function _RWADeleteItemModal(props: RWADeleteItemModalProps) {
                         <Icon className="mt-1 text-orange-800" name="Error" />
                     </div>
                     <div>
-                        Warning! Cannot delete this {tableNameForDisplay}{' '}
-                        because there are items that depend on it. Please change
-                        or delete those first.
+                        Warning! Cannot delete this {tableLabel} because there
+                        are items that depend on it. Please change or delete
+                        those first.
                     </div>
                 </div>
                 <div className="my-6 rounded-md bg-slate-50 p-4 text-slate-200">

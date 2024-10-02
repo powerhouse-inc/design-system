@@ -5,45 +5,43 @@ import {
     RWATableSelect,
     ServiceProviderFeeType,
 } from '@/rwa';
-import {
-    Control,
-    FieldArrayWithId,
-    FieldErrors,
-    Path,
-    UseFieldArrayAppend,
-    UseFieldArrayRemove,
-} from 'react-hook-form';
+import { Control, FieldErrors, Path, useFieldArray } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 
 type Props = {
-    readonly feeInputs: FieldArrayWithId<GroupTransactionFormInputs, 'fees'>[];
+    readonly canHaveTransactionFees: boolean;
     readonly serviceProviderFeeTypes: ServiceProviderFeeType[];
     readonly serviceProviderFeeTypeOptions: { label: string; value: string }[];
+    readonly showCreateServiceProviderFeeTypeModal: () => void;
     readonly control: Control<GroupTransactionFormInputs>;
-    readonly append: UseFieldArrayAppend<GroupTransactionFormInputs, 'fees'>;
-    readonly remove: UseFieldArrayRemove;
     readonly errors: FieldErrors<GroupTransactionFormInputs>;
     readonly isViewOnly: boolean;
-    readonly showCreateServiceProviderFeeTypeModal: () => void;
 };
 
 export function FeeTransactionsTable(props: Props) {
     const headings = ['Fees', 'Service Provider', 'Amount', ''] as const;
     const {
-        feeInputs,
+        canHaveTransactionFees,
         serviceProviderFeeTypes,
         serviceProviderFeeTypeOptions,
         control,
-        append,
-        remove,
         errors,
         isViewOnly,
         showCreateServiceProviderFeeTypeModal,
     } = props;
 
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: 'fees',
+    });
+
+    if (!canHaveTransactionFees) {
+        return null;
+    }
+
     return (
         <>
-            {feeInputs.length > 0 && (
+            {fields.length > 0 && (
                 <div className="bg-gray-50 pl-5 pt-3">
                     <table className="w-full border-separate text-xs font-medium">
                         <thead className="mb-2">
@@ -64,7 +62,7 @@ export function FeeTransactionsTable(props: Props) {
                             </tr>
                         </thead>
                         <tbody>
-                            {feeInputs.map((feeInput, index) => {
+                            {fields.map((feeInput, index) => {
                                 return (
                                     <tr key={feeInput.id}>
                                         <td className="w-52" />

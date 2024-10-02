@@ -1,5 +1,5 @@
 import { Icon, Modal } from '@/powerhouse';
-import { ModalFormInputs, TableName, useTableForm } from '@/rwa';
+import { ModalFormInputs, tableLabels, TableName, useTableForm } from '@/rwa';
 import { ComponentPropsWithoutRef, memo, useCallback } from 'react';
 import { twMerge } from 'tailwind-merge';
 
@@ -12,10 +12,16 @@ export type RWACreateItemModalProps = ComponentPropsWithoutRef<typeof Modal> & {
 export function _RWACreateItemModal(props: RWACreateItemModalProps) {
     const { tableName, open, onOpenChange } = props;
 
-    const { reset, submit, inputs } = useTableForm({
+    const {
+        reset,
+        submit,
+        formInputs: { inputs, additionalInputs },
+    } = useTableForm({
         operation: 'create',
         tableName,
     });
+
+    const tableLabel = tableLabels[tableName];
 
     const handleCancel = useCallback(() => {
         reset();
@@ -47,7 +53,7 @@ export function _RWACreateItemModal(props: RWACreateItemModalProps) {
         >
             <div className="w-[400px] p-6 text-slate-300">
                 <div className="mb-6 flex justify-between">
-                    <h1 className="text-xl font-bold">Create {tableName}</h1>
+                    <h1 className="text-xl font-bold">Create {tableLabel}</h1>
                     <button
                         className="flex size-8 items-center justify-center rounded-md bg-gray-100 text-gray-500 outline-none hover:text-gray-900"
                         onClick={handleCancel}
@@ -57,6 +63,7 @@ export function _RWACreateItemModal(props: RWACreateItemModalProps) {
                     </button>
                 </div>
                 <ModalFormInputs inputs={inputs} />
+                {additionalInputs}
                 <div className="mt-8 flex justify-between gap-3">
                     <button
                         className={twMerge(

@@ -50,7 +50,8 @@ export function getStateKeyForTableName(tableName: TableName) {
 export function getTableNameFor<A extends EditorAction>(
     action: A,
 ): TableNameFor<A> {
-    const entity = action.type.split('_')[1];
+    const parts = action.type.split('_');
+    const entity = parts.slice(1).join('_');
     return entity as TableNameFor<A>;
 }
 export function getActionOperationType<A extends EditorAction>(action: A) {

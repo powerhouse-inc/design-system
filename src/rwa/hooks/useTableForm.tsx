@@ -12,7 +12,7 @@ export function useTableForm(props: FormHookProps) {
 
     const { errors } = formState;
 
-    const inputs = useFormInputs({
+    const formInputs = useFormInputs({
         operation,
         control,
         watch,
@@ -28,8 +28,8 @@ export function useTableForm(props: FormHookProps) {
             reset,
             register,
             control,
-            inputs,
+            formInputs,
             formState,
         };
-    }, [submit, reset, register, control, inputs, formState]);
+    }, [submit, reset, register, control, formInputs, formState]);
 }
