@@ -1,6 +1,5 @@
 import {
     FormInputsByTableName,
-    getDefaultFormValues,
     Operation,
     TableItemType,
     TableName,
@@ -13,6 +12,7 @@ import {
     SubmitHandler,
     useForm,
 } from 'react-hook-form';
+import { useDefaultFormValues } from './useDefaultFormValues';
 
 function useWrappedForm<TValues extends FieldValues>(defaultValues: TValues) {
     const form = useForm<TValues>({
@@ -30,7 +30,7 @@ export function useSubmit(props: Props) {
     const { operation, tableName, tableItem } = props;
     const { handleAction, fixedIncomeTypes, spvs, accounts } =
         useEditorContext();
-    const defaultValues = getDefaultFormValues({
+    const defaultValues = useDefaultFormValues({
         operation,
         tableName,
         tableItem,

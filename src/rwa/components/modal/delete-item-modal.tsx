@@ -1,13 +1,13 @@
 import { Icon, Modal } from '@/powerhouse';
 import { DependentItemProps, tableLabels, TableName } from '@/rwa';
-import { ComponentPropsWithoutRef, useCallback } from 'react';
+import { ComponentPropsWithoutRef, memo, useCallback } from 'react';
 
 export type RWADeleteItemModalProps = ComponentPropsWithoutRef<typeof Modal> & {
     readonly tableName: TableName;
     readonly dependentItemProps: DependentItemProps;
 };
 
-export function RWADeleteItemModal(props: RWADeleteItemModalProps) {
+export function _RWADeleteItemModal(props: RWADeleteItemModalProps) {
     const { tableName, dependentItemProps, onOpenChange } = props;
 
     const tableNameForDisplay = tableLabels[tableName].toLowerCase();
@@ -67,3 +67,5 @@ export function RWADeleteItemModal(props: RWADeleteItemModalProps) {
         </Modal>
     );
 }
+
+export const RWADeleteItemModal = memo(_RWADeleteItemModal);

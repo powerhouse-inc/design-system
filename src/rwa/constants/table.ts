@@ -1,4 +1,10 @@
-import { GroupTransactionType } from '@/rwa';
+import {
+    EditorAction,
+    GroupTransactionType,
+    RealWorldAssetsState,
+    TableName,
+    TableNameFor,
+} from '@/rwa';
 
 export const defaultColumnCountByTableWidth = {
     1520: 10,
@@ -26,3 +32,28 @@ export const assetTransactionSignByTransactionType = {
     AssetSale: -1,
     AssetPurchase: 1,
 } as const;
+
+export function getStateKeyForTableName(tableName: TableName) {
+    const stateKeysByTableName: Record<TableName, keyof RealWorldAssetsState> =
+        {
+            ASSET: 'portfolio',
+            TRANSACTION: 'transactions',
+            ACCOUNT: 'accounts',
+            FIXED_INCOME_TYPE: 'fixedIncomeTypes',
+            SERVICE_PROVIDER_FEE_TYPE: 'serviceProviderFeeTypes',
+            SPV: 'spvs',
+        } as const;
+
+    return stateKeysByTableName[tableName];
+}
+
+export function getTableNameFor<A extends EditorAction>(
+    action: A,
+): TableNameFor<A> {
+    const entity = action.type.split('_')[1];
+    return entity as TableNameFor<A>;
+}
+export function getActionOperationType<A extends EditorAction>(action: A) {
+    const operation = action.type.split('_')[0];
+    return operation as 'CREATE' | 'EDIT' | 'DELETE';
+}

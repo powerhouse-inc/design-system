@@ -3,8 +3,12 @@ import {
     DispatchEditorAction,
     EditorAction,
     FixedIncome,
+    getActionOperationType,
     getCashAsset,
     getFixedIncomeAssets,
+    getStateKeyForTableName,
+    getTableNameFor,
+    makeTableData,
     Operation,
     RealWorldAssetsState,
     TableItemType,
@@ -49,7 +53,6 @@ type TEditorContext = RWAEditorContextProps &
             tableName: TableName,
         ) => void;
         readonly clearSelected: () => void;
-        readonly viewEditedItem: () => void;
         readonly getIsFormOpen: (tableName: TableName) => boolean;
         readonly handleAction: (action: EditorAction) => void;
         readonly handleUndo: () => void;
@@ -83,7 +86,6 @@ const defaultEditorContextValue: TEditorContext = {
     getIsFormOpen: () => false,
     clearSelected: () => {},
     viewItem: () => {},
-    viewEditedItem: () => {},
     createItem: () => {},
     editItem: () => {},
     onExport: () => {},
@@ -95,6 +97,7 @@ const defaultEditorContextValue: TEditorContext = {
 };
 
 const EditorContext = createContext(defaultEditorContextValue);
+EditorContext.displayName = 'EditorContext';
 
 type TableState = {
     selectedTableItem: TableItemType<TableName> | null;
@@ -115,7 +118,7 @@ type TableAction =
           tableName: TableName;
       }
     | { type: 'CLEAR_SELECTED' }
-    | { type: 'VIEW_EDITED_ITEM' };
+    | { type: 'VIEW_CURRENT_ITEM' };
 
 function tableReducer(state: TableState, action: TableAction): TableState {
     switch (action.type) {
@@ -143,11 +146,7 @@ function tableReducer(state: TableState, action: TableAction): TableState {
                 selectedTableName: null,
                 operation: null,
             };
-        case 'VIEW_EDITED_ITEM': {
-            if (!state.selectedTableItem || !state.selectedTableName) {
-                console.error('No item or table name selected');
-                return state;
-            }
+        case 'VIEW_CURRENT_ITEM': {
             return {
                 selectedTableItem: state.selectedTableItem,
                 selectedTableName: state.selectedTableName,
@@ -213,7 +212,7 @@ export function RWAEditorContextProvider(
         transactions,
     } = editorState;
 
-    const cashAsset = useMemo(() => getCashAsset(portfolio), [portfolio])!;
+    const cashAsset = useMemo(() => getCashAsset(portfolio), [portfolio]);
 
     const fixedIncomes = useMemo(
         () => getFixedIncomeAssets(portfolio),
@@ -225,24 +224,20 @@ export function RWAEditorContextProvider(
         undo();
         if (operation === 'edit') {
             tableDispatch({
-                type: 'VIEW_ITEM',
-                item: selectedTableItem!,
-                tableName: selectedTableName!,
+                type: 'VIEW_CURRENT_ITEM',
             });
         }
-    }, [canUndo, operation, selectedTableItem, selectedTableName, undo]);
+    }, [canUndo, operation, undo]);
 
     const handleRedo = useCallback(() => {
         if (!canRedo) return;
         redo();
         if (operation === 'edit') {
             tableDispatch({
-                type: 'VIEW_ITEM',
-                item: selectedTableItem!,
-                tableName: selectedTableName!,
+                type: 'VIEW_CURRENT_ITEM',
             });
         }
-    }, [canRedo, operation, redo, selectedTableItem, selectedTableName]);
+    }, [canRedo, operation, redo]);
 
     const getIsFormOpen = useCallback(
         (tableName: TableName) => selectedTableName === tableName,
@@ -272,17 +267,68 @@ export function RWAEditorContextProvider(
         setEditorState(stateRef.current);
     }, []);
 
-    const viewEditedItem = useCallback(() => {
-        tableDispatch({ type: 'VIEW_EDITED_ITEM' });
-        setEditorState(stateRef.current);
-    }, []);
-
     const handleAction = useCallback(
         (action: EditorAction) => {
             try {
-                dispatchEditorAction(action);
-                if (action.type.startsWith('EDIT')) {
-                    viewEditedItem();
+                const result = dispatchEditorAction(action);
+                const actionOperationType = getActionOperationType(action);
+
+                if (actionOperationType === 'DELETE' || !result) {
+                    clearSelected();
+                    return;
+                }
+                const tableName = getTableNameFor(action);
+                const stateKey = getStateKeyForTableName(tableName);
+                const currentStateForKey = stateRef.current[stateKey];
+                if (typeof currentStateForKey === 'string') return;
+
+                if (actionOperationType === 'CREATE') {
+                    const newStateForKey = [...currentStateForKey, result];
+                    const newState = {
+                        ...stateRef.current,
+                        [stateKey]: newStateForKey,
+                    };
+                    stateRef.current = newState;
+                    setEditorState(newState);
+                    console.log({
+                        newStateForKey,
+                        newState,
+                        tableName,
+                        selectedTableName,
+                    });
+
+                    if (tableName === selectedTableName) {
+                        const newTableData = makeTableData(tableName, newState);
+                        const newTableItem = newTableData.find(
+                            item => item.id === result.id,
+                        );
+                        console.log({
+                            newTableData,
+                            newTableItem,
+                        });
+                        if (newTableItem) {
+                            viewItem(newTableItem, tableName);
+                        }
+                    }
+                }
+
+                if (actionOperationType === 'EDIT') {
+                    const newStateForKey = currentStateForKey.map(item =>
+                        item.id === result.id ? result : item,
+                    );
+                    const newState = {
+                        ...stateRef.current,
+                        [stateKey]: newStateForKey,
+                    };
+                    stateRef.current = newState;
+                    setEditorState(newState);
+                    const newTableData = makeTableData(tableName, newState);
+                    const newTableItem = newTableData.find(
+                        item => item.id === result.id,
+                    );
+                    if (newTableItem) {
+                        editItem(newTableItem, tableName);
+                    }
                 }
             } catch (error) {
                 console.error(
@@ -291,7 +337,13 @@ export function RWAEditorContextProvider(
                 );
             }
         },
-        [dispatchEditorAction, viewEditedItem],
+        [
+            clearSelected,
+            dispatchEditorAction,
+            editItem,
+            selectedTableName,
+            viewItem,
+        ],
     );
 
     const value = useMemo(
@@ -316,7 +368,6 @@ export function RWAEditorContextProvider(
             handleUndo,
             handleRedo,
             viewItem,
-            viewEditedItem,
             createItem,
             editItem,
             clearSelected,
@@ -354,7 +405,6 @@ export function RWAEditorContextProvider(
             serviceProviderFeeTypes,
             spvs,
             transactions,
-            viewEditedItem,
             viewItem,
         ],
     );

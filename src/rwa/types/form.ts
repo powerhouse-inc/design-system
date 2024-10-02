@@ -5,11 +5,6 @@ import {
     TableName,
 } from '@/rwa';
 
-export type ItemDetailsProps = {
-    tableName: TableName;
-    className?: string;
-};
-
 export type AssetFormInputs = {
     id?: string;
     fixedIncomeTypeId?: string | null;

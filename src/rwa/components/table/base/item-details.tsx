@@ -1,19 +1,21 @@
 import { Icon } from '@/powerhouse';
 import {
     FormInputs,
-    ItemDetailsProps,
     RWAButton,
     tableLabels,
+    TableName,
     useDependentItemProps,
     useEditorContext,
     useModal,
     useTableForm,
 } from '@/rwa';
 import { memo, useCallback } from 'react';
-import { twMerge } from 'tailwind-merge';
 
-function _ItemDetails(props: ItemDetailsProps) {
-    const { tableName, className } = props;
+type Props = {
+    readonly tableName: TableName;
+};
+function _ItemDetails(props: Props) {
+    const { tableName } = props;
     const { showModal, closeModal } = useModal();
 
     const {
@@ -157,12 +159,7 @@ function _ItemDetails(props: ItemDetailsProps) {
     );
 
     return (
-        <div
-            className={twMerge(
-                'flex flex-col rounded-md border border-gray-300 bg-white',
-                className,
-            )}
-        >
+        <div className="flex flex-col overflow-scroll rounded-md border border-gray-300 bg-white">
             <div className="flex justify-between rounded-t-md border-b border-gray-300 bg-gray-100 p-3 font-semibold text-gray-800">
                 <div className="flex items-center">
                     {selectedTableItem?.itemNumber

@@ -78,16 +78,17 @@ export type AssetsTableData = FixedIncome & {
     currentValue: number | null | undefined;
 };
 
-export type TableItemByTableName = {
-    [tableNames.SERVICE_PROVIDER_FEE_TYPE]: TableItem<ServiceProviderFeeTypeTableData>;
-    [tableNames.FIXED_INCOME_TYPE]: TableItem<FixedIncomeType>;
-    [tableNames.ACCOUNT]: TableItem<Account>;
-    [tableNames.TRANSACTION]: TableItem<GroupTransactionsTableData>;
-    [tableNames.ASSET]: TableItem<AssetsTableData>;
-    [tableNames.SPV]: TableItem<SPV>;
+export type TableDataByTableName = {
+    SERVICE_PROVIDER_FEE_TYPE: ServiceProviderFeeTypeTableData;
+    FIXED_INCOME_TYPE: FixedIncomeType;
+    ACCOUNT: Account;
+    TRANSACTION: GroupTransactionsTableData;
+    ASSET: AssetsTableData;
+    SPV: SPV;
 };
+
 export type TableName = keyof typeof tableNames;
 
 export type TableItemType<TTableName extends TableName> = TableItem<
-    TableItemByTableName[TTableName]
+    TableDataByTableName[TTableName]
 >;

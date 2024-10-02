@@ -1,4 +1,5 @@
 import {
+    ActionOutputFor,
     mockAccounts,
     mockFixedIncomes,
     mockFixedIncomeTypes,
@@ -43,7 +44,7 @@ export const WithoutData: Story = {
         onShowRevisionHistory: () => {},
         dispatchEditorAction: action => {
             console.log(action);
-            return undefined;
+            return undefined as unknown as ActionOutputFor<typeof action>;
         },
     },
     render: function Wrapper(args) {

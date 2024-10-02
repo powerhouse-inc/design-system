@@ -70,7 +70,7 @@ export function useFormInputs(props: Props): Input[] {
         [showModal],
     );
 
-    const getInputs = useCallback(() => {
+    return useMemo(() => {
         switch (tableName) {
             case tableNames.ASSET: {
                 const tableItem = _tableItem as TableItemType<'ASSET'> | null;
@@ -666,8 +666,4 @@ export function useFormInputs(props: Props): Input[] {
         spvs,
         tableName,
     ]);
-
-    const inputs = getInputs();
-
-    return useMemo(() => inputs, [inputs]);
 }

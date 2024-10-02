@@ -1,40 +1,19 @@
 import {
+    Account,
     AccountFormInputs,
     AssetFormInputs,
+    FixedIncome,
+    FixedIncomeType,
     FixedIncomeTypeFormInputs,
+    GroupTransaction,
     GroupTransactionFormInputs,
+    ServiceProviderFeeType,
     ServiceProviderFeeTypeFormInputs,
+    SPV,
     SPVFormInputs,
+    TableDataByTableName,
+    TableName,
 } from '@/rwa';
-
-export type EditorAction =
-    | { type: 'CREATE_ASSET'; payload: AssetFormInputs }
-    | { type: 'CREATE_TRANSACTION'; payload: GroupTransactionFormInputs }
-    | { type: 'CREATE_ACCOUNT'; payload: AccountFormInputs }
-    | { type: 'CREATE_FIXED_INCOME_TYPE'; payload: FixedIncomeTypeFormInputs }
-    | {
-          type: 'CREATE_SERVICE_PROVIDER_FEE_TYPE';
-          payload: ServiceProviderFeeTypeFormInputs;
-      }
-    | { type: 'CREATE_SPV'; payload: SPVFormInputs }
-    | { type: 'EDIT_ASSET'; payload: AssetFormInputs }
-    | { type: 'EDIT_TRANSACTION'; payload: GroupTransactionFormInputs }
-    | { type: 'EDIT_ACCOUNT'; payload: AccountFormInputs }
-    | { type: 'EDIT_FIXED_INCOME_TYPE'; payload: FixedIncomeTypeFormInputs }
-    | {
-          type: 'EDIT_SERVICE_PROVIDER_FEE_TYPE';
-          payload: ServiceProviderFeeTypeFormInputs;
-      }
-    | { type: 'EDIT_SPV'; payload: SPVFormInputs }
-    | { type: 'DELETE_ASSET'; payload: { id: string } }
-    | { type: 'DELETE_TRANSACTION'; payload: { id: string } }
-    | { type: 'DELETE_ACCOUNT'; payload: { id: string } }
-    | { type: 'DELETE_FIXED_INCOME_TYPE'; payload: { id: string } }
-    | {
-          type: 'DELETE_SERVICE_PROVIDER_FEE_TYPE';
-          payload: { id: string };
-      }
-    | { type: 'DELETE_SPV'; payload: { id: string } };
 
 export type FormInputsByTableName = {
     ASSET: AssetFormInputs;
@@ -45,4 +24,45 @@ export type FormInputsByTableName = {
     SPV: SPVFormInputs;
 };
 
-export type DispatchEditorAction = (action: EditorAction) => void;
+export type ActionOutputByTableName = {
+    ASSET: FixedIncome;
+    TRANSACTION: GroupTransaction;
+    ACCOUNT: Account;
+    FIXED_INCOME_TYPE: FixedIncomeType;
+    SERVICE_PROVIDER_FEE_TYPE: ServiceProviderFeeType;
+    SPV: SPV;
+};
+
+interface CreateOrEditAction<
+    TOperation extends 'CREATE' | 'EDIT',
+    TTableName extends TableName,
+> {
+    type: `${TOperation}_${TTableName}`;
+    payload: FormInputsByTableName[TTableName];
+}
+
+interface DeleteAction<TTableName extends TableName> {
+    type: `DELETE_${TTableName}`;
+    payload: { id: string };
+}
+
+export type EditorAction =
+    | CreateOrEditAction<'CREATE', TableName>
+    | CreateOrEditAction<'EDIT', TableName>
+    | DeleteAction<TableName>;
+
+export type ActionOutputFor<A extends EditorAction> =
+    A['type'] extends `${infer Action}_${infer Entity}`
+        ? Action extends 'DELETE'
+            ? undefined
+            : ActionOutputByTableName[Entity & keyof ActionOutputByTableName]
+        : never;
+
+export type TableNameFor<A extends EditorAction> =
+    A['type'] extends `${infer _Action}_${infer Entity}`
+        ? Entity & keyof TableDataByTableName
+        : never;
+
+export type DispatchEditorAction = <TEditorAction extends EditorAction>(
+    action: TEditorAction,
+) => ActionOutputFor<TEditorAction>;

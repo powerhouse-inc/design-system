@@ -1,6 +1,6 @@
 import { Icon, Modal } from '@/powerhouse';
 import { ModalFormInputs, TableName, useTableForm } from '@/rwa';
-import { ComponentPropsWithoutRef, useCallback } from 'react';
+import { ComponentPropsWithoutRef, memo, useCallback } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 export type RWACreateItemModalProps = ComponentPropsWithoutRef<typeof Modal> & {
@@ -9,7 +9,7 @@ export type RWACreateItemModalProps = ComponentPropsWithoutRef<typeof Modal> & {
     readonly onOpenChange: (open: boolean) => void;
 };
 
-export function RWACreateItemModal(props: RWACreateItemModalProps) {
+export function _RWACreateItemModal(props: RWACreateItemModalProps) {
     const { tableName, open, onOpenChange } = props;
 
     const { reset, submit, inputs } = useTableForm({
@@ -21,6 +21,15 @@ export function RWACreateItemModal(props: RWACreateItemModalProps) {
         reset();
         onOpenChange(false);
     }, [onOpenChange, reset]);
+
+    const handleSubmit = useCallback(async () => {
+        try {
+            await submit();
+            onOpenChange(false);
+        } catch (error) {
+            console.error(error);
+        }
+    }, [onOpenChange, submit]);
 
     const buttonStyles =
         'min-h-[48px] min-w-[142px] text-base font-semibold py-3 px-6 rounded-xl outline-none active:opacity-75 hover:scale-105 transform transition-all';
@@ -63,7 +72,7 @@ export function RWACreateItemModal(props: RWACreateItemModalProps) {
                             buttonStyles,
                             'flex-1 bg-gray-800 text-gray-50',
                         )}
-                        onClick={submit}
+                        onClick={handleSubmit}
                     >
                         Save
                     </button>
@@ -72,3 +81,5 @@ export function RWACreateItemModal(props: RWACreateItemModalProps) {
         </Modal>
     );
 }
+
+export const RWACreateItemModal = memo(_RWACreateItemModal);

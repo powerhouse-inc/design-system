@@ -36,5 +36,9 @@ export function getFixedIncomeAssets(portfolio: Asset[]) {
 }
 
 export function getCashAsset(portfolio: Asset[]) {
-    return portfolio.find(a => isCashAsset(a));
+    const cashAsset = portfolio.find(a => isCashAsset(a));
+    if (!cashAsset) {
+        throw new Error('Cash asset not found');
+    }
+    return cashAsset;
 }
