@@ -11,20 +11,28 @@ type Props = {
     tableContainerRef: RefObject<HTMLDivElement>;
     rowRefs: MutableRefObject<(HTMLTableRowElement | null)[]>;
     headerRef: RefObject<HTMLTableSectionElement>;
+    hasSpecialLastRow?: boolean;
 };
 
 const defaultRowHeight = 34;
 const defaultHeaderHeight = 42;
+const defaultRowCount = 20;
 const defaultTwentyRowsPlusHeaderHeight =
-    defaultRowHeight * 20 + defaultHeaderHeight;
+    defaultRowHeight * defaultRowCount + defaultHeaderHeight;
 
 export function useTableHeight(props: Props) {
-    const { selectedItemNumber, tableContainerRef, rowRefs, headerRef } = props;
+    const {
+        selectedItemNumber,
+        tableContainerRef,
+        rowRefs,
+        headerRef,
+        hasSpecialLastRow = false,
+    } = props;
     const [maxHeight, setMaxHeight] = useState(
         `${defaultTwentyRowsPlusHeaderHeight}px`,
     );
     const selectedRowNumber = selectedItemNumber
-        ? selectedItemNumber - 1
+        ? selectedItemNumber - 1 + (hasSpecialLastRow ? 1 : 0)
         : undefined;
     const rowHeight = rowRefs.current[1]?.offsetHeight ?? defaultRowHeight;
     const headerHeight = headerRef.current?.offsetHeight ?? defaultHeaderHeight;

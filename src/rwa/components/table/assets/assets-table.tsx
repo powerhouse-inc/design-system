@@ -9,7 +9,6 @@ import {
     useEditorContext,
 } from '@/rwa';
 import { Fragment, useCallback, useMemo } from 'react';
-import { twMerge } from 'tailwind-merge';
 
 export function AssetsTable() {
     const tableName = tableNames.ASSET;
@@ -84,12 +83,7 @@ export function AssetsTable() {
 
     const specialLastRow = useCallback(
         (c: TableColumn[]) => (
-            <RWATableRow
-                className={twMerge(
-                    'sticky bottom-0',
-                    selectedTableItem !== null && 'hidden',
-                )}
-            >
+            <RWATableRow className="sticky bottom-0">
                 {c.map(column => (
                     <Fragment key={column.key}>
                         {column.key === 'name' && (

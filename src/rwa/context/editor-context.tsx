@@ -290,22 +290,13 @@ export function RWAEditorContextProvider(
                     };
                     stateRef.current = newState;
                     setEditorState(newState);
-                    console.log({
-                        newStateForKey,
-                        newState,
-                        tableName,
-                        selectedTableName,
-                    });
 
                     if (tableName === selectedTableName) {
                         const newTableData = makeTableData(tableName, newState);
                         const newTableItem = newTableData.find(
                             item => item.id === result.id,
                         );
-                        console.log({
-                            newTableData,
-                            newTableItem,
-                        });
+
                         if (newTableItem) {
                             viewItem(newTableItem, tableName);
                         }

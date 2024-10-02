@@ -56,6 +56,7 @@ export function Table(props: TableProps) {
         rowRefs,
         headerRef,
         selectedItemNumber: selectedTableItem?.itemNumber,
+        hasSpecialLastRow: !!specialLastRow,
     });
 
     const tableNameForDisplay = sentenceCase(tableName);
