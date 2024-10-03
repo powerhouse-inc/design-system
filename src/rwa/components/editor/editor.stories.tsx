@@ -42,7 +42,7 @@ export const WithoutData: Story = {
         onExport: () => {},
         onClose: () => {},
         onShowRevisionHistory: () => {},
-        dispatchEditorAction: action => {
+        editorDispatcher: action => {
             console.log(action);
             return undefined as unknown as ActionOutputFor<typeof action>;
         },

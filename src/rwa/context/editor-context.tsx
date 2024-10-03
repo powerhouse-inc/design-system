@@ -154,7 +154,7 @@ export function RWAEditorContextProvider(
     props: RWAEditorContextProps & {
         readonly children: ReactNode;
         readonly state: RealWorldAssetsState;
-        readonly dispatchEditorAction: EditorDispatcher;
+        readonly editorDispatcher: EditorDispatcher;
         readonly undo: () => void;
         readonly redo: () => void;
     },
@@ -168,7 +168,7 @@ export function RWAEditorContextProvider(
         canRedo,
         undo,
         redo,
-        dispatchEditorAction,
+        editorDispatcher,
         onExport,
         onClose,
         onSwitchboardLinkClick,
@@ -252,7 +252,7 @@ export function RWAEditorContextProvider(
     const handleAction = useCallback(
         (action: EditorAction) => {
             try {
-                const result = dispatchEditorAction(action);
+                const result = editorDispatcher(action);
                 const actionOperationType = getActionOperationType(action);
 
                 if (actionOperationType === 'DELETE' || !result) {
@@ -312,7 +312,7 @@ export function RWAEditorContextProvider(
         },
         [
             clearSelected,
-            dispatchEditorAction,
+            editorDispatcher,
             editItem,
             selectedTableName,
             viewItem,
