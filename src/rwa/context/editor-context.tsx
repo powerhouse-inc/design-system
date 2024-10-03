@@ -117,8 +117,7 @@ type TableAction =
           item: TableItemType<TableName>;
           tableName: TableName;
       }
-    | { type: 'CLEAR_SELECTED' }
-    | { type: 'VIEW_CURRENT_ITEM' };
+    | { type: 'CLEAR_SELECTED' };
 
 function tableReducer(state: TableState, action: TableAction): TableState {
     switch (action.type) {
@@ -146,13 +145,6 @@ function tableReducer(state: TableState, action: TableAction): TableState {
                 selectedTableName: null,
                 operation: null,
             };
-        case 'VIEW_CURRENT_ITEM': {
-            return {
-                selectedTableItem: state.selectedTableItem,
-                selectedTableName: state.selectedTableName,
-                operation: 'view',
-            };
-        }
         default:
             return state;
     }
@@ -222,22 +214,12 @@ export function RWAEditorContextProvider(
     const handleUndo = useCallback(() => {
         if (!canUndo) return;
         undo();
-        if (operation === 'edit') {
-            tableDispatch({
-                type: 'VIEW_CURRENT_ITEM',
-            });
-        }
-    }, [canUndo, operation, undo]);
+    }, [canUndo, undo]);
 
     const handleRedo = useCallback(() => {
         if (!canRedo) return;
         redo();
-        if (operation === 'edit') {
-            tableDispatch({
-                type: 'VIEW_CURRENT_ITEM',
-            });
-        }
-    }, [canRedo, operation, redo]);
+    }, [canRedo, redo]);
 
     const getIsFormOpen = useCallback(
         (tableName: TableName) => selectedTableName === tableName,
