@@ -63,6 +63,6 @@ export type TableNameFor<A extends EditorAction> =
         ? Entity & keyof TableDataByTableName
         : never;
 
-export type DispatchEditorAction = <TEditorAction extends EditorAction>(
+export type EditorDispatcher = <TEditorAction extends EditorAction>(
     action: TEditorAction,
 ) => ActionOutputFor<TEditorAction>;

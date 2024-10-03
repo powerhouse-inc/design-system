@@ -1,7 +1,7 @@
 import {
     CashAsset,
-    DispatchEditorAction,
     EditorAction,
+    EditorDispatcher,
     FixedIncome,
     getActionOperationType,
     getCashAsset,
@@ -154,7 +154,7 @@ export function RWAEditorContextProvider(
     props: RWAEditorContextProps & {
         readonly children: ReactNode;
         readonly state: RealWorldAssetsState;
-        readonly dispatchEditorAction: DispatchEditorAction;
+        readonly dispatchEditorAction: EditorDispatcher;
         readonly undo: () => void;
         readonly redo: () => void;
     },
