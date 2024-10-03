@@ -8,7 +8,7 @@ export type RWADeleteItemModalProps = ComponentPropsWithoutRef<typeof Modal> & {
 };
 
 export function _RWADeleteItemModal(props: RWADeleteItemModalProps) {
-    const { tableName, dependentItemProps, onOpenChange } = props;
+    const { tableName, dependentItemProps, onOpenChange, open } = props;
 
     const tableLabel = tableLabels[tableName].toLowerCase();
 
@@ -21,6 +21,7 @@ export function _RWADeleteItemModal(props: RWADeleteItemModalProps) {
                 className: 'rounded-3xl',
             }}
             onOpenChange={onOpenChange}
+            open={open}
             overlayProps={{
                 className: 'top-10',
             }}
@@ -44,9 +45,7 @@ export function _RWADeleteItemModal(props: RWADeleteItemModalProps) {
                         ({ dependentTableName, dependentItems }) => (
                             <div key={dependentTableName}>
                                 <div className="mb-0.5 font-semibold" key={1}>
-                                    {`${tableLabels[
-                                        dependentTableName
-                                    ].toLocaleLowerCase()}s: `}
+                                    {`${tableLabels[dependentTableName]}s: `}
                                 </div>
                                 {dependentItems.map(({ id, label }) => (
                                     <div key={id}>{label}</div>
