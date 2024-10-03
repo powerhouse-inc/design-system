@@ -25,7 +25,7 @@ import {
 import { ReactElement, useCallback, useMemo } from 'react';
 import {
     Control,
-    FieldErrors,
+    FormState,
     UseFormRegister,
     UseFormWatch,
 } from 'react-hook-form';
@@ -41,9 +41,9 @@ type Props = {
     tableName: TableName;
     tableItem: TableItemType<TableName> | undefined | null;
     operation: Operation;
+    formState: FormState<FormInputsByTableName[TableName]>;
     register: UseFormRegister<FormInputsByTableName[TableName]>;
     watch: UseFormWatch<FormInputsByTableName[TableName]>;
-    errors: FieldErrors<FormInputsByTableName[TableName]>;
     control: Control<FormInputsByTableName[TableName]>;
 };
 export function useFormInputs(props: Props): {
@@ -53,10 +53,10 @@ export function useFormInputs(props: Props): {
     const {
         tableName,
         operation,
+        formState: _formState,
         tableItem: _tableItem,
         register: _register,
         watch: _watch,
-        errors: _errors,
         control: _control,
     } = props;
     const {
@@ -82,7 +82,8 @@ export function useFormInputs(props: Props): {
                 type Payload = FormInputsByTableName['ASSET'];
                 const register = _register as UseFormRegister<Payload>;
                 const watch = _watch as UseFormWatch<Payload>;
-                const errors = _errors as FieldErrors<Payload>;
+                const formState = _formState as FormState<Payload>;
+                const { errors } = formState;
                 const control = _control as Control<Payload>;
                 const derivedInputsToDisplay =
                     operation !== 'create' && !!tableItem
@@ -288,7 +289,7 @@ export function useFormInputs(props: Props): {
                 type Payload = FormInputsByTableName['TRANSACTION'];
                 const register = _register as UseFormRegister<Payload>;
                 const watch = _watch as UseFormWatch<Payload>;
-                const errors = _errors as FieldErrors<Payload>;
+                const { errors } = _formState as FormState<Payload>;
                 const control = _control as Control<Payload>;
                 const type = watch('type');
                 const entryTimeInputValue =
@@ -496,7 +497,8 @@ export function useFormInputs(props: Props): {
             case tableNames.ACCOUNT: {
                 type Payload = FormInputsByTableName['ACCOUNT'];
                 const register = _register as UseFormRegister<Payload>;
-                const errors = _errors as FieldErrors<Payload>;
+                const formState = _formState as FormState<Payload>;
+                const { errors } = formState;
                 const inputs = [
                     {
                         label: 'Account Label',
@@ -540,7 +542,8 @@ export function useFormInputs(props: Props): {
             case tableNames.SPV: {
                 type Payload = FormInputsByTableName['SPV'];
                 const register = _register as UseFormRegister<Payload>;
-                const errors = _errors as FieldErrors<Payload>;
+                const formState = _formState as FormState<Payload>;
+                const { errors } = formState;
 
                 const inputs = [
                     {
@@ -568,7 +571,8 @@ export function useFormInputs(props: Props): {
             case tableNames.FIXED_INCOME_TYPE: {
                 type Payload = FormInputsByTableName['FIXED_INCOME_TYPE'];
                 const register = _register as UseFormRegister<Payload>;
-                const errors = _errors as FieldErrors<Payload>;
+                const formState = _formState as FormState<Payload>;
+                const { errors } = formState;
 
                 const inputs = [
                     {
@@ -598,7 +602,8 @@ export function useFormInputs(props: Props): {
                 type Payload =
                     FormInputsByTableName['SERVICE_PROVIDER_FEE_TYPE'];
                 const register = _register as UseFormRegister<Payload>;
-                const errors = _errors as FieldErrors<Payload>;
+                const formState = _formState as FormState<Payload>;
+                const { errors } = formState;
                 const control = _control as Control<Payload>;
 
                 const makeAccountLabel = (account: Account) => {
@@ -677,8 +682,8 @@ export function useFormInputs(props: Props): {
             }
         }
     }, [
+        _formState,
         _control,
-        _errors,
         _register,
         _tableItem,
         _watch,

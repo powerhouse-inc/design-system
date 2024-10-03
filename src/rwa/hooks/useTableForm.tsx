@@ -10,13 +10,11 @@ export function useTableForm(props: FormHookProps) {
         tableItem,
     });
 
-    const { errors } = formState;
-
     const formInputs = useFormInputs({
+        formState,
         operation,
         control,
         watch,
-        errors,
         tableItem,
         tableName,
         register,
