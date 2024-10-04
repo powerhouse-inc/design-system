@@ -15,7 +15,6 @@ import {
     tableLabels,
     useColumnPriority,
     useEditorContext,
-    useSortTableItems,
     useTableHeight,
 } from '@/rwa';
 import { useCallback, useRef } from 'react';
@@ -26,6 +25,7 @@ export function Table(props: TableProps) {
         tableName,
         tableData,
         columnCountByTableWidth = defaultColumnCountByTableWidth,
+        sortHandler,
         specialFirstRow,
         specialLastRow,
     } = props;
@@ -42,8 +42,6 @@ export function Table(props: TableProps) {
     const tableContainerRef = useRef<HTMLDivElement>(null);
     const rowRefs = useRef<(HTMLTableRowElement | null)[]>([]);
     const headerRef = useRef<HTMLTableSectionElement>(null);
-
-    const { sortedItems, sortHandler } = useSortTableItems(tableData);
 
     const columnsToShow = useColumnPriority({
         columns,
@@ -131,7 +129,7 @@ export function Table(props: TableProps) {
                 renderRow={renderRow}
                 specialFirstRow={specialFirstRow}
                 specialLastRow={specialLastRow}
-                tableData={sortedItems}
+                tableData={tableData}
             />
             {isAllowedToCreateDocuments && !operation ? (
                 <button

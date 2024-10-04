@@ -18,7 +18,7 @@ export function TableWithForm(props: Props) {
     const { tableName, specialFirstRow, specialLastRow } = props;
     const { getIsFormOpen } = useEditorContext();
     const showForm = getIsFormOpen(tableName);
-    const tableData = useTableData(tableName);
+    const { tableData, sortHandler } = useTableData(tableName);
     const shouldPaginate = tableData.length > 20;
 
     const {
@@ -53,6 +53,7 @@ export function TableWithForm(props: Props) {
                 ) : null}
             </div>
             <Table
+                sortHandler={sortHandler}
                 specialFirstRow={specialFirstRow}
                 specialLastRow={specialLastRow}
                 tableData={pageItems}

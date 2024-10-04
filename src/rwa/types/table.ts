@@ -7,6 +7,7 @@ import {
     SPV,
     tableNames,
 } from '@/rwa';
+import { Identifier, Order } from 'natural-orderby';
 import { ReactNode, RefObject } from 'react';
 
 export type ColumnCountByTableWidth = Record<number, number>;
@@ -55,6 +56,10 @@ export type TableProps = {
     tableName: TableName;
     tableData: TableItemType<TableName>[] | undefined;
     columnCountByTableWidth?: ColumnCountByTableWidth;
+    sortHandler: (
+        column: Identifier<TableItemType<TableName>>,
+        direction: Order,
+    ) => void;
     specialFirstRow?: (columns: TableColumn[]) => JSX.Element;
     specialLastRow?: (columns: TableColumn[]) => JSX.Element;
 };

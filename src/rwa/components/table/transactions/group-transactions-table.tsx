@@ -17,7 +17,7 @@ export function GroupTransactionsTable() {
     const { getIsFormOpen, fixedIncomes } = useEditorContext();
 
     const showForm = getIsFormOpen(tableName);
-    const tableData = useTableData(tableName);
+    const { tableData, sortHandler } = useTableData(tableName);
     const [filteredTableData, setFilteredTableData] = useState(tableData);
     const [filterAssetId, setFilterAssetId] = useState<string>();
     const [filterTypes, setFilterTypes] = useState<
@@ -148,7 +148,11 @@ export function GroupTransactionsTable() {
                     ) : null}
                 </div>
             </div>
-            <Table tableData={pageItems} tableName={tableName} />
+            <Table
+                sortHandler={sortHandler}
+                tableData={pageItems}
+                tableName={tableName}
+            />
             {showForm ? (
                 <div className="mt-4 rounded-md bg-white">
                     <ItemDetails tableName={tableName} />
