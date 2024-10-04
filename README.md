@@ -1,3 +1,5 @@
+## This repository has been migrated to [Powerhouse Monorepo](https://github.com/powerhouse-inc/powerhouse)
+
 # design-system
 
 This repository contains base and scoped (project) components, utilities, and hooks for the powerhouse org.
