@@ -37,7 +37,12 @@ export function RWATabs(props: RWATabsProps) {
             </div>
             <div className="mt-3 rounded-md bg-slate-50 p-8">
                 {tabComponents.map(({ value, Component }) => (
-                    <Content key={value} value={value}>
+                    <Content
+                        key={value}
+                        value={value}
+                        forceMount
+                        className="data-[state=inactive]:hidden"
+                    >
                         <Component />
                     </Content>
                 ))}
